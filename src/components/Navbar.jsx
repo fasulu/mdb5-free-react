@@ -23,58 +23,53 @@ export default function navbar() {
 
   return (
     <MDBNavbar expand='lg' light bgColor='light'>
-      <MDBContainer >
+      <MDBContainer  >
         <MDBNavbarBrand href='#'>
           <img
             src="https://www.birminghamchoice.co.uk/Data/pub/PublicWebsite/SiteLogos/BCCLogo_Mobile.jpg" width="189" height="45" alt="Scheme logo"
             className='img-fluid hover-shadow'
           />
         </MDBNavbarBrand>
+        <div className='d-flex input-group w-auto'>
+          <MDBNavbarToggler
+            aria-controls='navbarSupportedContent'
+            aria-expanded='false'
+            aria-label='Toggle navigation'
+            onClick={() => setShowBasic(!showBasic)}
+          >
+            <MDBIcon icon='bars' fas />
+          </MDBNavbarToggler>
 
-        <MDBNavbarToggler
-          aria-controls='navbarSupportedContent'
-          aria-expanded='false'
-          aria-label='Toggle navigation'
-          onClick={() => setShowBasic(!showBasic)}
-        >
-          <MDBIcon icon='bars' fas />
-        </MDBNavbarToggler>
+          <MDBCollapse navbar show={showBasic}>
+            <MDBNavbarNav className='mr-auto mb-2 mb-lg-0 '>
+              <MDBNavbarItem>
+                <MDBNavbarLink style={{ fontSize: '18px' }} active aria-current='page' href='#'>
+                  <strong>Mobile View</strong>
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+              <MDBNavbarItem>
+                <MDBNavbarLink style={{ fontSize: '18px' }} active aria-current='page' href='#'>
+                  <strong>Accessability</strong>
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+              <MDBNavbarItem>
+                <MDBNavbarLink style={{ fontSize: '18px' }} active aria-current='page' href='#'>
+                  <strong>Help</strong>
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+            </MDBNavbarNav>
 
-        <MDBCollapse navbar show={showBasic}>
-          <MDBNavbarNav className='mr-auto mb-2 mb-lg-0 '>
-            <MDBNavbarItem style={{ backgroundColor: '#fbfbfb' }}>
+            <form className='d-flex w-auto'>
+              <MDBBtn style={{margin:'12px', width:'135px'}} className='form-control'  color='primary'>
+                <MDBIcon style={{marginRight:'5px'}} fas icon='pencil-alt'/>
+                Register</MDBBtn>
 
-            </MDBNavbarItem>
-            <MDBNavbarItem>
-              <MDBNavbarLink active aria-current='page' href='#'>
-                Mobile View
-              </MDBNavbarLink>
-            </MDBNavbarItem>
-            <MDBNavbarItem>
-              <MDBNavbarLink active aria-current='page' href='#'>
-                Accessability
-              </MDBNavbarLink>
-            </MDBNavbarItem>
-            <MDBNavbarItem>
-              <MDBNavbarLink active aria-current='page' href='#'>
-                Help
-              </MDBNavbarLink>
-            </MDBNavbarItem>
-          </MDBNavbarNav>
-          
-          <form className='d-flex input-group w-auto mr-1'>
-            <MDBBtn style={{ fontSize: '10px', minWidth: '120px' }} color='primary me-1'>
-              <MDBIcon fas icon='pencil-alt' className='me-3' />
-              Register</MDBBtn>
-          </form>
-
-          <form className='d-flex input-group w-auto'>
-            <MDBBtn style={{ fontSize: '10px', minWidth: '120px' }} color='primary'>
-              <MDBIcon fas icon='user-alt' className='me-3' />
-              Login</MDBBtn>
-          </form>
-        </MDBCollapse>
-
+              <MDBBtn style={{margin:'12px', width:'135px'}} className='form-control'  color='primary'>
+                <MDBIcon style={{marginRight:'5px'}} fas icon='user-alt' />
+                Login</MDBBtn>
+            </form>
+          </MDBCollapse>
+        </div>
       </MDBContainer>
     </MDBNavbar>
   );

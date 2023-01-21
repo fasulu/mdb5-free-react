@@ -1,10 +1,7 @@
 import React from 'react';
 import {
-    MDBIcons,
     MDBContainer,
     MDBNavbar,
-    MDBNavbarBrand,
-    MDBNavbarToggler,
     MDBIcon,
     MDBNavbarNav,
     MDBNavbarItem,
@@ -14,14 +11,13 @@ import {
     MDBDropdownToggle,
     MDBDropdownMenu,
     MDBDropdownItem,
-    MDBCollapse,
 } from 'mdb-react-ui-kit';
 
-export default function NavbarBottom() {
+export default function NavbarSecondary() {
 
     const btn = "Properties and recent lets search"
     return (
-        <MDBNavbar expand='sm' >
+        <MDBNavbar expand='lg' >
             <MDBContainer fluid style={{ backgroundColor: '#8fbadc' }} >
 
                 <MDBNavbarNav className='mr-auto mb-2 mb-lg-0'>
