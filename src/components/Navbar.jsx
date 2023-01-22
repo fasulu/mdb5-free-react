@@ -23,7 +23,7 @@ export default function navbar() {
 
   return (
     <MDBNavbar expand='lg' light bgColor='light'>
-      <MDBContainer  >
+      <MDBContainer fluid >
         <MDBNavbarBrand href='#'>
           <img
             src="https://www.birminghamchoice.co.uk/Data/pub/PublicWebsite/SiteLogos/BCCLogo_Mobile.jpg" width="189" height="45" alt="Scheme logo"

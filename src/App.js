@@ -9,18 +9,17 @@ import Login from './components/login';
 import NINOCheck from './components/registerPageNICheck';
 import Registerclient from './components/registerclient';
 import HeaderTemp from './test/headerTemp';
+import TestSecondNavbar from './test/testSecondNavbar';
+import Flexbox from './test/flexbox';
 
 function App() {
   return (
     <React.Fragment>
-      {/* <HeaderTemp></HeaderTemp> */}
       <Navbar></Navbar>
       <NavbarSecondary></NavbarSecondary>
       <Registerclient></Registerclient>
       {/* <NINOCheck></NINOCheck> */}
       {/* <Login></Login> */}
-      {/* <ContainerRowCol></ContainerRowCol> */}
-      {/* <Boxes></Boxes> */}
       <Footer></Footer>
 
     </React.Fragment>

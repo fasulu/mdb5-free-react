@@ -15,13 +15,13 @@ export default function Registerclient() {
     return (
         <MDBContainer   >
 
-            <MDBRow className='my-3 justify-content-center'>
+            <MDBRow className='my-3 justify-content-center' bgColor='#f7f2f287'>
                 {/* <MDBCol className='mx-5' size='md'> */}
-                <MDBCol className='mx-2' size='md' >
+                <MDBCol className='mx-2' size='md'  >
                     <MDBTypography tag='h6'><strong>Register your household</strong></MDBTypography>
                     <MDBTypography tag='h7'>Household Registration</MDBTypography>
 
-                    <MDBCard className=' mx-auto'>
+                    <MDBCard className=' mx-auto' style={{backgroundColor:'#f7f2f287'}} >
                         <MDBCardBody >
                             <div className='mb-2'>
                                 <MDBTypography className='card-header' style={{ backgroundColor: '#dcdcdc' }} tag='h6'><strong>Primary Applicant Details</strong></MDBTypography>
@@ -30,18 +30,12 @@ export default function Registerclient() {
                                     <MDBDropdownToggle className='border border-dark rounded' color='secondary'>
                                         Please Choose
                                     </MDBDropdownToggle>
-                                    <MDBDropdownMenu style={{ border: '' }}>
-                                        <MDBDropdownItem style={{ height: '28px' }} link>Dr</MDBDropdownItem>
-                                        <MDBDropdownItem style={{ borderColor: 'grey' }} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{ height: '28px' }} link>Miss</MDBDropdownItem>
-                                        <MDBDropdownItem style={{ borderColor: 'grey' }} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{ height: '28px' }} link>Mr</MDBDropdownItem>
-                                        <MDBDropdownItem style={{ borderColor: 'grey' }} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{ height: '28px' }} link>Mrs</MDBDropdownItem>
-                                        <MDBDropdownItem style={{ borderColor: 'grey' }} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{ height: '28px' }} link>Ms</MDBDropdownItem>
-                                        <MDBDropdownItem style={{ borderColor: 'grey' }} className='dropdown-divider' hr></MDBDropdownItem>
-
+                                    <MDBDropdownMenu style={{ overflow: 'scroll', height: '11em' }}>
+                                        <MDBDropdownItem style={{ height: '25px' }} link>Dr</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '25px' }} link>Miss</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '25px' }} link>Mr</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '25px' }} link>Mrs</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '25px' }} link>Ms</MDBDropdownItem>
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </div>
@@ -108,10 +102,79 @@ export default function Registerclient() {
                                 </span>
                             </div>
 
-                            <div >
+{/*                         <div >
                                 <input className='form-control' type='text' style={{ width: '50px', float: 'left', marginRight: '5px' }} />
                                 <input className='form-control' type='text' style={{ width: '50px', float: 'left', marginRight: '5px' }} />
                                 <input className='form-control' type='text' style={{ width: '50px' }} />
+                            </div>
+
+                            <div className='mt-4'>
+                                <MDBTypography tag='h7'><strong>Your date of birth*</strong></MDBTypography>
+                            </div> */}
+                            <div className='mt-2'>
+                                <div className='btn-group'>
+                                    <MDBDropdown style={{ marginRight: '5px' }}>
+                                        <MDBDropdownToggle className='border border-dark rounded' color='secondary' >
+                                            Date
+                                        </MDBDropdownToggle>
+                                        <MDBDropdownMenu style={{ overflow: 'scroll', height: '12em' }} >
+                                            <MDBDropdownItem style={{height: '25px' }} link>01</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>02</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>03</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>04</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>05</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>06</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>07</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>08</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>09</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>10</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>11</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>12</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>13</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>14</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>15</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>16</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>17</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>18</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>19</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>20</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>21</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>22</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>23</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>24</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>25</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>26</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>27</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>28</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>29</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>30</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>31</MDBDropdownItem>
+                                        </MDBDropdownMenu>
+                                    </MDBDropdown>
+
+                                    <MDBDropdown  style={{ marginRight: '5px' }} className='dropdown btn-group' >
+                                        <MDBDropdownToggle className='border border-dark rounded' color='secondary' >
+                                            Month
+                                        </MDBDropdownToggle>
+                                        <MDBDropdownMenu style={{ overflow: 'scroll', height: '12em' }} >
+                                            <MDBDropdownItem style={{height: '25px' }} link>January</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>February</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>March</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>April</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>May</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>June</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>July</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>August</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>September</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>October</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>November</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>December</MDBDropdownItem>
+                                        </MDBDropdownMenu>
+                                    </MDBDropdown>
+
+                                <input className='form-control border border-dark rounded' type='text' placeholder='YEAR' style={{ width: '65px', float: 'left', borderColor:'black', color:'black', background:'#e3ebf7'}} />
+
+                                </div>
                             </div>
 
                             <div className='mt-4'>
@@ -120,19 +183,16 @@ export default function Registerclient() {
                                     <MDBDropdownToggle className='border border-dark rounded' color='secondary' >
                                         Please Choose
                                     </MDBDropdownToggle>
-                                    <MDBDropdownMenu >
-                                        <MDBDropdownItem style={{ height: '28px' }} link>Male</MDBDropdownItem>
-                                        <MDBDropdownItem style={{ borderColor: 'grey' }} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{ height: '28px' }} link>Female</MDBDropdownItem>
-                                        <MDBDropdownItem style={{ borderColor: 'grey' }} className='dropdown-divider'></MDBDropdownItem>
-
+                                    <MDBDropdownMenu style={{height: '5em' }}>
+                                        <MDBDropdownItem style={{ height: '30px' }} link>Male</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '30px' }} link>Female</MDBDropdownItem>
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </div>
                         </MDBCardBody>
                     </MDBCard>
 
-                    <MDBCard className='mt-4'>
+                    <MDBCard className='mt-4' style={{backgroundColor:'#f7f2f287'}}>
                         <MDBCardBody>
                             <MDBTypography className='card-header' style={{ backgroundColor: '#dcdcdc' }} tag='h6'><strong>Lived Abroad</strong></MDBTypography>
                             <MDBTypography tag='h7'><strong>Have you or any member of your household lived abroad in the last 5 years? *</strong></MDBTypography>
@@ -144,7 +204,7 @@ export default function Registerclient() {
                         </MDBCardBody>
                     </MDBCard>
 
-                    <MDBCard className='mt-4'>
+                    <MDBCard className='mt-4' style={{backgroundColor:'#f7f2f287'}}>
                         <MDBCardBody>
                             <div>
                                 <MDBTypography className='card-header' style={{ backgroundColor: '#dcdcdc' }} tag='h6'><strong>Current Address</strong></MDBTypography>
@@ -247,11 +307,76 @@ export default function Registerclient() {
                                     </span>
                                 </div>
 
-                                <div >
+                                {/* <div >
                                     <input className='form-control' type='text' style={{ width: '50px', float: 'left', marginRight: '5px' }} />
                                     <input className='form-control' type='text' style={{ width: '50px', float: 'left', marginRight: '5px' }} />
                                     <input className='form-control' type='text' style={{ width: '50px' }} />
+                                </div> */}
+<div className='mt-2'>
+                                <div className='btn-group'>
+                                    <MDBDropdown style={{ marginRight: '5px' }}>
+                                        <MDBDropdownToggle className='border border-dark rounded' color='secondary' >
+                                            Date
+                                        </MDBDropdownToggle>
+                                        <MDBDropdownMenu style={{ overflow: 'scroll', height: '12em' }} >
+                                            <MDBDropdownItem style={{height: '25px' }} link>01</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>02</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>03</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>04</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>05</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>06</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>07</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>08</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>09</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>10</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>11</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>12</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>13</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>14</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>15</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>16</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>17</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>18</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>19</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>20</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>21</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>22</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>23</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>24</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>25</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>26</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>27</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>28</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>29</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>30</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>31</MDBDropdownItem>
+                                        </MDBDropdownMenu>
+                                    </MDBDropdown>
+
+                                    <MDBDropdown  style={{ marginRight: '5px' }} className='dropdown btn-group' >
+                                        <MDBDropdownToggle className='border border-dark rounded' color='secondary' >
+                                            Month
+                                        </MDBDropdownToggle>
+                                        <MDBDropdownMenu style={{ overflow: 'scroll', height: '12em' }} >
+                                            <MDBDropdownItem style={{height: '25px' }} link>January</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>February</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>March</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>April</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>May</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>June</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>July</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>August</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>September</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>October</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>November</MDBDropdownItem>
+                                            <MDBDropdownItem style={{height: '25px' }} link>December</MDBDropdownItem>
+                                        </MDBDropdownMenu>
+                                    </MDBDropdown>
+
+                                <input className='form-control border border-dark rounded' type='text' placeholder='YEAR' style={{ width: '65px', float: 'left', borderColor:'black', color:'black', background:'#e3ebf7'}} />
+
                                 </div>
+                            </div>
 
                                 <div>
                                     <div className='mt-4'>
@@ -291,18 +416,13 @@ export default function Registerclient() {
                                             <MDBDropdownToggle className='border border-dark rounded' color='secondary'>
                                                 Please Choose
                                             </MDBDropdownToggle>
-                                            <MDBDropdownMenu color=''>
+                                            <MDBDropdownMenu style={{ overflow: 'scroll', height: '11em' }}>
                                                 {/* <MDBDropdownItem link>Please choose</MDBDropdownItem> */}
-                                                <MDBDropdownItem style={{height:'28px'}}  link>Home</MDBDropdownItem>
-                                                <MDBDropdownItem style={{ borderColor: 'grey' }} className='dropdown-divider'></MDBDropdownItem>
-                                                <MDBDropdownItem style={{height:'28px'}}  link>Work</MDBDropdownItem>
-                                                <MDBDropdownItem style={{ borderColor: 'grey' }} className='dropdown-divider'></MDBDropdownItem>
-                                                <MDBDropdownItem style={{height:'28px'}}  link>Solicitor</MDBDropdownItem>
-                                                <MDBDropdownItem style={{ borderColor: 'grey' }} className='dropdown-divider'></MDBDropdownItem>
-                                                <MDBDropdownItem style={{height:'28px'}}  link>Parents</MDBDropdownItem>
-                                                <MDBDropdownItem style={{ borderColor: 'grey' }} className='dropdown-divider'></MDBDropdownItem>
-                                                <MDBDropdownItem style={{height:'28px'}}  link>Other</MDBDropdownItem>
-                                                <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
+                                                <MDBDropdownItem style={{ height: '26px' }} link>Home</MDBDropdownItem>
+                                                <MDBDropdownItem style={{ height: '26px' }} link>Work</MDBDropdownItem>
+                                                <MDBDropdownItem style={{ height: '26px' }} link>Solicitor</MDBDropdownItem>
+                                                <MDBDropdownItem style={{ height: '26px' }} link>Parents</MDBDropdownItem>
+                                                <MDBDropdownItem style={{ height: '26px' }} link>Other</MDBDropdownItem>
 
                                             </MDBDropdownMenu>
                                         </MDBDropdown>
@@ -417,7 +537,7 @@ export default function Registerclient() {
                         </MDBCardBody>
                     </MDBCard>
 
-                    <MDBCard className='mt-4'>
+                    <MDBCard className='mt-4' style={{backgroundColor:'#f7f2f287'}}>
                         <MDBCardBody>
                             <div>
                                 <MDBTypography className='card-header' style={{ backgroundColor: '#dcdcdc' }} tag='h6'><strong>Contact Details</strong></MDBTypography>
@@ -474,7 +594,7 @@ export default function Registerclient() {
                         </MDBCardBody>
                     </MDBCard>
 
-                    <MDBCard className='mt-4'>
+                    <MDBCard className='mt-4' style={{backgroundColor:'#f7f2f287'}}>
                         <MDBCardBody>
                             <div>
                                 <MDBTypography className='card-header' style={{ backgroundColor: '#dcdcdc' }} tag='h6'><strong>Equality and Diversity Monitoring</strong></MDBTypography>
@@ -490,51 +610,29 @@ export default function Registerclient() {
                                         <MDBDropdownToggle className='border border-dark rounded' color='secondary'>
                                             Please Choose
                                         </MDBDropdownToggle>
-                                        <MDBDropdownMenu style={{ overflow: 'scroll', height: '18em' }}>
+                                        <MDBDropdownMenu style={{ overflow: 'scroll', height: '15em' }}>
                                             {/* <MDBDropdownItem link>Please choose</MDBDropdownItem> */}
-                                            <MDBDropdownItem style={{height:'28px'}} link> Asian or Asian British: Any Other Asian Background</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Asian or Asian British: Bangladeshi</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Asian or Asian British: Chinese</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Asian or Asian British: Indian</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Asian or Asian British: Pakistani</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Black or Black British: African</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Black or Black British: Any Other Black/African/Caribbean background</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Black or Black British: Caribbean</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Mixed: Any Other Mixed Background</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Mixed: White and Asian</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Mixed: White and Black African</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Mixed: White and Black Caribbean/African</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Not known</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Other Ethnic: Any other ethnic group</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Other Ethnic: Arab</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Prefer not to say</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> Refused</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> White: Gypsy or Irish Traveller</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> White: Irish</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> White: Other White: Any other white background</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                            <MDBDropdownItem style={{height:'28px'}} link> White: Welsh / English / Scottish / Northern Irish</MDBDropdownItem>
-                                            <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Asian or Asian British: Any Other Asian Background</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Asian or Asian British: Bangladeshi</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Asian or Asian British: Chinese</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Asian or Asian British: Indian</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Asian or Asian British: Pakistani</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Black or Black British: African</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Black or Black British: Any Other Black/African/Caribbean background</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Black or Black British: Caribbean</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Mixed: Any Other Mixed Background</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Mixed: White and Asian</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Mixed: White and Black African</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Mixed: White and Black Caribbean/African</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Not known</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Other Ethnic: Any other ethnic group</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Other Ethnic: Arab</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Prefer not to say</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> Refused</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> White: Gypsy or Irish Traveller</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> White: Irish</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> White: Other White: Any other white background</MDBDropdownItem>
+                                            <MDBDropdownItem style={{ height: '26px' }} link> White: Welsh / English / Scottish / Northern Irish</MDBDropdownItem>
                                         </MDBDropdownMenu>
                                     </MDBDropdown>
                                 </div>
@@ -549,39 +647,24 @@ export default function Registerclient() {
                                     <MDBDropdownToggle className='border border-dark rounded' color='secondary'>
                                         Please Choose
                                     </MDBDropdownToggle>
-                                    <MDBDropdownMenu style={{ overflow: 'scroll', height: '18em' }}>
+                                    <MDBDropdownMenu style={{ overflow: 'scroll', height: '15em' }}>
                                         {/* <MDBDropdownItem link>Please choose</MDBDropdownItem> */}
-                                        <MDBDropdownItem style={{height:'28px'}} link>UK National</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>UK National returning from residence overseas</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Bulgaria</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Croatia</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Czech Republic</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Estonia</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Hungary</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Ireland</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Latvia</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Lithuania</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Poland</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Romania</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Slovakia</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Slovenia</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Other EEA national</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Non-EEA national</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>UK National</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>UK National returning from residence overseas</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Bulgaria</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Croatia</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Czech Republic</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Estonia</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Hungary</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Ireland</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Latvia</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Lithuania</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Poland</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Romania</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Slovakia</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Slovenia</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Other EEA national</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Non-EEA national</MDBDropdownItem>
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </div>
@@ -595,16 +678,12 @@ export default function Registerclient() {
                                     <MDBDropdownToggle className='border border-dark rounded' color='secondary'>
                                         Please Choose
                                     </MDBDropdownToggle>
-                                    <MDBDropdownMenu color=''>
+                                    <MDBDropdownMenu style={{ height: '8em' }}>
                                         {/* <MDBDropdownItem link>Please choose</MDBDropdownItem> */}
-                                        <MDBDropdownItem style={{height:'28px'}} link>Heterosexual or Straight</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Gay or Lesbian</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Prefer not to say</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Other</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Heterosexual or Straight</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Gay or Lesbian</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Prefer not to say</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Other</MDBDropdownItem>
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </div>
@@ -617,26 +696,16 @@ export default function Registerclient() {
                                     <MDBDropdownToggle className='border border-dark rounded' color='secondary'>
                                         Please Choose
                                     </MDBDropdownToggle>
-                                    <MDBDropdownMenu style={{ overflow: 'scroll', height: '18em' }}>
-                                        {/* <MDBDropdownItem link>Please choose</MDBDropdownItem> */}
-                                        <MDBDropdownItem style={{height:'28px'}} link>Buddhist</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Christian (including all denominations)</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Hindu</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Jewish</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Muslim</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Sikh</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Any other religion</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Not known</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Prefer not to say</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
+                                    <MDBDropdownMenu style={{ height: '17.5em' }}>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Buddhist</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Christian (including all denominations)</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Hindu</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Jewish</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Muslim</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Sikh</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Any other religion</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Not known</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '26px' }} link>Prefer not to say</MDBDropdownItem>
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </div>
@@ -649,14 +718,10 @@ export default function Registerclient() {
                                     <MDBDropdownToggle className='border border-dark rounded' color='secondary'>
                                         Please Choose
                                     </MDBDropdownToggle>
-                                    <MDBDropdownMenu color=''>
-                                        {/* <MDBDropdownItem link>Please choose</MDBDropdownItem> */}
-                                        <MDBDropdownItem style={{height:'28px'}} link>No</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Yes</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Prefer not to say</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
+                                    <MDBDropdownMenu style={{ height: '7em' }}>
+                                        <MDBDropdownItem style={{ height: '29px' }} link>No</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '29px' }} link>Yes</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '29px' }} link>Prefer not to say</MDBDropdownItem>
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </div>
@@ -670,77 +735,41 @@ export default function Registerclient() {
                                         Please Choose
                                     </MDBDropdownToggle>
                                     <MDBDropdownMenu style={{ overflow: 'scroll', height: '18em' }}>
-                                        {/* <MDBDropdownItem link>Please choose</MDBDropdownItem> */}
-                                        <MDBDropdownItem style={{height:'28px'}} link>Albanian</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Bengali</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>BSL - British sign language</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Chinese</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Czechoslovakian</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>English</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Farsi</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>French</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>German</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Greek</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Gujarati</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Halari</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Hindi</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Israeli (Hebrew)</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Italian</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Kosovan</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Lingala</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Luganda</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Macedonian</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Other</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Portuguese</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Punjabi</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Romanian</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Russian</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Slovakian</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Somali</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Sorani - Kurdish Sorani</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Spanish</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Swahili</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Tamil</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Turkish</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Ugandan</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Urdu</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Yugoslavian</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Zulu</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Albanian</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Bengali</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>BSL - British sign language</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Chinese</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Czechoslovakian</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>English</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Farsi</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>French</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>German</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Greek</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Gujarati</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Halari</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Hindi</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Israeli (Hebrew)</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Italian</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Kosovan</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Lingala</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Luganda</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Macedonian</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Other</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Portuguese</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Punjabi</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Romanian</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Russian</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Slovakian</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Somali</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Sorani - Kurdish Sorani</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Spanish</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Swahili</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Tamil</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Turkish</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Ugandan</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Urdu</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Yugoslavian</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Zulu</MDBDropdownItem>
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </div>
@@ -758,7 +787,7 @@ export default function Registerclient() {
                         </MDBCardBody>
                     </MDBCard>
 
-                    <MDBCard className='mt-4'>
+                    <MDBCard className='mt-4' style={{backgroundColor:'#f7f2f287'}}>
                         <MDBCardBody>
                             <div>
                                 <MDBTypography className='card-header' style={{ backgroundColor: '#dcdcdc' }} tag='h6'><strong>Eligibility</strong></MDBTypography>
@@ -771,21 +800,14 @@ export default function Registerclient() {
                                     <MDBDropdownToggle className='border border-dark rounded' color='secondary'>
                                         Please Choose
                                     </MDBDropdownToggle>
-                                    <MDBDropdownMenu style={{ overflow: 'scroll', height: '18em' }}>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Birmingham City Council Tenant</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Registered Provider / Housing Association tenant</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Living with friends or family</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Private Tenant</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Owner Occupier</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Temporary Accommodation</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Other</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
+                                    <MDBDropdownMenu style={{ height: '15em' }}>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Birmingham City Council Tenant</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Registered Provider / Housing Association tenant</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Living with friends or family</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Private Tenant</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Owner Occupier</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Temporary Accommodation</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Other</MDBDropdownItem>
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </div>
@@ -830,7 +852,7 @@ export default function Registerclient() {
                             <div className="help-content border border-dark rounded">
                                 <span className="far fa-question-circle help-icon"></span>
                                 <span className="help-text">
-                                    <span style={{ fontSize: '12px', padding:'5px' }} className="configured-help-text ">
+                                    <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text ">
                                         The EEA includes EU countries and also Iceland, Liechtenstein and Norway. It allows them to be part of the EU's single market. Switzerland is neither an EU or EEA member but is part of the single market - this means Swiss nationals have the same rights to live and work in the UK as other EEA nationals.</span>
                                 </span>
                             </div>
@@ -839,33 +861,20 @@ export default function Registerclient() {
                                     <MDBDropdownToggle className='border border-dark rounded' color='secondary'>
                                         Please Choose
                                     </MDBDropdownToggle>
-                                    <MDBDropdownMenu style={{ overflow: 'scroll', height: '18em' }}>
-                                        <MDBDropdownItem style={{height:'28px'}} link>A person who has limited or exceptional leave to enter or remain in the UK with recourse to public funds</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>A British citizen</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>A citizen of a country within the EEA with settled status</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>A citizen of a country within the EEA with pre-settled status</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>A Commonwealth citizen with a right of abode</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>A family member of a citizen of a country within the EEA with settled status</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>A family member of a citizen of a country within the EEA with pre-settled status</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>A person with leave to remain</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>An Irish citizen</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Seeking, or have sought asylum in the UK</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Someone granted humanitarian protection under immigration rules</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>Someone with permission to be in the UK because you have a sponsor</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
-                                        <MDBDropdownItem style={{height:'28px'}} link>None of the above</MDBDropdownItem>
-                                        <MDBDropdownItem style={{borderColor:'grey'}} className='dropdown-divider'></MDBDropdownItem>
+                                    <MDBDropdownMenu style={{ overflow: 'scroll', height: '16em' }}>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>A person who has limited or exceptional leave to enter or remain in the UK with recourse to public funds</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>A British citizen</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>A citizen of a country within the EEA with settled status</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>A citizen of a country within the EEA with pre-settled status</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>A Commonwealth citizen with a right of abode</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>A family member of a citizen of a country within the EEA with settled status</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>A family member of a citizen of a country within the EEA with pre-settled status</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>A person with leave to remain</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>An Irish citizen</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Seeking, or have sought asylum in the UK</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Someone granted humanitarian protection under immigration rules</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>Someone with permission to be in the UK because you have a sponsor</MDBDropdownItem>
+                                        <MDBDropdownItem style={{ height: '28px' }} link>None of the above</MDBDropdownItem>
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </div>
@@ -873,7 +882,7 @@ export default function Registerclient() {
                         </MDBCardBody>
                     </MDBCard>
 
-                    <MDBCard className='mt-4'>
+                    <MDBCard className='mt-4' style={{backgroundColor:'#f7f2f287'}}>
                         <MDBCardBody>
                             <div>
                                 <MDBTypography className='card-header' style={{ backgroundColor: '#dcdcdc' }} tag='h6'><strong>Connection to Birmingham</strong></MDBTypography>
@@ -908,7 +917,7 @@ export default function Registerclient() {
                 </MDBCol>
 
                 <MDBCol className='' >
-                    <MDBCard className=''>
+                    <MDBCard className='' style={{backgroundColor:'#f7f2f287'}}>
                         <MDBCardBody >
                             <ul className="list-group list-group-flush" >
                                 <li className="list-group-item list-group-item-primary"><strong>Application progress</strong></li>
