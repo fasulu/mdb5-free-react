@@ -20,6 +20,32 @@ import {
 export default function navbar() {
 
   const [showBasic, setShowBasic] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const element1 = (<form className='d-flex mr-auto mb-2 mb-lg-0'>
+
+    <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
+      <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
+      My account</MDBBtn>
+
+    <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
+      <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
+      Messages</MDBBtn>
+
+    <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
+      <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
+      Logout</MDBBtn>
+
+  </form>);
+  const element2 = (<form className='d-flex mr-auto mb-2 mb-lg-0'>
+    <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
+      <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
+      Register</MDBBtn>
+
+    <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
+      <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
+      Login</MDBBtn>
+
+  </form>)
 
   return (
     <MDBNavbar expand='lg' light bgColor='light'>
@@ -59,15 +85,37 @@ export default function navbar() {
               </MDBNavbarItem>
             </MDBNavbarNav>
 
-            <form className='d-flex w-auto'>
-              <MDBBtn style={{margin:'12px', width:'135px'}} className='form-control'  color='primary'>
-                <MDBIcon style={{marginRight:'5px'}} fas icon='pencil-alt'/>
-                Register</MDBBtn>
+            {/* <form className='d-flex w-auto'> */}
+            {
+              loggedIn ? element1 : element2
+            }
+            {/* <form className='d-flex mr-auto mb-2 mb-lg-0'>
+              <div>
+                <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
+                  <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
+                  My account</MDBBtn>
 
-              <MDBBtn style={{margin:'12px', width:'135px'}} className='form-control'  color='primary'>
-                <MDBIcon style={{marginRight:'5px'}} fas icon='user-alt' />
-                Login</MDBBtn>
-            </form>
+                <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
+                  <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
+                  Messages</MDBBtn>
+
+                <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
+                  <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
+                  Logout</MDBBtn>
+              </div>
+
+
+              <div>
+                <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
+                  <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
+                  Register</MDBBtn>
+
+                <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
+                  <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
+                  Login</MDBBtn>
+              </div>
+
+            </form> */}
           </MDBCollapse>
         </div>
       </MDBContainer>

@@ -3,13 +3,12 @@ import {
   MDBFooter,
   MDBContainer,
   MDBCol,
-  MDBRow,
-  MDBTypography
+  MDBRow
 } from 'mdb-react-ui-kit';
 
 export default function Footer() {
   return (
-    <MDBFooter style={{ backgroundColor: '#333', fontSize: '12px', lineHeight: '16px' }} >
+    <MDBFooter style={{ backgroundColor: '#333', fontSize: '14px', lineHeight: '19px' }} >
       <MDBContainer className='text-center text-lg-left text-white p-1'>
         <MDBRow className=''>
           <MDBCol lg-auto md-auto sm-auto size='1'>
@@ -28,11 +27,9 @@ export default function Footer() {
           </MDBCol>
         </MDBRow>
       </MDBContainer>
-
-      <div style={{ backgroundColor: '#fbfbfb' }} className=''>
-        {/* &copy; {new Date().getFullYear()} Copyright:{' '} */}
-        <a className='text-center text-lg-left text-dark p-1'>
-          © Copyright Civica UK Limited 2017
+      <div style={{ backgroundColor: 'white' }} >
+        <a style={{ fontSize: '17px', justifyContent: 'left', marginLeft:'50px' }} className=''>
+          © Copyright Civica UK Limited 2023
         </a>
       </div>
     </MDBFooter>

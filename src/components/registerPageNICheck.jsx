@@ -17,7 +17,7 @@ export default function NINOCheck() {
                     <MDBTypography tag='h6'><strong>Register your household</strong></MDBTypography>
 
                     <MDBTypography tag='h7'>National insurance number check</MDBTypography>
-                    <MDBCard className='' >
+                    <MDBCard style={{ backgroundColor: '#f7f2f287' }} className='' >
                         <MDBCardBody>
                             <p className='lh-2' ><strong>National Insurance Check</strong></p>
                             <p className='lh-2' >To begin, please enter the National Insurance number of the primary applicant, and if applicable, the joint applicant.</p>
@@ -34,7 +34,7 @@ export default function NINOCheck() {
                             </MDBInputGroup>
 
                             <form className='d-flex input-group w-auto mt-5'>
-                                <MDBBtn style={{ fontSize: '15px' }} color='primary'>
+                                <MDBBtn style={{ fontSize: '18px', width: 'auto', textTransform: 'none' }} color='primary'>
 
                                     Next Page<MDBIcon fas icon='caret-right' className='mx-2' />
 
@@ -44,8 +44,8 @@ export default function NINOCheck() {
 
                     </MDBCard>
                 </MDBCol>
-                <MDBCol className='mx-5' size='md'>
-                    <MDBCard className='w-100 mx-auto'>
+                <MDBCol className='mt-5' size='md'>
+                    <MDBCard style={{ backgroundColor: '#f7f2f287' }} className='w-100 mx-auto'>
                         <MDBCardBody>
                             <ul className="list-group list-group-flush" >
                                 <li className="list-group-item list-group-item-primary"><strong>Application progress</strong></li>

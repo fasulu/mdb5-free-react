@@ -13,7 +13,7 @@ export default function Login() {
 
             <MDBRow className='mt-5 mb-5'>
                 <MDBCol className='mx-5' size='md'>
-                    <MDBCard className='w-100 mx-auto' >
+                    <MDBCard style={{ backgroundColor: '#f7f2f287' }} className='w-100 mx-auto' >
                         <MDBCardBody>
                             <MDBTypography tag='h3'>Login</MDBTypography>
 
@@ -24,7 +24,7 @@ export default function Login() {
                             </MDBInputGroup>
                             <a href="#" className="stretched-link">I have forgotten my login reference</a>
                             <form className='d-flex input-group w-auto mt-5'>
-                                <MDBBtn style={{ fontSize: '10px' }} color='primary'>
+                                <MDBBtn style={{ fontSize: '18px', width: 'auto', textTransform: 'none' }} color='primary'>
 
                                     Continue<MDBIcon fas icon='caret-right' className='mx-2' />
 
@@ -35,7 +35,7 @@ export default function Login() {
                     </MDBCard>
                 </MDBCol>
                 <MDBCol className='mx-5' size='md'>
-                    <MDBCard className='w-100 mx-auto'>
+                    <MDBCard style={{ backgroundColor: '#f7f2f287' }} className='w-100 mx-auto'>
                         <MDBCardBody>
                             <ul className="list-group list-group-flush" >
                                 <li className="list-group-item list-group-item-primary"><strong>Register</strong></li>
