@@ -11,7 +11,7 @@ export default function Footer() {
     <MDBFooter style={{ backgroundColor: '#333', fontSize: '14px', lineHeight: '19px' }} >
       <MDBContainer className='text-center text-lg-left text-white p-1'>
         <MDBRow className=''>
-          <MDBCol lg-auto md-auto sm-auto size='1'>
+          <MDBCol size='1'>
             Privacy Policy
           </MDBCol>
           <MDBCol size='2'>
