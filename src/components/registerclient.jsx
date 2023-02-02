@@ -9,6 +9,9 @@ import { sexOrients } from '../resources/sexOrient';
 import { beliefs } from '../resources/belief';
 import { languages } from '../resources/language';
 import { dates, months } from '../resources/datePicker';
+import { validPwd, validEmail, validName, validPostcode, emailMatch, pwdMatch, memDateMatch } from '../validations/Validator.jsx';
+
+// import PwdValidation from '../validations/PwdValidation';
 
 import {
     MDBContainer,
@@ -47,6 +50,7 @@ export default function Registerclient() {
     const [sName, setSName] = useState("");
     const [nameChange, setNameChange] = useState("");
     const [nINO, setNINO] = useState("");
+    const [dateofbirth, setdateofbirth] = useState("");
     const [dobDate, setDOBDate] = useState("");
     const [dobMonth, setDOBMonth] = useState("");
     const [dobYear, setDOBYear] = useState("");
@@ -56,6 +60,7 @@ export default function Registerclient() {
     const [addLine2, setAddLine2] = useState("");
     const [addLine3, setAddLine3] = useState("");
     const [addLine4, setAddLine4] = useState("");
+    const [movedInDate, setMovedInDate] = useState("");
     const [movedDate, setMovedDate] = useState("");
     const [movedMonth, setMovedMonth] = useState("");
     const [movedYear, setMovedYear] = useState("");
@@ -91,37 +96,62 @@ export default function Registerclient() {
     const [areyou, setAreYou] = useState("");
     const [connection, setConnection] = useState([]);
     const [memorableDate, setMemorableDate] = useState("");
-    const [memorableMonth, setMemorableMonth] = useState("");
-    const [memorableYear, setMemorableYear] = useState("");
-    const [reEnterMemorableDate, setReenterMemorableDate] = useState("");
-    const [reEnterMemorableMonth, setReenterMemorableMonth] = useState("");
-    const [reEnterMemorableYear, setReenterMemorableYear] = useState("");
+    const [memDate, setMemDate] = useState("");
+    const [memMonth, setMemMonth] = useState("");
+    const [memYear, setMemYear] = useState("");
+    const [reEntermemorableDate, setReenterMemorableDate] = useState("");
+    const [reEnterMemDate, setReenterMemDate] = useState("");
+    const [reEnterMemMonth, setReenterMemMonth] = useState("");
+    const [reEnterMemYear, setReenterMemYear] = useState("");
     const [password, setPassword] = useState("");
     const [reEnterPwd, setReEnterPwd] = useState("");
 
+    const [nameErr, setNameErr] = useState(false);
+    const [emailErr, setEmailErr] = useState(false);
+    const [passwordErr, setPasswordErr] = useState(false);
+    const [postcodeErr, setPostcodeErr] = useState(false);
+    const [emailMatchsErr, setEmailMatchesErr] = useState(false)
+    const [pwdMatchsErr, setPwdMatchesErr] = useState(false)
+    const [memMatchsErr, setMemMatchesErr] = useState(false)
 
     useEffect(() => {
 
     }, [])
 
     const showInConsole = (e) => {
+
         e.preventDefault();
-        const dateofbirth = dobMonth + "/" + dobDate + "/" + dobYear;
-        const memorable_date = memorableDate + "/" + memorableMonth + "/" + memorableYear;
-        const rememDate = reEnterMemorableDate + "/" + reEnterMemorableMonth + "/" + reEnterMemorableYear;
+
+        setdateofbirth(dobMonth + "/" + dobDate + "/" + dobYear);
+        setMovedInDate(movedMonth + "/" + movedDate + "/" + movedYear);
+        setMemorableDate(memMonth + "/" + memDate + "/" + memYear);
+        setReenterMemorableDate(reEnterMemMonth + "/" + reEnterMemDate + "/" + reEnterMemYear);
+
+        setNameErr(validName(fName))
+        setNameErr(validName(sName))
+        setPasswordErr(validPwd(password))
+        setEmailErr(validEmail(email))
+        setPostcodeErr(validPostcode(postcode))
+        setPostcodeErr(validPostcode(correspondencePostcode))
+
+        setEmailMatchesErr(emailMatch(email, reEnterEmail))
+        setPwdMatchesErr(pwdMatch(password, reEnterPwd))
+        setMemMatchesErr(memDateMatch(memorableDate, reEntermemorableDate))
+        console.log(`Validation result is fname/sname ${nameErr} pwd ${passwordErr}, email ${emailErr}, 
+        postcode ${postcodeErr}, email matches ${emailMatchsErr}, memorable date ${memMatchsErr}, pwd match ${pwdMatchsErr}`)
 
         console.log('in show in console', title, fName, mName, sName, nameChange,
             nINO, dateofbirth, sex, livedAbroad,
             postcode, addLine1, addLine2, addLine3, addLine4,
-            movedDate,
-            rented, landlordName, landlordAddress, infoAboutCurrentAddress,
+            movedInDate,
+            rented, landlordName, landlordAddress, currentTenancyType, infoAboutCurrentAddress,
             addressDifferent, correspondenceType, placedByLocalAuthrty, localAuthrtyName,
             correspondencePostcode, correspondenceAddLine1, correspondenceAddLine2, correspondenceAddLine3, correspondenceAddLine4,
             telephone, mobile, workPhone, email, reEnterEmail,
             ethnicity, nationality, sexOrient, belief,
             healthCondition, preferedLanguage, needInterpreter,
             tenure, tenancyRefNo, areyou, connection,
-            memorable_date, rememDate,
+            memorableDate, reEntermemorableDate,
             password, reEnterPwd
         )
     }
@@ -129,16 +159,14 @@ export default function Registerclient() {
     const handleCheckbox = (e) => {
 
         // e.preventDefault();
-        let checkedItems = [...connection]
+        let checkedItems = [...connection];
         if (e.target.checked) {
-            checkedItems = [...connection, e.target.value]
+            checkedItems = [...connection, e.target.value];
         } else {
-            checkedItems.splice(connection.indexOf(e.target.value), 1)
+            checkedItems.splice(connection.indexOf(e.target.value), 1);
         }
-        setConnection(checkedItems)
-
-
-        console.log(connection)
+        setConnection(checkedItems);
+        console.log(connection);
     }
 
     return (
@@ -264,76 +292,20 @@ export default function Registerclient() {
                                         <select style={datePickerStyle}
                                             className="form-select rounded"
                                             aria-label="Default select example"
-                                            value={dobDate}
                                             onChange={(e) => { setDOBDate(e.target.value) }}>
                                             {datesData.map((option) => (
                                                 <option value={option.dKey}>{option.dValue}</option>
                                             ))}
                                         </select>
-                                        {/* <select style={{ overflow: 'scroll', width: '70px' }} className="form-select rounded "
-                                            value={dobDate} onChange={(e) => { setDOBDate(e.target.value) }}>
-                                            <option defaultValue>dd</option>
-                                            <option value="01">01</option>
-                                            <option value="02">02</option>
-                                            <option value="03">03</option>
-                                            <option value="04">04</option>
-                                            <option value="05">05</option>
-                                            <option value="06">06</option>
-                                            <option value="07">07</option>
-                                            <option value="08">08</option>
-                                            <option value="09">09</option>
-                                            <option value="10">10</option>
-                                            <option value="11">11</option>
-                                            <option value="12">12</option>
-                                            <option value="13">13</option>
-                                            <option value="14">14</option>
-                                            <option value="15">15</option>
-                                            <option value="16">16</option>
-                                            <option value="17">17</option>
-                                            <option value="18">18</option>
-                                            <option value="19">19</option>
-                                            <option value="20">20</option>
-                                            <option value="21">21</option>
-                                            <option value="22">22</option>
-                                            <option value="23">23</option>
-                                            <option value="24">24</option>
-                                            <option value="25">25</option>
-                                            <option value="26">26</option>
-                                            <option value="27">27</option>
-                                            <option value="28">28</option>
-                                            <option value="29">29</option>
-                                            <option value="30">30</option>
-                                            <option value="31">31</option>
-                                        </select> */}
-
                                         <select style={monthPickerStyle}
                                             className="form-select rounded"
-                                            value={dobMonth}
                                             onChange={(e) => { setDOBMonth(e.target.value) }}>
                                             {monthsData.map((option) => (
                                                 <option value={option.mKey}>{option.mValue}</option>
                                             ))}
                                         </select>
-                                        {/* <select style={{ overflow: 'scroll', width: '78px' }} className="form-select rounded "
-                                            value={dobMonth} onChange={(e) => { setDOBMonth(e.target.value) }}>
-                                            <option defaultValue>mm</option>
-                                            <option value="1">January</option>
-                                            <option value="2">February</option>
-                                            <option value="3">March</option>
-                                            <option value="4">April</option>
-                                            <option value="5">May</option>
-                                            <option value="6">June</option>
-                                            <option value="7">July</option>
-                                            <option value="8">August</option>
-                                            <option value="9">September</option>
-                                            <option value="10">October</option>
-                                            <option value="11">November</option>
-                                            <option value="12">December</option>
-                                        </select> */}
-
                                         <input className='form-control rounded' type='text' placeholder='year'
-                                            style={yearPickerStyle}
-                                            value={dobYear} onChange={(e) => { setDOBYear(e.target.value) }}></input>
+                                            style={yearPickerStyle} onChange={(e) => { setDOBYear(e.target.value) }}></input>
 
                                     </div>
                                 </div>
@@ -524,76 +496,22 @@ export default function Registerclient() {
                                         <div className='btn-group'>
                                             <select style={datePickerStyle}
                                                 className="form-select rounded"
-                                                aria-label="Default select example"
-                                                value={movedDate}
                                                 onChange={(e) => { setMovedDate(e.target.value) }} >
                                                 {datesData.map((option) => (
                                                     <option value={option.dKey}>{option.dValue}</option>
                                                 ))}
                                             </select>
-                                            {/* <select style={{ overflow: 'scroll', width: '70px' }} className="form-select rounded "
-                                                value={movedDate} onChange={(e) => { setMovedDate(e.target.value) }} >
-                                                <option >dd</option>
-                                                <option value="01">01</option>
-                                                <option value="02">02</option>
-                                                <option value="03">03</option>
-                                                <option value="04">04</option>
-                                                <option value="05">05</option>
-                                                <option value="06">06</option>
-                                                <option value="07">07</option>
-                                                <option value="08">08</option>
-                                                <option value="09">09</option>
-                                                <option value="10">10</option>
-                                                <option value="11">11</option>
-                                                <option value="12">12</option>
-                                                <option value="13">13</option>
-                                                <option value="14">14</option>
-                                                <option value="15">15</option>
-                                                <option value="16">16</option>
-                                                <option value="17">17</option>
-                                                <option value="18">18</option>
-                                                <option value="19">19</option>
-                                                <option value="20">20</option>
-                                                <option value="21">21</option>
-                                                <option value="22">22</option>
-                                                <option value="23">23</option>
-                                                <option value="24">24</option>
-                                                <option value="25">25</option>
-                                                <option value="26">26</option>
-                                                <option value="27">27</option>
-                                                <option value="28">28</option>
-                                                <option value="29">29</option>
-                                                <option value="30">30</option>
-                                                <option value="31">31</option>
-                                            </select> */}
 
                                             <select style={monthPickerStyle}
                                                 className="form-select rounded"
-                                                value={movedMonth}
                                                 onChange={(e) => { setMovedMonth(e.target.value) }} >
                                                 {monthsData.map((option) => (
                                                     <option value={option.mKey}>{option.mValue}</option>
                                                 ))}
                                             </select>
-                                            {/* <select style={{ overflow: 'scroll', width: '78px' }} className="form-select rounded "
-                                                value={movedMonth} onChange={(e) => { setMovedMonth(e.target.value) }} >
-                                                <option defaultValue>mm</option>
-                                                <option value="1">January</option>
-                                                <option value="2">February</option>
-                                                <option value="3">March</option>
-                                                <option value="4">April</option>
-                                                <option value="5">May</option>
-                                                <option value="6">June</option>
-                                                <option value="7">July</option>
-                                                <option value="8">August</option>
-                                                <option value="9">September</option>
-                                                <option value="10">October</option>
-                                                <option value="11">November</option>
-                                                <option value="12">December</option>
-                                            </select> */}
                                             <input className='form-control rounded' border border-5 border-primary type='text' placeholder='year'
-                                                style={yearPickerStyle} not wsorking
-                                                value={movedYear} onChange={(e) => { setMovedYear(e.target.value) }} ></input>
+                                                style={yearPickerStyle}
+                                                onChange={(e) => { setMovedYear(e.target.value) }} ></input>
 
                                         </div>
                                     </div>
@@ -701,14 +619,13 @@ export default function Registerclient() {
                                                 <p style={{ fontSize: '16px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Correspondence description</strong></p>
                                                 <select style={comboBoxStyle}
                                                     className="form-select rounded"
-                                                    aria-label="Default select example"
-                                                    onChange={(e) => { setAreYou(e.target.value) }}>
+                                                    onChange={(e) => { setCorrespondenceType(e.target.value); setShowCorrespondence(showCorrespondence) }}>    {/* showCorrespondence will show or hide according to the selection */}
                                                     {correspondenceData.map((option) => (
                                                         <option value={option.correspondenceKey}>{option.correspondence}</option>
                                                     ))}
                                                 </select>
                                                 {/* <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
-                                                    value={correspondenceType} onChange={(e) => { setCorrespondenceType(e.target.value); setShowCorrespondence(showCorrespondence) }}>     showCorrespondence will  show or hide according to the selection
+                                                    value={correspondenceType} onChange={(e) => { setCorrespondenceType(e.target.value); setShowCorrespondence(showCorrespondence) }}>
                                                     <option defaultValue>Please Select</option>
                                                     <option value="Home">Home</option>
                                                     <option value="work">Work</option>
@@ -1428,7 +1345,7 @@ export default function Registerclient() {
                                 <div className='mt-2'>
                                     <div className='btn-group'>
                                         <select style={{ overflow: 'scroll', width: '70px' }} className="form-select rounded "
-                                            onChange={(e) => { setMemorableDate(e.target.value) }} >
+                                            onChange={(e) => { setMemDate(e.target.value) }} >
                                             <option defaultValue>dd</option>
                                             <option value="01">01</option>
                                             <option value="02">02</option>
@@ -1464,7 +1381,7 @@ export default function Registerclient() {
                                         </select>
 
                                         <select style={{ overflow: 'scroll', width: '78px' }} className="form-select rounded "
-                                            onChange={(e) => { setMemorableMonth(e.target.value) }} >
+                                            onChange={(e) => { setMemMonth(e.target.value) }} >
                                             <option defaultValue>mm</option>
                                             <option value="1">January</option>
                                             <option value="2">February</option>
@@ -1481,7 +1398,7 @@ export default function Registerclient() {
                                         </select>
                                         <input className='form-control rounded' type='text' placeholder='year'
                                             style={{ width: '65px', float: 'left', borderColor: 'lightgrey', color: 'black' }}
-                                            onChange={(e) => { setMemorableYear(e.target.value) }} />
+                                            onChange={(e) => { setMemYear(e.target.value) }} />
 
                                     </div>
                                 </div>
@@ -1491,7 +1408,7 @@ export default function Registerclient() {
                                     <div className='mt-2'>
                                         <div className='btn-group'>
                                             <select style={{ overflow: 'scroll', width: '70px' }} className="form-select rounded "
-                                                onChange={(e) => { setReenterMemorableDate(e.target.value) }} >
+                                                onChange={(e) => { setReenterMemDate(e.target.value) }} >
                                                 <option defaultValue>dd</option>
                                                 <option value="01">01</option>
                                                 <option value="02">02</option>
@@ -1527,7 +1444,7 @@ export default function Registerclient() {
                                             </select>
 
                                             <select style={{ overflow: 'scroll', width: '78px' }} className="form-select rounded "
-                                                onChange={(e) => { setReenterMemorableMonth(e.target.value) }} >
+                                                onChange={(e) => { setReenterMemMonth(e.target.value) }} >
                                                 <option defaultValue>mm</option>
                                                 <option value="1">January</option>
                                                 <option value="2">February</option>
@@ -1544,7 +1461,7 @@ export default function Registerclient() {
                                             </select>
                                             <input className='form-control rounded' type='text' placeholder='year'
                                                 style={{ width: '65px', float: 'left', borderColor: 'lightgrey', color: 'black' }}
-                                                onChange={(e) => { setReenterMemorableYear(e.target.value) }} />
+                                                onChange={(e) => { setReenterMemYear(e.target.value) }} />
 
                                         </div>
                                     </div>
