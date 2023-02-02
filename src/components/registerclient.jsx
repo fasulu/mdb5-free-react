@@ -1,5 +1,15 @@
-import React from 'react';
-import $ from 'jquery';
+import React, { useEffect, useState } from 'react';
+
+import { areyous } from '../resources/areyou';
+import { tenures } from '../resources/tenure';
+import { correspondences } from '../resources/correspondence';
+import { ethnicities } from '../resources/ethnicity';
+import { nationalities } from '../resources/nationality';
+import { sexOrients } from '../resources/sexOrient';
+import { beliefs } from '../resources/belief';
+import { languages } from '../resources/language';
+import { dates, months } from '../resources/datePicker';
+
 import {
     MDBContainer,
     MDBCard, MDBCardBody,
@@ -8,9 +18,23 @@ import {
     MDBBtn,
     MDBRadio, MDBCheckbox
 } from 'mdb-react-ui-kit';
-import { useEffect, useState } from 'react';
 
 export default function Registerclient() {
+
+    const areyouData = areyous;
+    const tenureData = tenures;
+    const correspondenceData = correspondences;
+    const ethnicityData = ethnicities;
+    const nationalityData = nationalities;
+    const sexOrientData = sexOrients;
+    const beliefData = beliefs;
+    const datesData = dates;
+    const monthsData = months;
+
+    const comboBoxStyle = { maxWidth: '250px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
+    const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
+    const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
+    const yearPickerStyle = { width: '65px', float: 'left' }
 
     const [showLandlord, setShowLandlord] = useState(false);
     const [showCorrespondence, setShowCorrespondence] = useState(false);
@@ -22,10 +46,10 @@ export default function Registerclient() {
     const [mName, setMName] = useState("");
     const [sName, setSName] = useState("");
     const [nameChange, setNameChange] = useState("");
+    const [nINO, setNINO] = useState("");
     const [dobDate, setDOBDate] = useState("");
     const [dobMonth, setDOBMonth] = useState("");
     const [dobYear, setDOBYear] = useState("");
-    const [nINO, setNINO] = useState("");
     const [sex, setSex] = useState("");
     const [postcode, setPostcode] = useState("");
     const [addLine1, setAddLine1] = useState("");
@@ -39,6 +63,7 @@ export default function Registerclient() {
     const [landlordName, setLandlordName] = useState("");
     const [landlordAddress, setLandlordAddress] = useState("");
     const [currentTenancyType, setCurrentTenancyType] = useState("");
+    const [infoAboutCurrentAddress, setInfoAboutCurrentAddress] = useState("");
     const [livedAbroad, setLivedAbroad] = useState("no");
     const [addressDifferent, setAddressDifferent] = useState("");
     const [correspondenceType, setCorrespondenceType] = useState("")
@@ -71,7 +96,7 @@ export default function Registerclient() {
     const [reEnterMemorableDate, setReenterMemorableDate] = useState("");
     const [reEnterMemorableMonth, setReenterMemorableMonth] = useState("");
     const [reEnterMemorableYear, setReenterMemorableYear] = useState("");
-    const [pwd, setPwd] = useState("");
+    const [password, setPassword] = useState("");
     const [reEnterPwd, setReEnterPwd] = useState("");
 
 
@@ -81,23 +106,23 @@ export default function Registerclient() {
 
     const showInConsole = (e) => {
         e.preventDefault();
-        const dob=dobMonth+"/"+dobDate+"/"+dobYear;
-        const memDate=memorableDate+"/"+memorableMonth+"/"+memorableYear;
-        const rememDate=reEnterMemorableDate+"/"+reEnterMemorableMonth+"/"+reEnterMemorableYear;
-        
+        const dateofbirth = dobMonth + "/" + dobDate + "/" + dobYear;
+        const memorable_date = memorableDate + "/" + memorableMonth + "/" + memorableYear;
+        const rememDate = reEnterMemorableDate + "/" + reEnterMemorableMonth + "/" + reEnterMemorableYear;
+
         console.log('in show in console', title, fName, mName, sName, nameChange,
-            nINO, dob, sex, livedAbroad,
+            nINO, dateofbirth, sex, livedAbroad,
             postcode, addLine1, addLine2, addLine3, addLine4,
             movedDate,
-            rented, landlordName, landlordAddress,
+            rented, landlordName, landlordAddress, infoAboutCurrentAddress,
             addressDifferent, correspondenceType, placedByLocalAuthrty, localAuthrtyName,
             correspondencePostcode, correspondenceAddLine1, correspondenceAddLine2, correspondenceAddLine3, correspondenceAddLine4,
             telephone, mobile, workPhone, email, reEnterEmail,
             ethnicity, nationality, sexOrient, belief,
             healthCondition, preferedLanguage, needInterpreter,
             tenure, tenancyRefNo, areyou, connection,
-            memDate,rememDate,
-            pwd, reEnterPwd
+            memorable_date, rememDate,
+            password, reEnterPwd
         )
     }
 
@@ -236,7 +261,16 @@ export default function Registerclient() {
 
                                 <div className='mt-2'>
                                     <div className='btn-group'>
-                                        <select style={{ overflow: 'scroll', width: '70px' }} className="form-select rounded "
+                                        <select style={datePickerStyle}
+                                            className="form-select rounded"
+                                            aria-label="Default select example"
+                                            value={dobDate}
+                                            onChange={(e) => { setDOBDate(e.target.value) }}>
+                                            {datesData.map((option) => (
+                                                <option value={option.dKey}>{option.dValue}</option>
+                                            ))}
+                                        </select>
+                                        {/* <select style={{ overflow: 'scroll', width: '70px' }} className="form-select rounded "
                                             value={dobDate} onChange={(e) => { setDOBDate(e.target.value) }}>
                                             <option defaultValue>dd</option>
                                             <option value="01">01</option>
@@ -270,9 +304,17 @@ export default function Registerclient() {
                                             <option value="29">29</option>
                                             <option value="30">30</option>
                                             <option value="31">31</option>
-                                        </select>
+                                        </select> */}
 
-                                        <select style={{ overflow: 'scroll', width: '78px' }} className="form-select rounded "
+                                        <select style={monthPickerStyle}
+                                            className="form-select rounded"
+                                            value={dobMonth}
+                                            onChange={(e) => { setDOBMonth(e.target.value) }}>
+                                            {monthsData.map((option) => (
+                                                <option value={option.mKey}>{option.mValue}</option>
+                                            ))}
+                                        </select>
+                                        {/* <select style={{ overflow: 'scroll', width: '78px' }} className="form-select rounded "
                                             value={dobMonth} onChange={(e) => { setDOBMonth(e.target.value) }}>
                                             <option defaultValue>mm</option>
                                             <option value="1">January</option>
@@ -287,9 +329,10 @@ export default function Registerclient() {
                                             <option value="10">October</option>
                                             <option value="11">November</option>
                                             <option value="12">December</option>
-                                        </select>
+                                        </select> */}
 
-                                        <input className='form-control rounded' type='text' placeholder='year' style={{ width: '65px', float: 'left', borderColor: 'lightgrey', color: 'black' }}
+                                        <input className='form-control rounded' type='text' placeholder='year'
+                                            style={yearPickerStyle}
                                             value={dobYear} onChange={(e) => { setDOBYear(e.target.value) }}></input>
 
                                     </div>
@@ -301,7 +344,7 @@ export default function Registerclient() {
 
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '16px' }}><strong>Your sex *</strong></p>
-                                    <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded"
+                                    <select style={comboBoxStyle} className="form-select border-rounded"
                                         value={sex} onChange={(e) => { setSex(e.target.value) }}>
                                         <option defaultValue>Please Choose</option>
                                         <option value="male">Male</option>
@@ -479,7 +522,16 @@ export default function Registerclient() {
 
                                     <div className='mt-2'>
                                         <div className='btn-group'>
-                                            <select style={{ overflow: 'scroll', width: '70px' }} className="form-select rounded "
+                                            <select style={datePickerStyle}
+                                                className="form-select rounded"
+                                                aria-label="Default select example"
+                                                value={movedDate}
+                                                onChange={(e) => { setMovedDate(e.target.value) }} >
+                                                {datesData.map((option) => (
+                                                    <option value={option.dKey}>{option.dValue}</option>
+                                                ))}
+                                            </select>
+                                            {/* <select style={{ overflow: 'scroll', width: '70px' }} className="form-select rounded "
                                                 value={movedDate} onChange={(e) => { setMovedDate(e.target.value) }} >
                                                 <option >dd</option>
                                                 <option value="01">01</option>
@@ -513,9 +565,17 @@ export default function Registerclient() {
                                                 <option value="29">29</option>
                                                 <option value="30">30</option>
                                                 <option value="31">31</option>
-                                            </select>
+                                            </select> */}
 
-                                            <select style={{ overflow: 'scroll', width: '78px' }} className="form-select rounded "
+                                            <select style={monthPickerStyle}
+                                                className="form-select rounded"
+                                                value={movedMonth}
+                                                onChange={(e) => { setMovedMonth(e.target.value) }} >
+                                                {monthsData.map((option) => (
+                                                    <option value={option.mKey}>{option.mValue}</option>
+                                                ))}
+                                            </select>
+                                            {/* <select style={{ overflow: 'scroll', width: '78px' }} className="form-select rounded "
                                                 value={movedMonth} onChange={(e) => { setMovedMonth(e.target.value) }} >
                                                 <option defaultValue>mm</option>
                                                 <option value="1">January</option>
@@ -530,9 +590,9 @@ export default function Registerclient() {
                                                 <option value="10">October</option>
                                                 <option value="11">November</option>
                                                 <option value="12">December</option>
-                                            </select>
-                                            <input className='form-control rounded' type='text' placeholder='year'
-                                                style={{ width: '65px', float: 'left', borderColor: 'lightgrey', color: 'black' }}
+                                            </select> */}
+                                            <input className='form-control rounded' border border-5 border-primary type='text' placeholder='year'
+                                                style={yearPickerStyle} not wsorking
                                                 value={movedYear} onChange={(e) => { setMovedYear(e.target.value) }} ></input>
 
                                         </div>
@@ -586,7 +646,7 @@ export default function Registerclient() {
                                             </div>
                                             <div className='mt-4'>
                                                 <p style={{ fontSize: '16px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Current tenancy type*</strong></p>
-                                                <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
+                                                <select style={comboBoxStyle} className="form-select rounded"
                                                     value={currentTenancyType} onChange={(e) => { setCurrentTenancyType(e.target.value) }}>
                                                     <option defaultValue>Please Select</option>
                                                     <option value="Assuredshorthold tenancy">Assuredshorthold tenancy</option>
@@ -599,7 +659,7 @@ export default function Registerclient() {
                                                 <p style={{ fontSize: '16px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Any other information about this address</strong></p>
                                                 <div className='mb-4' >
                                                     <textarea style={{ width: '350px', height: '75px' }} className='form-control' type='text'
-                                                        onChange={(e) => { setLandlordAddress(e.target.value) }} />
+                                                        onChange={(e) => { setInfoAboutCurrentAddress(e.target.value) }} />
                                                 </div>
                                             </div>
                                         </div>
@@ -639,15 +699,31 @@ export default function Registerclient() {
 
                                             <div className='mt-4'>
                                                 <p style={{ fontSize: '16px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Correspondence description</strong></p>
-                                                <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
-                                                    value={correspondenceType} onChange={(e) => { setCorrespondenceType(e.target.value); setShowCorrespondence(showCorrespondence) }}>     {/* showCorrespondence will  show or hide according to the selection */}
+                                                <select style={comboBoxStyle}
+                                                    className="form-select rounded"
+                                                    aria-label="Default select example"
+                                                    onChange={(e) => { setAreYou(e.target.value) }}>
+                                                    {correspondenceData.map((option) => (
+                                                        <option value={option.correspondenceKey}>{option.correspondence}</option>
+                                                    ))}
+                                                </select>
+                                                {/* <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
+                                                    value={correspondenceType} onChange={(e) => { setCorrespondenceType(e.target.value); setShowCorrespondence(showCorrespondence) }}>     showCorrespondence will  show or hide according to the selection
                                                     <option defaultValue>Please Select</option>
                                                     <option value="Home">Home</option>
                                                     <option value="work">Work</option>
                                                     <option value="solicitor">Solicitor</option>
                                                     <option value="parents">Parents</option>
                                                     <option value="other">Other</option>
-                                                </select>
+                                                </select> */}
+                                                {/* <select style={comboBoxStyle}
+                                                    className="form-select rounded"
+                                                    aria-label="Default select example"
+                                                    onChange={(e) => { setAreYou(e.target.value) }}>
+                                                    {areyouData.map((option) => (
+                                                        <option value={option.areYouKey}>{option.areYou}</option>
+                                                    ))}
+                                                </select> */}
                                             </div>
                                         </region>
 
@@ -789,7 +865,8 @@ export default function Registerclient() {
                                             </div>
 
                                             <div className='' >
-                                                <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Enter the local authority name' />
+                                                <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Enter the local authority name'
+                                                    onChange={(e) => { setLocalAuthrtyName(e.target.value) }} />
                                             </div>
                                         </div>
                                     }
@@ -902,7 +979,15 @@ export default function Registerclient() {
                                     </div>
 
                                     <div className='mt-2' >
-                                        <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded "
+
+                                        <select style={comboBoxStyle}
+                                            className="form-select rounded"
+                                            onChange={(e) => { setEthnicity(e.target.value) }}>
+                                            {ethnicityData.map((option) => (
+                                                <option value={option.ethnicityKey}>{option.ethnicity}</option>
+                                            ))}
+                                        </select>
+                                        {/* <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded "
                                             onChange={(e) => { setEthnicity(e.target.value) }} >
                                             <option defaultValue>Please Select</option>
                                             <option value="1"> Asian or Asian British: Any Other Asian Background</option>
@@ -926,7 +1011,7 @@ export default function Registerclient() {
                                             <option value="19"> White: Irish</option>
                                             <option value="20"> White: Other White: Any other white background</option>
                                             <option value="21"> White: Welsh / English / Scottish / Northern Irish</option>
-                                        </select>
+                                        </select> */}
                                     </div>
                                 </div>
                             </region>
@@ -939,7 +1024,14 @@ export default function Registerclient() {
                                 </div>
 
                                 <div className='mt-2' >
-                                    <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
+                                    <select style={comboBoxStyle}
+                                        className="form-select rounded"
+                                        onChange={(e) => { setNationality(e.target.value) }}>
+                                        {nationalityData.map((option) => (
+                                            <option value={option.nationalityKey}>{option.nationality}</option>
+                                        ))}
+                                    </select>
+                                    {/* <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
                                         onChange={(e) => { setNationality(e.target.value) }} >
                                         <option defaultValue>Please Select</option>
                                         <option value="1">UK National</option>
@@ -958,7 +1050,7 @@ export default function Registerclient() {
                                         <option value="14">Slovenia</option>
                                         <option value="15">Other EEA national</option>
                                         <option value="16">Non-EEA national</option>
-                                    </select>
+                                    </select> */}
                                 </div>
                             </region>
 
@@ -970,14 +1062,21 @@ export default function Registerclient() {
                                 </div>
 
                                 <div className='mt-2' >
-                                    <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
+                                    <select style={comboBoxStyle}
+                                        className="form-select rounded"
+                                        onChange={(e) => { setSexOrient(e.target.value) }}>
+                                        {sexOrientData.map((option) => (
+                                            <option value={option.sexOrientKey}>{option.sexOrient}</option>
+                                        ))}
+                                    </select>
+                                    {/* <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
                                         onChange={(e) => { setSexOrient(e.target.value) }} >
                                         <option defaultValue>Please Select</option>
                                         <option value="1">Heterosexual or Straight</option>
                                         <option value="2">Gay or Lesbian</option>
                                         <option value="3">Prefer not to say</option>
                                         <option value="4">Other</option>
-                                    </select>
+                                    </select> */}
                                 </div>
                             </region>
 
@@ -989,7 +1088,14 @@ export default function Registerclient() {
                                 </div>
 
                                 <div className='mt-2' >
-                                    <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
+                                    <select style={comboBoxStyle}
+                                        className="form-select rounded"
+                                        onChange={(e) => { setBelief(e.target.value) }}>
+                                        {beliefData.map((option) => (
+                                            <option value={option.beliefKey}>{option.belief}</option>
+                                        ))}
+                                    </select>
+                                    {/* <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
                                         onChange={(e) => { setBelief(e.target.value) }} >
                                         <option defaultValue>Please Select</option>
                                         <option value="1">Buddhist</option>
@@ -1001,7 +1107,7 @@ export default function Registerclient() {
                                         <option value="7">Any other religion</option>
                                         <option value="8">Not known</option>
                                         <option value="9">Prefer not to say</option>
-                                    </select>
+                                    </select> */}
                                 </div>
                             </region>
 
@@ -1031,7 +1137,14 @@ export default function Registerclient() {
                                 </div>
 
                                 <div className='mt-2' >
-                                    <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
+                                    <select style={comboBoxStyle}
+                                        className="form-select rounded"
+                                        onChange={(e) => { setPreferedLanguage(e.target.value) }} >
+                                        {languages.map((option) => (
+                                            <option value={option.languageKey}>{option.language}</option>
+                                        ))}
+                                    </select>
+                                    {/* <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
                                         onChange={(e) => { setPreferedLanguage(e.target.value) }} >
                                         <option defaultValue>Please Select</option>
                                         <option value="1">Albanian</option>
@@ -1070,7 +1183,7 @@ export default function Registerclient() {
                                         <option value="34">Urdu</option>
                                         <option value="35">Yugoslavian</option>
                                         <option value="36">Zulu</option>
-                                    </select>
+                                    </select> */}
                                 </div>
                             </region>
 
@@ -1113,8 +1226,16 @@ export default function Registerclient() {
                                     <p style={{ fontSize: '17px' }}><strong>What is your current tenure? *</strong></p>
                                 </div>
                                 <div className='mt-2' >
-                                    <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
-                                        onChange={(e) => { setTenure(e.target.value); setShowTenancyRef(!showTenancyRef) }} >        {/* setShowTenancyRef will show or hide according to the selection */}
+                                    <select style={comboBoxStyle}
+                                        className="form-select rounded"
+                                        aria-label="Default select example"
+                                        onChange={(e) => { setTenure(e.target.value); setShowTenancyRef(!showTenancyRef) }}>
+                                        {tenureData.map((option) => (
+                                            <option value={option.tenureKey}>{option.tenure}</option>
+                                        ))}
+                                    </select>
+                                    {/* <select style={comboBoxStyle} className="form-select rounded"
+                                        // onChange={(e) => { setTenure(e.target.value); setShowTenancyRef(!showTenancyRef) }} >         setShowTenancyRef will show or hide according to the selection
                                         <option defaultValue>Please Select</option>
                                         <option value="1">Birmingham City Council Tenant</option>
                                         <option value="2">Registered Provider / Housing Association tenant</option>
@@ -1123,7 +1244,8 @@ export default function Registerclient() {
                                         <option value="5">Owner Occupier</option>
                                         <option value="6">Temporary Accommodation</option>
                                         <option value="7">Other</option>
-                                    </select>
+                                    </select> */}
+
                                 </div>
                                 {/* The following option is only for birmingham city council tenants, so this will check for that particular option has been selected*/}
                                 {showTenancyRef && tenure == "1" &&
@@ -1173,7 +1295,7 @@ export default function Registerclient() {
                                     </span>
                                 </div>
                                 <div className='mt-2' >
-                                    <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
+                                    {/* <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
                                         onChange={(e) => { setAreYou(e.target.value) }} >
                                         <option defaultValue>Please Select</option>
                                         <option value="1">A person who has limited or exceptional leave to enter or remain in the UK with recourse to public funds</option>
@@ -1189,6 +1311,14 @@ export default function Registerclient() {
                                         <option value="7">Someone granted humanitarian protection under immigration rules</option>
                                         <option value="8">Someone with permission to be in the UK because you have a sponsor</option>
                                         <option value="9">None of the above</option>
+                                    </select> */}
+                                    <select style={comboBoxStyle}
+                                        className="form-select rounded"
+                                        aria-label="Default select example"
+                                        onChange={(e) => { setAreYou(e.target.value) }}>
+                                        {areyouData.map((option) => (
+                                            <option value={option.areYouKey}>{option.areYou}</option>
+                                        ))}
                                     </select>
                                 </div>
                             </region>
@@ -1456,7 +1586,7 @@ export default function Registerclient() {
 
                                 <div className='mb-4' >
                                     <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Password...'
-                                        value={pwd} onChange={(e) => { setPwd(e.target.value) }}></input>
+                                        value={password} onChange={(e) => { setPassword(e.target.value) }}></input>
                                 </div>
 
                                 <div className='mt-4'>
@@ -1485,6 +1615,21 @@ export default function Registerclient() {
                             </ul>
                         </MDBCardBody>
                     </MDBCard>
+
+                    {/* <MDBCard className='mt-5' style={{ backgroundColor: '#f7f2f287' }}>
+                        <MDBCardBody >
+                            <div >
+                                <select style={{ overflow: 'scroll', width: 'auto' }}
+                                    className="form-select border-rounded"
+                                    aria-label="Default select example"
+                                    onChange={(e) => { setAreYou(e.target.value) }}>
+                                    {areyouData.map((option) => (
+                                        <option value={option.areYouKey}>{option.areYou}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </MDBCardBody>
+                    </MDBCard> */}
 
                 </MDBCol>
             </MDBRow>
