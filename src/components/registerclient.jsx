@@ -9,9 +9,7 @@ import { sexOrients } from '../resources/sexOrient';
 import { beliefs } from '../resources/belief';
 import { languages } from '../resources/language';
 import { dates, months } from '../resources/datePicker';
-import { validPwd, validEmail, validName, validPostcode, emailMatch, pwdMatch, memDateMatch } from '../validations/Validator.jsx';
-
-// import PwdValidation from '../validations/PwdValidation';
+import { validPwd, validEmail, validName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch } from '../validations/Validator.jsx';
 
 import {
     MDBContainer,
@@ -34,12 +32,16 @@ export default function Registerclient() {
     const datesData = dates;
     const monthsData = months;
 
+    const ageMax = new Date().getFullYear();        // year picker up to current year
+    const ageMin = new Date().getFullYear() - 120;  // year picker 120 year back from current year
+
     const comboBoxStyle = { maxWidth: '250px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
-    const yearPickerStyle = { width: '65px', float: 'left' }
+    const yearPickerStyle = { width: '80px', float: 'left', border:'5' };
 
     const [showLandlord, setShowLandlord] = useState(false);
+    const [showAddress, setShowAddress] = useState(false);
     const [showCorrespondence, setShowCorrespondence] = useState(false);
     const [showLocalAuthority, setShowLocalAuthority] = useState(false);
     const [showTenancyRef, setShowTenancyRef] = useState(false);
@@ -110,6 +112,7 @@ export default function Registerclient() {
     const [emailErr, setEmailErr] = useState(false);
     const [passwordErr, setPasswordErr] = useState(false);
     const [postcodeErr, setPostcodeErr] = useState(false);
+    const [numberErr, setNumberErr] = useState(false)
     const [emailMatchsErr, setEmailMatchesErr] = useState(false)
     const [pwdMatchsErr, setPwdMatchesErr] = useState(false)
     const [memMatchsErr, setMemMatchesErr] = useState(false)
@@ -133,12 +136,18 @@ export default function Registerclient() {
         setEmailErr(validEmail(email))
         setPostcodeErr(validPostcode(postcode))
         setPostcodeErr(validPostcode(correspondencePostcode))
+        setNumberErr(validNumber(telephone))
+        setNumberErr(validNumber(workPhone))
+        setNumberErr(validNumber(mobile))
 
         setEmailMatchesErr(emailMatch(email, reEnterEmail))
         setPwdMatchesErr(pwdMatch(password, reEnterPwd))
         setMemMatchesErr(memDateMatch(memorableDate, reEntermemorableDate))
-        console.log(`Validation result is fname/sname ${nameErr} pwd ${passwordErr}, email ${emailErr}, 
-        postcode ${postcodeErr}, email matches ${emailMatchsErr}, memorable date ${memMatchsErr}, pwd match ${pwdMatchsErr}`)
+
+        console.log(`Validation result is fname/sname ${nameErr} pwd ${passwordErr}, 
+        email ${emailErr}, postcode ${postcodeErr}, email matches ${emailMatchsErr}, 
+        home telephone ${telephone}, work telephone ${workPhone}, mobile ${mobile},
+        memorable date ${memMatchsErr}, pwd match ${pwdMatchsErr}`)
 
         console.log('in show in console', title, fName, mName, sName, nameChange,
             nINO, dateofbirth, sex, livedAbroad,
@@ -154,6 +163,13 @@ export default function Registerclient() {
             memorableDate, reEntermemorableDate,
             password, reEnterPwd
         )
+
+        if ((!pwdMatchsErr) || (!memMatchsErr) || (!emailMatchsErr)) {
+
+            !pwdMatchsErr ? alert('Password error') : "";
+            !memMatchsErr ? alert('Memorable date error') : "";
+            !emailMatchsErr ? alert('Email error') : "";
+        }
     }
 
     const handleCheckbox = (e) => {
@@ -167,6 +183,17 @@ export default function Registerclient() {
         }
         setConnection(checkedItems);
         console.log(connection);
+    }
+
+    const findPostcodeAddress = (e) => {
+        e.preventDefault();
+        setShowAddress(true);
+        alert('Sorry... \nPostcode search is not connected to UK Post Office API, \nplease enter the address manually')
+    }
+
+    const showAddresCard = (e) => {
+        e.preventDefault();
+        setShowAddress(true);
     }
 
     return (
@@ -197,7 +224,7 @@ export default function Registerclient() {
                             </div>
 
                             {/* ********** First name  */}
-                            <region>
+                            <div>
 
                                 <p className='mb-4' style={{ fontSize: '16px' }}><strong>Your first name(s) *</strong></p>
                                 <div style={{ width: 'auto' }} className="mb-2 mt-2 help-content border border-grey rounded">
@@ -210,10 +237,10 @@ export default function Registerclient() {
                                     <input style={{ width: '250px' }} className='form-control' type='text' placeholder='First name...'
                                         value={fName} onChange={(e) => { setFName(e.target.value) }}></input>
                                 </div>
-                            </region>
+                            </div>
 
                             {/* ********** Middle name  */}
-                            <region>
+                            <div>
 
                                 <p style={{ fontSize: '16px' }}><strong>Your middle name(s) *</strong></p>
                                 <div style={{ width: 'auto' }} className="mb-2 mt-2 help-content border border-grey rounded">
@@ -226,10 +253,10 @@ export default function Registerclient() {
                                     <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Middle name...'
                                         value={mName} onChange={(e) => { setMName(e.target.value) }}></input>
                                 </div>
-                            </region>
+                            </div>
 
                             {/* ********** Surname  */}
-                            <region>
+                            <div>
 
                                 <p style={{ fontSize: '16px' }}><strong>Your surname *</strong></p>
                                 <div style={{ width: 'auto' }} className="mb-2 mt-2 help-content border border-grey rounded">
@@ -243,10 +270,10 @@ export default function Registerclient() {
                                         value={sName} onChange={(e) => { setSName(e.target.value) }}></input>
                                 </div>
 
-                            </region>
+                            </div>
 
                             {/* ********** Name change  */}
-                            <region>
+                            <div>
 
                                 <p style={{ fontSize: '14px' }}><strong>Have you ever used a different name, eg a maiden name or by deed poll? if so, please provide details</strong></p>
                                 <div style={{ width: 'auto' }} className="mb-2 mt-2 help-content border border-grey rounded">
@@ -259,20 +286,20 @@ export default function Registerclient() {
                                     <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Have you ever used a different name, eg a maiden name or by deed poll? if so, please provide details'
                                         value={nameChange} onChange={(e) => { setNameChange(e.target.value) }}></input>
                                 </div>
-                            </region>
+                            </div>
 
                             {/* ********** NINO   */}
-                            <region>
+                            <div>
 
                                 <p style={{ fontSize: '16px' }}><strong>Your National Insurance Number *</strong></p>
                                 <div className='mb-4' >
                                     <input style={{ width: '250px' }} className='form-control' type='text'
                                         value={nINO} onChange={(e) => { setNINO(e.target.value) }}></input>
                                 </div>
-                            </region>
+                            </div>
 
                             {/* *********** Date of Birth  */}
-                            <region>
+                            <div>
 
                                 <p style={{ fontSize: '16px' }}><strong>Your date of birth *</strong></p>
                                 <div style={{ width: 'auto' }} className="mb-2 mt-2 help-content border border-grey rounded">
@@ -294,25 +321,32 @@ export default function Registerclient() {
                                             aria-label="Default select example"
                                             onChange={(e) => { setDOBDate(e.target.value) }}>
                                             {datesData.map((option) => (
-                                                <option value={option.dKey}>{option.dValue}</option>
+                                                <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
                                             ))}
                                         </select>
                                         <select style={monthPickerStyle}
                                             className="form-select rounded"
                                             onChange={(e) => { setDOBMonth(e.target.value) }}>
                                             {monthsData.map((option) => (
-                                                <option value={option.mKey}>{option.mValue}</option>
+                                                <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
                                             ))}
                                         </select>
-                                        <input className='form-control rounded' type='text' placeholder='year'
-                                            style={yearPickerStyle} onChange={(e) => { setDOBYear(e.target.value) }}></input>
+                                        <input className='form-control rounded'
+                                            style={yearPickerStyle}
+                                            type='number'
+                                            border={5}
+                                            min={ageMin}
+                                            max={ageMax}
+                                            placeholder='year'
+                                            onChange={(e) => { setDOBYear(e.target.value) }}>
+                                        </input>
 
                                     </div>
                                 </div>
-                            </region>
+                            </div>
 
                             {/* *********** Sex  */}
-                            <region>
+                            <div>
 
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '16px' }}><strong>Your sex *</strong></p>
@@ -323,7 +357,7 @@ export default function Registerclient() {
                                         <option value="female">Female</option>
                                     </select>
                                 </div>
-                            </region>
+                            </div>
 
                         </MDBCardBody>
                     </MDBCard>
@@ -333,7 +367,7 @@ export default function Registerclient() {
                         {/* ***********  Lived abroad  */}
                         <MDBCardBody>
 
-                            <region>
+                            <div>
 
                                 <div>
                                     <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }}><strong>Lived Abroad</strong></MDBTypography>
@@ -353,7 +387,7 @@ export default function Registerclient() {
                                     </MDBCol>
                                 </MDBRow>
 
-                            </region>
+                            </div>
 
                         </MDBCardBody>
                     </MDBCard>
@@ -362,7 +396,7 @@ export default function Registerclient() {
                         <MDBCardBody>
                             {/* ***********  Current address */}
 
-                            <region>
+                            <div>
 
                                 <div>
                                     <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Current Address</strong></MDBTypography>
@@ -389,97 +423,98 @@ export default function Registerclient() {
                                         <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">Enter a postcode and click the find address button to search for an address by postcode or use the enter address button to fill in the address fields manually.</span>
                                     </span>
                                 </div>
-                                <form className='d-flex input-group w-auto mt-1'>
-                                    <MDBBtn style={{ fontSize: '13px', border: 'solid 1px #bbb', title: 'Not connected with Post Office address search api' }} disabled color='light'>
 
-                                        Find address
-
-                                    </MDBBtn>
-                                    <MDBBtn style={{ fontSize: '13px', border: 'solid 1px #bbb', marginLeft: '5px' }} color='light'>
-
-                                        Enter an address manually
-
-                                    </MDBBtn>
+                                <form className='d-flex w-auto mb-3'>
+                                    <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
+                                        onClick={findPostcodeAddress} >
+                                        Find address</MDBBtn>
+                                    <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
+                                        onClick={showAddresCard} >
+                                        Enter an address manually</MDBBtn>
                                 </form>
 
-                            </region>
+                            </div>
 
-                            {/* ***********  Address line 1  */}
-                            <region>
+                            {showAddress &&
+                                <div id='showAddressDetails'>
+                                    {/* ***********  Address line 1  */}
+                                    <div>
 
-                                <div className='mt-4'>
-                                    <p style={{ fontSize: '16px' }}><strong>Address line 1*</strong></p>
-                                </div>
-                                <div style={{ width: '' }} className="mb-2 mt-2 help-content border border-grey rounded">
-                                    <span className="far fa-question-circle help-icon"></span>
-                                    <span className="help-text">
-                                        <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">Enter the house or flat number and street name. For example: 12 High Street</span>
-                                    </span>
-                                </div>
-                                <div className='' >
-                                    <input style={{ width: '250px' }} className='form-control' type='text' placeholder='house or flat number and street'
-                                        value={addLine1} onChange={(e) => { setAddLine1(e.target.value) }} />
-                                </div>
-                            </region>
+                                        <div className='mt-4'>
+                                            <p style={{ fontSize: '16px' }}><strong>Address line 1*</strong></p>
+                                        </div>
+                                        <div style={{ width: '' }} className="mb-2 mt-2 help-content border border-grey rounded">
+                                            <span className="far fa-question-circle help-icon"></span>
+                                            <span className="help-text">
+                                                <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">Enter the house or flat number and street name. For example: 12 High Street</span>
+                                            </span>
+                                        </div>
+                                        <div className='' >
+                                            <input style={{ width: '250px' }} className='form-control ' type='text' placeholder='house or flat number and street'
+                                                maxLength={75} value={addLine1} onChange={(e) => { setAddLine1(e.target.value) }} />
+                                        </div>
+                                    </div>
 
-                            {/* ***********  Address line 2  */}
-                            <region>
+                                    {/* ***********  Address line 2  */}
+                                    <div>
 
-                                <div className='mt-4'>
-                                    <p style={{ fontSize: '16px' }}><strong>Address line 2*</strong></p>
-                                </div>
-                                <div style={{ width: '220px' }} className="mb-2 mt-2 help-content border border-grey rounded">
-                                    <span className="far fa-question-circle help-icon"></span>
-                                    <span className="help-text">
-                                        <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">Enter the second line of your address</span>
-                                    </span>
-                                </div>
-                                <div className='' >
-                                    <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Address line 2'
-                                        value={addLine2} onChange={(e) => { setAddLine2(e.target.value) }} />
-                                </div>
-                            </region>
+                                        <div className='mt-4'>
+                                            <p style={{ fontSize: '16px' }}><strong>Address line 2*</strong></p>
+                                        </div>
+                                        <div style={{ width: '220px' }} className="mb-2 mt-2 help-content border border-grey rounded">
+                                            <span className="far fa-question-circle help-icon"></span>
+                                            <span className="help-text">
+                                                <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">Enter the second line of your address</span>
+                                            </span>
+                                        </div>
+                                        <div className='' >
+                                            <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Address line 2'
+                                                maxLength={75} value={addLine2} onChange={(e) => { setAddLine2(e.target.value) }} />
+                                        </div>
+                                    </div>
 
-                            {/* ***********  Address line 3  */}
-                            <region>
+                                    {/* ***********  Address line 3  */}
+                                    <div>
 
-                                <div className='mt-4'>
-                                    <p style={{ fontSize: '16px' }}><strong>Address line 3*</strong></p>
-                                </div>
-                                <div style={{ width: '220px' }} className="mb-2 mt-2 help-content border border-grey rounded">
-                                    <span className="far fa-question-circle help-icon"></span>
-                                    <span className="help-text">
-                                        <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">Enter the third line of your address</span>
-                                    </span>
-                                </div>
-                                <div className='' >
-                                    <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Address line 3'
-                                        value={addLine3} onChange={(e) => { setAddLine3(e.target.value) }} />
-                                </div>
-                            </region>
+                                        <div className='mt-4'>
+                                            <p style={{ fontSize: '16px' }}><strong>Address line 3*</strong></p>
+                                        </div>
+                                        <div style={{ width: '220px' }} className="mb-2 mt-2 help-content border border-grey rounded">
+                                            <span className="far fa-question-circle help-icon"></span>
+                                            <span className="help-text">
+                                                <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">Enter the third line of your address</span>
+                                            </span>
+                                        </div>
+                                        <div className='' >
+                                            <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Address line 3'
+                                                maxLength={75} value={addLine3} onChange={(e) => { setAddLine3(e.target.value) }} />
+                                        </div>
+                                    </div>
 
-                            {/* ***********  Address line 4  */}
-                            <region>
+                                    {/* ***********  Address line 4  */}
+                                    <div>
 
-                                <div className='mt-4'>
-                                    <p style={{ fontSize: '16px' }}><strong>Address line 4*</strong></p>
+                                        <div className='mt-4'>
+                                            <p style={{ fontSize: '16px' }}><strong>Address line 4*</strong></p>
+                                        </div>
+                                        <div style={{ width: '220px' }} className="mb-2 mt-2 help-content border border-grey rounded">
+                                            <span className="far fa-question-circle help-icon"></span>
+                                            <span className="help-text">
+                                                <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">Enter the fourth line of your address</span>
+                                            </span>
+                                        </div>
+                                        <div className='' >
+                                            <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Address line 4'
+                                                maxLength={75} value={addLine4} onChange={(e) => { setAddLine4(e.target.value) }} />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div style={{ width: '220px' }} className="mb-2 mt-2 help-content border border-grey rounded">
-                                    <span className="far fa-question-circle help-icon"></span>
-                                    <span className="help-text">
-                                        <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">Enter the fourth line of your address</span>
-                                    </span>
-                                </div>
-                                <div className='' >
-                                    <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Address line 4'
-                                        value={addLine4} onChange={(e) => { setAddLine4(e.target.value) }} />
-                                </div>
-                            </region>
+                            }
 
                             <div className='mt-4'>
                                 {/* *********** When moved to this address  */}
 
-                                <region>
+                                <div>
                                     <p style={{ fontSize: '16px' }}><strong>2. When did you move into this address?</strong></p>
                                     <div className="help-content">
                                         <p className='' style={{ fontSize: '14px' }}><strong>Date you moved into this address *</strong></p>
@@ -493,12 +528,12 @@ export default function Registerclient() {
                                     </div>
 
                                     <div className='mt-2'>
-                                        <div className='btn-group'>
+                                        <div className='btn-group' >
                                             <select style={datePickerStyle}
                                                 className="form-select rounded"
                                                 onChange={(e) => { setMovedDate(e.target.value) }} >
                                                 {datesData.map((option) => (
-                                                    <option value={option.dKey}>{option.dValue}</option>
+                                                    <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
                                                 ))}
                                             </select>
 
@@ -506,19 +541,23 @@ export default function Registerclient() {
                                                 className="form-select rounded"
                                                 onChange={(e) => { setMovedMonth(e.target.value) }} >
                                                 {monthsData.map((option) => (
-                                                    <option value={option.mKey}>{option.mValue}</option>
+                                                    <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
                                                 ))}
                                             </select>
-                                            <input className='form-control rounded' border border-5 border-primary type='text' placeholder='year'
+                                            <input className='form-control rounded' 
                                                 style={yearPickerStyle}
-                                                onChange={(e) => { setMovedYear(e.target.value) }} ></input>
-
+                                                type='number'
+                                                min={ageMin + 70}
+                                                max={ageMax}
+                                                placeholder='year'
+                                                onChange={(e) => { setMovedYear(e.target.value) }} >
+                                            </input>
                                         </div>
                                     </div>
-                                </region>
+                                </div>
 
                                 {/* ***********  Rented property?  */}
-                                <region>
+                                <div>
 
                                     <div>
                                         <div className='mt-4'>
@@ -530,10 +569,10 @@ export default function Registerclient() {
                                             value='no' onChange={(e) => { setRented(e.target.value); setShowLandlord(false); }}></MDBRadio>     {/* setShowLandlord will  show or hide according to the selection */}
 
                                     </div>
-                                </region>
+                                </div>
 
                                 {/* ***********  Landlord Details. Show Landlord input details div when user selected Yes, if not hide the div */}
-                                <region>
+                                <div>
 
                                     {showLandlord &&
 
@@ -550,7 +589,7 @@ export default function Registerclient() {
                                             </div>
                                             <div className='mb-4' >
                                                 <input style={{ width: '250px' }} className='form-control' type='text'
-                                                    onChange={(e) => { setLandlordName(e.target.value) }} />
+                                                    maxLength={30} onChange={(e) => { setLandlordName(e.target.value) }} />
                                             </div>
                                             <div className="help-content mt-2">
                                                 <span className="help-text">
@@ -560,12 +599,12 @@ export default function Registerclient() {
                                             </div>
                                             <div className='mb-4' >
                                                 <textarea style={{ width: '350px' }} className='form-control' type='text'
-                                                    onChange={(e) => { setLandlordAddress(e.target.value) }} />
+                                                    maxLength={100} onChange={(e) => { setLandlordAddress(e.target.value) }} />
                                             </div>
                                             <div className='mt-4'>
                                                 <p style={{ fontSize: '16px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Current tenancy type*</strong></p>
                                                 <select style={comboBoxStyle} className="form-select rounded"
-                                                    value={currentTenancyType} onChange={(e) => { setCurrentTenancyType(e.target.value) }}>
+                                                    maxLength={50} value={currentTenancyType} onChange={(e) => { setCurrentTenancyType(e.target.value) }}>
                                                     <option defaultValue>Please Select</option>
                                                     <option value="Assuredshorthold tenancy">Assuredshorthold tenancy</option>
                                                     <option value="Assured tenancy">Assured tenancy</option>
@@ -577,16 +616,16 @@ export default function Registerclient() {
                                                 <p style={{ fontSize: '16px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Any other information about this address</strong></p>
                                                 <div className='mb-4' >
                                                     <textarea style={{ width: '350px', height: '75px' }} className='form-control' type='text'
-                                                        onChange={(e) => { setInfoAboutCurrentAddress(e.target.value) }} />
+                                                        maxLength={150} onChange={(e) => { setInfoAboutCurrentAddress(e.target.value) }} />
                                                 </div>
                                             </div>
                                         </div>
 
                                     }
-                                </region>
+                                </div>
 
                                 {/* ***********  Where you want to send letters  */}
-                                <region>
+                                <div>
 
                                     <div className='mt-4'>
                                         <p style={{ fontSize: '16px' }}><strong>3. Correspondence Address</strong></p>
@@ -605,7 +644,7 @@ export default function Registerclient() {
                                         </MDBRow>
                                     </div>
 
-                                </region>
+                                </div>
 
                                 {/* ***********  Correspondence description. Show Correspondence address input when user selected to different addres, if not hide this div */}
 
@@ -613,7 +652,7 @@ export default function Registerclient() {
                                     <div id='showCorrespondenceDetails'>
 
                                         {/* ***********  Correspondence description.  */}
-                                        <region>
+                                        <div>
 
                                             <div className='mt-4'>
                                                 <p style={{ fontSize: '16px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Correspondence description</strong></p>
@@ -621,7 +660,7 @@ export default function Registerclient() {
                                                     className="form-select rounded"
                                                     onChange={(e) => { setCorrespondenceType(e.target.value); setShowCorrespondence(showCorrespondence) }}>    {/* showCorrespondence will show or hide according to the selection */}
                                                     {correspondenceData.map((option) => (
-                                                        <option value={option.correspondenceKey}>{option.correspondence}</option>
+                                                        <option key={option.correspondenceKey} value={option.correspondenceKey}>{option.correspondence}</option>
                                                     ))}
                                                 </select>
                                                 {/* <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
@@ -642,11 +681,11 @@ export default function Registerclient() {
                                                     ))}
                                                 </select> */}
                                             </div>
-                                        </region>
+                                        </div>
 
                                         <div className='mt-4'>
                                             {/* ***********  Correspondence postcode  */}
-                                            <region>
+                                            <div>
 
                                                 <p style={{ fontSize: '17px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Postcode*</strong></p>
                                                 <div style={{ width: '' }} className="mb-2 mt-2 help-content border border-grey rounded">
@@ -657,7 +696,7 @@ export default function Registerclient() {
                                                 </div>
                                                 <div className='mb-4' >
                                                     <input style={{ width: '250px' }} className='form-control' type='text' placeholder='postcode...'
-                                                        onChange={(e) => { setCorrespondencePostcode(e.target.value) }} />
+                                                        maxLength={8} onChange={(e) => { setCorrespondencePostcode(e.target.value) }} />
                                                 </div>
 
                                                 <div style={{ width: '' }} className="mb-2 mt-2 help-content border border-grey rounded">
@@ -678,10 +717,10 @@ export default function Registerclient() {
 
                                                     </MDBBtn>
                                                 </form>
-                                            </region>
+                                            </div>
 
                                             {/* ***********  Correspondence address line 1  */}
-                                            <region>
+                                            <div>
 
                                                 <div className='mt-4'>
                                                     <p style={{ fontSize: '17px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Correspondence address line 1*</strong></p>
@@ -694,13 +733,13 @@ export default function Registerclient() {
                                                 </div>
                                                 <div className='' >
                                                     <input style={{ width: '250px' }} className='form-control' type='text' placeholder='house or flat number and street name'
-                                                        onChange={(e) => { setCorrespondenceAddLine1(e.target.value) }} />
+                                                        maxLength={75} onChange={(e) => { setCorrespondenceAddLine1(e.target.value) }} />
                                                 </div>
 
-                                            </region>
+                                            </div>
 
                                             {/* ***********  Correspondence address line 2  */}
-                                            <region>
+                                            <div>
 
                                                 <div className='mt-4'>
                                                     <p style={{ fontSize: '17px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Correspondence address line 2*</strong></p>
@@ -713,12 +752,12 @@ export default function Registerclient() {
                                                 </div>
                                                 <div className='' >
                                                     <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Correspondence address line 2'
-                                                        onChange={(e) => { setCorrespondenceAddLine2(e.target.value) }} />
+                                                        maxLength={75} onChange={(e) => { setCorrespondenceAddLine2(e.target.value) }} />
                                                 </div>
-                                            </region>
+                                            </div>
 
                                             {/* ***********  Correspondence address line 3  */}
-                                            <region>
+                                            <div>
 
                                                 <div className='mt-4'>
                                                     <p style={{ fontSize: '17px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Correspondence address line 3*</strong></p>
@@ -731,12 +770,12 @@ export default function Registerclient() {
                                                 </div>
                                                 <div className='' >
                                                     <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Correspondence address line 3'
-                                                        onChange={(e) => { setCorrespondenceAddLine3(e.target.value) }} />
+                                                        maxLength={75} onChange={(e) => { setCorrespondenceAddLine3(e.target.value) }} />
                                                 </div>
-                                            </region>
+                                            </div>
 
                                             {/* ***********  Correspondence address line 4  */}
-                                            <region>
+                                            <div>
 
                                                 <div className='mt-4'>
                                                     <p style={{ fontSize: '17px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Correspondence address line 4*</strong></p>
@@ -749,15 +788,15 @@ export default function Registerclient() {
                                                 </div>
                                                 <div className='' >
                                                     <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Correspondence address line 4'
-                                                        onChange={(e) => { setCorrespondenceAddLine4(e.target.value) }} />
+                                                        maxLength={75} onChange={(e) => { setCorrespondenceAddLine4(e.target.value) }} />
                                                 </div>
-                                            </region>
+                                            </div>
                                         </div>
                                     </div>
                                 }
 
                                 {/* ***********  Were placed by local authority. Show Local Authority input when user selected Yes, if not hide this div  */}
-                                <region>
+                                <div>
 
                                     <div className='mt-4'>
                                         <p style={{ fontSize: '16px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Were you placed at this address in Birmingham by another local Authority?*</strong></p>
@@ -783,11 +822,11 @@ export default function Registerclient() {
 
                                             <div className='' >
                                                 <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Enter the local authority name'
-                                                    onChange={(e) => { setLocalAuthrtyName(e.target.value) }} />
+                                                    maxLength={25} onChange={(e) => { setLocalAuthrtyName(e.target.value) }} />
                                             </div>
                                         </div>
                                     }
-                                </region>
+                                </div>
 
                             </div>
                         </MDBCardBody>
@@ -803,7 +842,7 @@ export default function Registerclient() {
                             </div>
 
                             {/* ***********  Home telephone  */}
-                            <region>
+                            <div>
 
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '17px' }}><strong>Home telephone*</strong></p>
@@ -817,14 +856,14 @@ export default function Registerclient() {
                                 <div>
                                     <div className='mt-2' >
                                         <input style={{ width: '250px' }} className='form-control' type='text' placeholder='home telephone'
-                                            onChange={(e) => { setTelephone(e.target.value) }} />
+                                            minLength={9} maxLength={20} onChange={(e) => { setTelephone(e.target.value) }} />
                                     </div>
                                 </div>
 
-                            </region>
+                            </div>
 
                             {/* ***********  Work telephone  */}
-                            <region>
+                            <div>
 
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '17px' }}><strong>Work telephone*</strong></p>
@@ -832,13 +871,13 @@ export default function Registerclient() {
                                 <div>
                                     <div className='mt-2' >
                                         <input style={{ width: '250px' }} className='form-control' type='text' placeholder='work telephone'
-                                            onChange={(e) => { setWorkPhone(e.target.value) }} />
+                                            minLength={9} maxLength={20} onChange={(e) => { setWorkPhone(e.target.value) }} />
                                     </div>
                                 </div>
-                            </region>
+                            </div>
 
                             {/* ***********  Mobile telephone  */}
-                            <region>
+                            <div>
 
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '17px' }}><strong>Mobile telephone*</strong></p>
@@ -846,13 +885,13 @@ export default function Registerclient() {
                                 <div>
                                     <div className='mt-2' >
                                         <input style={{ width: '250px' }} className='form-control' type='text' placeholder='mobile telephone'
-                                            onChange={(e) => { setMobile(e.target.value) }} />
+                                            minLength={11} maxLength={20} onChange={(e) => { setMobile(e.target.value) }} />
                                     </div>
                                 </div>
-                            </region>
+                            </div>
 
                             {/* ***********  Email address  */}
-                            <region>
+                            <div>
 
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '17px' }}><strong>Email address*</strong></p>
@@ -860,7 +899,7 @@ export default function Registerclient() {
                                 <div>
                                     <div className='mt-2' >
                                         <input style={{ width: '250px' }} className='form-control' type='text' placeholder='email address'
-                                            onChange={(e) => { setEmail(e.target.value) }} />
+                                            minLength={6} maxLength={40} onChange={(e) => { setEmail(e.target.value) }} />
                                     </div>
                                 </div>
                                 <div className='mt-4'>
@@ -869,11 +908,11 @@ export default function Registerclient() {
                                 <div>
                                     <div className='mt-2' >
                                         <input style={{ width: '250px' }} className='form-control' type='text' placeholder='re-enter email address'
-                                            onChange={(e) => { setReEnterEmail(e.target.value) }} />
+                                            minLength={6} maxLength={40} onChange={(e) => { setReEnterEmail(e.target.value) }} />
                                     </div>
                                 </div>
 
-                            </region>
+                            </div>
 
                         </MDBCardBody>
                     </MDBCard>
@@ -888,7 +927,7 @@ export default function Registerclient() {
                             </div>
 
                             {/**********  Ethnic group  */}
-                            <region>
+                            <div>
 
                                 <div className='mt-4'>
                                     <div >
@@ -901,7 +940,7 @@ export default function Registerclient() {
                                             className="form-select rounded"
                                             onChange={(e) => { setEthnicity(e.target.value) }}>
                                             {ethnicityData.map((option) => (
-                                                <option value={option.ethnicityKey}>{option.ethnicity}</option>
+                                                <option key={option.ethnicityKey} value={option.ethnicityKey}>{option.ethnicity}</option>
                                             ))}
                                         </select>
                                         {/* <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded "
@@ -931,10 +970,10 @@ export default function Registerclient() {
                                         </select> */}
                                     </div>
                                 </div>
-                            </region>
+                            </div>
 
                             {/**********  Nationality  */}
-                            <region>
+                            <div>
 
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '17px' }}><strong>What is your nationality? *</strong></p>
@@ -945,7 +984,7 @@ export default function Registerclient() {
                                         className="form-select rounded"
                                         onChange={(e) => { setNationality(e.target.value) }}>
                                         {nationalityData.map((option) => (
-                                            <option value={option.nationalityKey}>{option.nationality}</option>
+                                            <option key={option.nationalityKey} value={option.nationalityKey}>{option.nationality}</option>
                                         ))}
                                     </select>
                                     {/* <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
@@ -969,10 +1008,10 @@ export default function Registerclient() {
                                         <option value="16">Non-EEA national</option>
                                     </select> */}
                                 </div>
-                            </region>
+                            </div>
 
                             {/**********  Sexual orientation */}
-                            <region>
+                            <div>
 
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '17px' }}><strong>What is your sexual orientation? *</strong></p>
@@ -983,7 +1022,7 @@ export default function Registerclient() {
                                         className="form-select rounded"
                                         onChange={(e) => { setSexOrient(e.target.value) }}>
                                         {sexOrientData.map((option) => (
-                                            <option value={option.sexOrientKey}>{option.sexOrient}</option>
+                                            <option key={option.sexOrientKey} value={option.sexOrientKey}>{option.sexOrient}</option>
                                         ))}
                                     </select>
                                     {/* <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
@@ -995,10 +1034,10 @@ export default function Registerclient() {
                                         <option value="4">Other</option>
                                     </select> */}
                                 </div>
-                            </region>
+                            </div>
 
                             {/**********  Belief */}
-                            <region>
+                            <div>
 
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '17px' }}><strong>What is your religion or belief? *</strong></p>
@@ -1009,7 +1048,7 @@ export default function Registerclient() {
                                         className="form-select rounded"
                                         onChange={(e) => { setBelief(e.target.value) }}>
                                         {beliefData.map((option) => (
-                                            <option value={option.beliefKey}>{option.belief}</option>
+                                            <option key={option.beliefKey} value={option.beliefKey}>{option.belief}</option>
                                         ))}
                                     </select>
                                     {/* <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
@@ -1026,10 +1065,10 @@ export default function Registerclient() {
                                         <option value="9">Prefer not to say</option>
                                     </select> */}
                                 </div>
-                            </region>
+                            </div>
 
                             {/**********  Health condition */}
-                            <region>
+                            <div>
 
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '17px' }}><strong>Do you have any physical or mental health conditions or illnesses lasting or expected to last for 12 months or more? *</strong></p>
@@ -1044,10 +1083,10 @@ export default function Registerclient() {
                                         <option value="prefer not to say">Prefer not to say</option>
                                     </select>
                                 </div>
-                            </region>
+                            </div>
 
                             {/**********  Prefered Language */}
-                            <region>
+                            <div>
 
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '17px' }}><strong>Which language do you prefer using? *</strong></p>
@@ -1058,7 +1097,7 @@ export default function Registerclient() {
                                         className="form-select rounded"
                                         onChange={(e) => { setPreferedLanguage(e.target.value) }} >
                                         {languages.map((option) => (
-                                            <option value={option.languageKey}>{option.language}</option>
+                                            <option key={option.languageKey} value={option.languageKey}>{option.language}</option>
                                         ))}
                                     </select>
                                     {/* <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
@@ -1102,10 +1141,10 @@ export default function Registerclient() {
                                         <option value="36">Zulu</option>
                                     </select> */}
                                 </div>
-                            </region>
+                            </div>
 
                             {/**********  Interpreter */}
-                            <region>
+                            <div>
 
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '17px' }}><strong>Do you require an interpreter? *</strong></p>
@@ -1121,7 +1160,7 @@ export default function Registerclient() {
                                     </MDBCol>
                                 </MDBRow>
 
-                            </region>
+                            </div>
 
 
                         </MDBCardBody>
@@ -1137,7 +1176,7 @@ export default function Registerclient() {
                             </div>
 
                             {/**********  Current tenure */}
-                            <region>
+                            <div>
 
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '17px' }}><strong>What is your current tenure? *</strong></p>
@@ -1148,7 +1187,7 @@ export default function Registerclient() {
                                         aria-label="Default select example"
                                         onChange={(e) => { setTenure(e.target.value); setShowTenancyRef(!showTenancyRef) }}>
                                         {tenureData.map((option) => (
-                                            <option value={option.tenureKey}>{option.tenure}</option>
+                                            <option key={option.tenureKey} value={option.tenureKey}>{option.tenure}</option>
                                         ))}
                                     </select>
                                     {/* <select style={comboBoxStyle} className="form-select rounded"
@@ -1185,14 +1224,14 @@ export default function Registerclient() {
 
                                         <div className='mt-3' >
                                             <input style={{ width: '250px', fontSize: '13px' }} className='form-control' type='text' placeholder='Enter your tenancy agreement number'
-                                                onChange={(e) => { setTenancyRefNo(e.target.value) }} />
+                                                maxLength={15} onChange={(e) => { setTenancyRefNo(e.target.value) }} />
                                         </div>
                                     </div>
                                 }
-                            </region>
+                            </div>
 
                             {/**********  Are you? */}
-                            <region>
+                            <div>
 
                                 <div className="help-content">
                                     <span className="help-text">
@@ -1212,33 +1251,16 @@ export default function Registerclient() {
                                     </span>
                                 </div>
                                 <div className='mt-2' >
-                                    {/* <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
-                                        onChange={(e) => { setAreYou(e.target.value) }} >
-                                        <option defaultValue>Please Select</option>
-                                        <option value="1">A person who has limited or exceptional leave to enter or remain in the UK with recourse to public funds</option>
-                                        <option value="2">A British citizen</option>
-                                        <option value="3">A citizen of a country within the EEA with settled status</option>
-                                        <option value="4">A citizen of a country within the EEA with pre-settled status</option>
-                                        <option value="5">A Commonwealth citizen with a right of abode</option>
-                                        <option value="6">A family member of a citizen of a country within the EEA with settled status</option>
-                                        <option value="7">A family member of a citizen of a country within the EEA with pre-settled status</option>
-                                        <option value="8">A person with leave to remain</option>
-                                        <option value="9">An Irish citizen</option>
-                                        <option value="6">Seeking, or have sought asylum in the UK</option>
-                                        <option value="7">Someone granted humanitarian protection under immigration rules</option>
-                                        <option value="8">Someone with permission to be in the UK because you have a sponsor</option>
-                                        <option value="9">None of the above</option>
-                                    </select> */}
                                     <select style={comboBoxStyle}
                                         className="form-select rounded"
                                         aria-label="Default select example"
                                         onChange={(e) => { setAreYou(e.target.value) }}>
                                         {areyouData.map((option) => (
-                                            <option value={option.areYouKey}>{option.areYou}</option>
+                                            <option key={option.areYouKey} value={option.areYouKey}>{option.areYou}</option>
                                         ))}
                                     </select>
                                 </div>
-                            </region>
+                            </div>
 
                         </MDBCardBody>
                     </MDBCard>
@@ -1249,7 +1271,7 @@ export default function Registerclient() {
                         <MDBCardBody>
                             <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Connection to Birmingham</strong></MDBTypography>
 
-                            <region>
+                            <div>
 
                                 <div>
                                     <div className='mt-4'>
@@ -1293,7 +1315,7 @@ export default function Registerclient() {
                                             onChange={handleCheckbox} />
                                     </div>
                                 </div>
-                            </region>
+                            </div>
 
                         </MDBCardBody>
                     </MDBCard>
@@ -1310,7 +1332,7 @@ export default function Registerclient() {
                                 </div>
                             </div>
 
-                            <region>
+                            <div>
 
                                 <div className="help-content mt-2">
                                     <span className="help-text">
@@ -1325,10 +1347,10 @@ export default function Registerclient() {
                                             Please make sure you remember your new memorable date as you will need it when you log in next.</span>
                                     </span>
                                 </div>
-                            </region>
+                            </div>
 
                             {/**********  Memorable date */}
-                            <region>
+                            <div className='memorabledate'>
 
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '16px' }}><strong>Enter your new memorable date*</strong></p>
@@ -1344,61 +1366,30 @@ export default function Registerclient() {
 
                                 <div className='mt-2'>
                                     <div className='btn-group'>
-                                        <select style={{ overflow: 'scroll', width: '70px' }} className="form-select rounded "
+                                        <select style={datePickerStyle}
+                                            className="form-select rounded"
                                             onChange={(e) => { setMemDate(e.target.value) }} >
-                                            <option defaultValue>dd</option>
-                                            <option value="01">01</option>
-                                            <option value="02">02</option>
-                                            <option value="03">03</option>
-                                            <option value="04">04</option>
-                                            <option value="05">05</option>
-                                            <option value="06">06</option>
-                                            <option value="07">07</option>
-                                            <option value="08">08</option>
-                                            <option value="09">09</option>
-                                            <option value="10">10</option>
-                                            <option value="11">11</option>
-                                            <option value="12">12</option>
-                                            <option value="13">13</option>
-                                            <option value="14">14</option>
-                                            <option value="15">15</option>
-                                            <option value="16">16</option>
-                                            <option value="17">17</option>
-                                            <option value="18">18</option>
-                                            <option value="19">19</option>
-                                            <option value="20">20</option>
-                                            <option value="21">21</option>
-                                            <option value="22">22</option>
-                                            <option value="23">23</option>
-                                            <option value="24">24</option>
-                                            <option value="25">25</option>
-                                            <option value="26">26</option>
-                                            <option value="27">27</option>
-                                            <option value="28">28</option>
-                                            <option value="29">29</option>
-                                            <option value="30">30</option>
-                                            <option value="31">31</option>
+                                            {datesData.map((option) => (
+                                                <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
+                                            ))}
                                         </select>
 
-                                        <select style={{ overflow: 'scroll', width: '78px' }} className="form-select rounded "
+                                        <select style={monthPickerStyle}
+                                            className="form-select rounded"
                                             onChange={(e) => { setMemMonth(e.target.value) }} >
-                                            <option defaultValue>mm</option>
-                                            <option value="1">January</option>
-                                            <option value="2">February</option>
-                                            <option value="3">March</option>
-                                            <option value="4">April</option>
-                                            <option value="5">May</option>
-                                            <option value="6">June</option>
-                                            <option value="7">July</option>
-                                            <option value="8">August</option>
-                                            <option value="9">September</option>
-                                            <option value="10">October</option>
-                                            <option value="11">November</option>
-                                            <option value="12">December</option>
+                                            {monthsData.map((option) => (
+                                                <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
+                                            ))}
                                         </select>
-                                        <input className='form-control rounded' type='text' placeholder='year'
-                                            style={{ width: '65px', float: 'left', borderColor: 'lightgrey', color: 'black' }}
-                                            onChange={(e) => { setMemYear(e.target.value) }} />
+
+                                        <input className='form-control rounded'
+                                            style={yearPickerStyle}
+                                            type='number'
+                                            min={ageMin}
+                                            max={ageMax}
+                                            placeholder='year'
+                                            onChange={(e) => { setMemYear(e.target.value) }} >
+                                        </input>
 
                                     </div>
                                 </div>
@@ -1407,69 +1398,43 @@ export default function Registerclient() {
                                     <p style={{ fontSize: '16px' }}><strong>Enter your new memorable date again*</strong></p>
                                     <div className='mt-2'>
                                         <div className='btn-group'>
-                                            <select style={{ overflow: 'scroll', width: '70px' }} className="form-select rounded "
+                                            <select style={datePickerStyle}
+                                                className="form-select rounded"
                                                 onChange={(e) => { setReenterMemDate(e.target.value) }} >
-                                                <option defaultValue>dd</option>
-                                                <option value="01">01</option>
-                                                <option value="02">02</option>
-                                                <option value="03">03</option>
-                                                <option value="04">04</option>
-                                                <option value="05">05</option>
-                                                <option value="06">06</option>
-                                                <option value="07">07</option>
-                                                <option value="08">08</option>
-                                                <option value="09">09</option>
-                                                <option value="10">10</option>
-                                                <option value="11">11</option>
-                                                <option value="12">12</option>
-                                                <option value="13">13</option>
-                                                <option value="14">14</option>
-                                                <option value="15">15</option>
-                                                <option value="16">16</option>
-                                                <option value="17">17</option>
-                                                <option value="18">18</option>
-                                                <option value="19">19</option>
-                                                <option value="20">20</option>
-                                                <option value="21">21</option>
-                                                <option value="22">22</option>
-                                                <option value="23">23</option>
-                                                <option value="24">24</option>
-                                                <option value="25">25</option>
-                                                <option value="26">26</option>
-                                                <option value="27">27</option>
-                                                <option value="28">28</option>
-                                                <option value="29">29</option>
-                                                <option value="30">30</option>
-                                                <option value="31">31</option>
+                                                {datesData.map((option) => (
+                                                    <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
+                                                ))}
                                             </select>
 
-                                            <select style={{ overflow: 'scroll', width: '78px' }} className="form-select rounded "
+                                            <select style={monthPickerStyle}
+                                                className="form-select rounded"
                                                 onChange={(e) => { setReenterMemMonth(e.target.value) }} >
-                                                <option defaultValue>mm</option>
-                                                <option value="1">January</option>
-                                                <option value="2">February</option>
-                                                <option value="3">March</option>
-                                                <option value="4">April</option>
-                                                <option value="5">May</option>
-                                                <option value="6">June</option>
-                                                <option value="7">July</option>
-                                                <option value="8">August</option>
-                                                <option value="9">September</option>
-                                                <option value="10">October</option>
-                                                <option value="11">November</option>
-                                                <option value="12">December</option>
+                                                {monthsData.map((option) => (
+                                                    <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
+                                                ))}
                                             </select>
-                                            <input className='form-control rounded' type='text' placeholder='year'
-                                                style={{ width: '65px', float: 'left', borderColor: 'lightgrey', color: 'black' }}
-                                                onChange={(e) => { setReenterMemYear(e.target.value) }} />
+
+                                            {/* <input className='form-control rounded' border border-5 border-primary type='text' placeholder='year'
+                                                style={yearPickerStyle} minLength={4} maxLength={4}
+                                                onChange={(e) => { setReenterMemYear(e.target.value) }} >
+                                            </input> */}
+
+                                            <input className='form-control rounded'
+                                                style={yearPickerStyle}
+                                                type='number'
+                                                min={ageMin}
+                                                max={ageMax}
+                                                placeholder='year'
+                                                onChange={(e) => { setReenterMemYear(e.target.value) }} >
+                                            </input>
 
                                         </div>
                                     </div>
                                 </div>
-                            </region>
+                            </div>
 
                             {/**********  Password */}
-                            <region>
+                            <div>
 
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '17px' }}><strong>Enter your new password</strong></p>
@@ -1502,8 +1467,8 @@ export default function Registerclient() {
                                 </div>
 
                                 <div className='mb-4' >
-                                    <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Password...'
-                                        value={password} onChange={(e) => { setPassword(e.target.value) }}></input>
+                                    <input style={{ width: '250px' }} className='form-control' type='password' placeholder='Password...'
+                                        minLength={6} maxLength={10} value={password} onChange={(e) => { setPassword(e.target.value) }}></input>
                                 </div>
 
                                 <div className='mt-4'>
@@ -1511,10 +1476,10 @@ export default function Registerclient() {
 
                                 </div>
                                 <div className='mb-4' >
-                                    <input style={{ width: '250px' }} className='form-control' type='text' placeholder='Reenter password...'
-                                        value={reEnterPwd} onChange={(e) => { setReEnterPwd(e.target.value) }}></input>
+                                    <input style={{ width: '250px' }} className='form-control' type='password' placeholder='Reenter password...'
+                                        minLength={6} maxLength={10} value={reEnterPwd} onChange={(e) => { setReEnterPwd(e.target.value) }}></input>
                                 </div>
-                            </region>
+                            </div>
 
                         </MDBCardBody>
                     </MDBCard>
@@ -1532,22 +1497,6 @@ export default function Registerclient() {
                             </ul>
                         </MDBCardBody>
                     </MDBCard>
-
-                    {/* <MDBCard className='mt-5' style={{ backgroundColor: '#f7f2f287' }}>
-                        <MDBCardBody >
-                            <div >
-                                <select style={{ overflow: 'scroll', width: 'auto' }}
-                                    className="form-select border-rounded"
-                                    aria-label="Default select example"
-                                    onChange={(e) => { setAreYou(e.target.value) }}>
-                                    {areyouData.map((option) => (
-                                        <option value={option.areYouKey}>{option.areYou}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </MDBCardBody>
-                    </MDBCard> */}
-
                 </MDBCol>
             </MDBRow>
             <MDBRow>

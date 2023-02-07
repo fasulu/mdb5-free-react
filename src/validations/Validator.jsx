@@ -23,11 +23,9 @@ export const validEmail = (email) => {
 };
 
 export const validPostcode = (postcode) => {
-  let patternN = /^[a-zA-Z0-9- ]*$/;
-  let validPostcode = patternN.test(postcode);
-  let nameLength = postcode.replace(/\s+/g, "").length;
-
-  if (!validPostcode || (nameLength < 4 || nameLength > 8)) {
+  let patternN = '^[a-zA-Z]{1,2}[0-9]{1,2}[ ]{1}[0-9]{1,1}[a-zA-Z]{2}$';
+  let validPostcode = postcode.match(patternN);
+  if (!validPostcode) {
     return false;
   } else {
     return true;
@@ -36,7 +34,7 @@ export const validPostcode = (postcode) => {
 
 export const validName = (name) => {
   let patternN = /^[a-zA-Z- ]*$/; // /^[a-zA-Z]+$/
-  let validName = patternN.test(name);
+  let validName = name.match(patternN);
   let nameLength = name.replace(/\s+/g, "").length;
 
   if (!validName || (nameLength < 6 || nameLength > 20)) {
@@ -46,8 +44,41 @@ export const validName = (name) => {
   }
 };
 
+export const validNumber = (num) => {
+  let numLength = num.replace(/\s+/g, "").length;
+  let patternNum = '^[0-9]{0,15}$';
+  let validNnum = num.match(patternNum);
+
+  if ((numLength < 9 || numLength > 20) || !validNnum) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+export const validAddress = (address) => {
+  let addressLength = address.length;
+
+  if (addressLength < 4) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+export const ValidNINO = (nino) => {
+  let patternNino = '^[a-zA-Z]{2}[0-9]{6}[a-zA-Z]{1}$';
+  let resultNino = nino.match(patternNino);
+
+  if (resultNino) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 export const emailMatch = (email, reEnterEmail) => {
-  if (email !== reEnterEmail)  {
+  if ((email !== reEnterEmail) || (email === "") || (reEnterEmail === "")) {
     console.log('Error:- Emails are not same');
     return false
   } else {
@@ -57,21 +88,21 @@ export const emailMatch = (email, reEnterEmail) => {
 };
 
 export const pwdMatch = (pwd, repwd) => {
-  if (pwd !== repwd)  {
+  if ((pwd !== repwd) || (pwd === "") || (repwd === "")) {
     console.log('Error:- Passwords are not same');
     return false
   } else {
-    console.log('Password and memorable dates are matches')
+    console.log('Password are same')
     return true
   }
 };
 
 export const memDateMatch = (memDate, reMemDate) => {
-  if (memDate !== reMemDate) {
-    console.log('Error:- Memorable are not same');
+  if ((memDate !== reMemDate) || (memDate === "") || (reMemDate === "")) {
+    console.log('Error:- Memorable dates are not same');
     return false
   } else {
-    console.log('Memorable dates are matches')
+    console.log('Memorable dates are same')
     return true
   }
 };
