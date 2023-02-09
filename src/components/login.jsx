@@ -9,10 +9,10 @@ import {
 
 export default function Login() {
     return (
-        <MDBContainer  >
-
-            <MDBRow className='mt-5 mb-5'>
-                <MDBCol className='mx-5' size='md'>
+        <React.Fragment>
+        
+            {/* <MDBRow className='mt-5 mb-5'>
+                <MDBCol className='mx-5' size='md'> */}
                     <MDBCard style={{ backgroundColor: '#f7f2f287' }} className='w-100 mx-auto' >
                         <MDBCardBody>
                             <MDBTypography tag='h3'>Login</MDBTypography>
@@ -33,18 +33,18 @@ export default function Login() {
                         </MDBCardBody>
 
                     </MDBCard>
-                </MDBCol>
-                <MDBCol className='mx-5' size='md'>
-                    <MDBCard style={{ backgroundColor: '#f7f2f287' }} className='w-100 mx-auto'>
+                {/* </MDBCol> */}
+                {/* <MDBCol className='mx-5' size='md'> */}
+                    {/* <MDBCard style={{ backgroundColor: '#f7f2f287' }} className='w-100 mx-auto'>
                         <MDBCardBody>
                             <ul className="list-group list-group-flush" >
                                 <li className="list-group-item list-group-item-primary"><strong>Register</strong></li>
                                 <li className="list-group-item">Register</li>
                             </ul>
                         </MDBCardBody>
-                    </MDBCard>
-                </MDBCol>
-            </MDBRow>
+                    </MDBCard> */}
+                {/* </MDBCol> */}
+            {/* </MDBRow> */}
 
             {/* <div className="d-flex p-5 ">
                 <div className="p-2 flex-shrink-2 "></div>
@@ -70,11 +70,8 @@ export default function Login() {
                             </div>
                         </MDBCardBody>
                     </MDBCard>
-
-
-
                 </div>
-            </div> */}
-        </MDBContainer >
+            </div> */}    
+        </React.Fragment>
     );
 }

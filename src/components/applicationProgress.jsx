@@ -1,16 +1,27 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 import {
-    MDBIcon,
-    MDBCard, MDBCardBody
+    MDBIcon, MDBBtn,
+    MDBRow, MDBCol,
+    MDBCard, MDBCardBody, MDBContainer
 } from 'mdb-react-ui-kit';
 
 const ApplicationProgress = (props) => {
 
-    const styleSelected = {marginRight: '5px', color: '#4f83c3'};
-    const styleUnSelected = {marginRight: '5px', color: '#4f4f4f'};
-    const styleSelectedIconColor = {color: '#4f83c3'};
-    const styleUnSelectedIconColor = {color: '#4f4f4f'};
+    const navigate = useNavigate();
+
+    const gotoAccountPage = () => {
+        navigate('/account');
+    }
+
+    const styleBtn = { fontSize: '15px', borderTop: '1px solid #d7cdcd', borderBottom: '1px solid #d7cdcd', textTransform: 'none' };
+    const styleBorder = { color: '#4f83c3', borderTop: '1px solid #d7cdcd', borderBottom: '1px solid #d7cdcd' };
+
+    const styleSelected = { marginRight: '5px', color: '#4f83c3' };
+    const styleUnSelected = { marginRight: '5px', color: '#4f4f4f' };
+    const styleSelectedIconColor = { color: '#4f83c3' };
+    const styleUnSelectedIconColor = { color: '#4f4f4f' };
 
     const iconRight = "fa-solid fa-caret-right";
     const iconDown = "fa-solid fa-caret-down";
@@ -18,7 +29,9 @@ const ApplicationProgress = (props) => {
     const iconStatus = props.iconStatus;
 
     return (
-            <React.Fragment>
+        <React.Fragment>
+            <MDBContainer className='pe-5 pt-3' >
+
                 {
                     iconStatus === "NinoCheckPage" &&
 
@@ -30,6 +43,7 @@ const ApplicationProgress = (props) => {
                                 <li className="list-group-item" style={styleUnSelectedIconColor}><MDBIcon style={styleUnSelected} fas icon={iconDown} />  Household Registration</li>
                                 <li className="list-group-item" style={styleUnSelectedIconColor}><MDBIcon style={styleUnSelected} fas icon={iconDown} />  Joint Applicant</li>
                                 <li className="list-group-item" style={styleUnSelectedIconColor}><MDBIcon style={styleUnSelected} fas icon={iconDown} />  Household Members</li>
+                                <MDBBtn className='btn btn-md ' style={styleBtn} color='tertiary' onClick={gotoAccountPage} ><strong> My Account </strong></MDBBtn>
                             </ul>
                         </MDBCardBody>
                     </MDBCard>
@@ -45,6 +59,7 @@ const ApplicationProgress = (props) => {
                                 <li className="list-group-item" style={styleSelectedIconColor}><MDBIcon style={styleSelected} fas icon={iconRight} />  Household Registration</li>
                                 <li className="list-group-item" style={styleUnSelectedIconColor}><MDBIcon style={styleUnSelected} fas icon={iconDown} />  Joint Applicant</li>
                                 <li className="list-group-item" style={styleUnSelectedIconColor}><MDBIcon style={styleUnSelected} fas icon={iconDown} />  Household Members</li>
+                                <MDBBtn className='btn btn-md ' style={styleBtn} color='tertiary' onClick={gotoAccountPage} ><strong> My Account </strong></MDBBtn>
                             </ul>
                         </MDBCardBody>
                     </MDBCard>
@@ -60,7 +75,7 @@ const ApplicationProgress = (props) => {
                                 <li className="list-group-item" style={styleUnSelectedIconColor}><MDBIcon style={styleUnSelected} fas icon={iconDown} />  Household Registration</li>
                                 <li className="list-group-item" style={styleSelectedIconColor}><MDBIcon style={styleSelected} fas icon={iconRight} />  Joint Applicant</li>
                                 <li className="list-group-item" style={styleUnSelectedIconColor}><MDBIcon style={styleUnSelected} fas icon={iconDown} />  Household Members</li>
-
+                                <MDBBtn className='btn btn-md ' style={styleBtn} color='tertiary' onClick={gotoAccountPage} ><strong> My Account </strong></MDBBtn>
                             </ul>
                         </MDBCardBody>
                     </MDBCard>
@@ -76,14 +91,15 @@ const ApplicationProgress = (props) => {
                                 <li className="list-group-item" style={styleUnSelectedIconColor}><MDBIcon style={styleUnSelected} fas icon={iconDown} />  Household Registration</li>
                                 <li className="list-group-item" style={styleUnSelectedIconColor}><MDBIcon style={styleUnSelected} fas icon={iconDown} />  Joint Applicant</li>
                                 <li className="list-group-item" style={styleSelectedIconColor}><MDBIcon style={styleSelected} fas icon={iconRight} />  Household Members</li>
-
+                                <MDBBtn className='btn btn-md ' style={styleBtn} color='tertiary' onClick={gotoAccountPage} ><strong> My Account </strong></MDBBtn>
                             </ul>
                         </MDBCardBody>
                     </MDBCard>
                 }
 
-            </React.Fragment>
-        )
+            </MDBContainer>
+        </React.Fragment>
+    )
 };
 
 export default ApplicationProgress;

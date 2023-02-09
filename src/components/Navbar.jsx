@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import {
   MDBIcons,
   MDBContainer,
@@ -13,35 +15,58 @@ import {
   MDBCollapse,
 } from 'mdb-react-ui-kit';
 
-export default function navbar() {
+export default function Navbar() {
 
+  const navigate = useNavigate();
+  
   const [showBasic, setShowBasic] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const element1 = (<form className='d-flex mr-auto mb-2 mb-lg-0'>
 
-    <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
-      <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
-      My account</MDBBtn>
+  const gotoRegisterPage = () => {
+    navigate('/nino');
+  }
 
-    <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
-      <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
-      Messages</MDBBtn>
+  const gotoAccountPage = () => {
+    navigate('/account');
+  }
 
-    <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
-      <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
-      Logout</MDBBtn>
+  const gotoLoginPage = () => {
+    navigate('/login');
+  }
 
-  </form>);
-  const element2 = (<form className='d-flex mr-auto mb-2 mb-lg-0'>
-    <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
-      <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
-      Register</MDBBtn>
+  const element1 = (
+    <form className='d-flex mr-auto mb-2 mb-lg-0'>
 
-    <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
-      <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
-      Login</MDBBtn>
+      <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} 
+      className='form-control' color='primary' onClick={gotoAccountPage}>
+        <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
+        My account</MDBBtn>
 
-  </form>)
+      <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
+        <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
+        Messages</MDBBtn>
+
+      <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
+        <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
+        Logout</MDBBtn>
+
+    </form>
+  );
+
+  const element2 = (
+    <form className='d-flex mr-auto mb-2 mb-lg-0'>
+      <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }}
+        className='form-control' color='primary' onClick={gotoRegisterPage}>
+        <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
+        Register</MDBBtn>
+
+      <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }}
+        className='form-control' color='primary' onClick={gotoLoginPage}>
+        <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
+        Login</MDBBtn>
+
+    </form>
+  )
 
   return (
     <MDBNavbar expand='lg' light bgColor='light'>
@@ -66,7 +91,7 @@ export default function navbar() {
             <MDBNavbarNav className='mr-auto mb-2 mb-lg-0 '>
               <MDBNavbarItem>
                 <MDBNavbarLink style={{ fontSize: '18px' }} active aria-current='page' href='#'>
-                  <strong>Mobile View</strong>
+                  <strong></strong>
                 </MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>

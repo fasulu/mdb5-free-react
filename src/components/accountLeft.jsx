@@ -19,7 +19,7 @@ const AccountLeft = (props) => {
     return (
         <React.Fragment>
             {
-                <MDBContainer >
+                <MDBContainer className='ps-5 pt-3' >
                     <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
                         <p style={{ color: 'black', fontSize: '20px', borderBottom: '2px solid #d7cdcd' }} ><strong>My Account</strong></p>
                     </MDBRow>

@@ -21,7 +21,7 @@ const AccountRight = (props) => {
     return (
         <React.Fragment>
             {
-                <MDBContainer >
+                <MDBContainer className='pe-5 pt-3' >
                     <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
                         <div style={{ backgroundColor: '#b0cce3' }} className="list-group-item list-group-item-primary">
                             <p style={{ color: 'black' }} ><strong>Primary Name/Surname</strong></p>

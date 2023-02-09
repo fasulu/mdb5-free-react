@@ -8,7 +8,6 @@ import {
 } from 'mdb-react-ui-kit';
 
 import { ValidNINO } from '../validations/Validator';
-import ApplicationProgress from './applicationProgress'
 
 export default function NINOCheck() {
 
@@ -27,12 +26,11 @@ export default function NINOCheck() {
         setNINOPrimaryErr(ValidNINO(ninoPrimary));
         setNINOJointErr(ValidNINO(ninoJoint));
 
-        console.log(`Primary NINO is ${ninoPrimary} error is ${ninoPrimaryErr}, joint NINO is ${ninoJoint} error is ${ninoJointErr}`)
+        console.log(`Primary NINO is ${ninoPrimary} is ${ninoPrimaryErr}, joint NINO is ${ninoJoint} is ${ninoJointErr}`)
     }
     return (
         <React.Fragment>
                 <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
-                    {/* <MDBCol className='col-md-6 col-sm-6'> */}
                         <MDBTypography style={{ fontSize: '17px' }}><strong>Register your household</strong></MDBTypography>
 
                         <MDBTypography style={{ fontSize: '16px', lineHeight: '1.5px' }}>National insurance number check</MDBTypography>
@@ -71,10 +69,6 @@ export default function NINOCheck() {
                                 </form>
                             </MDBCardBody>
                         </MDBCard>
-                    {/* </MDBCol> */}
-                    {/* <MDBCol className='col-md-6 col-sm-6'>
-                        <ApplicationProgress iconStatus={"NinoCheckPage"} ></ApplicationProgress>
-                    </MDBCol> */}
                 </MDBRow>
         </React.Fragment>
     );

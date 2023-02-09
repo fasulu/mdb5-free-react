@@ -11,6 +11,9 @@ import { ValidNINO } from '../validations/Validator';
 import ApplicationProgress from '../components/applicationProgress'
 import AccountRight from '../components/accountRight';
 import AccountLeft from '../components/accountLeft';
+import Navbar from '../components/Navbar';
+import NavbarSecondary from '../components/NavbarSecondary';
+import Footer from '../components/footer';
 
 export default function AccountPage() {
 
@@ -33,16 +36,17 @@ export default function AccountPage() {
     }
     return (
         <React.Fragment>
-            <MDBContainer  >
+            <Navbar/>
+            <NavbarSecondary/>
                 <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
-                    <MDBCol className='col-lg-8 col-md-8 col-sm-6'>
+                    <MDBCol className='col-lg-8 col-md-8 col-sm-8'>
                         <AccountLeft></AccountLeft>
                     </MDBCol>
-                    <MDBCol className='col-lg-4 col-md-4 col-sm-0'>
+                    <MDBCol className='col-lg-4 col-md-4 col-sm-4'>
                         <AccountRight></AccountRight>
                     </MDBCol>
                 </MDBRow>
-            </MDBContainer >
+            <Footer/>
 
         </React.Fragment>
     );

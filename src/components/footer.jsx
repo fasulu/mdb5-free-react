@@ -29,7 +29,7 @@ export default function Footer() {
       </MDBContainer>
       <div style={{ backgroundColor: 'white' }} >
         <a style={{ fontSize: '17px', justifyContent: 'left', marginLeft:'50px' }} className=''>
-          © Copyright Civica UK Limited 2023
+          © Copyright Fasulu Rahman, UK - 2023
         </a>
       </div>
     </MDBFooter>
