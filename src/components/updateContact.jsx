@@ -1,83 +1,52 @@
 import React, { useEffect, useState } from 'react';
 
-import { areyous } from '../resources/areyou';
-import { tenures } from '../resources/tenure';
-import { correspondences } from '../resources/correspondence';
-import { ethnicities } from '../resources/ethnicity';
-import { nationalities } from '../resources/nationality';
-import { sexOrients } from '../resources/sexOrient';
-import { beliefs } from '../resources/belief';
-import { languages } from '../resources/language';
 import { dates, months } from '../resources/datePicker';
 import { validPwd, validEmail, validName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch, ValidNINO } from '../validations/Validator.jsx';
-import ApplicationProgress from '../components/applicationProgress'
 
 import {
     MDBContainer,
     MDBCard, MDBCardBody,
     MDBRow, MDBCol,
     MDBTypography,
-    MDBBtn,
-    MDBRadio, MDBCheckbox
+    MDBBtn
 } from 'mdb-react-ui-kit';
 
 export default function UpdateContact() {
 
-    const datesData = dates;
-    const monthsData = months;
-
-    const ageMax = new Date().getFullYear();        // year picker up to current year
-    const ageMin = new Date().getFullYear() - 120;  // year picker 120 year back from current year
-
-    const inputStyle = { fontSize: '14px', width: '250px' };
-    const comboBoxStyle = { maxWidth: '250px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
-    const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
-    const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
-    const yearPickerStyle = { width: '80px', float: 'left', border: '5' };
-
-    const [showAddress, setShowAddress] = useState(false);
-
-    const [title, setTitle] = useState("Mr");
+    const inputStyle = { marginLeft: '5px' };
+    
     const [fName, setFName] = useState("Rishi");
     const [mName, setMName] = useState("Sunak");
     const [sName, setSName] = useState("Singh");
     const [nINO, setNINO] = useState("ZW123456P");
-    const [postcode, setPostcode] = useState("LW1 3AN");
     const [addLine1, setAddLine1] = useState("10 Downing Street");
     const [addLine2, setAddLine2] = useState("West Minster");
     const [addLine3, setAddLine3] = useState("London");
+    const [postcode, setPostcode] = useState("LW1 3AN");
     const [addLine4, setAddLine4] = useState("UK");
+
+    const [correspondenceAddLine1, setCorrespondenceAddLine1] = useState("1050 Whirlpool Suite");
+    const [correspondenceAddLine2, setCorrespondenceAddLine2] = useState("Gatewick boulevard");
+    const [correspondenceAddLine3, setCorrespondenceAddLine3] = useState("London");
+    const [correspondencePostcode, setCorrespondencePostcode] = useState("LS1 1AA");
+    const [correspondenceAddLine4, setCorrespondenceAddLine4] = useState("UK");
+
     const [telephone, setTelephone] = useState("0201234569");
     const [mobile, setMobile] = useState("07894563214");
     const [workPhone, setWorkPhone] = useState("0201245879");
     const [email, setEmail] = useState("rsunak@dowingst.com");
     const [reEnterEmail, setReEnterEmail] = useState("rsunak@dowingst.com");
-    const [memorableDate, setMemorableDate] = useState("15/01/2000");
-    const [memDate, setMemDate] = useState("");
-    const [memMonth, setMemMonth] = useState("");
-    const [memYear, setMemYear] = useState("");
-    const [reEntermemorableDate, setReenterMemorableDate] = useState("");
-    const [reEnterMemDate, setReenterMemDate] = useState("");
-    const [reEnterMemMonth, setReenterMemMonth] = useState("");
-    const [reEnterMemYear, setReenterMemYear] = useState("");
-    const [password, setPassword] = useState("A!asdfgh");
-    const [reEnterPwd, setReEnterPwd] = useState("A!asdfgh");
-
+    
     const [nameErr, setNameErr] = useState(false);
-    const [ninoErr, setNinoErr] = useState(false);
     const [emailErr, setEmailErr] = useState(false);
-    const [passwordErr, setPasswordErr] = useState(false);
-    const [postcodeErr, setPostcodeErr] = useState(false);
     const [numberErr, setNumberErr] = useState(false)
     const [emailMatchsErr, setEmailMatchesErr] = useState(false)
-    const [pwdMatchsErr, setPwdMatchesErr] = useState(false)
-    const [memMatchsErr, setMemMatchesErr] = useState(false)
-
+    
     useEffect(() => {
 
     }, [])
 
-    const showInConsole = (e) => {
+    const save = (e) => {
 
         e.preventDefault();
 
@@ -122,348 +91,134 @@ export default function UpdateContact() {
         }
     }
 
-    const findPostcodeAddress = (e) => {
-        e.preventDefault();
-        setShowAddress(true);
-        alert('Sorry... \nPostcode search is not connected to UK Post Office API, \nplease enter the address manually')
-    }
-
-    const showAddresCard = (e) => {
-        e.preventDefault();
-        setShowAddress(true);
+    const cancelEntry = (e) => {
+        window.location.reload();
     }
 
     return (
         <React.Fragment>
             <MDBContainer className='ps-5 pt-3'  >
-
                 <MDBCard className='w-100 mx-auto' style={{ backgroundColor: '#f7f2f287' }} >
-                    <MDBRow>
-                        <MDBCol>
-                            <MDBTypography className='card-header'
-                                style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
-                                <strong>{`${fName} ${mName} ${sName}`}</strong><span>Address</span>
-                            </MDBTypography>
-                        </MDBCol>
+                    <MDBTypography className='card-header'
+                        style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
+                        <strong>{`${fName} ${mName} ${sName} (NINO:- ${nINO})`}</strong>
+                    </MDBTypography>
 
-                    </MDBRow>
+                    <MDBCardBody>
 
-                    <MDBRow>
-                        <MDBCol className='size=md '>
-                            <MDBCard>
-                                <MDBCardBody className='p-1'>
+                        {/**********  Permanent Address */}
+                        <MDBRow>
+                            <MDBCol className='size=md'>
+                                <div className='p-2'>
                                     <MDBTypography className='card-header'
-                                        style={{ fontSize: '17px', backgroundColor: '#b7b5b521' }} >
-                                        <strong>Address</strong>
+                                        style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
+                                        <strong>Permanent Address</strong>
                                     </MDBTypography>
 
-                                    <MDBRow>
-                                        <MDBCol >
-                                            <MDBTypography style={{ fontSize: '16px' }} label='Name'>Address </MDBTypography>
-                                        </MDBCol>
-                                        <MDBCol >
+                                    <p className='mt-3' ><strong>1st line of address</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='1st line of your address'
+                                            minLength={9} maxLength={20} value={addLine1} onChange={(e) => { setAddLine1(e.target.value) }} /></p>
 
-                                            <MDBTypography style={{ fontSize: '16px' }} label='Name'>{addLine1} </MDBTypography>
+                                    <p className=' mt-3'><strong>2nd line of address</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='2nd line of your address'
+                                            minLength={9} maxLength={20} value={addLine2} onChange={(e) => { setAddLine2(e.target.value) }} /></p>
 
-                                            <MDBTypography style={{ fontSize: '16px' }} label='Name'>{addLine2} </MDBTypography>
+                                    <p className=' mt-3'><strong>3rd line of address</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='3rd line of your address'
+                                            minLength={9} maxLength={20} value={addLine3} onChange={(e) => { setAddLine3(e.target.value) }} /></p>
 
-                                            <MDBTypography style={{ fontSize: '16px' }} label='Name'>{addLine3} </MDBTypography>
-                                            <MDBTypography style={{ fontSize: '16px' }} label='Name'>{postcode} </MDBTypography>
+                                    <p className=' mt-3' ><strong>4th line of address</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='4th line of your address'
+                                            minLength={9} maxLength={20} value={addLine4} onChange={(e) => { setAddLine4(e.target.value) }} /></p>
 
-                                            <MDBTypography style={{ fontSize: '16px' }} label='Name'>{addLine4} </MDBTypography>
-                                        </MDBCol>
-                                    </MDBRow>
-                                </MDBCardBody>
-                            </MDBCard>
-                        </MDBCol>
-                        <MDBCol className='size=md '>
-                            <MDBCard>
-                                <MDBCardBody className='p-1'>
+                                    <p className=' mt-3' ><strong>Postcode</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='Postcode'
+                                            minLength={9} maxLength={20} value={postcode} onChange={(e) => { setPostcode(e.target.value) }} /></p>
+                                </div>
+                            </MDBCol>
+
+                            {/**********  Correspondence Address */}
+                            <MDBCol className='size=md'>
+                                <div className='p-2'>
                                     <MDBTypography className='card-header'
-                                        style={{ fontSize: '17px', backgroundColor: '#b7b5b521' }} >
-                                        <strong>Correspondence</strong>
+                                        style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
+                                        <strong>Correspondence Address</strong>
                                     </MDBTypography>
+                                    <p className=' mt-3' ><strong>1st line of address</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='1st line of correspondence address'
+                                            minLength={9} maxLength={20} value={correspondenceAddLine1} onChange={(e) => { setCorrespondenceAddLine1(e.target.value) }} /></p>
 
-                                    <MDBRow>
-                                        <MDBCol >
-                                            <MDBTypography style={{ fontSize: '16px' }} label='Name'>Address </MDBTypography>
-                                        </MDBCol>
-                                        <MDBCol >
+                                    <p className=' mt-3' ><strong>2nd line of address</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='2nd line of correspondence address'
+                                            minLength={9} maxLength={20} value={correspondenceAddLine2} onChange={(e) => { setCorrespondenceAddLine2(e.target.value) }} /></p>
 
-                                            <MDBTypography style={{ fontSize: '16px' }} label='Name'>{addLine1} </MDBTypography>
+                                    <p className=' mt-3' ><strong>3rd line of address</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='3rd line of correspondence address'
+                                            minLength={9} maxLength={20} value={correspondenceAddLine3} onChange={(e) => { setCorrespondenceAddLine3(e.target.value) }} /></p>
 
-                                            <MDBTypography style={{ fontSize: '16px' }} label='Name'>{addLine2} </MDBTypography>
+                                    <p className=' mt-3' ><strong>4th line of address</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='4th line of correspondence address'
+                                            minLength={9} maxLength={20} value={correspondenceAddLine4} onChange={(e) => { setCorrespondenceAddLine4(e.target.value) }} /></p>
 
-                                            <MDBTypography style={{ fontSize: '16px' }} label='Name'>{addLine3} </MDBTypography>
-                                            <MDBTypography style={{ fontSize: '16px' }} label='Name'>{postcode} </MDBTypography>
-
-                                            <MDBTypography style={{ fontSize: '16px' }} label='Name'>{addLine4} </MDBTypography>
-                                        </MDBCol>
-                                    </MDBRow>
-                                </MDBCardBody>
-                            </MDBCard>
-                        </MDBCol>
-                    </MDBRow>
-                    <MDBCardBody >
-
-                    </MDBCardBody>
-                </MDBCard>
-
-                <MDBCard>
-                    <MDBCardBody>
-
-                    </MDBCardBody>
-                </MDBCard>
-
-                {/* ***********  Contact Details  */}
-                <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
-
-                    <MDBCardBody>
-                        <div>
-                            <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} tag='h6'><strong>Contact Details</strong></MDBTypography>
-
-                        </div>
-
-                        {/* ***********  Home telephone  */}
-                        <div>
-
-                            <div className='mt-4'>
-                                <p style={{ fontSize: '17px' }}><strong>Home telephone*</strong></p>
-                            </div>
-                            <div className="help-content">
-                                <span className="far fa-question-circle help-icon"></span>
-                                <span className="help-text">
-                                    <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">including area code</span>
-                                </span>
-                            </div>
-                            <div>
-                                <div className='mt-2' >
-                                    <input style={inputStyle} className='form-control' type='text' placeholder='home telephone'
-                                        minLength={9} maxLength={20} onChange={(e) => { setTelephone(e.target.value) }} />
-                                </div>
-                            </div>
-
-                        </div>
-
-                        {/* ***********  Work telephone  */}
-                        <div>
-
-                            <div className='mt-4'>
-                                <p style={{ fontSize: '17px' }}><strong>Work telephone*</strong></p>
-                            </div>
-                            <div>
-                                <div className='mt-2' >
-                                    <input style={inputStyle} className='form-control' type='text' placeholder='work telephone'
-                                        minLength={9} maxLength={20} onChange={(e) => { setWorkPhone(e.target.value) }} />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* ***********  Mobile telephone  */}
-                        <div>
-
-                            <div className='mt-4'>
-                                <p style={{ fontSize: '17px' }}><strong>Mobile telephone*</strong></p>
-                            </div>
-                            <div>
-                                <div className='mt-2' >
-                                    <input style={inputStyle} className='form-control' type='text' placeholder='mobile telephone'
-                                        minLength={11} maxLength={20} onChange={(e) => { setMobile(e.target.value) }} />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* ***********  Email address  */}
-                        <div>
-
-                            <div className='mt-4'>
-                                <p style={{ fontSize: '17px' }}><strong>Email address*</strong></p>
-                            </div>
-                            <div>
-                                <div className='mt-2' >
-                                    <input style={inputStyle} className='form-control' type='text' placeholder='email address'
-                                        minLength={6} maxLength={40} onChange={(e) => { setEmail(e.target.value) }} />
-                                </div>
-                            </div>
-                            <div className='mt-4'>
-                                <p style={{ fontSize: '17px' }}><strong>Please re-enter your email address*</strong></p>
-                            </div>
-                            <div>
-                                <div className='mt-2' >
-                                    <input style={inputStyle} className='form-control' type='text' placeholder='re-enter email address'
-                                        minLength={6} maxLength={40} onChange={(e) => { setReEnterEmail(e.target.value) }} />
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </MDBCardBody>
-                </MDBCard>
-
-                {/* ********** Login Details */}
-                <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
-
-                    <MDBCardBody>
-
-                        <div>
-                            <p className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Login Details</strong></p>
-                            <div className='mt-4'>
-                                <p style={{ fontSize: '17px' }}><strong>Enter your new memorable date</strong></p>
-                            </div>
-                        </div>
-
-                        <div>
-
-                            <div className="help-content mt-2">
-                                <span className="help-text">
-                                    <span style={{ fontSize: '12px' }} className="configured-help-text">
-                                        You need to set a memorable date to use when you log in next.</span>
-                                </span>
-                            </div>
-
-                            <div className="help-content">
-                                <span className="help-text">
-                                    <span style={{ fontSize: '12px' }} className="configured-help-text">
-                                        Please make sure you remember your new memorable date as you will need it when you log in next.</span>
-                                </span>
-                            </div>
-                        </div>
-
-                        {/**********  Memorable date */}
-                        <div className='memorabledate'>
-
-                            <div className='mt-4'>
-                                <p style={{ fontSize: '16px' }}><strong>Enter your new memorable date*</strong></p>
-                            </div>
-
-                            <div style={{ width: '280px' }} className=" mt-2 help-content border border-grey rounded">
-                                <span className="far fa-question-circle help-icon"></span>
-                                <span className="help-text">
-                                    <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text ">
-                                        For example 01 01 2000</span>
-                                </span>
-                            </div>
-
-                            <div className='mt-2'>
-                                <div className='btn-group'>
-                                    <select style={datePickerStyle}
-                                        className="form-select rounded"
-                                        onChange={(e) => { setMemDate(e.target.value) }} >
-                                        {datesData.map((option) => (
-                                            <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
-                                        ))}
-                                    </select>
-
-                                    <select style={monthPickerStyle}
-                                        className="form-select rounded"
-                                        onChange={(e) => { setMemMonth(e.target.value) }} >
-                                        {monthsData.map((option) => (
-                                            <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
-                                        ))}
-                                    </select>
-
-                                    <input className='form-control rounded'
-                                        style={yearPickerStyle}
-                                        type='number'
-                                        min={ageMin}
-                                        max={ageMax}
-                                        placeholder='year'
-                                        onChange={(e) => { setMemYear(e.target.value) }} >
-                                    </input>
+                                    <p className=' mt-3' ><strong>Postcode</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='Correspondence postcode'
+                                            minLength={9} maxLength={20} value={correspondencePostcode} onChange={(e) => { setCorrespondencePostcode(e.target.value) }} /></p>
 
                                 </div>
-                            </div>
+                            </MDBCol>
+                        </MDBRow>
 
-                            <div className='mt-4'>
-                                <p style={{ fontSize: '16px' }}><strong>Enter your new memorable date again*</strong></p>
-                                <div className='mt-2'>
-                                    <div className='btn-group'>
-                                        <select style={datePickerStyle}
-                                            className="form-select rounded"
-                                            onChange={(e) => { setReenterMemDate(e.target.value) }} >
-                                            {datesData.map((option) => (
-                                                <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
-                                            ))}
-                                        </select>
-
-                                        <select style={monthPickerStyle}
-                                            className="form-select rounded"
-                                            onChange={(e) => { setReenterMemMonth(e.target.value) }} >
-                                            {monthsData.map((option) => (
-                                                <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
-                                            ))}
-                                        </select>
-                                        <input className='form-control rounded'
-                                            style={yearPickerStyle}
-                                            type='number'
-                                            min={ageMin}
-                                            max={ageMax}
-                                            placeholder='year'
-                                            onChange={(e) => { setReenterMemYear(e.target.value) }} >
-                                        </input>
-
-                                    </div>
+                        <MDBRow>
+                            <MDBCol className='size=md'>
+                                <div className='p-2'>
+                                    <MDBTypography className='card-header'
+                                        style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
+                                        <strong>Contact Details</strong>
+                                    </MDBTypography>
+                                    <p className=' mt-3' ><strong>Home Telephone</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='Home telephone'
+                                            minLength={9} maxLength={20} value={telephone} onChange={(e) => { setTelephone(e.target.value) }} />
+                                    </p>
+                                    <p className=' mt-3' ><strong>Work Telephone</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='Work telephone'
+                                            minLength={9} maxLength={20} value={workPhone} onChange={(e) => { setWorkPhone(e.target.value) }} />
+                                    </p>
+                                    <p className=' mt-3' ><strong>Mobile</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='Mobile'
+                                            minLength={9} maxLength={20} value={mobile} onChange={(e) => { setMobile(e.target.value) }} />
+                                    </p>
                                 </div>
-                            </div>
-                        </div>
+                            </MDBCol>
+                            <MDBCol className='size=md'>
+                                <div className='p-2'>
+                                    <MDBTypography className='card-header'
+                                        style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
+                                        <strong>Email Details</strong>
+                                    </MDBTypography>
+                                    <p className=' mt-3' ><strong>New Email</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='New email'
+                                            minLength={6} maxLength={40} value={email} onChange={(e) => { setEmail(e.target.value) }} />
+                                    </p>
+                                    <p className=' mt-3' ><strong>Enter your new email again</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='Enter your new email again'
+                                            minLength={6} maxLength={40} value={reEnterEmail} onChange={(e) => { setReEnterEmail(e.target.value) }} />
+                                    </p>
+                                </div>
+                            </MDBCol>
+                        </MDBRow>
 
-                        {/**********  Password */}
-                        <div>
+                        <form className='d-flex w-auto p-2'>
+                            <MDBBtn style={{ fontSize: '18px', width: 'auto', textTransform: 'none' }}
+                                color='success me-1'
+                                onClick={save}>
+                                Save
+                            </MDBBtn>
 
-                            <div className='mt-4'>
-                                <p style={{ fontSize: '17px' }}><strong>Enter your new password</strong></p>
-                            </div>
-
-
-                            <div className="help-content">
-                                <span className="help-text">
-                                    <span style={{ fontSize: '12px' }} className="configured-help-text">
-                                        You need to set a password to use when you log in next.</span>
-                                </span>
-                            </div>
-
-                            <div className="help-content mt-2 mb-2">
-                                <span className="help-text">
-                                    <span style={{ fontSize: '12px' }} className="configured-help-text">
-                                        Please enter a password that is between 6 and 10 characters long and has at least 1 lower case letter, 1 upper case letter and 1 number. Symbols and punctuation are not allowed.</span>
-                                </span>
-                            </div>
-                            <div className="help-content">
-                                <span className="help-text">
-                                    <span style={{ fontSize: '12px' }} className="configured-help-text">
-                                        Please make sure you remember your new password as you will need it when you log in next.</span>
-                                </span>
-                            </div>
-
-                            <div className='mt-4'>
-                                <p style={{ fontSize: '16px' }}><strong>Enter your new password*</strong></p>
-
-                            </div>
-
-                            <div className='mb-4' >
-                                <input style={inputStyle} className='form-control' type='password' placeholder='Password...'
-                                    minLength={6} maxLength={10} value={password} onChange={(e) => { setPassword(e.target.value) }}></input>
-                            </div>
-
-                            <div className='mt-4'>
-                                <p style={{ fontSize: '16px' }}><strong>Enter your new password again*</strong></p>
-
-                            </div>
-                            <div className='mb-4' >
-                                <input style={inputStyle} className='form-control' type='password' placeholder='Reenter password...'
-                                    minLength={6} maxLength={10} value={reEnterPwd} onChange={(e) => { setReEnterPwd(e.target.value) }}></input>
-                            </div>
-                        </div>
-
-                        <form className='d-flex w-auto'>
-                            <MDBBtn style={{ fontSize: '18px', width: 'auto', textTransform: 'none' }} color='primary me-1'>
-                                {/* <MDBIcon fas icon='caret-left' className='me-2' /> */}
-                                Previous Page</MDBBtn>
-
-                            <MDBBtn style={{ fontSize: '18px', width: 'auto', textTransform: 'none' }} color='primary'
-                                onClick={showInConsole}>
-                                {/* <MDBIcon fas icon='caret-right' className='me-2' /> */}
-                                Next Page</MDBBtn>
+                            <MDBBtn style={{ fontSize: '18px', width: 'auto', textTransform: 'none' }}
+                                color='warning'
+                                onClick={cancelEntry}>
+                                Cancel
+                            </MDBBtn>
                         </form>
                     </MDBCardBody>
                 </MDBCard>

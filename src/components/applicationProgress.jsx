@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import {
     MDBIcon, MDBBtn,
-    MDBRow, MDBCol,
     MDBCard, MDBCardBody, MDBContainer
 } from 'mdb-react-ui-kit';
 

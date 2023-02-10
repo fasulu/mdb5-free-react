@@ -22,9 +22,9 @@ import LoginPage from './pages/loginPage';
 import PrimaryApplicantPage from './pages/primaryApplicantPage';
 import JointApplicantPage from './pages/jointApplicantPage';
 import HouseholdMemberPage from './pages/householdMemberPage';
-import HomeLeft from './components/homeLeft';
 import PageNotFound from './pages/PageNotFound';
-import UpdateContact from './components/updateContact';
+import UpdateContactPage from './pages/updateContactPage';
+import UpdateLoginPage from './pages/updateLoginPage';
 
 export const AppContext = createContext();
 
@@ -46,12 +46,12 @@ function App() {
               <Route path="primary" element={<PrimaryApplicantPage />} />
               <Route path="joint" element={<JointApplicantPage />} />
               <Route path="member" element={<HouseholdMemberPage />} />
-              <Route path="updatecontact" element={<UpdateContact/>} />
+              <Route path="updatecontact" element={<UpdateContactPage/>} />
               <Route path="jointdetail" element={<HouseholdMemberPage />} />
               <Route path="updatejointdetail" element={<HouseholdMemberPage />} />
               <Route path="memberlist" element={<HouseholdMemberPage />} />
               <Route path="updatememberdetail" element={<HouseholdMemberPage />} />
-              <Route path="updatelogin" element={<HouseholdMemberPage />} />
+              <Route path="updatelogin" element={<UpdateLoginPage/>} />
               <Route path="/" element={<HomePage />} />
               <Route path="*" element={<PageNotFound />} /> 
             </Routes>

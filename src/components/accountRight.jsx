@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 import {
     MDBIcon,
@@ -9,6 +10,8 @@ import {
 } from 'mdb-react-ui-kit';
 
 const AccountRight = (props) => {
+    
+    const navigate = useNavigate();
 
     const styleBtn = { fontSize: '13px', color: '#4f83c3', textTransform: 'none' };
 
@@ -17,6 +20,14 @@ const AccountRight = (props) => {
     const iconRight = "fa-solid fa-caret-right";
 
     const iconStatus = props.iconStatus;
+
+    const gotoUpdateContactPage = () => {
+        navigate('/updatecontact');
+    }    
+
+    const gotoUpdateLoginPage = () => {
+        navigate('/updatelogin');
+    }    
 
     return (
         <React.Fragment>
@@ -60,10 +71,16 @@ const AccountRight = (props) => {
                     </MDBRow>
                     <MDBRow >
                         <MDBCol>
-                            <MDBBtn style={styleBtn} color='tertiary'> Update contact details </MDBBtn>
+                            <MDBBtn style={styleBtn} color='tertiary'
+                            onClick={gotoUpdateContactPage}>
+                                 Update contact details 
+                                 </MDBBtn>
                         </MDBCol>
                         <MDBCol>
-                            <MDBBtn style={styleBtn} color='tertiary'> Update your login details </MDBBtn>
+                            <MDBBtn style={styleBtn} color='tertiary'
+                            onClick={gotoUpdateLoginPage}> 
+                            Update your login details 
+                            </MDBBtn>
                         </MDBCol>
                     </MDBRow>
 
