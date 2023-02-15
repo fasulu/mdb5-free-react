@@ -7,31 +7,20 @@ import {
 } from 'mdb-react-ui-kit';
 
 export default function Footer() {
+
+  const footerStyle = { backgroundColor: '#333', fontSize: '14px' };
   return (
-    <MDBFooter style={{ backgroundColor: '#333', fontSize: '14px', lineHeight: '19px' }} >
+    <MDBFooter style={footerStyle} >
       <MDBContainer className='text-center text-lg-left text-white p-1'>
-        <MDBRow className=''>
-          <MDBCol size='1'>
-            Privacy Policy
+        <MDBRow>
+          <MDBCol>
+            <p>Education purpose only</p>
           </MDBCol>
-          <MDBCol size='2'>
-            Cookie Policy
-          </MDBCol>
-          <MDBCol size='2'>
-            Site Map
-          </MDBCol>
-          <MDBCol size='2'>
-            Accessebility Policy
-          </MDBCol>
-          <MDBCol size='2'>
+          <MDBCol>
+            <p>© Copyright Fasulu Rahman, UK - 2023</p>
           </MDBCol>
         </MDBRow>
       </MDBContainer>
-      <div style={{ backgroundColor: 'white' }} >
-        <a style={{ fontSize: '17px', justifyContent: 'left', marginLeft:'50px' }} className=''>
-          © Copyright Fasulu Rahman, UK - 2023
-        </a>
-      </div>
     </MDBFooter>
   );
 }

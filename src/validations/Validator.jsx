@@ -44,6 +44,17 @@ export const validName = (name) => {
   }
 };
 
+export const validMName = (name) => {
+  let patternN = /^[a-zA-Z- ]*$/; // /^[a-zA-Z]+$/
+  let validName = name.match(patternN);
+
+  if (!validName) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
 export const validNumber = (num) => {
   let numLength = num.replace(/\s+/g, "").length;
   let patternNum = '^[0-9]{0,15}$';
@@ -106,3 +117,8 @@ export const memDateMatch = (memDate, reMemDate) => {
     return true
   }
 };
+
+function ToCamelCase (props) {
+  return props.replace(/\b(\w)/g, s => s.toUpperCase());  
+}
+export default ToCamelCase

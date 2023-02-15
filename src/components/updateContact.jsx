@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 import { dates, months } from '../resources/datePicker';
 import { validPwd, validEmail, validName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch, ValidNINO } from '../validations/Validator.jsx';
@@ -12,6 +13,8 @@ import {
 } from 'mdb-react-ui-kit';
 
 export default function UpdateContact() {
+
+    const navigator = useNavigate();
 
     const inputStyle = { marginLeft: '5px' };
     
@@ -92,7 +95,8 @@ export default function UpdateContact() {
     }
 
     const cancelEntry = (e) => {
-        window.location.reload();
+        // window.location.reload();
+        navigator('/account')
     }
 
     return (

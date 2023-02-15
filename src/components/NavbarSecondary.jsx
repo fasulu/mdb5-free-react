@@ -15,14 +15,14 @@ import {
 
 export default function NavbarSecondary() {
 
-    const btn = "Properties and recent lets search"
     return (
         <MDBNavbar expand='lg' >
             <MDBContainer fluid style={{ backgroundColor: '#8fbadc' }} >
 
                 <MDBNavbarNav className='mr-auto mb-2 mb-lg-0'>
                     <MDBNavbarItem>
-                        <MDBNavbarLink style={{color:'black', fontWeight:'bold'}} active aria-current='page' href='#'>
+                        <MDBNavbarLink style={{color:'black', fontWeight:'bold'}} 
+                        active aria-current='page' href='/home'>
                             Home
                         </MDBNavbarLink>
                     </MDBNavbarItem>
@@ -31,22 +31,16 @@ export default function NavbarSecondary() {
                             <MDBDropdownToggle style={{color:'black', fontWeight:'bold'}} tag='a' className='nav-link' role='button'>
                                 About
                             </MDBDropdownToggle>
-                            <MDBDropdownMenu style={{ overflow: 'scroll', height: '22em', background:'#8fbadc' }}>
-                                <MDBDropdownItem style={{ height: '28px' }} link>About</MDBDropdownItem>
-                                <MDBDropdownItem style={{ height: '28px' }} link>Register</MDBDropdownItem>
-                                <MDBDropdownItem style={{ height: '28px' }} link>Apply for a Mobility Assessment</MDBDropdownItem>
-                                <MDBDropdownItem style={{ height: '28px' }} link>What happens next</MDBDropdownItem>
-                                <MDBDropdownItem style={{ height: '28px' }} link>Prioritising applications</MDBDropdownItem>
-                                <MDBDropdownItem style={{ height: '28px' }} link>The size of properties</MDBDropdownItem>
-                                <MDBDropdownItem style={{ height: '28px' }} link>Bidding</MDBDropdownItem>
-                                <MDBDropdownItem style={{ height: '28px' }} link>Change of Circumstances</MDBDropdownItem>
-                                <MDBDropdownItem style={{ height: '28px' }} link>Shotlisting property adverts</MDBDropdownItem>
-                                <MDBDropdownItem style={{ height: '28px' }} link>Feedback</MDBDropdownItem>
-                                <MDBDropdownItem style={{ height: '28px' }} link>Empty Property Repair Standards</MDBDropdownItem>
-                                <MDBDropdownItem style={{ height: '28px' }} link>Frequently asked questions</MDBDropdownItem>
-                                <MDBDropdownItem style={{ height: '28px' }} link>Request a review</MDBDropdownItem>
-                                <MDBDropdownItem style={{ height: '28px' }} link>Guide to registerig for housing</MDBDropdownItem>
-                                <MDBDropdownItem style={{ height: '28px' }} link>Key facts</MDBDropdownItem>
+                            <MDBDropdownMenu style={{ height: '18.8em', background:'#8fbadc' }}>
+                                <MDBDropdownItem style={{ height: '28px' }} href="/nino" link>Register</MDBDropdownItem>
+                                <MDBDropdownItem style={{ height: '28px' }} href="/whatisnext" link>What happens next</MDBDropdownItem>
+                                <MDBDropdownItem style={{ height: '28px' }} href="/priority" link>Prioritising applications</MDBDropdownItem>
+                                <MDBDropdownItem style={{ height: '28px' }} href="/size" link>The size of properties</MDBDropdownItem>
+                                <MDBDropdownItem style={{ height: '28px' }} href="/anychange" link>Change of Circumstances</MDBDropdownItem>
+                                <MDBDropdownItem style={{ height: '28px' }} href="/shortlisting" link>Shotlisting property adverts</MDBDropdownItem>
+                                <MDBDropdownItem style={{ height: '28px' }} href="/repair" link>Empty Property Repair Standards</MDBDropdownItem>
+                                <MDBDropdownItem style={{ height: '28px' }} href="/guide" link>Guide to registerig for housing</MDBDropdownItem>
+                                <MDBDropdownItem style={{ height: '28px' }} href="/keyfacts" link>Key facts</MDBDropdownItem>
                             </MDBDropdownMenu>
                         </MDBDropdown>
                     </MDBNavbarItem>

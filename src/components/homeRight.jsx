@@ -25,15 +25,15 @@ export default function HomeRight() {
             {
                 <MDBContainer className='mt-5'  >
                     <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
-                    <img src={image1} className='img-fluid shadow-4' alt='...' />
+                    <img src={image1} className='img-fluid rounded shadow-4' alt='...' />
                     </MDBRow>
 
                     <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
-                    <img src={image2} className='img-fluid shadow-4' alt='...' />
+                    <img src={image2} className='img-fluid rounded shadow-4' alt='...' />
                     </MDBRow>
 
                     <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
-                    <img src={image3} className='img-fluid shadow-4' alt='...' />
+                    <img src={image3} className='img-fluid rounded shadow-4' alt='...' />
                     </MDBRow>
 
                 </MDBContainer>

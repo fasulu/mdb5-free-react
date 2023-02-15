@@ -52,9 +52,9 @@ export default function HomeBottom() {
                             <MDBTypography className='card-header' style={{ fontSize: '15px', backgroundColor: '#dcdcdc' }} >
                                 <strong><MDBIcon style={{ marginRight: '10px' }} fas icon="address-card" />Register  </strong>
                             </MDBTypography>
-                            <MDBCardBody>
-                                <a onClick={gotoRegisterPage}>Click here to register</a>
-                                <MDBIcon style={{ marginLeft: '50px', fontSize: '50px', backgroundColor: '#dcdcdc' }} fas icon="laptop-medical" />
+                            <MDBCardBody style={{ textAlign: 'center', fontSize: '15px' }}>
+                                <a onClick={gotoRegisterPage} href="/nino">Click here to register</a>
+                                <MDBIcon style={{ padding:'5px', color: 'blue'}} fas icon="laptop-medical" />
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>

@@ -29,6 +29,18 @@ const AccountRight = (props) => {
         navigate('/updatelogin');
     }    
 
+    const gotoJointApplicant = () => {
+        navigate('/jointapplicantedit');
+    }    
+    
+        const gotoMembersList = () => {
+            navigate('/memberlist');
+        }    
+    
+        const logout = () => {
+            navigate('/login');
+        }    
+    
     return (
         <React.Fragment>
             {
@@ -51,17 +63,21 @@ const AccountRight = (props) => {
                     </MDBRow>
                     <MDBRow >
                         <MDBCol>
-                            <MDBBtn style={styleBtn} color='tertiary' > My Partner </MDBBtn>
+                            <MDBBtn style={styleBtn} color='tertiary' 
+                            onClick={gotoJointApplicant} > My Partner </MDBBtn>
                         </MDBCol>
                     </MDBRow>
                     <MDBRow >
                         <MDBCol>
-                            <MDBBtn style={styleBtn} color='tertiary' > My Household Members </MDBBtn>
+                            <MDBBtn style={styleBtn} color='tertiary'
+                            onClick={gotoMembersList} > My Household Members </MDBBtn>
                         </MDBCol>
                     </MDBRow>
                     <MDBRow >
                         <MDBCol style={styleBorder}>
-                            <MDBBtn style={styleBtn} color='tertiary'  > <MDBIcon style={styleBtn} fas icon={iconRight} /> Logout </MDBBtn>
+                            <MDBBtn style={styleBtn} color='tertiary'
+                            onClick={logout}  > 
+                            <MDBIcon style={styleBtn} fas icon={iconRight} /> Logout </MDBBtn>
                         </MDBCol>
                     </MDBRow>
                     <MDBRow >
@@ -84,7 +100,8 @@ const AccountRight = (props) => {
                         </MDBCol>
                     </MDBRow>
 
-                    <MDBRow style={{ backgroundColor: '#f7f2f287', textTransform: 'none' }} className='my-3 justify-content-center' bgcolor='#f7f2f287'>
+                    <MDBRow style={{ backgroundColor: '#f7f2f287', textTransform: 'none' }} 
+                    className='my-3 justify-content-center' bgcolor='#f7f2f287'>
                         
                     </MDBRow>
                 </MDBContainer>

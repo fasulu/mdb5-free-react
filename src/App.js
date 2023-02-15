@@ -25,6 +25,19 @@ import HouseholdMemberPage from './pages/householdMemberPage';
 import PageNotFound from './pages/PageNotFound';
 import UpdateContactPage from './pages/updateContactPage';
 import UpdateLoginPage from './pages/updateLoginPage';
+import MemberListPage from './pages/memberListPage';
+import JointApplicantEditPage from './pages/jointApplicantEditPage';
+import MemberEditPage from './pages/memberEditPage';
+import AccessibilityPage from './pages/accessibilityPage';
+import HelpPage from './pages/helpPage';
+import WhatIsNextPage from './pages/whatIsNextPage';
+import PriorityPage from './pages/priorityPage';
+import SizePage from './pages/sizePage';
+import AnyChangePage from './pages/anyChangePage';
+import ShortListPage from './pages/shortListingPage';
+import RepairPage from './pages/repairPage';
+import GuidePage from './pages/guidePage';
+import KeyFactsPage from './pages/keyFactsPage';
 
 export const AppContext = createContext();
 
@@ -47,11 +60,24 @@ function App() {
               <Route path="joint" element={<JointApplicantPage />} />
               <Route path="member" element={<HouseholdMemberPage />} />
               <Route path="updatecontact" element={<UpdateContactPage/>} />
-              <Route path="jointdetail" element={<HouseholdMemberPage />} />
+              <Route path="jointdetail" element={<JointApplicantPage/>} />
+              <Route path="jointapplicantedit" element={<JointApplicantEditPage/>} />
               <Route path="updatejointdetail" element={<HouseholdMemberPage />} />
-              <Route path="memberlist" element={<HouseholdMemberPage />} />
+              <Route path="memberlist" element={<MemberListPage />} />
+              <Route path="memberedit" element={<MemberEditPage />} />
               <Route path="updatememberdetail" element={<HouseholdMemberPage />} />
               <Route path="updatelogin" element={<UpdateLoginPage/>} />
+              <Route path="accessibility" element={<AccessibilityPage/>} />
+              <Route path="help" element={<HelpPage/>} />
+              <Route path="whatisnext" element={<WhatIsNextPage/>} />
+              <Route path="priority" element={<PriorityPage/>} />
+              <Route path="size" element={<SizePage/>} />
+              <Route path="anychange" element={<AnyChangePage/>} />
+              <Route path="shortlisting" element={<ShortListPage/>} />
+              <Route path="repair" element={<RepairPage/>} />
+              <Route path="guide" element={<GuidePage/>} />
+              <Route path="keyfacts" element={<KeyFactsPage/>} />
+
               <Route path="/" element={<HomePage />} />
               <Route path="*" element={<PageNotFound />} /> 
             </Routes>

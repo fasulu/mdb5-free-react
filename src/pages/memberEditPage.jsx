@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
+
 import {
-    MDBRow, MDBCol
+    MDBRow, MDBCol, MDBTypography,
+    MDBCard, MDBCardBody, MDBRipple
 } from 'mdb-react-ui-kit';
 
 import { ValidNINO } from '../validations/Validator';
 import AccountRight from '../components/accountRight';
-import AccountLeft from '../components/accountLeft';
 import Navbar from '../components/Navbar';
 import NavbarSecondary from '../components/NavbarSecondary';
 import Footer from '../components/footer';
+import MemberEdit from '../components/memberEdit';
 
-export default function AccountPage() {
+export default function MemberEditPage() {
 
-    const inputStyle = { width: '250px' };
+    const inputStyle = { fontSize: '14px', width: '250px', color: 'black' };
+
+    const boxStyle = {
+        backgroundColor: '#a3a5a9',
+        cursor: 'pointer',
+    };
 
     const [ninoPrimary, setNINOPrimary] = useState("");
     const [ninoJoint, setNINOJoint] = useState("");
@@ -31,18 +38,18 @@ export default function AccountPage() {
     }
     return (
         <React.Fragment>
-            <Navbar/>
-            <NavbarSecondary/>
-                <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
-                    <MDBCol className='col-lg-8 col-md-8 col-sm-8'>
-                        <AccountLeft></AccountLeft>
-                    </MDBCol>
-                    <MDBCol className='col-lg-4 col-md-4 col-sm-4'>
-                        <AccountRight></AccountRight>
-                    </MDBCol>
-                </MDBRow>
-            <Footer/>
-
+            <Navbar />
+            <NavbarSecondary />
+            <MDBRow className='my-3 justify-content-center' alignment='center' bgcolor='#f7f2f287'>
+                <MDBTypography className='card-header' style={{ fontSize: '16px' }} ><strong>Edit Member</strong></MDBTypography>
+                <MDBCol md='6'>
+                    <MemberEdit></MemberEdit>
+                </MDBCol>
+                <MDBCol className='col-lg-4 col-md-4 col-sm-4'>
+                    <AccountRight></AccountRight>
+                </MDBCol>
+            </MDBRow>
+            <Footer />
         </React.Fragment>
     );
 }

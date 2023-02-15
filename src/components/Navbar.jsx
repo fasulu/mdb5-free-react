@@ -24,13 +24,13 @@ export default function Navbar() {
 
   const gotoRegisterPage = () => {
     navigate('/nino');
-  }
+}
 
   const gotoAccountPage = () => {
     navigate('/account');
   }
 
-  const gotoLoginPage = () => {
+  const gotoLoginPage = () =>{ 
     navigate('/login');
   }
 
@@ -69,12 +69,12 @@ export default function Navbar() {
   )
 
   return (
-    <MDBNavbar expand='lg' light bgColor='light'>
+    <MDBNavbar expand='lg' light bgColor='white'>
       <MDBContainer fluid >
-        <MDBNavbarBrand href='#'>
+        <MDBNavbarBrand href='/home'>
           <img
             src="https://www.birminghamchoice.co.uk/Data/pub/PublicWebsite/SiteLogos/BCCLogo_Mobile.jpg" width="189" height="45" alt="Scheme logo"
-            className='img-fluid hover-shadow'
+            className='img-fluid rounded hover-shadow'
           />
         </MDBNavbarBrand>
         <div className='d-flex input-group w-auto'>
@@ -95,12 +95,12 @@ export default function Navbar() {
                 </MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink style={{ fontSize: '18px' }} active aria-current='page' href='#'>
-                  <strong>Accessability</strong>
+                <MDBNavbarLink style={{ fontSize: '18px' }} active aria-current='page' href='/accessibility'>
+                  <strong>Accessibility</strong>
                 </MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink style={{ fontSize: '18px' }} active aria-current='page' href='#'>
+                <MDBNavbarLink style={{ fontSize: '18px' }} active aria-current='page' href='/help'>
                   <strong>Help</strong>
                 </MDBNavbarLink>
               </MDBNavbarItem>

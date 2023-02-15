@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import {
-    MDBRow, MDBCol
+    MDBIcon,
+    MDBCard, MDBCardBody,
+    MDBContainer, MDBRow, MDBCol,
+    MDBTypography,
+    MDBBtn
 } from 'mdb-react-ui-kit';
 
 import { ValidNINO } from '../validations/Validator';
 import AccountRight from '../components/accountRight';
-import AccountLeft from '../components/accountLeft';
 import Navbar from '../components/Navbar';
 import NavbarSecondary from '../components/NavbarSecondary';
 import Footer from '../components/footer';
+import JointApplicantEdit from '../components/jointApplicantEdit';
 
-export default function AccountPage() {
-
-    const inputStyle = { width: '250px' };
+export default function JointApplicantEditPage() {
 
     const [ninoPrimary, setNINOPrimary] = useState("");
     const [ninoJoint, setNINOJoint] = useState("");
@@ -35,7 +37,7 @@ export default function AccountPage() {
             <NavbarSecondary/>
                 <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
                     <MDBCol className='col-lg-8 col-md-8 col-sm-8'>
-                        <AccountLeft></AccountLeft>
+                        <JointApplicantEdit/>
                     </MDBCol>
                     <MDBCol className='col-lg-4 col-md-4 col-sm-4'>
                         <AccountRight></AccountRight>

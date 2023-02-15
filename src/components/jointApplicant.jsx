@@ -9,7 +9,6 @@ import { beliefs } from '../resources/belief';
 import { languages } from '../resources/language';
 import { dates, months } from '../resources/datePicker';
 import { validEmail, validName, validPostcode, validNumber, emailMatch, ValidNINO } from '../validations/Validator.jsx';
-import ApplicationProgress from '../components/applicationProgress'
 
 import {
     MDBContainer,

@@ -25,6 +25,9 @@ export default function HomeLeft() {
                         <MDBTypography className='card-header' style={{ color: 'black', fontSize: '25px', borderBottom: '3px solid #d7cdcd' }} ><strong>Welcome to Birmingham Choice</strong></MDBTypography>
                         <MDBCardBody>
                             <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
+                                <p style={{color:'black'}}> <em>This website is for education purpose only,</em> <span style={{color:'red', fontSize: '20px'}}><strong>DO NOT</strong></span> <em>fill the forms with your or anyone else personal information</em> </p>
+                            </MDBRow>
+                            <MDBRow >
                             </MDBRow>
                             <MDBRow >
                                 <p> Social housing is a valuable but limited resource and demand for it is greater than the number of homes available.  Therefore, to allocate housing tenancies in a fair and transparent way, the Council manages a housing allocation scheme, as it must do by law.</p>
