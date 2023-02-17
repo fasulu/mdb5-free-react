@@ -8,7 +8,7 @@ import { sexOrients } from '../resources/sexOrient';
 import { beliefs } from '../resources/belief';
 import { languages } from '../resources/language';
 import { dates, months } from '../resources/datePicker';
-import { validEmail, validName, validPostcode, validNumber, emailMatch, ValidNINO } from '../validations/Validator.jsx';
+import { validEmail, validName, validPostcode, validNumber, emailMatch, validNINO, validMName } from '../validations/Validator.jsx';
 
 import {
     MDBContainer,
@@ -42,6 +42,7 @@ export default function JointApplicant() {
     const [showAddress, setShowAddress] = useState(false);
     const [showLocalAuthority, setShowLocalAuthority] = useState(false);
     const [showTenancyRef, setShowTenancyRef] = useState(false);
+    const [continueApplication, setContinueApplication] = useState(false);
 
     const [relationWithPrimaryApplicant, setRelationWithPrimaryApplicant] = useState("")
     const [title, setTitle] = useState("");
@@ -51,30 +52,37 @@ export default function JointApplicant() {
     const [nameChange, setNameChange] = useState("");
     const [nINO, setNINO] = useState("");
     const [dateofbirth, setdateofbirth] = useState("");
+    const [sex, setSex] = useState("");
+
     const [dobDate, setDOBDate] = useState("");
     const [dobMonth, setDOBMonth] = useState("");
     const [dobYear, setDOBYear] = useState("");
-    const [sex, setSex] = useState("");
-    const [partnerAddress, setPartnerAddress] = useState("Need to fill dynamically")
-    const [postcode, setPostcode] = useState("");
-    const [addLine1, setAddLine1] = useState("");
-    const [addLine2, setAddLine2] = useState("");
-    const [addLine3, setAddLine3] = useState("");
-    const [addLine4, setAddLine4] = useState("");
+
+    const [livedAbroad, setLivedAbroad] = useState("");
+
+    const [currentlyLiveWithYou, setCurrentlyLiveWithYou] = useState("no");
+    const [livingInDiffAddress, setLivingInDiffAddress] = useState("");
+
+    const [corresPostcode, setCorresPostcode] = useState("");
+    const [corresAddLine1, setCorresAddLine1] = useState("");
+    const [corresAddLine2, setCorresAddLine2] = useState("");
+    const [corresAddLine3, setCorresAddLine3] = useState("");
+    const [corresAddLine4, setCorresAddLine4] = useState("");
+
     const [placedByLocalAuthrty, setPlacedByLocalAuthrty] = useState("");
     const [localAuthrtyName, setLocalAuthrtyName] = useState("");
-    const [livingInDiffAddress, setLivingInDiffAddress] = useState("");
+
     const [isShePregnant, setIsShePregnant] = useState("no");
     const [showDeliveryDate, setShowDeliveryDate] = useState(false);
     const [deliveryDate, setDeliveryDate] = useState("");
     const [delDate, setDelDate] = useState("");
     const [delMonth, setDelMonth] = useState("");
     const [delYear, setDelYear] = useState("");
-    const [movedToUkDate, setMovedToUkDate] = useState("");
-    const [movedUKDate, setMovedUKDate] = useState("");
-    const [movedUKMonth, setMovedUKMonth] = useState("");
-    const [movedUKYear, setMovedUKYear] = useState("");
-    const [currentlyLiveWithYou, setCurrentlyLiveWithYou] = useState("no");
+
+    const [movedInDate, setMovedInDate] = useState("");
+    const [movedDate, setMovedDate] = useState("");
+    const [movedMonth, setMovedMonth] = useState("");
+    const [movedYear, setMovedYear] = useState("");
     const [telephone, setTelephone] = useState("");
     const [mobile, setMobile] = useState("");
     const [workPhone, setWorkPhone] = useState("");
@@ -93,12 +101,7 @@ export default function JointApplicant() {
     const [areYouWorker, setAreYouWorker] = useState();
     const [connection, setConnection] = useState([]);
 
-    const [ninoErr, setNinoErr] = useState(false);
-    const [nameErr, setNameErr] = useState(false);
-    const [emailErr, setEmailErr] = useState(false);
-    const [postcodeErr, setPostcodeErr] = useState(false);
-    const [numberErr, setNumberErr] = useState(false)
-    const [emailMatchsErr, setEmailMatchesErr] = useState(false)
+    const [comments, setComments] = useState();
 
     useEffect(() => {
 
@@ -130,52 +133,82 @@ export default function JointApplicant() {
 
     const ContinueOnJointApplicantDetails = (e) => {
         e.preventDefault();
-        if (livingInDiffAddress === "Living with primary applicant") {
-            setShowAddress(false);
-        } else { setShowAddress(true); }
+        if (livingInDiffAddress == "Living in different address") {
 
+            let newEdit1 = { ...showAddress }; newEdit1 = true; setShowAddress(newEdit1)
+            let newEdit2 = { ...continueApplication }; newEdit2 = true; setContinueApplication(newEdit2)
+
+        } else {
+
+            let newEdit1 = { ...showAddress }; newEdit1 = false; setShowAddress(newEdit1)
+            let newEdit2 = { ...continueApplication }; newEdit2 = true; setContinueApplication(newEdit2)
+
+        }
     }
 
     const saveJointMember = (e) => {
         e.preventDefault();
 
         setdateofbirth(dobMonth + "/" + dobDate + "/" + dobYear);
-        setMovedToUkDate(movedUKMonth + "/" + movedUKDate + "/" + movedUKYear);
+        setMovedInDate(movedMonth + "/" + movedDate + "/" + movedYear);
         setDeliveryDate(delDate + "/" + delMonth + "/" + delYear);
 
-        setNameErr(validName(fName))
-        setNameErr(validName(sName))
-        setNinoErr(ValidNINO(nINO))
-        setEmailErr(validEmail(email))
-        setPostcodeErr(validPostcode(postcode))
-        setNumberErr(validNumber(telephone))
-        setNumberErr(validNumber(workPhone))
-        setNumberErr(validNumber(mobile))
+        const fNameErr = validName(fName);
+        const mNameErr = validMName(mName);
+        const sNameErr = validName(sName);
+        const ninoErr = validNINO(nINO)
+        const emailErr = validEmail(email);
+        const corresPostcodeErr = validPostcode(corresPostcode);
+        const telephoneErr = validNumber(telephone);
+        const workphoneErr = validNumber(workPhone);
+        const mobileErr = validNumber(mobile);
+        const emailMatchesErr = emailMatch(email, reEnterEmail)
 
-        setEmailMatchesErr(emailMatch(email, reEnterEmail))
-
-        console.log(`Validation result is fname/sname ${nameErr}, 
-        email ${emailErr}, postcode ${postcodeErr}, email matches ${emailMatchsErr}, 
+        console.log(`Validation result is fname/sname ${fNameErr} ${mNameErr}, ${sNameErr}, 
+        nino ${ninoErr}, email ${emailErr}, email matches ${emailMatchesErr}, 
+        correspondence postcode ${corresPostcodeErr}, 
+        telephone err ${telephoneErr}, workphone err ${workphoneErr}, mobile err ${mobileErr}, 
         home telephone ${telephone}, work telephone ${workPhone}, mobile ${mobile}`)
 
         console.log('Im in saveJointMember', relationWithPrimaryApplicant,
             title, fName, mName, sName, nameChange,
             nINO, dateofbirth, sex,
-            postcode, addLine1, addLine2, addLine3, addLine4,
-            currentlyLiveWithYou, movedToUkDate, placedByLocalAuthrty, localAuthrtyName,
+            corresPostcode, corresAddLine1, corresAddLine2, corresAddLine3, corresAddLine4,
+            currentlyLiveWithYou, movedInDate, placedByLocalAuthrty, localAuthrtyName,
             telephone, mobile, workPhone, email, reEnterEmail,
             ethnicity, nationality, sexOrient, isShePregnant, deliveryDate,
             belief, healthCondition, preferedLanguage, needInterpreter,
-            tenure, tenancyRefNo, isYourPartner, areYouWorker, connection
+            tenure, tenancyRefNo, isYourPartner, areYouWorker, connection, comments
         )
 
-        if ((!emailMatchsErr) || (!nameErr) || (!emailErr) || (!postcodeErr) || (!numberErr) || (!ninoErr)) {
-            !nameErr && alert('Name error');
-            !emailErr && alert('Email error');
-            !ninoErr && alert('NINO error');
-            !postcodeErr && alert('Postcode error');
-            !numberErr && alert('Telephone/Mobile number error');
-            !emailMatchsErr && alert('Email match error');
+        if (showAddress) {
+            if ((!fNameErr) || (!mNameErr) || (!sNameErr) || (!emailErr) || (!emailMatchesErr) || (!ninoErr) ||
+                (!corresPostcodeErr) || (!telephoneErr) || (!workphoneErr) || (!mobileErr)) {
+                !fNameErr && alert('First Name error');
+                !mNameErr && alert('Middle Name error');
+                !sNameErr && alert('Surname error');
+                !telephoneErr && alert('Telephone number error');
+                !workphoneErr && alert('Work telephone number error');
+                !mobileErr && alert('Mobile number error');
+                !emailErr && alert('Email error');
+                !ninoErr && alert('NINO error');
+                !corresPostcodeErr && alert('Postcode error');
+                !emailMatchesErr && alert('Email match error');
+            }
+        } else {
+            if ((!fNameErr) || (!mNameErr) || (!sNameErr) || (!emailErr) || (!emailMatchesErr) ||
+                (!ninoErr) || (!telephoneErr) || (!workphoneErr) || (!mobileErr)) {
+                !fNameErr && alert('First Name error');
+                !mNameErr && alert('Middle Name error');
+                !sNameErr && alert('Surname error');
+                !telephoneErr && alert('Telephone number error');
+                !workphoneErr && alert('Work telephone number error');
+                !mobileErr && alert('Mobile number error');
+                !emailErr && alert('Email error');
+                !ninoErr && alert('NINO error');
+                !emailMatchesErr && alert('Email match error');
+            }
+
         }
     }
 
@@ -203,7 +236,7 @@ export default function JointApplicant() {
 
                             <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Relationship to main applicant *</strong></p>
                             <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded mb-2"
-                                value={relationWithPrimaryApplicant} onChange={(e) => { setRelationWithPrimaryApplicant(e.target.value) }}>
+                                value={relationWithPrimaryApplicant} onChange={(e) => { let newEdit = { ...relationWithPrimaryApplicant }; newEdit = e.target.value; setRelationWithPrimaryApplicant(newEdit) }}>
                                 <option defaultValue={relationWithPrimaryApplicant} >Spouse or Partnership</option>
                                 <option value="1">Civil Partner</option>
                                 <option value="2">Husband</option>
@@ -223,13 +256,13 @@ export default function JointApplicant() {
 
                             <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Title *</strong></p>
                             <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded" aria-label="Default select example"
-                                value={title} onChange={(e) => { setTitle(e.target.value) }}>
+                                value={title} onChange={(e) => { let newEdit = { ...title }; newEdit = e.target.value; setTitle(newEdit) }}>
                                 <option defaultValue={title}>Please Choose</option>
-                                <option value="1">Dr</option>
-                                <option value="2">Miss</option>
-                                <option value="3">Mr</option>
-                                <option value="4">Mrs</option>
-                                <option value="5">Ms</option>
+                                <option value="dr">Dr</option>
+                                <option value="miss">Miss</option>
+                                <option value="mr">Mr</option>
+                                <option value="mrs">Mrs</option>
+                                <option value="ms">Ms</option>
                             </select>
 
                         </div>
@@ -246,7 +279,7 @@ export default function JointApplicant() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='First name...'
-                                    maxLength={20} value={fName} onChange={(e) => { setFName(e.target.value) }}></input>
+                                    maxLength={20} value={fName} onChange={(e) => { let newEdit = { ...fName }; newEdit = e.target.value; setFName(newEdit) }}></input>
                             </div>
                         </div>
 
@@ -262,7 +295,7 @@ export default function JointApplicant() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='Middle name...'
-                                    maxLength={20} value={mName} onChange={(e) => { setMName(e.target.value) }}></input>
+                                    maxLength={20} value={mName} onChange={(e) => { let newEdit = { ...mName }; newEdit = e.target.value; setMName(newEdit) }}></input>
                             </div>
                         </div>
 
@@ -278,7 +311,7 @@ export default function JointApplicant() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='Surname...'
-                                    maxLength={20} value={sName} onChange={(e) => { setSName(e.target.value) }}></input>
+                                    maxLength={20} value={sName} onChange={(e) => { let newEdit = { ...sName }; newEdit = e.target.value; setSName(newEdit) }}></input>
                             </div>
 
                         </div>
@@ -295,7 +328,7 @@ export default function JointApplicant() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='Have you ever used a different name, eg a maiden name or by deed poll? if so, please provide details'
-                                    maxLength={50} value={nameChange} onChange={(e) => { setNameChange(e.target.value) }}></input>
+                                    maxLength={50} value={nameChange} onChange={(e) => { let newEdit = { ...nameChange }; newEdit = e.target.value; setNameChange(newEdit) }}></input>
                             </div>
                         </div>
 
@@ -305,12 +338,12 @@ export default function JointApplicant() {
                             <MDBRow>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='currentlyLiveWithYouRadio' value='yes' label='Yes' inline id='currentlyLiveWithYouYes' htmlFor="currentlyLiveWithYouYes"
-                                        onClick={(e) => { setCurrentlyLiveWithYou(e.target.value) }}></MDBRadio>
+                                        onClick={(e) => { let newEdit = { ...currentlyLiveWithYou }; newEdit = e.target.value; setCurrentlyLiveWithYou(newEdit) }}></MDBRadio>
                                 </MDBCol>
                                 <MDBCol className='col-3'>
 
                                     <MDBRadio name='currentlyLiveWithYouRadio' value='no' label='No' inline id='currentlyLiveWithYouNo' htmlFor='currentlyLiveWithYouNo'
-                                        onChange={(e) => { setCurrentlyLiveWithYou(e.target.value) }}></MDBRadio>
+                                        onClick={(e) => { let newEdit = { ...currentlyLiveWithYou }; newEdit = e.target.value; setCurrentlyLiveWithYou(newEdit) }}></MDBRadio>
                                 </MDBCol>
                             </MDBRow>
 
@@ -321,7 +354,7 @@ export default function JointApplicant() {
                             <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Your National Insurance Number *</strong></p>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text'
-                                    maxLength={9} value={nINO} onChange={(e) => { setNINO(e.target.value) }}></input>
+                                    maxLength={9} value={nINO} onChange={(e) => { let newEdit = { ...nINO }; newEdit = e.target.value; setNINO(newEdit) }}></input>
                             </div>
                         </div>
 
@@ -346,14 +379,14 @@ export default function JointApplicant() {
                                     <select style={datePickerStyle}
                                         className="form-select rounded"
                                         aria-label="Default select example"
-                                        onChange={(e) => { setDOBDate(e.target.value) }}>
+                                        onChange={(e) => { let newEdit = { ...dobDate }; newEdit = e.target.value; setDOBDate(newEdit) }}>
                                         {datesData.map((option) => (
                                             <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
                                         ))}
                                     </select>
                                     <select style={monthPickerStyle}
                                         className="form-select rounded"
-                                        onChange={(e) => { setDOBMonth(e.target.value) }}>
+                                        onChange={(e) => { let newEdit = { ...dobMonth }; newEdit = e.target.value; setDOBMonth(newEdit) }}>
                                         {monthsData.map((option) => (
                                             <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
                                         ))}
@@ -365,7 +398,7 @@ export default function JointApplicant() {
                                         min={yearMin}
                                         max={yearMax}
                                         placeholder='year'
-                                        onChange={(e) => { setDOBYear(e.target.value) }}>
+                                        onChange={(e) => { let newEdit = { ...dobYear }; newEdit = e.target.value; setDOBYear(newEdit) }}>
                                     </input>
 
                                 </div>
@@ -378,12 +411,39 @@ export default function JointApplicant() {
                             <div className='mt-4'>
                                 <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Gender *</strong></p>
                                 <select style={comboBoxStyle} className="form-select border-rounded"
-                                    value={sex} onChange={(e) => { setSex(e.target.value) }}>
+                                    value={sex} onChange={(e) => { let newEdit = { ...sex }; newEdit = e.target.value; setSex(newEdit) }}>
                                     <option defaultValue>Please Choose</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
                                 </select>
                             </div>
+                        </div>
+
+                    </MDBCardBody>
+                </MDBCard>
+
+                {/* ***********  Lived abroad  */}
+                <MDBCard className='mt-4 mb-2' style={{ backgroundColor: '#f7f2f287' }}>
+
+                    <MDBCardBody>
+                        <div>
+                            <div>
+                                <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }}><strong>Lived Abroad</strong></MDBTypography>
+                            </div>
+                            <p style={{ fontSize: '16px' }}><strong>Have this member  lived abroad in the last 5 years? *</strong></p>
+
+                            <MDBRow>
+                                <MDBCol className='col-3'>
+                                    <MDBRadio name='livedAbroadRadio' value='yes' label='Yes' inline id='livedAbroadYes' htmlFor="livedAbroadYes"
+                                        onClick={(e) => { let newEdit = { ...livedAbroad }; newEdit = e.target.value; setLivedAbroad(newEdit) }}></MDBRadio>
+                                </MDBCol>
+                                <MDBCol className='col-3'>
+
+                                    <MDBRadio name='livedAbroadRadio' value='no' label='No' inline id='livedAbroadNo' htmlFor='livedAbroadNo'
+                                        onClick={(e) => { let newEdit = { ...livedAbroad }; newEdit = e.target.value; setLivedAbroad(newEdit) }}></MDBRadio>
+                                </MDBCol>
+                            </MDBRow>
+
                         </div>
 
                     </MDBCardBody>
@@ -400,11 +460,11 @@ export default function JointApplicant() {
                             <MDBRow>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='placedByLocalAuthrtyRadio' id='placedByLocalAuthrtyYes' label='Yes' htmlFor='placedByLocalAuthrtyYes' inline
-                                        value='yes' onChange={(e) => { setPlacedByLocalAuthrty(e.target.value); setShowLocalAuthority(true); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
+                                        value='yes' onChange={(e) => { let newEdit = { ...placedByLocalAuthrty }; newEdit = e.target.value; setPlacedByLocalAuthrty(newEdit); setShowLocalAuthority(true); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
                                 </MDBCol>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='placedByLocalAuthrtyRadio' id='placedByLocalAuthrtyNo' label='No' htmlFor='placedByLocalAuthrtyNo' inline
-                                        value='no' onChange={(e) => { setPlacedByLocalAuthrty(e.target.value); setShowLocalAuthority(false); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
+                                        value='no' onChange={(e) => { let newEdit = { ...placedByLocalAuthrty }; newEdit = e.target.value; setPlacedByLocalAuthrty(newEdit); setShowLocalAuthority(false); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
                                 </MDBCol>
                             </MDBRow>
 
@@ -417,23 +477,21 @@ export default function JointApplicant() {
 
                                     <div className='' >
                                         <input style={inputStyle} className='form-control' type='text' placeholder='Enter the local authority name'
-                                            maxLength={25} onChange={(e) => { setLocalAuthrtyName(e.target.value) }} />
+                                            maxLength={25} onChange={(e) => { let newEdit = { ...localAuthrtyName }; newEdit = e.target.value; setLocalAuthrtyName(newEdit) }} />
                                     </div>
                                 </div>
                             }
 
-                            {/* *********** What is ther current address? */}
+                            {/* *********** What is thier current address? */}
                             <div>
-
-                                <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Current Address</strong></p>
                                 <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>What is their current address?</strong></p>
                                 <div style={{ fontSize: '13px', height: 'auto', width: 'auto', background: '#e4f5fb' }} className=" help-content border border-grey rounded">
                                     <p className='mx-2 mt-3 mb-2' style={{ fontSize: '12px' }}><strong>Is this person living with one of the following people?</strong></p>
 
-                                    <MDBRadio className='mx-1' name='livingInDiffAddressRadio' id='livingInDiffAddressYes' label={partnerAddress} htmlFor='livingInDiffAddressYes'
-                                        value='yes' onChange={(e) => { setLivingInDiffAddress("Living with primary applicant"); setShowAddress(false); }}></MDBRadio>     {/* Get and show primary applicant address in this place */}
-                                    <MDBRadio className='mx-1' name='livingInDiffAddressRadio' id='livingInDiffAddressNo' label='This person is living at a different addres' htmlFor='livingInDiffAddressNo'
-                                        value='no' onChange={(e) => { setLivingInDiffAddress("Living in different address"); }}></MDBRadio>     {/* Spouse or partner living in different address */}
+                                    <MDBRadio className='mx-1' name='livingInDiffAddressRadio' id='livingInDiffAddressYes' label="Living with primary applicant" htmlFor='livingInDiffAddressYes'
+                                        value='Living with primary applicant' onChange={(e) => { let newEdit = { ...livingInDiffAddress }; newEdit = e.target.value; setLivingInDiffAddress(newEdit);}}></MDBRadio>     {/* Get and show primary applicant address in this place */}
+                                    <MDBRadio className='mx-1' name='livingInDiffAddressRadio' id='livingInDiffAddressNo' label='This person is living at a different address' htmlFor='livingInDiffAddressNo'
+                                        value='Living in different address' onChange={(e) => { let newEdit = { ...livingInDiffAddress }; newEdit = e.target.value; setLivingInDiffAddress(newEdit); }}></MDBRadio>     {/* Spouse or partner living in different address */}
                                 </div>
                                 <p className='mt-3 mb-2' style={{ fontSize: '13px' }}>You must select an option to conitue</p>
 
@@ -458,12 +516,12 @@ export default function JointApplicant() {
                                 <div style={{ width: 'auto' }} className="mb-2 mt-2 help-content border border-grey rounded">
                                     <span className="far fa-question-circle help-icon"></span>
                                     <span className="help-text">
-                                        <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">Enter the postcode using capital letters. For example: B1 1BB. If your address is outside UK please enter XY1 1YX.</span>
+                                        <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">Enter the Postcode using capital letters. For example: B1 1BB. If your address is outside UK please enter XY1 1YX.</span>
                                     </span>
                                 </div>
                                 <div className='mt-3 mb-2' >
                                     <input style={inputStyle} className='form-control' type='text' placeholder='postcode...'
-                                        maxLength={8} value={postcode} onChange={(e) => { setPostcode(e.target.value) }} />
+                                        maxLength={8} value={corresPostcode} onChange={(e) => { let newEdit = { ...corresPostcode }; newEdit = e.target.value; setCorresPostcode(newEdit) }} />
                                 </div>
 
                                 <div style={{ width: 'auto' }} className="mb-2 mt-2 help-content border border-grey rounded">
@@ -477,9 +535,6 @@ export default function JointApplicant() {
                                     <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
                                         onClick={findPostcodeAddress} >
                                         Find address</MDBBtn>
-                                    {/* <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
-                                                onClick={showAddresCard}>
-                                                Enter an address manually</MDBBtn> */}
                                 </form>
 
 
@@ -497,7 +552,7 @@ export default function JointApplicant() {
                                     </div>
                                     <div className='' >
                                         <input style={inputStyle} className='form-control ' type='text' placeholder='house or flat number and street'
-                                            maxLength={75} value={addLine1} onChange={(e) => { setAddLine1(e.target.value) }} />
+                                            maxLength={75} value={corresAddLine1} onChange={(e) => { let newEdit = { ...corresAddLine1 }; newEdit = e.target.value; setCorresAddLine1(newEdit) }} />
                                     </div>
                                 </div>
 
@@ -515,7 +570,7 @@ export default function JointApplicant() {
                                     </div>
                                     <div className='' >
                                         <input style={inputStyle} className='form-control' type='text' placeholder='Address line 2'
-                                            maxLength={75} value={addLine2} onChange={(e) => { setAddLine2(e.target.value) }} />
+                                            maxLength={75} value={corresAddLine2} onChange={(e) => { let newEdit = { ...corresAddLine2 }; newEdit = e.target.value; setCorresAddLine2(newEdit) }} />
                                     </div>
                                 </div>
 
@@ -533,7 +588,7 @@ export default function JointApplicant() {
                                     </div>
                                     <div className='' >
                                         <input style={inputStyle} className='form-control' type='text' placeholder='Address line 3'
-                                            maxLength={75} value={addLine3} onChange={(e) => { setAddLine3(e.target.value) }} />
+                                            maxLength={75} value={corresAddLine3} onChange={(e) => { let newEdit = { ...corresAddLine3 }; newEdit = e.target.value; setCorresAddLine3(newEdit) }} />
                                     </div>
                                 </div>
 
@@ -551,7 +606,7 @@ export default function JointApplicant() {
                                     </div>
                                     <div className='' >
                                         <input style={inputStyle} className='form-control' type='text' placeholder='Address line 4'
-                                            maxLength={75} value={addLine4} onChange={(e) => { setAddLine4(e.target.value) }} />
+                                            maxLength={75} value={corresAddLine4} onChange={(e) => { let newEdit = { ...corresAddLine4 }; newEdit = e.target.value; setCorresAddLine4(newEdit) }} />
                                     </div>
                                 </div>
                             </div>
@@ -565,11 +620,9 @@ export default function JointApplicant() {
                     <MDBCardBody>
                         <div className='mb-2'>
                             <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Contact Details</strong></MDBTypography>
-
                         </div>
-
+                        {/* ***********  home telephone  */}
                         <div>
-
                             <div className='mt-4'>
                                 <p style={{ fontSize: '17px' }}><strong>Home telephone*</strong></p>
                             </div>
@@ -582,7 +635,7 @@ export default function JointApplicant() {
                             <div>
                                 <div className='mt-2' >
                                     <input style={inputStyle} className='form-control' type='text' placeholder='home telephone'
-                                        minLength={9} maxLength={20} onChange={(e) => { setTelephone(e.target.value) }} />
+                                        minLength={9} maxLength={20} onChange={(e) => { let newEdit = { ...telephone }; newEdit = e.target.value; setTelephone(newEdit) }} />
                                 </div>
                             </div>
 
@@ -597,7 +650,7 @@ export default function JointApplicant() {
                             <div>
                                 <div className='mt-2' >
                                     <input style={inputStyle} className='form-control' type='text' placeholder='work telephone'
-                                        minLength={9} maxLength={20} onChange={(e) => { setWorkPhone(e.target.value) }} />
+                                        minLength={9} maxLength={20} onChange={(e) => { let newEdit = { ...workPhone }; newEdit = e.target.value; setWorkPhone(newEdit) }} />
                                 </div>
                             </div>
                         </div>
@@ -611,7 +664,7 @@ export default function JointApplicant() {
                             <div>
                                 <div className='mt-2' >
                                     <input style={inputStyle} className='form-control' type='text' placeholder='mobile telephone'
-                                        minLength={11} maxLength={20} onChange={(e) => { setMobile(e.target.value) }} />
+                                        minLength={11} maxLength={20} onChange={(e) => { let newEdit = { ...mobile }; newEdit = e.target.value; setMobile(newEdit) }} />
                                 </div>
                             </div>
                         </div>
@@ -625,7 +678,7 @@ export default function JointApplicant() {
                             <div>
                                 <div className='mt-2' >
                                     <input style={inputStyle} className='form-control' type='email' placeholder='email address'
-                                        minLength={6} maxLength={40} onChange={(e) => { setEmail(e.target.value) }} />
+                                        minLength={6} maxLength={40} onChange={(e) => { let newEdit = { ...email }; newEdit = e.target.value; setEmail(newEdit) }} />
                                 </div>
                             </div>
                             <div className='mt-4  help-content border border-grey rounded' style={{ background: '#e4f5fb' }}>
@@ -634,7 +687,7 @@ export default function JointApplicant() {
                             <div>
                                 <div className='mt-2' >
                                     <input style={inputStyle} className='form-control' type='email' placeholder='re-enter email address'
-                                        minLength={6} maxLength={40} onChange={(e) => { setReEnterEmail(e.target.value) }} />
+                                        minLength={6} maxLength={40} onChange={(e) => { let newEdit = { ...reEnterEmail }; newEdit = e.target.value; setReEnterEmail(newEdit) }} />
                                 </div>
                             </div>
 
@@ -664,7 +717,7 @@ export default function JointApplicant() {
 
                                     <select style={comboBoxStyle}
                                         className="form-select rounded"
-                                        onChange={(e) => { setEthnicity(e.target.value) }}>
+                                        onChange={(e) => { let newEdit = { ...ethnicity }; newEdit = e.target.value; setEthnicity(newEdit) }}>
                                         {ethnicityData.map((option) => (
                                             <option key={option.ethnicityKey} value={option.ethnicityKey}>{option.ethnicity}</option>
                                         ))}
@@ -683,7 +736,7 @@ export default function JointApplicant() {
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
-                                    onChange={(e) => { setNationality(e.target.value) }}>
+                                    onChange={(e) => { let newEdit = { ...nationality }; newEdit = e.target.value; setNationality(newEdit) }}>
                                     {nationalityData.map((option) => (
                                         <option key={option.nationalityKey} value={option.nationalityKey}>{option.nationality}</option>
                                     ))}
@@ -701,7 +754,7 @@ export default function JointApplicant() {
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
-                                    onChange={(e) => { setBelief(e.target.value) }}>
+                                    onChange={(e) => { let newEdit = { ...belief }; newEdit = e.target.value; setBelief(newEdit) }}>
                                     {beliefData.map((option) => (
                                         <option key={option.beliefKey} value={option.beliefKey}>{option.belief}</option>
                                     ))}
@@ -719,7 +772,7 @@ export default function JointApplicant() {
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
-                                    onChange={(e) => { setSexOrient(e.target.value) }}>
+                                    onChange={(e) => { let newEdit = { ...sexOrient }; newEdit = e.target.value; setSexOrient(newEdit) }}>
                                     {sexOrientData.map((option) => (
                                         <option key={option.sexOrientKey} value={option.sexOrientKey}>{option.sexOrient}</option>
                                     ))}
@@ -738,11 +791,11 @@ export default function JointApplicant() {
                             <MDBRow>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='isShePregnantRadio' id='isShePregnantYes' label='Yes' htmlFor='isShePregnantYes' inline
-                                        value='yes' onChange={(e) => { setIsShePregnant(e.target.value); setShowDeliveryDate(true); }}></MDBRadio>     {/* setShowDeliveryDate will  show or hide according to the selection */}
+                                        value='yes' onChange={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); setShowDeliveryDate(true); }}></MDBRadio>     {/* setShowDeliveryDate will  show or hide according to the selection */}
                                 </MDBCol>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='isShePregnantRadio' id='isShePregnantNo' label='No' htmlFor='isShePregnantNo' inline
-                                        value='no' onChange={(e) => { setIsShePregnant(e.target.value); setShowDeliveryDate(false); }}></MDBRadio>     {/* setShowDeliveryDate will  show or hide according to the selection */}
+                                        value='no' onChange={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); setShowDeliveryDate(false); }}></MDBRadio>     {/* setShowDeliveryDate will  show or hide according to the selection */}
                                 </MDBCol>
                             </MDBRow>
                         </div>
@@ -768,14 +821,14 @@ export default function JointApplicant() {
                                         <select style={datePickerStyle}
                                             className="form-select rounded"
                                             aria-label="Default select example"
-                                            onChange={(e) => { setDelDate(e.target.value) }}>
+                                            onChange={(e) => { let newEdit = { ...delDate }; newEdit = e.target.value; setDelDate(newEdit) }}>
                                             {datesData.map((option) => (
                                                 <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
                                             ))}
                                         </select>
                                         <select style={monthPickerStyle}
                                             className="form-select rounded"
-                                            onChange={(e) => { setDelMonth(e.target.value) }}>
+                                            onChange={(e) => { let newEdit = { ...delMonth }; newEdit = e.target.value; setDelMonth(newEdit) }}>
                                             {monthsData.map((option) => (
                                                 <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
                                             ))}
@@ -787,7 +840,7 @@ export default function JointApplicant() {
                                             min={new Date().getFullYear()}
                                             max={new Date().getFullYear() + 1}
                                             placeholder='year'
-                                            onChange={(e) => { setDelYear(e.target.value) }}>
+                                            onChange={(e) => { let newEdit = { ...delYear }; newEdit = e.target.value; setDelYear(newEdit) }}>
                                         </input>
 
                                     </div>
@@ -804,7 +857,7 @@ export default function JointApplicant() {
 
                             <div className='mt-2' >
                                 <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
-                                    onChange={(e) => { setHealthCondition(e.target.value) }} >
+                                    onChange={(e) => { let newEdit = { ...healthCondition }; newEdit = e.target.value; setHealthCondition(newEdit) }} >
                                     <option defaultValue>Please Select</option>
                                     <option value="no">No</option>
                                     <option value="yes">Yes</option>
@@ -823,7 +876,7 @@ export default function JointApplicant() {
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
-                                    onChange={(e) => { setPreferedLanguage(e.target.value) }} >
+                                    onChange={(e) => { let newEdit = { ...preferedLanguage }; newEdit = e.target.value; setPreferedLanguage(newEdit) }} >
                                     {languages.map((option) => (
                                         <option key={option.languageKey} value={option.languageKey}>{option.language}</option>
                                     ))}
@@ -839,11 +892,11 @@ export default function JointApplicant() {
                                 <MDBRow >
                                     <MDBCol className='col-3 mx-2 mb-2'>
                                         <MDBRadio name='needInterpreterRadio' id='needInterpreterYes' label='Yes' inline
-                                            value='yes' onChange={(e) => { setNeedInterpreter(e.target.value) }} />
+                                            value='yes' onChange={(e) => { let newEdit = { ...needInterpreter }; newEdit = e.target.value; setNeedInterpreter(newEdit) }} />
                                     </MDBCol>
                                     <MDBCol className='col-3'>
                                         <MDBRadio name='needInterpreterRadio' id='needInterpreterNo' label='No' inline
-                                            value='no' onChange={(e) => { setNeedInterpreter(e.target.value) }} />
+                                            value='no' onChange={(e) => { let newEdit = { ...needInterpreter }; newEdit = e.target.value; setNeedInterpreter(newEdit) }} />
                                     </MDBCol>
                                 </MDBRow>
                             </div>
@@ -870,7 +923,7 @@ export default function JointApplicant() {
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
                                     aria-label="Default select example"
-                                    onChange={(e) => { setTenure(e.target.value); setShowTenancyRef(!showTenancyRef) }}>
+                                    onChange={(e) => { let newEdit = { ...tenure }; newEdit = e.target.value; setTenure(newEdit); setShowTenancyRef(!showTenancyRef) }}>
                                     {tenureData.map((option) => (
                                         <option key={option.tenureKey} value={option.tenureKey}>{option.tenure}</option>
                                     ))}
@@ -896,7 +949,7 @@ export default function JointApplicant() {
 
                                     <div className='mt-3' >
                                         <input style={{ width: '250px', fontSize: '13px' }} className='form-control' type='text' placeholder='Enter your tenancy agreement number'
-                                            maxLength={15} onChange={(e) => { setTenancyRefNo(e.target.value) }} />
+                                            maxLength={15} onChange={(e) => { let newEdit = { ...tenancyRefNo }; newEdit = e.target.value; setTenancyRefNo(newEdit) }} />
                                     </div>
                                 </div>
                             }
@@ -904,7 +957,6 @@ export default function JointApplicant() {
 
                         {/**********  Is your partner? */}
                         <div>
-
                             <div className="help-content">
                                 <span className="help-text">
                                     <span style={{ fontSize: '12px' }} className="configured-help-text">
@@ -926,7 +978,7 @@ export default function JointApplicant() {
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
                                     aria-label="Default select example"
-                                    onChange={(e) => { setIsYourPartner(e.target.value) }}>
+                                    onChange={(e) => { let newEdit = { ...isYourPartner }; newEdit = e.target.value; setIsYourPartner(newEdit) }}>
                                     {areyouData.map((option) => (
                                         <option key={option.areYouKey} value={option.areYouKey}>{option.areYou}</option>
                                     ))}
@@ -952,7 +1004,7 @@ export default function JointApplicant() {
                                 <div className='btn-group' >
                                     <select style={datePickerStyle}
                                         className="form-select rounded"
-                                        onChange={(e) => { setMovedUKDate(e.target.value) }} >
+                                        onChange={(e) => { let newEdit = { ...movedDate }; newEdit = e.target.value; setMovedDate(newEdit) }} >
                                         {datesData.map((option) => (
                                             <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
                                         ))}
@@ -960,7 +1012,7 @@ export default function JointApplicant() {
 
                                     <select style={monthPickerStyle}
                                         className="form-select rounded"
-                                        onChange={(e) => { setMovedUKMonth(e.target.value) }} >
+                                        onChange={(e) => { let newEdit = { ...movedMonth }; newEdit = e.target.value; setMovedMonth(newEdit) }} >
                                         {monthsData.map((option) => (
                                             <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
                                         ))}
@@ -971,7 +1023,7 @@ export default function JointApplicant() {
                                         min={yearMin + 70}
                                         max={yearMax}
                                         placeholder='year'
-                                        onChange={(e) => { setMovedUKYear(e.target.value) }} >
+                                        onChange={(e) => { let newEdit = { ...movedYear }; newEdit = e.target.value; setMovedYear(newEdit) }} >
                                     </input>
                                 </div>
                             </div>
@@ -979,21 +1031,19 @@ export default function JointApplicant() {
 
                         {/**********  Are you  a worker, self-employed or a student?*/}
                         <div className=" mt-2 help-content border border-grey rounded" style={{ fontSize: '13px', width: 'auto', background: '#e4f5fb' }}>
-
                             <div className='mt-2'>
                                 <p style={{ fontSize: '17px' }}><strong>Are you  a worker, self-employed or a student?*</strong></p>
                             </div>
                             <MDBRow className='mb-2'>
                                 <MDBCol className='col-3 mx-2 mb-2'>
                                     <MDBRadio name='areYouWorkerRadio' id='areYouWorkerYes' label='Yes' inline
-                                        value='yes' onChange={(e) => { setAreYouWorker(e.target.value) }} />
+                                        value='yes' onChange={(e) => { let newEdit = { ...areYouWorker }; newEdit = e.target.value; setAreYouWorker(newEdit) }} />
                                 </MDBCol>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='areYouWorkerRadio' id='areYouWorkerNo' label='No' inline
-                                        value='no' onChange={(e) => { setAreYouWorker(e.target.value) }} />
+                                        value='no' onChange={(e) => { let newEdit = { ...areYouWorker }; newEdit = e.target.value; setAreYouWorker(newEdit) }} />
                                 </MDBCol>
                             </MDBRow>
-
                         </div>
                     </MDBCardBody>
                 </MDBCard>
@@ -1003,9 +1053,7 @@ export default function JointApplicant() {
 
                     <MDBCardBody>
                         <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Connection to Birmingham</strong></MDBTypography>
-
                         <div>
-
                             <div>
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '17px' }}><strong>In order to help us understand why you want to live in Birmingham, we need to know about your connection to the city. Please choose from the following options. *</strong></p>
@@ -1048,6 +1096,21 @@ export default function JointApplicant() {
                                         onChange={handleCheckbox} />
                                 </div>
                             </div>
+                        </div>
+                    </MDBCardBody>
+                </MDBCard>
+
+                {/**********  Any comments or additional information */}
+                <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
+                    <MDBCardBody>
+                        <p className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Any other comments or additional information</strong></p>
+                        <div className='mt-4' >
+                            <MDBRow>
+                                <MDBCol >
+                                    <textarea style={{ width: '250px', height: '350px' }} className='form-control' type='text'
+                                        maxLength={250} onChange={(e) => { let newEdit = { ...comments }; newEdit = e.target.value; setComments(newEdit) }} />
+                                </MDBCol>
+                            </MDBRow>
                         </div>
 
                         <form className='d-flex w-auto mt-3'>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import axios from "axios";
 import { useLocation, useNavigate } from 'react-router-dom';
-
-
 
 import { areyous } from '../resources/areyou';
 import { tenures } from '../resources/tenure';
@@ -12,8 +11,7 @@ import { sexOrients } from '../resources/sexOrient';
 import { beliefs } from '../resources/belief';
 import { languages } from '../resources/language';
 import { dates, months } from '../resources/datePicker';
-import { validPwd, validEmail, validName, validMName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch, ValidNINO } from '../validations/Validator.jsx';
-import ApplicationProgress from '../components/applicationProgress'
+import { validEmail, validName, validPostcode, validNumber, emailMatch, validMName, pwdMatch, memDateMatch, validPwd } from '../validations/Validator';
 
 import {
     MDBContainer,
@@ -28,6 +26,7 @@ export default function PrimaryApplicant() {
 
     const navigate = useNavigate();
     const location = useLocation();
+
     let memberid = location.state.nino
     // console.log(memberid)
 
@@ -45,6 +44,7 @@ export default function PrimaryApplicant() {
     const ageMin = new Date().getFullYear() - 120;  // year picker 120 year back from current year
 
     const inputStyle = { fontSize: '14px', width: '250px' };
+    const ninoInputStyle= {fontSize: '14px', fontWeight:'bold', width: '250px',borderColor: '#79baf3' , backgroundColor:'#b8ffb8', color:'black'}
     const comboBoxStyle = { maxWidth: '250px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
@@ -63,11 +63,12 @@ export default function PrimaryApplicant() {
     const [nameChange, setNameChange] = useState("");
     const [nINO, setNINO] = useState(memberid.toUpperCase());
     const [dateofbirth, setdateofbirth] = useState("");
-
     const [dobDate, setDOBDate] = useState("");
     const [dobMonth, setDOBMonth] = useState("");
     const [dobYear, setDOBYear] = useState("");
     const [sex, setSex] = useState("");
+
+    const [livedAbroad, setLivedAbroad] = useState("no");
 
     const [postcode, setPostcode] = useState("");
     const [addLine1, setAddLine1] = useState("");
@@ -86,17 +87,17 @@ export default function PrimaryApplicant() {
     const [currentTenancyType, setCurrentTenancyType] = useState("");
     const [infoAboutCurrentAddress, setInfoAboutCurrentAddress] = useState("");
 
-    const [livedAbroad, setLivedAbroad] = useState("no");
 
     const [addressDifferent, setAddressDifferent] = useState("");
     const [correspondenceType, setCorrespondenceType] = useState("")
-    const [placedByLocalAuthrty, setPlacedByLocalAuthrty] = useState("");
-    const [localAuthrtyName, setLocalAuthrtyName] = useState("");
     const [correspondencePostcode, setCorrespondencePostcode] = useState("");
     const [correspondenceAddLine1, setCorrespondenceAddLine1] = useState("");
     const [correspondenceAddLine2, setCorrespondenceAddLine2] = useState("");
     const [correspondenceAddLine3, setCorrespondenceAddLine3] = useState("");
     const [correspondenceAddLine4, setCorrespondenceAddLine4] = useState("");
+
+    const [placedByLocalAuthrty, setPlacedByLocalAuthrty] = useState("");
+    const [localAuthrtyName, setLocalAuthrtyName] = useState("");
 
     const [telephone, setTelephone] = useState("");
     const [mobile, setMobile] = useState("");
@@ -109,6 +110,7 @@ export default function PrimaryApplicant() {
     const [sexOrient, setSexOrient] = useState("");
     const [belief, setBelief] = useState("");
     const [healthCondition, setHealthCondition] = useState("");
+
     const [preferedLanguage, setPreferedLanguage] = useState("");
     const [needInterpreter, setNeedInterpreter] = useState("");
 
@@ -131,16 +133,8 @@ export default function PrimaryApplicant() {
     const [password, setPassword] = useState("");
     const [reEnterPwd, setReEnterPwd] = useState("");
 
-    // const [nameErr, setNameErr] = useState(false);
-    // const [ninoErr, setNinoErr] = useState(false);
-    // const [emailErr, setEmailErr] = useState(false);
-    // const [passwordErr, setPasswordErr] = useState(false);
-    // const [postcodeErr, setPostcodeErr] = useState(false);
-    // const [numberErr, setNumberErr] = useState(false)
-    // const [emailMatchsErr, setEmailMatchesErr] = useState(false)
-    // const [pwdMatchsErr, setPwdMatchesErr] = useState(false)
-    // const [memMatchsErr, setMemMatchesErr] = useState(false)
-    
+    const [comments, setComments] = useState();
+
     useEffect(() => {
 
     }, [])
@@ -187,7 +181,7 @@ export default function PrimaryApplicant() {
             telephone, mobile, workPhone, email, reEnterEmail,
             ethnicity, nationality, sexOrient, belief,
             healthCondition, preferedLanguage, needInterpreter,
-            tenure, tenancyRefNo, areyou, connection,
+            tenure, tenancyRefNo, areyou, connection, comments,
             memorableDate, reEntermemorableDate,
             password, reEnterPwd
         )
@@ -208,20 +202,29 @@ export default function PrimaryApplicant() {
             !emailMatchesErr && alert('Email match error');
             !pwdMatchesErr && alert('Password match error');
             !memMatchesErr && alert('Memorable date error');
+        } else {
+
         }
     }
 
     const handleCheckbox = (e) => {
 
-        // e.preventDefault();
-        let checkedItems = [...connection];
-        if (e.target.checked) {
-            checkedItems = [...connection, e.target.value];
-        } else {
-            checkedItems.splice(connection.indexOf(e.target.value), 1);
+        e.preventDefault();
+        try {
+
+            let checkedItems = [...connection];
+            if (e.target.checked) {
+                checkedItems = [...connection, e.target.value];
+            } else {
+                checkedItems.splice(connection.indexOf(e.target.value), 1);
+            }
+            setConnection(checkedItems);
+            console.log(connection);
+
+        } catch (error) {
+            alert("Unable to select your option")
+            console.log(`Connection with birmingham checkbox error:- ${error}`)
         }
-        setConnection(checkedItems);
-        console.log(connection);
     }
 
     const findPostcodeAddress = (e) => {
@@ -235,13 +238,20 @@ export default function PrimaryApplicant() {
         setShowAddress(true);
     }
 
+    const previousPage = () => {
+        try {
+
+            navigate('/nino')
+
+        } catch (error) {
+            alert("Unable to proceed on your request")
+            console.log(`Goto previous page error:- ${error}`)
+        }
+    }
+
     return (
         <React.Fragment>
             <MDBContainer className='ps-5 pt-3'  >
-
-                {/* <MDBRow className='my-5 justify-content-center' bgcolor='#f7f2f287'>
-                    {/* <MDBCol className='col-md-6 col-sm-6'> */}
-                {/* <MDBCol className='mx-2' size='md'  >  */}
 
                 <MDBCard className='w-100 mx-auto' style={{ backgroundColor: '#f7f2f287' }} >
 
@@ -277,7 +287,7 @@ export default function PrimaryApplicant() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='First name...'
-                                    maxLength={20} value={fName} onChange={(e) => { let newEdit ={...fName}; newEdit= e.target.value; setFName(newEdit) }}></input>
+                                    maxLength={20} value={fName} onChange={(e) => { let newEdit = { ...fName }; newEdit = e.target.value; setFName(newEdit) }}></input>
                             </div>
                         </div>
 
@@ -293,7 +303,7 @@ export default function PrimaryApplicant() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='Middle name...'
-                                    maxLength={20} value={mName} onChange={(e) => { let newEdit ={...mName}; newEdit= e.target.value; setMName(newEdit) }}></input>
+                                    maxLength={20} value={mName} onChange={(e) => { let newEdit = { ...mName }; newEdit = e.target.value; setMName(newEdit) }}></input>
                             </div>
                         </div>
 
@@ -309,7 +319,7 @@ export default function PrimaryApplicant() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='Surname...'
-                                    maxLength={20} value={sName} onChange={(e) => { let newEdit ={...sName}; newEdit= e.target.value; setSName(newEdit) }}></input>
+                                    maxLength={20} value={sName} onChange={(e) => { let newEdit = { ...sName }; newEdit = e.target.value; setSName(newEdit) }}></input>
                             </div>
 
                         </div>
@@ -325,7 +335,7 @@ export default function PrimaryApplicant() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='Have you ever used a different name, eg a maiden name or by deed poll? if so, please provide details'
-                                    maxLength={50} value={nameChange} onChange={(e) => { let newEdit ={...nameChange}; newEdit= e.target.value; setNameChange(newEdit) }}></input>
+                                    maxLength={50} value={nameChange} onChange={(e) => { let newEdit = { ...nameChange }; newEdit = e.target.value; setNameChange(newEdit) }}></input>
                             </div>
                         </div>
 
@@ -334,7 +344,7 @@ export default function PrimaryApplicant() {
 
                             <p style={{ fontSize: '16px' }}><strong>Your National Insurance Number *</strong></p>
                             <div className='mb-4' >
-                                <input style={inputStyle} className='form-control' type='text'
+                                <input style={ninoInputStyle} className='form-control' type='text'
                                     maxLength={9} value={nINO} readOnly></input>
                             </div>
                         </div>
@@ -360,14 +370,14 @@ export default function PrimaryApplicant() {
                                     <select style={datePickerStyle}
                                         className="form-select rounded"
                                         aria-label="Default select example"
-                                        onChange={(e) => { let newEdit ={...dobDate}; newEdit= e.target.value; setDOBDate(newEdit) }}>
+                                        onChange={(e) => { let newEdit = { ...dobDate }; newEdit = e.target.value; setDOBDate(newEdit) }}>
                                         {datesData.map((option) => (
                                             <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
                                         ))}
                                     </select>
                                     <select style={monthPickerStyle}
                                         className="form-select rounded"
-                                        onChange={(e) => { let newEdit ={...dobMonth}; newEdit= e.target.value; setDOBMonth(newEdit) }}>
+                                        onChange={(e) => { let newEdit = { ...dobMonth }; newEdit = e.target.value; setDOBMonth(newEdit) }}>
                                         {monthsData.map((option) => (
                                             <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
                                         ))}
@@ -379,7 +389,7 @@ export default function PrimaryApplicant() {
                                         min={ageMin}
                                         max={ageMax}
                                         placeholder='year'
-                                        onChange={(e) => { let newEdit ={...dobYear}; newEdit= e.target.value; setDOBYear(newEdit) }}>
+                                        onChange={(e) => { let newEdit = { ...dobYear }; newEdit = e.target.value; setDOBYear(newEdit) }}>
                                     </input>
 
                                 </div>
@@ -392,7 +402,7 @@ export default function PrimaryApplicant() {
                             <div className='mt-4'>
                                 <p style={{ fontSize: '16px' }}><strong>Your sex *</strong></p>
                                 <select style={comboBoxStyle} className="form-select border-rounded"
-                                    value={sex} onChange={(e) => { let newEdit ={...sex}; newEdit= e.target.value; setSex(newEdit) }}>
+                                    value={sex} onChange={(e) => { let newEdit = { ...sex }; newEdit = e.target.value; setSex(newEdit) }}>
                                     <option defaultValue>Please Choose</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
@@ -411,17 +421,17 @@ export default function PrimaryApplicant() {
                             <div>
                                 <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }}><strong>Lived Abroad</strong></MDBTypography>
                             </div>
-                            <p style={{ fontSize: '16px' }}><strong>Have you or any member of your household lived abroad in the last 5 years? *</strong></p>
+                            <p style={{ fontSize: '16px' }}><strong>Have you or any member of your household lived abroad in the last 5 years?*</strong></p>
 
                             <MDBRow>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='livedAbroadRadio' value='yes' label='Yes' inline id='livedAbroadYes' htmlFor="livedAbroadYes"
-                                        onClick={(e) => { let newEdit ={...livedAbroad}; newEdit= e.target.value; setLivedAbroad(newEdit) }}></MDBRadio>
+                                        onClick={(e) => { let newEdit = { ...livedAbroad }; newEdit = e.target.value; setLivedAbroad(newEdit) }}></MDBRadio>
                                 </MDBCol>
                                 <MDBCol className='col-3'>
 
                                     <MDBRadio name='livedAbroadRadio' value='no' label='No' inline id='livedAbroadNo' htmlFor='livedAbroadNo'
-                                        onChange={(e) => { let newEdit ={...livedAbroad}; newEdit= e.target.value; setLivedAbroad(newEdit) }}></MDBRadio>
+                                        onChange={(e) => { let newEdit = { ...livedAbroad }; newEdit = e.target.value; setLivedAbroad(newEdit) }}></MDBRadio>
                                 </MDBCol>
                             </MDBRow>
 
@@ -450,7 +460,7 @@ export default function PrimaryApplicant() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='postcode...'
-                                    maxLength={8} value={postcode} onChange={(e) => { let newEdit ={...postcode}; newEdit= e.target.value; setPostcode(newEdit) }} />
+                                    maxLength={8} value={postcode} onChange={(e) => { let newEdit = { ...postcode }; newEdit = e.target.value; setPostcode(newEdit) }} />
                             </div>
 
                             <div style={{ width: 'auto' }} className="mb-2 mt-2 help-content border border-grey rounded">
@@ -487,7 +497,7 @@ export default function PrimaryApplicant() {
                                     </div>
                                     <div className='' >
                                         <input style={inputStyle} className='form-control ' type='text' placeholder='house or flat number and street'
-                                            maxLength={75} value={addLine1} onChange={(e) => { let newEdit ={...addLine1}; newEdit= e.target.value; setAddLine1(newEdit) }} />
+                                            maxLength={75} value={addLine1} onChange={(e) => { let newEdit = { ...addLine1 }; newEdit = e.target.value; setAddLine1(newEdit) }} />
                                     </div>
                                 </div>
 
@@ -505,7 +515,7 @@ export default function PrimaryApplicant() {
                                     </div>
                                     <div className='' >
                                         <input style={inputStyle} className='form-control' type='text' placeholder='Address line 2'
-                                            maxLength={75} value={addLine2} onChange={(e) => { let newEdit ={...addLine2}; newEdit= e.target.value; setAddLine2(newEdit) }} />
+                                            maxLength={75} value={addLine2} onChange={(e) => { let newEdit = { ...addLine2 }; newEdit = e.target.value; setAddLine2(newEdit) }} />
                                     </div>
                                 </div>
 
@@ -523,7 +533,7 @@ export default function PrimaryApplicant() {
                                     </div>
                                     <div className='' >
                                         <input style={inputStyle} className='form-control' type='text' placeholder='Address line 3'
-                                            maxLength={75} value={addLine3} onChange={(e) => { let newEdit ={...addLine3}; newEdit= e.target.value; setAddLine3(newEdit) }} />
+                                            maxLength={75} value={addLine3} onChange={(e) => { let newEdit = { ...addLine3 }; newEdit = e.target.value; setAddLine3(newEdit) }} />
                                     </div>
                                 </div>
 
@@ -541,7 +551,7 @@ export default function PrimaryApplicant() {
                                     </div>
                                     <div className='' >
                                         <input style={inputStyle} className='form-control' type='text' placeholder='Address line 4'
-                                            maxLength={75} value={addLine4} onChange={(e) => {let newEdit ={...addLine4}; newEdit= e.target.value; setAddLine4(newEdit)}} />
+                                            maxLength={75} value={addLine4} onChange={(e) => { let newEdit = { ...addLine4 }; newEdit = e.target.value; setAddLine4(newEdit) }} />
                                     </div>
                                 </div>
                             </div>
@@ -567,7 +577,7 @@ export default function PrimaryApplicant() {
                                     <div className='btn-group' >
                                         <select style={datePickerStyle}
                                             className="form-select rounded"
-                                            onChange={(e) => { let newEdit ={...movedDate}; newEdit= e.target.value; setMovedDate(newEdit) }} >
+                                            onChange={(e) => { let newEdit = { ...movedDate }; newEdit = e.target.value; setMovedDate(newEdit) }} >
                                             {datesData.map((option) => (
                                                 <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
                                             ))}
@@ -575,7 +585,7 @@ export default function PrimaryApplicant() {
 
                                         <select style={monthPickerStyle}
                                             className="form-select rounded"
-                                            onChange={(e) => { let newEdit ={...movedMonth}; newEdit= e.target.value; setMovedMonth(newEdit) }} >
+                                            onChange={(e) => { let newEdit = { ...movedMonth }; newEdit = e.target.value; setMovedMonth(newEdit) }} >
                                             {monthsData.map((option) => (
                                                 <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
                                             ))}
@@ -586,7 +596,7 @@ export default function PrimaryApplicant() {
                                             min={ageMin + 70}
                                             max={ageMax}
                                             placeholder='year'
-                                            onChange={(e) => { let newEdit ={...movedYear}; newEdit= e.target.value; setMovedYear(newEdit) }} >
+                                            onChange={(e) => { let newEdit = { ...movedYear }; newEdit = e.target.value; setMovedYear(newEdit) }} >
                                         </input>
                                     </div>
                                 </div>
@@ -600,9 +610,9 @@ export default function PrimaryApplicant() {
                                         <p style={{ fontSize: '16px' }}><strong>Is this a rented property?*</strong></p>
                                     </div>
                                     <MDBRadio name='rentedRadio' label='Yes' inline id='rentedYes' htmlFor="rentedYes"
-                                        value='yes' onChange={(e) => { let newEdit ={...rented}; newEdit= e.target.value; setRented(newEdit); setShowLandlord(true); }}></MDBRadio>     {/* setShowLandlord will  show or hide according to the selection */}
+                                        value='yes' onChange={(e) => { let newEdit = { ...rented }; newEdit = e.target.value; setRented(newEdit); setShowLandlord(true); }}></MDBRadio>     {/* setShowLandlord will  show or hide according to the selection */}
                                     <MDBRadio name='rentedRadio' label='No' inline id='rentedNo' htmlFor="rentedNo"
-                                        value='no' onChange={(e) => { let newEdit ={...rented}; newEdit= e.target.value; setRented(newEdit); setShowLandlord(false); }}></MDBRadio>     {/* setShowLandlord will  show or hide according to the selection */}
+                                        value='no' onChange={(e) => { let newEdit = { ...rented }; newEdit = e.target.value; setRented(newEdit); setShowLandlord(false); }}></MDBRadio>     {/* setShowLandlord will  show or hide according to the selection */}
 
                                 </div>
                             </div>
@@ -625,7 +635,7 @@ export default function PrimaryApplicant() {
                                         </div>
                                         <div className='mb-4' >
                                             <input style={inputStyle} className='form-control' type='text'
-                                                maxLength={30} onChange={(e) => { let newEdit ={...landlordName}; newEdit= e.target.value; setLandlordName(newEdit) }} />
+                                                maxLength={30} onChange={(e) => { let newEdit = { ...landlordName }; newEdit = e.target.value; setLandlordName(newEdit) }} />
                                         </div>
                                         <div className="help-content mt-2">
                                             <span className="help-text">
@@ -635,12 +645,12 @@ export default function PrimaryApplicant() {
                                         </div>
                                         <div className='mb-4' >
                                             <textarea style={{ width: '350px' }} className='form-control' type='text'
-                                                maxLength={100} onChange={(e) => { let newEdit ={...landlordAddress}; newEdit= e.target.value; setLandlordAddress(newEdit) }} />
+                                                maxLength={100} onChange={(e) => { let newEdit = { ...landlordAddress }; newEdit = e.target.value; setLandlordAddress(newEdit) }} />
                                         </div>
                                         <div className='mt-4'>
                                             <p style={{ fontSize: '16px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Current tenancy type*</strong></p>
                                             <select style={comboBoxStyle} className="form-select rounded"
-                                                maxLength={50} value={currentTenancyType} onChange={(e) => { let newEdit ={...currentTenancyType}; newEdit= e.target.value; setCurrentTenancyType(newEdit) }}>
+                                                maxLength={50} value={currentTenancyType} onChange={(e) => { let newEdit = { ...currentTenancyType }; newEdit = e.target.value; setCurrentTenancyType(newEdit) }}>
                                                 <option defaultValue>Please Select</option>
                                                 <option value="Assuredshorthold tenancy">Assuredshorthold tenancy</option>
                                                 <option value="Assured tenancy">Assured tenancy</option>
@@ -652,7 +662,7 @@ export default function PrimaryApplicant() {
                                             <p style={{ fontSize: '16px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Any other information about this address</strong></p>
                                             <div className='mb-4' >
                                                 <textarea style={{ width: '350px', height: '75px' }} className='form-control' type='text'
-                                                    maxLength={150} onChange={(e) => {  let newEdit ={...infoAboutCurrentAddress}; newEdit= e.target.value; setInfoAboutCurrentAddress(newEdit) }} />
+                                                    maxLength={150} onChange={(e) => { let newEdit = { ...infoAboutCurrentAddress }; newEdit = e.target.value; setInfoAboutCurrentAddress(newEdit) }} />
                                             </div>
                                         </div>
                                     </div>
@@ -674,9 +684,9 @@ export default function PrimaryApplicant() {
 
                                     <MDBRow>
                                         <MDBRadio name='addressDifferentRadio' id='addressDifferentYes' label='To my current address' inline
-                                            value='current address' onChange={(e) => { let newEdit ={...addressDifferent}; newEdit= e.target.value; setAddressDifferent(newEdit); setShowCorrespondence(false); }}></MDBRadio>    {/* setShowCorrespondence will  show or hide according to the selection */}
+                                            value='current address' onChange={(e) => { let newEdit = { ...addressDifferent }; newEdit = e.target.value; setAddressDifferent(newEdit); setShowCorrespondence(false); }}></MDBRadio>    {/* setShowCorrespondence will  show or hide according to the selection */}
                                         <MDBRadio name='addressDifferentRadio' id='addressDifferentNo' label='To my correspondence address' inline
-                                            value='correspondence address' onChange={(e) => { let newEdit ={...addressDifferent}; newEdit= e.target.value; setAddressDifferent(newEdit); setShowCorrespondence(true); }}></MDBRadio>
+                                            value='correspondence address' onChange={(e) => { let newEdit = { ...addressDifferent }; newEdit = e.target.value; setAddressDifferent(newEdit); setShowCorrespondence(true); }}></MDBRadio>
                                     </MDBRow>
                                 </div>
 
@@ -694,7 +704,7 @@ export default function PrimaryApplicant() {
                                             <p style={{ fontSize: '16px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Correspondence description</strong></p>
                                             <select style={comboBoxStyle}
                                                 className="form-select rounded"
-                                                onChange={(e) => { let newEdit ={...correspondenceType}; newEdit= e.target.value; setCorrespondenceType(newEdit); setShowCorrespondence(showCorrespondence) }}>    {/* showCorrespondence will show or hide according to the selection */}
+                                                onChange={(e) => { let newEdit = { ...correspondenceType }; newEdit = e.target.value; setCorrespondenceType(newEdit); setShowCorrespondence(showCorrespondence) }}>    {/* showCorrespondence will show or hide according to the selection */}
                                                 {correspondenceData.map((option) => (
                                                     <option key={option.correspondenceKey} value={option.correspondenceKey}>{option.correspondence}</option>
                                                 ))}
@@ -732,7 +742,7 @@ export default function PrimaryApplicant() {
                                             </div>
                                             <div className='mb-4' >
                                                 <input style={inputStyle} className='form-control' type='text' placeholder='postcode...'
-                                                    maxLength={8} onChange={(e) => {  let newEdit ={...correspondencePostcode}; newEdit= e.target.value; setCorrespondencePostcode(newEdit) }} />
+                                                    maxLength={8} onChange={(e) => { let newEdit = { ...correspondencePostcode }; newEdit = e.target.value; setCorrespondencePostcode(newEdit) }} />
                                             </div>
 
                                             <div style={{ width: '' }} className="mb-2 mt-2 help-content border border-grey rounded">
@@ -769,7 +779,7 @@ export default function PrimaryApplicant() {
                                             </div>
                                             <div className='' >
                                                 <input style={inputStyle} className='form-control' type='text' placeholder='house or flat number and street name'
-                                                    maxLength={75} onChange={(e) => { let newEdit ={...correspondenceAddLine1}; newEdit= e.target.value; setCorrespondenceAddLine1(newEdit) }} />
+                                                    maxLength={75} onChange={(e) => { let newEdit = { ...correspondenceAddLine1 }; newEdit = e.target.value; setCorrespondenceAddLine1(newEdit) }} />
                                             </div>
 
                                         </div>
@@ -788,7 +798,7 @@ export default function PrimaryApplicant() {
                                             </div>
                                             <div className='' >
                                                 <input style={inputStyle} className='form-control' type='text' placeholder='Correspondence address line 2'
-                                                    maxLength={75} onChange={(e) => { let newEdit ={...correspondenceAddLine2}; newEdit= e.target.value; setCorrespondenceAddLine2(newEdit) }} />
+                                                    maxLength={75} onChange={(e) => { let newEdit = { ...correspondenceAddLine2 }; newEdit = e.target.value; setCorrespondenceAddLine2(newEdit) }} />
                                             </div>
                                         </div>
 
@@ -806,7 +816,7 @@ export default function PrimaryApplicant() {
                                             </div>
                                             <div className='' >
                                                 <input style={inputStyle} className='form-control' type='text' placeholder='Correspondence address line 3'
-                                                    maxLength={75} onChange={(e) => { let newEdit ={...correspondenceAddLine3}; newEdit= e.target.value; setCorrespondenceAddLine3(newEdit) }} />
+                                                    maxLength={75} onChange={(e) => { let newEdit = { ...correspondenceAddLine3 }; newEdit = e.target.value; setCorrespondenceAddLine3(newEdit) }} />
                                             </div>
                                         </div>
 
@@ -824,7 +834,7 @@ export default function PrimaryApplicant() {
                                             </div>
                                             <div className='' >
                                                 <input style={inputStyle} className='form-control' type='text' placeholder='Correspondence address line 4'
-                                                    maxLength={75} onChange={(e) => { let newEdit ={...correspondenceAddLine4}; newEdit= e.target.value; setCorrespondenceAddLine4(newEdit) }} />
+                                                    maxLength={75} onChange={(e) => { let newEdit = { ...correspondenceAddLine4 }; newEdit = e.target.value; setCorrespondenceAddLine4(newEdit) }} />
                                             </div>
                                         </div>
                                     </div>
@@ -841,11 +851,11 @@ export default function PrimaryApplicant() {
                                 <MDBRow>
                                     <MDBCol className='col-3'>
                                         <MDBRadio name='placedByLocalAuthrtyRadio' id='placedByLocalAuthrtyYes' label='Yes' htmlFor='placedByLocalAuthrtyYes' inline
-                                            value='yes' onChange={(e) => { let newEdit ={...placedByLocalAuthrty}; newEdit= e.target.value; setPlacedByLocalAuthrty(newEdit); setShowLocalAuthority(true); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
+                                            value='yes' onChange={(e) => { let newEdit = { ...placedByLocalAuthrty }; newEdit = e.target.value; setPlacedByLocalAuthrty(newEdit); setShowLocalAuthority(true); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
                                     </MDBCol>
                                     <MDBCol className='col-3'>
                                         <MDBRadio name='placedByLocalAuthrtyRadio' id='placedByLocalAuthrtyNo' label='No' htmlFor='placedByLocalAuthrtyNo' inline
-                                            value='no' onChange={(e) => { let newEdit ={...placedByLocalAuthrty}; newEdit= e.target.value; setPlacedByLocalAuthrty(newEdit); setShowLocalAuthority(false); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
+                                            value='no' onChange={(e) => { let newEdit = { ...placedByLocalAuthrty }; newEdit = e.target.value; setPlacedByLocalAuthrty(newEdit); setShowLocalAuthority(false); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
                                     </MDBCol>
                                 </MDBRow>
 
@@ -858,7 +868,7 @@ export default function PrimaryApplicant() {
 
                                         <div className='' >
                                             <input style={inputStyle} className='form-control' type='text' placeholder='Enter the local authority name'
-                                                maxLength={25} onChange={(e) => { let newEdit ={...localAuthrtyName}; newEdit= e.target.value; setLocalAuthrtyName(newEdit) }} />
+                                                maxLength={25} onChange={(e) => { let newEdit = { ...localAuthrtyName }; newEdit = e.target.value; setLocalAuthrtyName(newEdit) }} />
                                         </div>
                                     </div>
                                 }
@@ -892,7 +902,7 @@ export default function PrimaryApplicant() {
                             <div>
                                 <div className='mt-2' >
                                     <input style={inputStyle} className='form-control' type='text' placeholder='home telephone'
-                                        minLength={9} maxLength={20} onChange={(e) => { let newEdit ={...telephone}; newEdit= e.target.value; setTelephone(newEdit) }} />
+                                        minLength={9} maxLength={20} onChange={(e) => { let newEdit = { ...telephone }; newEdit = e.target.value; setTelephone(newEdit) }} />
                                 </div>
                             </div>
 
@@ -907,7 +917,7 @@ export default function PrimaryApplicant() {
                             <div>
                                 <div className='mt-2' >
                                     <input style={inputStyle} className='form-control' type='text' placeholder='work telephone'
-                                        minLength={9} maxLength={20} onChange={(e) => { let newEdit ={...workPhone}; newEdit= e.target.value; setWorkPhone(newEdit) }} />
+                                        minLength={9} maxLength={20} onChange={(e) => { let newEdit = { ...workPhone }; newEdit = e.target.value; setWorkPhone(newEdit) }} />
                                 </div>
                             </div>
                         </div>
@@ -921,7 +931,7 @@ export default function PrimaryApplicant() {
                             <div>
                                 <div className='mt-2' >
                                     <input style={inputStyle} className='form-control' type='text' placeholder='mobile telephone'
-                                        minLength={11} maxLength={20} onChange={(e) => { let newEdit ={...mobile}; newEdit= e.target.value; setMobile(newEdit) }} />
+                                        minLength={11} maxLength={20} onChange={(e) => { let newEdit = { ...mobile }; newEdit = e.target.value; setMobile(newEdit) }} />
                                 </div>
                             </div>
                         </div>
@@ -935,7 +945,7 @@ export default function PrimaryApplicant() {
                             <div>
                                 <div className='mt-2' >
                                     <input style={inputStyle} className='form-control' type='text' placeholder='email address'
-                                        minLength={6} maxLength={40} onChange={(e) => { let newEdit ={...email}; newEdit= e.target.value; setEmail(newEdit) }} />
+                                        minLength={6} maxLength={40} onChange={(e) => { let newEdit = { ...email }; newEdit = e.target.value; setEmail(newEdit) }} />
                                 </div>
                             </div>
                             <div className='mt-4'>
@@ -944,7 +954,7 @@ export default function PrimaryApplicant() {
                             <div>
                                 <div className='mt-2' >
                                     <input style={inputStyle} className='form-control' type='text' placeholder='re-enter email address'
-                                        minLength={6} maxLength={40} onChange={(e) => { let newEdit ={...reEnterEmail}; newEdit= e.target.value; setReEnterEmail(newEdit) }} />
+                                        minLength={6} maxLength={40} onChange={(e) => { let newEdit = { ...reEnterEmail }; newEdit = e.target.value; setReEnterEmail(newEdit) }} />
                                 </div>
                             </div>
 
@@ -973,7 +983,7 @@ export default function PrimaryApplicant() {
 
                                     <select style={comboBoxStyle}
                                         className="form-select rounded"
-                                        onChange={(e) => { let newEdit ={...ethnicity}; newEdit= e.target.value; setEthnicity(newEdit) }}>
+                                        onChange={(e) => { let newEdit = { ...ethnicity }; newEdit = e.target.value; setEthnicity(newEdit) }}>
                                         {ethnicityData.map((option) => (
                                             <option key={option.ethnicityKey} value={option.ethnicityKey}>{option.ethnicity}</option>
                                         ))}
@@ -992,7 +1002,7 @@ export default function PrimaryApplicant() {
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
-                                    onChange={(e) => { let newEdit ={...nationality}; newEdit= e.target.value; setNationality(newEdit) }}>
+                                    onChange={(e) => { let newEdit = { ...nationality }; newEdit = e.target.value; setNationality(newEdit) }}>
                                     {nationalityData.map((option) => (
                                         <option key={option.nationalityKey} value={option.nationalityKey}>{option.nationality}</option>
                                     ))}
@@ -1010,7 +1020,7 @@ export default function PrimaryApplicant() {
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
-                                    onChange={(e) => { let newEdit ={...sexOrient}; newEdit= e.target.value; setSexOrient(newEdit) }}>
+                                    onChange={(e) => { let newEdit = { ...sexOrient }; newEdit = e.target.value; setSexOrient(newEdit) }}>
                                     {sexOrientData.map((option) => (
                                         <option key={option.sexOrientKey} value={option.sexOrientKey}>{option.sexOrient}</option>
                                     ))}
@@ -1028,7 +1038,7 @@ export default function PrimaryApplicant() {
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
-                                    onChange={(e) => { let newEdit ={...belief}; newEdit= e.target.value; setBelief(newEdit) }}>
+                                    onChange={(e) => { let newEdit = { ...belief }; newEdit = e.target.value; setBelief(newEdit) }}>
                                     {beliefData.map((option) => (
                                         <option key={option.beliefKey} value={option.beliefKey}>{option.belief}</option>
                                     ))}
@@ -1045,7 +1055,7 @@ export default function PrimaryApplicant() {
 
                             <div className='mt-2' >
                                 <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
-                                    onChange={(e) => { let newEdit ={...healthCondition}; newEdit= e.target.value; setHealthCondition(newEdit) }} >
+                                    onChange={(e) => { let newEdit = { ...healthCondition }; newEdit = e.target.value; setHealthCondition(newEdit) }} >
                                     <option defaultValue>Please Select</option>
                                     <option value="no">No</option>
                                     <option value="yes">Yes</option>
@@ -1064,7 +1074,7 @@ export default function PrimaryApplicant() {
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
-                                    onChange={(e) => { let newEdit ={...preferedLanguage}; newEdit= e.target.value; setPreferedLanguage(newEdit) }} >
+                                    onChange={(e) => { let newEdit = { ...preferedLanguage }; newEdit = e.target.value; setPreferedLanguage(newEdit) }} >
                                     {languages.map((option) => (
                                         <option key={option.languageKey} value={option.languageKey}>{option.language}</option>
                                     ))}
@@ -1081,11 +1091,11 @@ export default function PrimaryApplicant() {
                             <MDBRow>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='needInterpreterRadio' id='needInterpreterYes' label='Yes' inline
-                                        value='yes' onChange={(e) => { let newEdit ={...needInterpreter}; newEdit= e.target.value; setNeedInterpreter(newEdit) }} />
+                                        value='yes' onChange={(e) => { let newEdit = { ...needInterpreter }; newEdit = e.target.value; setNeedInterpreter(newEdit) }} />
                                 </MDBCol>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='needInterpreterRadio' id='needInterpreterNo' label='No' inline
-                                        value='no' onChange={(e) => { let newEdit ={...needInterpreter}; newEdit= e.target.value; setNeedInterpreter(newEdit) }} />
+                                        value='no' onChange={(e) => { let newEdit = { ...needInterpreter }; newEdit = e.target.value; setNeedInterpreter(newEdit) }} />
                                 </MDBCol>
                             </MDBRow>
 
@@ -1113,7 +1123,7 @@ export default function PrimaryApplicant() {
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
                                     aria-label="Default select example"
-                                    onChange={(e) => { let newEdit ={...tenure}; newEdit= e.target.value; setTenure(newEdit); setShowTenancyRef(!showTenancyRef) }}>
+                                    onChange={(e) => { let newEdit = { ...tenure }; newEdit = e.target.value; setTenure(newEdit); setShowTenancyRef(!showTenancyRef) }}>
                                     {tenureData.map((option) => (
                                         <option key={option.tenureKey} value={option.tenureKey}>{option.tenure}</option>
                                     ))}
@@ -1139,7 +1149,7 @@ export default function PrimaryApplicant() {
 
                                     <div className='mt-3' >
                                         <input style={{ width: '250px', fontSize: '13px' }} className='form-control' type='text' placeholder='Enter your tenancy agreement number'
-                                            maxLength={15} onChange={(e) => { let newEdit ={...tenancyRefNo}; newEdit= e.target.value; setTenancyRefNo(newEdit) }} />
+                                            maxLength={15} onChange={(e) => { let newEdit = { ...tenancyRefNo }; newEdit = e.target.value; setTenancyRefNo(newEdit) }} />
                                     </div>
                                 </div>
                             }
@@ -1169,7 +1179,7 @@ export default function PrimaryApplicant() {
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
                                     aria-label="Default select example"
-                                    onChange={(e) => { let newEdit ={...areyou}; newEdit= e.target.value; setAreYou(newEdit) }}>
+                                    onChange={(e) => { let newEdit = { ...areyou }; newEdit = e.target.value; setAreYou(newEdit) }}>
                                     {areyouData.map((option) => (
                                         <option key={option.areYouKey} value={option.areYouKey}>{option.areYou}</option>
                                     ))}
@@ -1235,9 +1245,23 @@ export default function PrimaryApplicant() {
                     </MDBCardBody>
                 </MDBCard>
 
+                {/**********  Any comments or additional information */}
+                <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
+                    <MDBCardBody>
+                        <p className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Any other comments or additional information</strong></p>
+                        <div className='mt-4' >
+                            <MDBRow>
+                                <MDBCol >
+                                    <textarea style={{ width: '250px', height: '350px' }} className='form-control' type='text'
+                                        maxLength={250} onChange={(e) => { let newEdit = { ...comments }; newEdit = e.target.value; setComments(newEdit) }} />
+                                </MDBCol>
+                            </MDBRow>
+                        </div>
+                    </MDBCardBody>
+                </MDBCard>
+
                 {/* ********** Login Details */}
                 <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
-
                     <MDBCardBody>
 
                         <div>
@@ -1283,7 +1307,7 @@ export default function PrimaryApplicant() {
                                 <div className='btn-group'>
                                     <select style={datePickerStyle}
                                         className="form-select rounded"
-                                        onChange={(e) => { let newEdit ={...memDate}; newEdit= e.target.value; setMemDate(newEdit) }} >
+                                        onChange={(e) => { let newEdit = { ...memDate }; newEdit = e.target.value; setMemDate(newEdit) }} >
                                         {datesData.map((option) => (
                                             <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
                                         ))}
@@ -1291,7 +1315,7 @@ export default function PrimaryApplicant() {
 
                                     <select style={monthPickerStyle}
                                         className="form-select rounded"
-                                        onChange={(e) => { let newEdit ={...memMonth}; newEdit= e.target.value; setMemMonth(newEdit) }} >
+                                        onChange={(e) => { let newEdit = { ...memMonth }; newEdit = e.target.value; setMemMonth(newEdit) }} >
                                         {monthsData.map((option) => (
                                             <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
                                         ))}
@@ -1303,7 +1327,7 @@ export default function PrimaryApplicant() {
                                         min={ageMin}
                                         max={ageMax}
                                         placeholder='year'
-                                        onChange={(e) => { let newEdit ={...memYear}; newEdit= e.target.value; setMemYear(newEdit) }} >
+                                        onChange={(e) => { let newEdit = { ...memYear }; newEdit = e.target.value; setMemYear(newEdit) }} >
                                     </input>
 
                                 </div>
@@ -1315,7 +1339,7 @@ export default function PrimaryApplicant() {
                                     <div className='btn-group'>
                                         <select style={datePickerStyle}
                                             className="form-select rounded"
-                                            onChange={(e) => { let newEdit ={...reEnterMemDate}; newEdit= e.target.value; setReenterMemDate(newEdit) }} >
+                                            onChange={(e) => { let newEdit = { ...reEnterMemDate }; newEdit = e.target.value; setReenterMemDate(newEdit) }} >
                                             {datesData.map((option) => (
                                                 <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
                                             ))}
@@ -1323,7 +1347,7 @@ export default function PrimaryApplicant() {
 
                                         <select style={monthPickerStyle}
                                             className="form-select rounded"
-                                            onChange={(e) => { let newEdit ={...reEnterMemMonth}; newEdit= e.target.value; setReenterMemMonth(newEdit) }} >
+                                            onChange={(e) => { let newEdit = { ...reEnterMemMonth }; newEdit = e.target.value; setReenterMemMonth(newEdit) }} >
                                             {monthsData.map((option) => (
                                                 <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
                                             ))}
@@ -1334,7 +1358,7 @@ export default function PrimaryApplicant() {
                                             min={ageMin}
                                             max={ageMax}
                                             placeholder='year'
-                                            onChange={(e) => { let newEdit ={...reEnterMemYear}; newEdit= e.target.value; setReenterMemYear(newEdit) }} >
+                                            onChange={(e) => { let newEdit = { ...reEnterMemYear }; newEdit = e.target.value; setReenterMemYear(newEdit) }} >
                                         </input>
 
                                     </div>
@@ -1377,7 +1401,7 @@ export default function PrimaryApplicant() {
 
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='password' placeholder='Password...'
-                                    minLength={6} maxLength={10} value={password} onChange={(e) => { let newEdit ={...password}; newEdit= e.target.value; setPassword(newEdit) }}></input>
+                                    minLength={6} maxLength={10} value={password} onChange={(e) => { let newEdit = { ...password }; newEdit = e.target.value; setPassword(newEdit) }}></input>
                             </div>
 
                             <div className='mt-4'>
@@ -1386,12 +1410,13 @@ export default function PrimaryApplicant() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='password' placeholder='Reenter password...'
-                                    minLength={6} maxLength={10} value={reEnterPwd} onChange={(e) => { let newEdit ={...reEnterPwd}; newEdit= e.target.value; setReEnterPwd(newEdit) }}></input>
+                                    minLength={6} maxLength={10} value={reEnterPwd} onChange={(e) => { let newEdit = { ...reEnterPwd }; newEdit = e.target.value; setReEnterPwd(newEdit) }}></input>
                             </div>
                         </div>
 
                         <form className='d-flex w-auto'>
-                            <MDBBtn style={{ fontSize: '18px', width: 'auto', textTransform: 'none' }} color='primary me-1'>
+                            <MDBBtn style={{ fontSize: '18px', width: 'auto', textTransform: 'none' }} color='primary me-1'
+                                onClick={previousPage}>
                                 {/* <MDBIcon fas icon='caret-left' className='me-2' /> */}
                                 Previous Page</MDBBtn>
 
@@ -1402,14 +1427,6 @@ export default function PrimaryApplicant() {
                         </form>
                     </MDBCardBody>
                 </MDBCard>
-
-                {/* </MDBCol> */}
-                {/* <MDBCol className='col-md-6 col-sm-6'> */}
-                {/* <MDBCol className='mx-2' size='md'  > */}
-
-                {/* <ApplicationProgress iconStatus={"PrimaryApplicant"} ></ApplicationProgress> */}
-                {/* </MDBCol> */}
-                {/* </MDBRow> */}
             </MDBContainer >
         </React.Fragment>
     );

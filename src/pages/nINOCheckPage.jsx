@@ -7,7 +7,7 @@ import {
     MDBBtn
 } from 'mdb-react-ui-kit';
 
-import { ValidNINO } from '../validations/Validator';
+import { validNINO } from '../validations/Validator';
 import ApplicationProgress from '../components/applicationProgress'
 import NINOCheck from '../components/nINOCheck';
 import Navbar from '../components/Navbar';
@@ -28,8 +28,8 @@ export default function NINOCheckPage() {
 
         e.preventDefault();
 
-        setNINOPrimaryErr(ValidNINO(ninoPrimary));
-        setNINOJointErr(ValidNINO(ninoJoint));
+        setNINOPrimaryErr(validNINO(ninoPrimary));
+        setNINOJointErr(validNINO(ninoJoint));
 
         console.log(`Primary NINO is ${ninoPrimary} error is ${ninoPrimaryErr}, joint NINO is ${ninoJoint} error is ${ninoJointErr}`)
     }

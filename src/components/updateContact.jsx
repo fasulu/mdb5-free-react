@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
 import { dates, months } from '../resources/datePicker';
-import { validPwd, validEmail, validName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch, ValidNINO } from '../validations/Validator.jsx';
+import { validPwd, validEmail, validName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch, validNINO } from '../validations/Validator.jsx';
 
 import {
     MDBContainer,
@@ -58,7 +58,7 @@ export default function UpdateContact() {
 
         setNameErr(validName(fName));
         setNameErr(validName(sName));
-        setNameErr(ValidNINO(nINO));
+        setNameErr(validNINO(nINO));
         setPasswordErr(validPwd(password));
         setEmailErr(validEmail(email));
         setPostcodeErr(validPostcode(postcode));

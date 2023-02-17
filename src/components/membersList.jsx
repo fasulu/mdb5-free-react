@@ -16,7 +16,7 @@ import {
 
 import { testData } from '../resources/testData';
 
-import ToCamelCase from '../validations/Validator'
+import { ToCamelCase } from '../validations/Validator'
 
 export default function MembersList(props) {
 
@@ -44,10 +44,10 @@ export default function MembersList(props) {
         return (
           <MDBCard className='m-2' style={boxStyle} >
             {<MDBRipple rippleColor='dark' rippleTag='div' className='hover-overlay'>
-              <MDBCardBody key={membersList.dataKey} item = 'true' >
+              <MDBCardBody key={membersList.dataKey} item='true' >
                 <MDBRow alignment='center'>
                   <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
-                    <MDBTypography style={{ cursor: 'pointer', fontSize: '16px', color: '#1a82db', textDecoration:'blue' }}>
+                    <MDBTypography style={{ cursor: 'pointer', fontSize: '16px', color: '#1a82db', textDecoration: 'blue' }}>
                       Id: <strong onClick={(e) => openMember(e.target)}>{ToCamelCase(membersList.householdMemberID)}</strong>
                     </MDBTypography>
                     <MDBTypography style={inputStyle}>Date of birth: <strong>{membersList.dob.toUpperCase()}</strong></MDBTypography>

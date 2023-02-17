@@ -4,7 +4,7 @@ import {
     MDBContainer, MDBRow, MDBCol
 } from 'mdb-react-ui-kit';
 
-import { ValidNINO } from '../validations/Validator';
+import { validNINO } from '../validations/Validator';
 import ApplicationProgress from '../components/applicationProgress'
 import JointApplicant from '../components/jointApplicant';
 import Navbar from '../components/Navbar';

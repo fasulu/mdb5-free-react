@@ -1,5 +1,5 @@
 
-export const validPwd = (password) => {
+function validPwd(password) {
   let pwdLength = password.replace(/\s+/g, "").length;
   let patternP = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
   let validPwd = password.match(patternP);
@@ -11,7 +11,7 @@ export const validPwd = (password) => {
   }
 };
 
-export const validEmail = (email) => {
+function validEmail(email) {
   let patternE = /[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$/;
   if (email.match(patternE)) {
     console.log("Email good");
@@ -22,7 +22,7 @@ export const validEmail = (email) => {
   }
 };
 
-export const validPostcode = (postcode) => {
+function validPostcode(postcode) {
   let patternN = '^[a-zA-Z]{1,2}[0-9]{1,2}[ ]{1}[0-9]{1,1}[a-zA-Z]{2}$';
   let validPostcode = postcode.match(patternN);
   if (!validPostcode) {
@@ -32,19 +32,19 @@ export const validPostcode = (postcode) => {
   }
 };
 
-export const validName = (name) => {
+function validName(name) {
   let patternN = /^[a-zA-Z- ]*$/; // /^[a-zA-Z]+$/
   let validName = name.match(patternN);
   let nameLength = name.replace(/\s+/g, "").length;
 
-  if (!validName || (nameLength < 6 || nameLength > 20)) {
+  if (!validName || (nameLength < 4 || nameLength > 20)) {
     return false;
   } else {
     return true;
   }
 };
 
-export const validMName = (name) => {
+function validMName(name) {
   let patternN = /^[a-zA-Z- ]*$/; // /^[a-zA-Z]+$/
   let validName = name.match(patternN);
 
@@ -55,7 +55,7 @@ export const validMName = (name) => {
   }
 };
 
-export const validNumber = (num) => {
+function validNumber(num) {
   let numLength = num.replace(/\s+/g, "").length;
   let patternNum = '^[0-9]{0,15}$';
   let validNnum = num.match(patternNum);
@@ -67,7 +67,7 @@ export const validNumber = (num) => {
   }
 };
 
-export const validAddress = (address) => {
+function validAddress(address) {
   let addressLength = address.length;
 
   if (addressLength < 4) {
@@ -77,7 +77,7 @@ export const validAddress = (address) => {
   }
 };
 
-export const ValidNINO = (nino) => {
+function validNINO(nino) {
   let patternNino = '^[a-zA-Z]{2}[0-9]{6}[a-zA-Z]{1}$';
   let resultNino = nino.match(patternNino);
 
@@ -88,7 +88,7 @@ export const ValidNINO = (nino) => {
   }
 };
 
-export const emailMatch = (email, reEnterEmail) => {
+function emailMatch(email, reEnterEmail) {
   if ((email !== reEnterEmail) || (email === "") || (reEnterEmail === "")) {
     console.log('Error:- Emails are not same');
     return false
@@ -98,7 +98,7 @@ export const emailMatch = (email, reEnterEmail) => {
   }
 };
 
-export const pwdMatch = (pwd, repwd) => {
+function pwdMatch(pwd, repwd) {
   if ((pwd !== repwd) || (pwd === "") || (repwd === "")) {
     console.log('Error:- Passwords are not same');
     return false
@@ -108,7 +108,7 @@ export const pwdMatch = (pwd, repwd) => {
   }
 };
 
-export const memDateMatch = (memDate, reMemDate) => {
+function memDateMatch(memDate, reMemDate) {
   if ((memDate !== reMemDate) || (memDate === "") || (reMemDate === "")) {
     console.log('Error:- Memorable dates are not same');
     return false
@@ -121,4 +121,17 @@ export const memDateMatch = (memDate, reMemDate) => {
 function ToCamelCase (props) {
   return props.replace(/\b(\w)/g, s => s.toUpperCase());  
 }
-export default ToCamelCase
+export {
+  ToCamelCase, 
+  validNINO, 
+  validPwd,
+  validEmail,
+  validPostcode,
+  validName,
+  validMName,
+  validNumber,
+  validAddress,
+  emailMatch,
+  pwdMatch,
+  memDateMatch
+}

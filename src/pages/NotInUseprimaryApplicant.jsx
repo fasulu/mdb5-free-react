@@ -9,7 +9,7 @@ import { sexOrients } from '../resources/sexOrient';
 import { beliefs } from '../resources/belief';
 import { languages } from '../resources/language';
 import { dates, months } from '../resources/datePicker';
-import { validPwd, validEmail, validName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch, ValidNINO } from '../validations/Validator.jsx';
+import { validPwd, validEmail, validName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch, validNINO } from '../validations/Validator.jsx';
 import ApplicationProgress from '../components/applicationProgress'
 
 import {
@@ -135,7 +135,7 @@ export default function PrimaryApplicant() {
 
         setNameErr(validName(fName));
         setNameErr(validName(sName));
-        setNameErr(ValidNINO(nINO));
+        setNameErr(validNINO(nINO));
         setPasswordErr(validPwd(password));
         setEmailErr(validEmail(email));
         setPostcodeErr(validPostcode(postcode));

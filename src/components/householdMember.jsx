@@ -7,7 +7,7 @@ import { nationalities } from '../resources/nationality';
 import { sexOrients } from '../resources/sexOrient';
 import { beliefs } from '../resources/belief';
 import { dates, months } from '../resources/datePicker';
-import { validEmail, validName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch, ValidNINO } from '../validations/Validator.jsx';
+import { validEmail, validName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch, validNINO } from '../validations/Validator.jsx';
 import ApplicationProgress from '../components/applicationProgress'
 
 import {
@@ -41,41 +41,36 @@ export default function HouseholdMember() {
     const [showLocalAuthority, setShowLocalAuthority] = useState(false);
 
     const [relationWithPrimaryApplicant, setRelationWithPrimaryApplicant] = useState("");
-    const [assessmentPurposeOnly, setAssessmentPurposeOnly] = useState("");
+    const [assessmentPurposeOnly, setAssessmentPurposeOnly] = useState("yes");
     const [title, setTitle] = useState("");
     const [fName, setFName] = useState("");
     const [mName, setMName] = useState("");
     const [sName, setSName] = useState("");
     const [nameChange, setNameChange] = useState("");
-    const [spouseOfAnotherMember, setSpouseOfAnotherMember] = useState("");
-    const [spouseAnotherMember, setSpouseAnotherMember] = useState(false);
-    const [spouseAnotherMemberName, SetSpouseAnotherMemberName] = useState("");
     const [nINO, setNINO] = useState("");
     const [dateofbirth, setdateofbirth] = useState("");
     const [dobDate, setDOBDate] = useState("");
     const [dobMonth, setDOBMonth] = useState("");
     const [dobYear, setDOBYear] = useState("");
     const [sex, setSex] = useState("");
+    const [isSpouseOfAnotherMember, setIsSpouseOfAnotherMember] = useState("no");
+    const [spouseAnotherMember, setSpouseAnotherMember] = useState(false);
+    const [spouseAnotherMemberName, SetSpouseAnotherMemberName] = useState("");
     const [partnerAddress, setPartnerAddress] = useState("Need to fill dynamically")
-    const [postcode, setPostcode] = useState("");
-    const [addLine1, setAddLine1] = useState("");
-    const [addLine2, setAddLine2] = useState("");
-    const [addLine3, setAddLine3] = useState("");
-    const [addLine4, setAddLine4] = useState("");
     const [placedByLocalAuthrty, setPlacedByLocalAuthrty] = useState("");
     const [localAuthrtyName, setLocalAuthrtyName] = useState("");
-    const [livingInDiffAddress, setLivingInDiffAddress] = useState("");
+    const [currentAddress, setCurrentAddress] = useState("");
     const [isShePregnant, setIsShePregnant] = useState("no");
     const [showDeliveryDate, setShowDeliveryDate] = useState(false);
     const [deliveryDate, setDeliveryDate] = useState("");
     const [delDate, setDelDate] = useState("");
     const [delMonth, setDelMonth] = useState("");
     const [delYear, setDelYear] = useState("");
-    const [movedDate, setMovedDate] = useState("");
     const [movedInDate, setMovedInDate] = useState("");
-    const [movedInMonth, setMovedInMonth] = useState("");
-    const [movedInYear, setMovedInYear] = useState("");
-    const [currentlyLiveWithYou, setCurrentlyLiveWithYou] = useState("no");
+    const [movedDate, setMovedDate] = useState("");
+    const [movedMonth, setMovedMonth] = useState("");
+    const [movedYear, setMovedYear] = useState("");
+    const [currentlyLiveWithYou, setCurrentlyLiveWithYou] = useState("yes");
     const [telephone, setTelephone] = useState("");
     const [mobile, setMobile] = useState("");
     const [workPhone, setWorkPhone] = useState("");
@@ -85,15 +80,8 @@ export default function HouseholdMember() {
     const [nationality, setNationality] = useState("");
     const [sexOrient, setSexOrient] = useState("");
     const [belief, setBelief] = useState("");
-    const [healthCondition, setHealthCondition] = useState("");
-    const [areYouWorker, setAreYouWorker] = useState();
-
-    const [ninoErr, setNinoErr] = useState(false);
-    const [nameErr, setNameErr] = useState(false);
-    const [emailErr, setEmailErr] = useState(false);
-    const [postcodeErr, setPostcodeErr] = useState(false);
-    const [numberErr, setNumberErr] = useState(false)
-    const [emailMatchsErr, setEmailMatchesErr] = useState(false)
+    const [healthCondition, setHealthCondition] = useState("no");
+    const [areYouWorker, setAreYouWorker] = useState("no");
 
     useEffect(() => {
 
@@ -122,43 +110,46 @@ export default function HouseholdMember() {
         e.preventDefault();
 
         setdateofbirth(dobMonth + "/" + dobDate + "/" + dobYear);
-        setMovedDate(movedInMonth + "/" + movedInDate + "/" + movedInYear);
+        setMovedInDate(movedMonth + "/" + movedDate + "/" + movedYear);
         setDeliveryDate(delMonth + "/" + delDate + "/" + delYear);
 
-        setNameErr(validName(fName))
-        setNameErr(validName(sName))
-        setNameErr(validName(spouseAnotherMemberName))
-        setNinoErr(ValidNINO(nINO))
-        setEmailErr(validEmail(email))
-        setPostcodeErr(validPostcode(postcode))
-        setNumberErr(validNumber(telephone))
-        setNumberErr(validNumber(workPhone))
-        setNumberErr(validNumber(mobile))
+        const fNameErr = validName(fName);
+        const mNameErr = validName(sName);
+        const sNameErr = validName(sName);
+        const spouseNameErr = validName(spouseAnotherMemberName);
+        const ninoErr = validNINO(nINO);
+        const emailErr = validEmail(email);
+        const telephoneErr = validNumber(telephone);
+        const workphoneErr = validNumber(workPhone);
+        const mobileErr = validNumber(mobile);
+        const emailMatchesErr = emailMatch(email, reEnterEmail);
 
-        setEmailMatchesErr(emailMatch(email, reEnterEmail))
-
-        console.log(`Validation result is fname/sname ${nameErr}, 
-        email ${emailErr}, postcode ${postcodeErr}, email matches ${emailMatchsErr}, 
-        home telephone ${telephone}, work telephone ${workPhone}, mobile ${mobile}`)
+        console.log(`Validation result is fname/mname/sname ${fNameErr} ${mNameErr} ${sNameErr}, 
+        ninoErr ${ninoErr}, spouse name ${spouseNameErr}, home telephone ${telephoneErr}, work telephone ${workphoneErr}, 
+        mobile ${mobileErr},email ${emailErr}, email matches ${emailMatchesErr}`)
 
         console.log('Im in saveJointMember', relationWithPrimaryApplicant,
             assessmentPurposeOnly, title, fName, mName, sName, nameChange,
-            currentlyLiveWithYou, spouseOfAnotherMember, spouseAnotherMemberName,
+            currentlyLiveWithYou, isSpouseOfAnotherMember, spouseAnotherMemberName,
             nINO, dateofbirth, sex, placedByLocalAuthrty, localAuthrtyName,
-            postcode, addLine1, addLine2, addLine3, addLine4,
-            telephone, mobile, workPhone, email, reEnterEmail, movedDate,
+            currentAddress, telephone, mobile, workPhone, email, reEnterEmail, movedInDate,
             ethnicity, nationality, belief, sexOrient,
             isShePregnant, deliveryDate,
             healthCondition, areYouWorker
         )
 
-        if ((!emailMatchsErr) || (!nameErr) || (!emailErr) || (!postcodeErr) || (!numberErr) || (!ninoErr)) {
-            !nameErr && alert('Name error');
+        if ((!fNameErr) || (!mNameErr) || (!sNameErr) || (!emailErr) || (!emailMatchesErr) ||
+            (!ninoErr) || (!telephoneErr) || (!workphoneErr) || (!mobileErr)) {
+            !fNameErr && alert('First Name error');
+            !mNameErr && alert('Middle Name error');
+            !sNameErr && alert('Surname error');
+            !telephoneErr && alert('Telephone number error');
+            !workphoneErr && alert('Work telephone number error');
+            !mobileErr && alert('Mobile number error');
             !emailErr && alert('Email error');
             !ninoErr && alert('NINO error');
-            !postcodeErr && alert('Postcode error');
-            !numberErr && alert('Telephone/Mobile number error');
-            !emailMatchsErr && alert('Email match error');
+            !emailMatchesErr && alert('Email match error');
+
         }
     }
 
@@ -185,7 +176,7 @@ export default function HouseholdMember() {
 
                             <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Relationship to main applicant *</strong></p>
                             <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded mb-2"
-                                value={relationWithPrimaryApplicant} onChange={(e) => { setRelationWithPrimaryApplicant(e.target.value) }}>
+                                value={relationWithPrimaryApplicant} onChange={(e) => { let newEdit = { ...relationWithPrimaryApplicant }; newEdit = e.target.value; setRelationWithPrimaryApplicant(newEdit) }}>
                                 <option defaultValue>Please choose</option>
                                 <option value="1">Daughter</option>
                                 <option value="2">Relative</option>
@@ -207,12 +198,12 @@ export default function HouseholdMember() {
                             <MDBRow>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='assessmentPurposeOnlyRadio' value='yes' label='Yes' inline id='assessmentPurposeOnlyYes' htmlFor="assessmentPurposeOnlyYes"
-                                        onClick={(e) => { setAssessmentPurposeOnly(e.target.value) }}></MDBRadio>
+                                        onClick={(e) => { let newEdit = { ...assessmentPurposeOnly }; newEdit = e.target.value; setAssessmentPurposeOnly(newEdit) }}></MDBRadio>
                                 </MDBCol>
                                 <MDBCol className='col-3'>
 
                                     <MDBRadio name='assessmentPurposeOnlyRadio' value='no' label='No' inline id='assessmentPurposeOnlyNo' htmlFor='assessmentPurposeOnlyNo'
-                                        onChange={(e) => { setAssessmentPurposeOnly(e.target.value) }}></MDBRadio>
+                                        onChange={(e) => { let newEdit = { ...assessmentPurposeOnly }; newEdit = e.target.value; setAssessmentPurposeOnly(newEdit) }}></MDBRadio>
                                 </MDBCol>
                             </MDBRow>
 
@@ -222,7 +213,7 @@ export default function HouseholdMember() {
 
                             <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Title *</strong></p>
                             <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded" aria-label="Default select example"
-                                value={title} onChange={(e) => { setTitle(e.target.value) }}>
+                                value={title} onChange={(e) => { let newEdit = { ...title }; newEdit = e.target.value; setTitle(newEdit) }}>
                                 <option defaultValue>Please Choose</option>
                                 <option value="1">Dr</option>
                                 <option value="2">Miss</option>
@@ -245,7 +236,7 @@ export default function HouseholdMember() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='First name...'
-                                    maxLength={20} value={fName} onChange={(e) => { setFName(e.target.value) }}></input>
+                                    maxLength={20} value={fName} onChange={(e) => { let newEdit = { ...fName }; newEdit = e.target.value; setFName(newEdit) }}></input>
                             </div>
                         </div>
 
@@ -261,7 +252,7 @@ export default function HouseholdMember() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='Middle name...'
-                                    maxLength={20} value={mName} onChange={(e) => { setMName(e.target.value) }}></input>
+                                    maxLength={20} value={mName} onChange={(e) => { let newEdit = { ...mName }; newEdit = e.target.value; setMName(newEdit) }}></input>
                             </div>
                         </div>
 
@@ -277,7 +268,7 @@ export default function HouseholdMember() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='Surname...'
-                                    maxLength={20} value={sName} onChange={(e) => { setSName(e.target.value) }}></input>
+                                    maxLength={20} value={sName} onChange={(e) => { let newEdit = { ...sName }; newEdit = e.target.value; setSName(newEdit) }}></input>
                             </div>
 
                         </div>
@@ -294,22 +285,22 @@ export default function HouseholdMember() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='Have you ever used a different name, eg a maiden name or by deed poll? if so, please provide details'
-                                    maxLength={50} value={nameChange} onChange={(e) => { setNameChange(e.target.value) }}></input>
+                                    maxLength={50} value={nameChange} onChange={(e) => { let newEdit = { ...nameChange }; newEdit = e.target.value; setNameChange(newEdit) }}></input>
                             </div>
                         </div>
 
-                        {/* ********** Does you partner currently live with you?  */}
+                        {/* ********** Does this member currently live with you?  */}
                         <div >
                             <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Does this household member currently live with you? *</strong></p>
                             <MDBRow>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='currentlyLiveWithYouRadio' value='yes' label='Yes' inline id='currentlyLiveWithYouYes' htmlFor="currentlyLiveWithYouYes"
-                                        onClick={(e) => { setCurrentlyLiveWithYou(e.target.value) }}></MDBRadio>
+                                        onClick={(e) => { let newEdit = { ...currentlyLiveWithYou }; newEdit = e.target.value; setCurrentlyLiveWithYou(newEdit) }}></MDBRadio>
                                 </MDBCol>
                                 <MDBCol className='col-3'>
 
-                                    <MDBRadio name='currentlyLiveWithYouRadio' value='no' label='No' inline id='currentlyLiveWithYouNo' htmlFor='currentlyLiveWithYouNo'
-                                        onChange={(e) => { setCurrentlyLiveWithYou(e.target.value) }}></MDBRadio>
+                                    <MDBRadio name='currentlyLiveWithYouRadio' value='no' defaultChecked label='No' inline id='currentlyLiveWithYouNo' htmlFor='currentlyLiveWithYouNo'
+                                        onClick={(e) => { let newEdit = { ...currentlyLiveWithYou }; newEdit = e.target.value; setCurrentlyLiveWithYou(newEdit) }}></MDBRadio>
                                 </MDBCol>
                             </MDBRow>
 
@@ -321,12 +312,12 @@ export default function HouseholdMember() {
                             <MDBRow>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='spouseOfAnotherMemberRadio' value='yes' label='Yes' inline id='spouseOfAnotherMemberYes' htmlFor="spouseOfAnotherMemberYes"
-                                        onClick={(e) => { setSpouseOfAnotherMember(e.target.value); setSpouseAnotherMember(true) }}></MDBRadio>
+                                        onClick={(e) => { let newEdit = { ...isSpouseOfAnotherMember }; newEdit = e.target.value; setIsSpouseOfAnotherMember(newEdit); setSpouseAnotherMember(true) }}></MDBRadio>
                                 </MDBCol>
                                 <MDBCol className='col-3'>
 
-                                    <MDBRadio name='spouseOfAnotherMemberRadio' value='no' label='No' inline id='spouseOfAnotherMemberNo' htmlFor='spouseOfAnotherMemberNo'
-                                        onChange={(e) => { setSpouseOfAnotherMember(e.target.value); setSpouseAnotherMember(false) }}></MDBRadio>
+                                    <MDBRadio name='spouseOfAnotherMemberRadio' value='no' defaultChecked label='No' inline id='spouseOfAnotherMemberNo' htmlFor='spouseOfAnotherMemberNo'
+                                        onChange={(e) => { let newEdit = { ...isSpouseOfAnotherMember }; newEdit = e.target.value; setIsSpouseOfAnotherMember(newEdit); setSpouseAnotherMember(false) }}></MDBRadio>
                                 </MDBCol>
                             </MDBRow>
 
@@ -338,7 +329,7 @@ export default function HouseholdMember() {
                                         <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Above person's spouse first name and surname *</strong></p>
                                         <div className='mb-4' >
                                             <input className='form-control' type='text' placeholder='First name and Surname...'
-                                                maxLength={20} value={spouseAnotherMemberName} onChange={(e) => { SetSpouseAnotherMemberName(e.target.value) }}></input>
+                                                maxLength={50} value={spouseAnotherMemberName} onChange={(e) => { let newEdit = { ...spouseAnotherMemberName }; newEdit = e.target.value; SetSpouseAnotherMemberName(newEdit) }}></input>
                                         </div>
 
                                     </div>
@@ -353,7 +344,7 @@ export default function HouseholdMember() {
                             <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Household Member's NINO *</strong></p>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text'
-                                    maxLength={9} value={nINO} onChange={(e) => { setNINO(e.target.value) }}></input>
+                                    maxLength={9} value={nINO} onChange={(e) => { let newEdit = { ...nINO }; newEdit = e.target.value; setNINO(newEdit) }}></input>
                             </div>
                         </div>
 
@@ -378,14 +369,14 @@ export default function HouseholdMember() {
                                     <select style={datePickerStyle}
                                         className="form-select rounded"
                                         aria-label="Default select example"
-                                        onChange={(e) => { setDOBDate(e.target.value) }}>
+                                        onChange={(e) => { let newEdit = { ...dobDate }; newEdit = e.target.value; setDOBDate(newEdit) }}>
                                         {datesData.map((option) => (
                                             <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
                                         ))}
                                     </select>
                                     <select style={monthPickerStyle}
                                         className="form-select rounded"
-                                        onChange={(e) => { setDOBMonth(e.target.value) }}>
+                                        onChange={(e) => { let newEdit = { ...dobMonth }; newEdit = e.target.value; setDOBMonth(newEdit) }}>
                                         {monthsData.map((option) => (
                                             <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
                                         ))}
@@ -397,7 +388,7 @@ export default function HouseholdMember() {
                                         min={yearMin}
                                         max={yearMax}
                                         placeholder='year'
-                                        onChange={(e) => { setDOBYear(e.target.value) }}>
+                                        onChange={(e) => { let newEdit = { ...dobYear }; newEdit = e.target.value; setDOBYear(newEdit) }}>
                                     </input>
 
                                 </div>
@@ -410,7 +401,7 @@ export default function HouseholdMember() {
                             <div className='mt-4'>
                                 <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Gender *</strong></p>
                                 <select style={comboBoxStyle} className="form-select border-rounded"
-                                    value={sex} onChange={(e) => { setSex(e.target.value) }}>
+                                    value={sex} onChange={(e) => { let newEdit = { ...sex }; newEdit = e.target.value; setSex(newEdit) }}>
                                     <option defaultValue>Please Choose</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
@@ -426,50 +417,56 @@ export default function HouseholdMember() {
                     <MDBCardBody>
 
                         <div className='mb-2'>
-                            <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Current Address</strong></MDBTypography>
+                            <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
+                                <strong>Current Address</strong></MDBTypography>
 
                             <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Was this household member place at this address in Birmingham by another local Authority?*</strong></p>
                             <MDBRow>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='placedByLocalAuthrtyRadio' id='placedByLocalAuthrtyYes' label='Yes' htmlFor='placedByLocalAuthrtyYes' inline
-                                        value='yes' onChange={(e) => { setPlacedByLocalAuthrty(e.target.value); setShowLocalAuthority(true); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
+                                        value='yes' onChange={(e) => { let newEdit = { ...placedByLocalAuthrty }; newEdit = e.target.value; setPlacedByLocalAuthrty(newEdit); setShowLocalAuthority(true); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
                                 </MDBCol>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='placedByLocalAuthrtyRadio' id='placedByLocalAuthrtyNo' label='No' htmlFor='placedByLocalAuthrtyNo' inline
-                                        value='no' onChange={(e) => { setPlacedByLocalAuthrty(e.target.value); setShowLocalAuthority(false); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
+                                        value='no' onChange={(e) => { let newEdit = { ...placedByLocalAuthrty }; newEdit = e.target.value; setPlacedByLocalAuthrty(newEdit); setShowLocalAuthority(false); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
                                 </MDBCol>
                             </MDBRow>
-
-                            {showLocalAuthority &&
-                                <div>
-
-                                    <div className='mt-4'>
-                                        <p style={{ fontSize: '16px' }}><strong>If yes, by which local authority?</strong></p>
-                                    </div>
-
-                                    <div className='' >
-                                        <input style={inputStyle} className='form-control' type='text' placeholder='Enter the local authority name'
-                                            maxLength={25} onChange={(e) => { setLocalAuthrtyName(e.target.value) }} />
-                                    </div>
-                                </div>
-                            }
-
-                            {/* *********** What is their current address? */}
+                        </div>
+                        {showLocalAuthority &&
                             <div>
 
-                                <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>What is their current address?</strong></p>
-                                <div style={{ fontSize: '13px', height: 'auto', width: 'auto', background: '#e4f5fb' }} className=" help-content border border-grey rounded">
-                                    <p className='mx-2 mt-3 mb-2' style={{ fontSize: '12px' }}><strong>Is this person living with one of the following people?</strong></p>
-
-                                    <MDBRadio className='mx-1' name='livingInDiffAddressRadio' id='livingInDiffAddressYes' label={partnerAddress} htmlFor='livingInDiffAddressYes'
-                                        value='yes' onChange={(e) => { setLivingInDiffAddress("Living with primary applicant"); setShowAddress(false); }}></MDBRadio>     {/* Get and show primary applicant address in this place */}
-                                    <MDBRadio className='mx-1' name='livingInDiffAddressRadio' id='livingInDiffAddressNo' label='This person is living at a different addres' htmlFor='livingInDiffAddressNo'
-                                        value='no' onChange={(e) => { setLivingInDiffAddress("Living in different address"); setShowAddress(true); }}></MDBRadio>     {/* This household member living in different address */}
+                                <div className='mt-4'>
+                                    <p style={{ fontSize: '16px' }}><strong>If yes, by which local authority?</strong></p>
                                 </div>
 
+                                <div className='' >
+                                    <input style={inputStyle} className='form-control' type='text' placeholder='Enter the local authority name'
+                                        maxLength={25} onChange={(e) => { let newEdit = { ...localAuthrtyName }; newEdit = e.target.value; setLocalAuthrtyName(newEdit) }} />
+                                </div>
                             </div>
+                        }
+
+                        {/* *********** What is their current address? */}
+                        <div>
+
+                            <p className='mt-3 mb-2' style={{ fontSize: '16px' }}>
+                                <strong>What is their current address?</strong></p>
+
+                            <div style={{ fontSize: '13px', height: 'auto', width: 'auto', background: '#e4f5fb' }} className=" help-content border border-grey rounded">
+                                <p className='mx-2 mt-3 mb-2' style={{ fontSize: '12px' }}><strong>Is this person living in the following address?</strong></p>
+                                <MDBRow className='mt-3 mb-2'>
+                                    <MDBRadio className='mx-2' name='livingInDiffAddressRadio' id='livingInDiffAddressYes' label='Living with primary applicant' htmlFor='livingInDiffAddressYes'
+                                        value='Living with primary applicant' onChange={(e) => { let newEdit = { ...currentAddress }; newEdit = e.target.value; setCurrentAddress(newEdit); }}></MDBRadio>
+                                </MDBRow>
+                                <MDBRow className='mb-2'>
+                                    <MDBRadio className='mx-2' name='livingInDiffAddressRadio' id='livingInDiffAddressNo' label='Living in different address' htmlFor='livingInDiffAddressNo'
+                                        value='Living in different address' defaultChecked onChange={(e) => { let newEdit = { ...currentAddress }; newEdit = e.target.value; setCurrentAddress(newEdit); }}></MDBRadio>
+                                </MDBRow>
+                            </div>
+
                         </div>
-                        {/* ***********  Postcode  */}
+
+                        {/* *********** Currently not receiving or saving the member address - Postcode  */}
                         {showAddress &&
                             <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
                                 <MDBCardBody>
@@ -601,7 +598,7 @@ export default function HouseholdMember() {
                             <div>
                                 <div className='mt-2' >
                                     <input style={inputStyle} className='form-control' type='text' placeholder='home telephone'
-                                        minLength={9} maxLength={20} onChange={(e) => { setTelephone(e.target.value) }} />
+                                        minLength={9} maxLength={20} onChange={(e) => { let newEdit = { ...telephone }; newEdit = e.target.value; setTelephone(newEdit) }} />
                                 </div>
                             </div>
 
@@ -616,7 +613,7 @@ export default function HouseholdMember() {
                             <div>
                                 <div className='mt-2' >
                                     <input style={inputStyle} className='form-control' type='text' placeholder='work telephone'
-                                        minLength={9} maxLength={20} onChange={(e) => { setWorkPhone(e.target.value) }} />
+                                        minLength={9} maxLength={20} onChange={(e) => { let newEdit = { ...workPhone }; newEdit = e.target.value; setWorkPhone(newEdit) }} />
                                 </div>
                             </div>
                         </div>
@@ -630,7 +627,7 @@ export default function HouseholdMember() {
                             <div>
                                 <div className='mt-2' >
                                     <input style={inputStyle} className='form-control' type='text' placeholder='mobile telephone'
-                                        minLength={11} maxLength={20} onChange={(e) => { setMobile(e.target.value) }} />
+                                        minLength={11} maxLength={20} onChange={(e) => { let newEdit = { ...mobile }; newEdit = e.target.value; setMobile(newEdit) }} />
                                 </div>
                             </div>
                         </div>
@@ -651,7 +648,7 @@ export default function HouseholdMember() {
                                 <p style={{ fontSize: '17px' }}><strong>Please re-enter your email address*</strong></p>
                                 <div className='p-2 mt-2' >
                                     <input style={inputStyle} className='form-control' type='email' placeholder='re-enter email address'
-                                        minLength={6} maxLength={40} onChange={(e) => { setReEnterEmail(e.target.value) }} />
+                                        minLength={6} maxLength={40} onChange={(e) => { let newEdit = { ...reEnterEmail }; newEdit = e.target.value; setReEnterEmail(newEdit) }} />
                                 </div>
                             </div>
 
@@ -670,7 +667,7 @@ export default function HouseholdMember() {
                                 <div className='btn-group' >
                                     <select style={datePickerStyle}
                                         className="form-select rounded"
-                                        onChange={(e) => { setMovedInDate(e.target.value) }} >
+                                        onChange={(e) => { let newEdit = { ...movedDate }; newEdit = e.target.value; setMovedDate(newEdit) }} >
                                         {datesData.map((option) => (
                                             <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
                                         ))}
@@ -678,7 +675,7 @@ export default function HouseholdMember() {
 
                                     <select style={monthPickerStyle}
                                         className="form-select rounded"
-                                        onChange={(e) => { setMovedInMonth(e.target.value) }} >
+                                        onChange={(e) => { let newEdit = { ...movedMonth }; newEdit = e.target.value; setMovedMonth(newEdit) }} >
                                         {monthsData.map((option) => (
                                             <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
                                         ))}
@@ -689,7 +686,7 @@ export default function HouseholdMember() {
                                         min={yearMin + 70}
                                         max={yearMax}
                                         placeholder='year'
-                                        onChange={(e) => { setMovedInYear(e.target.value) }} >
+                                        onChange={(e) => { let newEdit = { ...movedYear }; newEdit = e.target.value; setMovedYear(newEdit) }} >
                                     </input>
                                 </div>
                             </div>
@@ -717,7 +714,7 @@ export default function HouseholdMember() {
 
                                     <select style={comboBoxStyle}
                                         className="form-select rounded"
-                                        onChange={(e) => { setEthnicity(e.target.value) }}>
+                                        onChange={(e) => { let newEdit = { ...ethnicity }; newEdit = e.target.value; setEthnicity(newEdit) }}>
                                         {ethnicityData.map((option) => (
                                             <option key={option.ethnicityKey} value={option.ethnicityKey}>{option.ethnicity}</option>
                                         ))}
@@ -736,7 +733,7 @@ export default function HouseholdMember() {
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
-                                    onChange={(e) => { setNationality(e.target.value) }}>
+                                    onChange={(e) => { let newEdit = { ...nationality }; newEdit = e.target.value; setNationality(newEdit) }}>
                                     {nationalityData.map((option) => (
                                         <option key={option.nationalityKey} value={option.nationalityKey}>{option.nationality}</option>
                                     ))}
@@ -754,7 +751,7 @@ export default function HouseholdMember() {
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
-                                    onChange={(e) => { setBelief(e.target.value) }}>
+                                    onChange={(e) => { let newEdit = { ...belief }; newEdit = e.target.value; setBelief(newEdit) }}>
                                     {beliefData.map((option) => (
                                         <option key={option.beliefKey} value={option.beliefKey}>{option.belief}</option>
                                     ))}
@@ -766,13 +763,13 @@ export default function HouseholdMember() {
                         <div>
 
                             <div className='mt-4  help-content border border-grey rounded' style={{ background: '#e4f5fb' }}>
-                                <p style={{ fontSize: '17px' }}><strong>What is your sexual orientation? *</strong></p>
+                                <p style={{ fontSize: '17px', margin: '3px' }}><strong>What is your sexual orientation? *</strong></p>
                             </div>
 
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
-                                    onChange={(e) => { setSexOrient(e.target.value) }}>
+                                    onChange={(e) => { let newEdit = { ...sexOrient }; newEdit = e.target.value; setSexOrient(newEdit) }}>
                                     {sexOrientData.map((option) => (
                                         <option key={option.sexOrientKey} value={option.sexOrientKey}>{option.sexOrient}</option>
                                     ))}
@@ -791,11 +788,11 @@ export default function HouseholdMember() {
                             <MDBRow>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='isShePregnantRadio' id='isShePregnantYes' label='Yes' htmlFor='isShePregnantYes' inline
-                                        value='yes' onChange={(e) => { setIsShePregnant(e.target.value); setShowDeliveryDate(true); }}></MDBRadio>     {/* setShowDeliveryDate will  show or hide according to the selection */}
+                                        value='yes' onChange={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); setShowDeliveryDate(true); }}></MDBRadio>     {/* setShowDeliveryDate will  show or hide according to the selection */}
                                 </MDBCol>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='isShePregnantRadio' id='isShePregnantNo' label='No' htmlFor='isShePregnantNo' inline
-                                        value='no' onChange={(e) => { setIsShePregnant(e.target.value); setShowDeliveryDate(false); }}></MDBRadio>     {/* setShowDeliveryDate will  show or hide according to the selection */}
+                                        value='no' onChange={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); setShowDeliveryDate(false); }}></MDBRadio>     {/* setShowDeliveryDate will  show or hide according to the selection */}
                                 </MDBCol>
                             </MDBRow>
                         </div>
@@ -821,14 +818,14 @@ export default function HouseholdMember() {
                                         <select style={datePickerStyle}
                                             className="form-select rounded"
                                             aria-label="Default select example"
-                                            onChange={(e) => { setDelDate(e.target.value) }}>
+                                            onChange={(e) => { let newEdit = { ...delDate }; newEdit = e.target.value; setDelDate(newEdit) }}>
                                             {datesData.map((option) => (
                                                 <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
                                             ))}
                                         </select>
                                         <select style={monthPickerStyle}
                                             className="form-select rounded"
-                                            onChange={(e) => { setDelMonth(e.target.value) }}>
+                                            onChange={(e) => { let newEdit = { ...delMonth }; newEdit = e.target.value; setDelMonth(newEdit) }}>
                                             {monthsData.map((option) => (
                                                 <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
                                             ))}
@@ -840,7 +837,7 @@ export default function HouseholdMember() {
                                             min={new Date().getFullYear()}
                                             max={new Date().getFullYear() + 1}
                                             placeholder='year'
-                                            onChange={(e) => { setDelYear(e.target.value) }}>
+                                            onChange={(e) => { let newEdit = { ...delYear }; newEdit = e.target.value; setDelYear(newEdit) }}>
                                         </input>
 
                                     </div>
@@ -852,12 +849,12 @@ export default function HouseholdMember() {
                         <div>
 
                             <div className='mt-4'>
-                                <p style={{ fontSize: '17px' }}><strong>Do you have any physical or mental health conditions or illnesses lasting or expected to last for 12 months or more? *</strong></p>
+                                <p style={{ fontSize: '17px' }}><strong>Does any physical or mental health conditions or illnesses lasting or expected to last for 12 months or more? *</strong></p>
                             </div>
 
                             <div className='mt-2' >
                                 <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
-                                    onChange={(e) => { setHealthCondition(e.target.value) }} >
+                                    onChange={(e) => { let newEdit = { ...healthCondition }; newEdit = e.target.value; setHealthCondition(newEdit) }} >
                                     <option defaultValue>Please Select</option>
                                     <option value="no">No</option>
                                     <option value="yes">Yes</option>
@@ -869,20 +866,20 @@ export default function HouseholdMember() {
                     </MDBCardBody>
                 </MDBCard>
 
-                {/**********  Eligibility */}
+                {/**********  Employment details*/}
                 <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
                     <MDBCardBody>
                         <div>
-                            <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} tag='h6'><strong>Employment details</strong></MDBTypography>
+                            <MDBTypography className='card-header'
+                                style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} tag='h6'>
+                                <strong>Employment details</strong>
+                            </MDBTypography>
                         </div>
-
-                        {/**********  Employment details*/}
-
-
                         <div className="mt-2 help-content border border-grey rounded" style={{ fontSize: '13px', width: 'auto', background: '#e4f5fb' }}>
 
                             <div className='p-2 mt-2'>
-                                <p style={{ fontSize: '17px' }}><strong>Does this household member have a writtern offer fof employment in Birmingham?*</strong></p>
+                                <p style={{ fontSize: '17px' }}>
+                                    <strong>Does this household member have a writtern offer or employment in Birmingham?*</strong></p>
                                 <div style={{ width: 'auto' }} className="mb-2 mt-2 help-content border border-grey rounded">
                                     <span className="far fa-question-circle help-icon"></span>
                                     <span className="help-text">
@@ -893,24 +890,25 @@ export default function HouseholdMember() {
                             <MDBRow className='px-2 mb-2'>
                                 <MDBCol className='col-3 mx-2 mb-2'>
                                     <MDBRadio name='areYouWorkerRadio' id='areYouWorkerYes' label='Yes' inline
-                                        value='yes' onChange={(e) => { setAreYouWorker(e.target.value) }} />
+                                        value='yes' onChange={(e) => { let newEdit = { ...areYouWorker }; newEdit = e.target.value; setAreYouWorker(newEdit) }} />
                                 </MDBCol>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='areYouWorkerRadio' id='areYouWorkerNo' label='No' inline
-                                        value='no' onChange={(e) => { setAreYouWorker(e.target.value) }} />
+                                        value='no' onChange={(e) => { let newEdit = { ...areYouWorker }; newEdit = e.target.value; setAreYouWorker(newEdit) }} />
                                 </MDBCol>
                             </MDBRow>
                         </div>
-                        <form className='d-flex w-auto mt-3'>
-                            <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
-                                onClick={saveJointMember} >
-                                Save Household Member</MDBBtn>
-                            <MDBBtn className='me-1 btn btn-outline-secondary' style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='white'
-                                onClick={cancelEntry}>
-                                Cancel</MDBBtn>
-                        </form>
                     </MDBCardBody>
                 </MDBCard>
+                <form className='d-flex w-auto mt-4'>
+                    <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
+                        onClick={saveJointMember} >
+                        Save Household Member</MDBBtn>
+                    <MDBBtn className='me-1 btn btn-outline-secondary' style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='white'
+                        onClick={cancelEntry}>
+                        Cancel</MDBBtn>
+                </form>
+
             </MDBContainer>
         </React.Fragment >
     );

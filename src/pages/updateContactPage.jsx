@@ -3,7 +3,7 @@ import {
     MDBRow, MDBCol
 } from 'mdb-react-ui-kit';
 
-import { ValidNINO } from '../validations/Validator';
+import { validNINO } from '../validations/Validator';
 import AccountRight from '../components/accountRight';
 import Navbar from '../components/Navbar';
 import NavbarSecondary from '../components/NavbarSecondary';
@@ -24,8 +24,8 @@ export default function UpdateContactPage() {
 
         e.preventDefault();
 
-        setNINOPrimaryErr(ValidNINO(ninoPrimary));
-        setNINOJointErr(ValidNINO(ninoJoint));
+        setNINOPrimaryErr(validNINO(ninoPrimary));
+        setNINOJointErr(validNINO(ninoJoint));
 
         console.log(`Primary NINO is ${ninoPrimary} error is ${ninoPrimaryErr}, joint NINO is ${ninoJoint} error is ${ninoJointErr}`)
     }

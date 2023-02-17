@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 import {
     MDBIcon,
@@ -8,26 +9,55 @@ import {
     MDBBtn
 } from 'mdb-react-ui-kit';
 
-import { ValidNINO } from '../validations/Validator';
+import { validNINO } from '../validations/Validator';
 
 export default function NINOCheck() {
+
+    const ninoCheckUrl = "http://localhost:9001/client/clientnino/"
 
     const navigate = useNavigate();
 
     const inputStyle = { width: '250px' };
     const [ninoPrimary, setNINOPrimary] = useState("");
 
-    const Continue_ = (e) => {
+    useEffect(() => {
+
+    }, [])
+
+    const Continue_ = async (e) => {
 
         e.preventDefault();
-        const validateNino = (ValidNINO(ninoPrimary));  // validate nino
-        console.log(`Primary NINO is ${ninoPrimary} and validator return ${validateNino}`)
+        try {
 
-        if(validateNino) {
+            const validateNino = (validNINO(ninoPrimary));  // validate nino
+            console.log(`Primary NINO is ${ninoPrimary} and validator return ${validateNino}`)
 
-            navigate('/primary', { state: { nino: ninoPrimary } });
+            console.log(`${ninoCheckUrl + ninoPrimary} In fetch data`)
+            const ninoData = await axios.get(ninoCheckUrl + ninoPrimary, {})
+            console.log(ninoData.data.message)
+            const result = ninoData.data.message
+
+            // check nino exist and valid nino number entered
+            if ((result === "NINO not registerd") && validateNino) {
+
+                navigate('/primary', { state: { nino: ninoPrimary } });
+
+            } else if ((result === "NINO registerd") && validateNino) {
+
+                alert(`National Insurance number already registered. \nPlease login to view your status`);
+                navigate('/login');
+                
+            } else {
+
+                alert(`Please verify your National Insurance Number and try again. \n${ninoPrimary.toUpperCase()}`);
+            }
+
+        } catch (error) {
+            alert("Unable to proceed on your request")
+            console.log(`Unable to proceed on your request:- ${error}`)
         }
     }
+
     return (
         <React.Fragment>
             <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
@@ -48,7 +78,7 @@ export default function NINOCheck() {
                                 minLength={9}
                                 maxLength={9}
                                 value={ninoPrimary}
-                                onChange={(e) => { setNINOPrimary(e.target.value) }}></input>
+                                onChange={(e) => { { let newEdit = { ...ninoPrimary }; newEdit = e.target.value; setNINOPrimary(newEdit) } }}></input>
                         </div>
 
                         <form className='d-flex input-group w-auto mt-5'>

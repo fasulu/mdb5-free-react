@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
 import { dates, months } from '../resources/datePicker';
-import { validEmail, validName, validPostcode, validNumber, emailMatch, ValidNINO } from '../validations/Validator.jsx';
+import { validEmail, validName, validPostcode, validNumber, emailMatch, validNINO } from '../validations/Validator.jsx';
 
 import {
     MDBContainer,
