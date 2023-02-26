@@ -36,12 +36,14 @@ export default function HouseholdMember() {
     const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const yearPickerStyle = { width: '80px', float: 'left', border: '5' };
-
+    
     const [showAddress, setShowAddress] = useState(false);
     const [showLocalAuthority, setShowLocalAuthority] = useState(false);
-
+    
+    const [partnerAddress, setPartnerAddress] = useState("Need to fill dynamically")
+    
     const [relationWithPrimaryApplicant, setRelationWithPrimaryApplicant] = useState("");
-    const [assessmentPurposeOnly, setAssessmentPurposeOnly] = useState("yes");
+    const [assessmentPurposeOnly, setAssessmentPurposeOnly] = useState("no");
     const [title, setTitle] = useState("");
     const [fName, setFName] = useState("");
     const [mName, setMName] = useState("");
@@ -53,35 +55,42 @@ export default function HouseholdMember() {
     const [dobMonth, setDOBMonth] = useState("");
     const [dobYear, setDOBYear] = useState("");
     const [sex, setSex] = useState("");
-    const [isSpouseOfAnotherMember, setIsSpouseOfAnotherMember] = useState("no");
-    const [spouseAnotherMember, setSpouseAnotherMember] = useState(false);
-    const [spouseAnotherMemberName, SetSpouseAnotherMemberName] = useState("");
-    const [partnerAddress, setPartnerAddress] = useState("Need to fill dynamically")
-    const [placedByLocalAuthrty, setPlacedByLocalAuthrty] = useState("");
-    const [localAuthrtyName, setLocalAuthrtyName] = useState("");
-    const [currentAddress, setCurrentAddress] = useState("");
-    const [isShePregnant, setIsShePregnant] = useState("no");
-    const [showDeliveryDate, setShowDeliveryDate] = useState(false);
-    const [deliveryDate, setDeliveryDate] = useState("");
-    const [delDate, setDelDate] = useState("");
-    const [delMonth, setDelMonth] = useState("");
-    const [delYear, setDelYear] = useState("");
+
+    const [currentlyLiveWithYou, setCurrentlyLiveWithYou] = useState("no");
     const [movedInDate, setMovedInDate] = useState("");
     const [movedDate, setMovedDate] = useState("");
     const [movedMonth, setMovedMonth] = useState("");
     const [movedYear, setMovedYear] = useState("");
-    const [currentlyLiveWithYou, setCurrentlyLiveWithYou] = useState("yes");
+    const [currentAddress, setCurrentAddress] = useState("");
+
+    const [isShePregnant, setIsShePregnant] = useState("no");
+    const [spouseAnotherMemberName, SetSpouseAnotherMemberName] = useState("");
+    const [deliveryDate, setDeliveryDate] = useState("");
+    const [delDate, setDelDate] = useState("");
+    const [delMonth, setDelMonth] = useState("");
+    const [delYear, setDelYear] = useState("");
+
+    const [placedByLocalAuthrty, setPlacedByLocalAuthrty] = useState("");
+    const [localAuthrtyName, setLocalAuthrtyName] = useState("");
+
+    const [isSpouseOfAnotherMember, setIsSpouseOfAnotherMember] = useState("no");
+    const [spouseAnotherMember, setSpouseAnotherMember] = useState(false);
+    const [showDeliveryDate, setShowDeliveryDate] = useState(false);
+
     const [telephone, setTelephone] = useState("");
     const [mobile, setMobile] = useState("");
     const [workPhone, setWorkPhone] = useState("");
     const [email, setEmail] = useState("");
     const [reEnterEmail, setReEnterEmail] = useState("");
+
     const [ethnicity, setEthnicity] = useState("");
     const [nationality, setNationality] = useState("");
     const [sexOrient, setSexOrient] = useState("");
     const [belief, setBelief] = useState("");
     const [healthCondition, setHealthCondition] = useState("no");
+
     const [areYouWorker, setAreYouWorker] = useState("no");
+    const [comments, setComments] = useState("");
 
     useEffect(() => {
 
@@ -202,7 +211,7 @@ export default function HouseholdMember() {
                                 </MDBCol>
                                 <MDBCol className='col-3'>
 
-                                    <MDBRadio name='assessmentPurposeOnlyRadio' value='no' label='No' inline id='assessmentPurposeOnlyNo' htmlFor='assessmentPurposeOnlyNo'
+                                    <MDBRadio name='assessmentPurposeOnlyRadio' value='no' label='No' defaultChecked inline id='assessmentPurposeOnlyNo' htmlFor='assessmentPurposeOnlyNo'
                                         onChange={(e) => { let newEdit = { ...assessmentPurposeOnly }; newEdit = e.target.value; setAssessmentPurposeOnly(newEdit) }}></MDBRadio>
                                 </MDBCol>
                             </MDBRow>
@@ -427,7 +436,7 @@ export default function HouseholdMember() {
                                         value='yes' onChange={(e) => { let newEdit = { ...placedByLocalAuthrty }; newEdit = e.target.value; setPlacedByLocalAuthrty(newEdit); setShowLocalAuthority(true); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
                                 </MDBCol>
                                 <MDBCol className='col-3'>
-                                    <MDBRadio name='placedByLocalAuthrtyRadio' id='placedByLocalAuthrtyNo' label='No' htmlFor='placedByLocalAuthrtyNo' inline
+                                    <MDBRadio name='placedByLocalAuthrtyRadio' id='placedByLocalAuthrtyNo' label='No' defaultChecked htmlFor='placedByLocalAuthrtyNo' inline
                                         value='no' onChange={(e) => { let newEdit = { ...placedByLocalAuthrty }; newEdit = e.target.value; setPlacedByLocalAuthrty(newEdit); setShowLocalAuthority(false); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
                                 </MDBCol>
                             </MDBRow>
@@ -783,7 +792,7 @@ export default function HouseholdMember() {
                             <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Is this household member is pregnant?*</strong></p>
                             <span className="far fa-question-circle help-icon"></span>
                             <span className="help-text">
-                                <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">You will need to let us know when the bay is born by providing a full copy of the birth certificate.</span>
+                                <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">You will need to let us know when the baby is born by providing a full copy of the birth certificate.</span>
                             </span>
                             <MDBRow>
                                 <MDBCol className='col-3'>
@@ -791,7 +800,7 @@ export default function HouseholdMember() {
                                         value='yes' onChange={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); setShowDeliveryDate(true); }}></MDBRadio>     {/* setShowDeliveryDate will  show or hide according to the selection */}
                                 </MDBCol>
                                 <MDBCol className='col-3'>
-                                    <MDBRadio name='isShePregnantRadio' id='isShePregnantNo' label='No' htmlFor='isShePregnantNo' inline
+                                    <MDBRadio name='isShePregnantRadio' id='isShePregnantNo' label='No' defaultChecked htmlFor='isShePregnantNo' inline
                                         value='no' onChange={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); setShowDeliveryDate(false); }}></MDBRadio>     {/* setShowDeliveryDate will  show or hide according to the selection */}
                                 </MDBCol>
                             </MDBRow>
@@ -893,12 +902,30 @@ export default function HouseholdMember() {
                                         value='yes' onChange={(e) => { let newEdit = { ...areYouWorker }; newEdit = e.target.value; setAreYouWorker(newEdit) }} />
                                 </MDBCol>
                                 <MDBCol className='col-3'>
-                                    <MDBRadio name='areYouWorkerRadio' id='areYouWorkerNo' label='No' inline
+                                    <MDBRadio name='areYouWorkerRadio' id='areYouWorkerNo' label='No' inline defaultChecked
                                         value='no' onChange={(e) => { let newEdit = { ...areYouWorker }; newEdit = e.target.value; setAreYouWorker(newEdit) }} />
                                 </MDBCol>
                             </MDBRow>
                         </div>
                     </MDBCardBody>
+                </MDBCard>
+
+                {/**********  Any comments or additional information */}
+                <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
+                    <MDBCardBody>
+                        <p className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Any other comments or additional information</strong></p>
+                        <div className='mt-4' >
+                            <MDBRow>
+                                <MDBCol >
+                                    <textarea style={{ width: '250px', height: '350px' }} className='form-control' type='text'
+                                        maxLength={250} onChange={(e) => { let newEdit = { ...comments }; newEdit = e.target.value; setComments(newEdit) }} />
+                                </MDBCol>
+                            </MDBRow>
+                        </div>
+                    </MDBCardBody>
+                </MDBCard>
+
+                <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
                 </MDBCard>
                 <form className='d-flex w-auto mt-4'>
                     <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
@@ -908,6 +935,8 @@ export default function HouseholdMember() {
                         onClick={cancelEntry}>
                         Cancel</MDBBtn>
                 </form>
+                <MDBCardBody>
+                </MDBCardBody>
 
             </MDBContainer>
         </React.Fragment >

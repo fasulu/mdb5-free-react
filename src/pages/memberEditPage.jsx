@@ -42,10 +42,10 @@ export default function MemberEditPage() {
             <NavbarSecondary />
             <MDBRow className='my-3 justify-content-center' alignment='center' bgcolor='#f7f2f287'>
                 <MDBTypography className='card-header' style={{ fontSize: '16px' }} ><strong>Edit Member</strong></MDBTypography>
-                <MDBCol md='6'>
+                <MDBCol md='8'>
                     <MemberEdit></MemberEdit>
                 </MDBCol>
-                <MDBCol className='col-lg-4 col-md-4 col-sm-4'>
+                <MDBCol className='col-lg-3 col-md-3 col-sm-3'>
                     <AccountRight></AccountRight>
                 </MDBCol>
             </MDBRow>

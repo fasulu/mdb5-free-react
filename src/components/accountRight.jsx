@@ -70,7 +70,7 @@ const AccountRight = (props) => {
                     <MDBRow >
                         <MDBCol>
                             <MDBBtn style={styleBtn} color='tertiary'
-                            onClick={gotoMembersList} > My Household Members </MDBBtn>
+                            onClick={gotoMembersList} > My Members </MDBBtn>
                         </MDBCol>
                     </MDBRow>
                     <MDBRow >

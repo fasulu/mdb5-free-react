@@ -1,15 +1,5 @@
+import moment from 'moment/moment';
 
-function validPwd(password) {
-  let pwdLength = password.replace(/\s+/g, "").length;
-  let patternP = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
-  let validPwd = password.match(patternP);
-
-  if ((pwdLength < 8 || pwdLength > 10) || !validPwd) {
-    return false;
-  } else {
-    return true;
-  }
-};
 
 function validEmail(email) {
   let patternE = /[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$/;
@@ -47,7 +37,7 @@ function validName(name) {
 function validMName(name) {
   let patternN = /^[a-zA-Z- ]*$/; // /^[a-zA-Z]+$/
   let validName = name.match(patternN);
-
+  
   if (!validName) {
     return false;
   } else {
@@ -80,7 +70,7 @@ function validAddress(address) {
 function validNINO(nino) {
   let patternNino = '^[a-zA-Z]{2}[0-9]{6}[a-zA-Z]{1}$';
   let resultNino = nino.match(patternNino);
-
+  
   if (resultNino) {
     return true;
   } else {
@@ -98,6 +88,18 @@ function emailMatch(email, reEnterEmail) {
   }
 };
 
+function validPwd(password) {
+  let pwdLength = password.replace(/\s+/g, "").length;
+  let patternP = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
+  let validPwd = password.match(patternP);
+
+  if ((pwdLength < 8 || pwdLength > 10) || !validPwd) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
 function pwdMatch(pwd, repwd) {
   if ((pwd !== repwd) || (pwd === "") || (repwd === "")) {
     console.log('Error:- Passwords are not same');
@@ -108,22 +110,37 @@ function pwdMatch(pwd, repwd) {
   }
 };
 
-function memDateMatch(memDate, reMemDate) {
-  if ((memDate !== reMemDate) || (memDate === "") || (reMemDate === "")) {
+function memDateMatch(date1, date2) {
+
+  if (date1 !== date2) {
     console.log('Error:- Memorable dates are not same');
     return false
   } else {
-    console.log('Memorable dates are same')
+    console.log('Memorable dates are same');
     return true
   }
 };
 
-function ToCamelCase (props) {
-  return props.replace(/\b(\w)/g, s => s.toUpperCase());  
+function validDate(date_) {
+  // let memDatePattern = '^(?:(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])|(3[01]|[12][0-9]|0[1-9])/(1[0-2]|0[1-9]))/[0-9]{4}$';
+  // let resultMemDate = memDate.match(memDatePattern);
+  let result = moment(date_, "MM/DD/YYYY").isValid()
+  console.log(result)
+  if (!result) {
+    console.log('Error:- Not a valid date');
+    return false
+  } else {
+    console.log('Valid date')
+    return true
+  }
+};
+
+function ToCamelCase(props) {
+  return props.replace(/\b(\w)/g, s => s.toUpperCase());
 }
 export {
-  ToCamelCase, 
-  validNINO, 
+  ToCamelCase,
+  validNINO,
   validPwd,
   validEmail,
   validPostcode,
@@ -133,5 +150,6 @@ export {
   validAddress,
   emailMatch,
   pwdMatch,
-  memDateMatch
+  memDateMatch,
+  validDate
 }

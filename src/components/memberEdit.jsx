@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigation } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { dates, months } from '../resources/datePicker';
+import { testData } from '../resources/testData';
+import { validEmail, validNumber, validDate } from '../validations/Validator';
 
 import {
     MDBCard,
@@ -13,7 +15,7 @@ import {
     MDBCol,
 } from 'mdb-react-ui-kit';
 
-import ToCamelCase from '../validations/Validator'
+import { ToCamelCase } from '../validations/Validator'
 
 export default function MemberEdit() {
 
@@ -27,7 +29,12 @@ export default function MemberEdit() {
     const yearMax = new Date().getFullYear();        // year picker up to current year
     const yearMin = new Date().getFullYear() - 120;  // year picker 120 year back from current year
 
-    const inputStyle = { fontSize: '14px', width: '250px', color: 'black' };
+    const labelStyle = { maxHeight: 'auto', fontSize: '16px', width: 'auto', color: '#4f4f4f' };
+    const inputStyle = { maxHeight: 'auto', fontSize: '16px', minwidth: '250px', color: 'black' };
+    const commentStyle = { minHeight: '150px', fontSize: '16px', minWidth: '250px', color: 'black' };
+    const memberStyle = { paddingLeft: '10px', color: 'black', };
+    const headerStyle = { fontSize: '17px', backgroundColor: '#e3f6fd' };
+    const btnSytle = { fontSize: '16px', width: 'auto', textTransform: 'none', marginRight: '10px' };
 
     const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
@@ -35,215 +42,379 @@ export default function MemberEdit() {
 
     const [primaryApplicantID, setPrimaryApplicantID] = useState("asd34dfsg324fdg65hgj");
     const [householdMemberID, setHouseholdMemberID] = useState(memberid);
-    const [relationWithPrimaryApplicant, setRelationWithPrimaryApplicant] = useState("Wife")
+    const [relationship, setRelationship] = useState("wife")
     const [title, setTitle] = useState("Mrs");
     const [fName, setFName] = useState("Prity");
     const [mName, setMName] = useState("");
     const [sName, setSName] = useState("Patel");
     const [nINO, setNINO] = useState("WF123456A");
-    let tempDOB = "10/25/1975"
-    tempDOB = tempDOB.split('/')[1] + '/' + tempDOB.split('/')[0] + '/' + tempDOB.split('/')[2]
+    let tempDOB = "10/25/1975"; tempDOB = tempDOB.split('/')[1] + '/' + tempDOB.split('/')[0] + '/' + tempDOB.split('/')[2]
     const [dateofbirth, setdateofbirth] = useState(tempDOB);
-    const [movedDate, setMovedDate] = useState("10/20/2021");
-    const [movedInDate, setMovedInDate] = useState("");
-    const [movedInMonth, setMovedInMonth] = useState("");
-    const [movedInYear, setMovedInYear] = useState("");
+    let tempMovedDate = "12/20/2019";
+    const [movedDate, setMovedDate] = useState(tempMovedDate);
+    const [movedInDate, setMovedInDate] = useState(tempMovedDate.split('/')[1]);
+    const [movedInMonth, setMovedInMonth] = useState(tempMovedDate.split('/')[0]);
+    const [movedInYear, setMovedInYear] = useState(tempMovedDate.split('/')[2]);
     const [currentlyLiveWithYou, setCurrentlyLiveWithYou] = useState("yes");
+
+    const [currentAddress, setCurrentAddress] = useState("with primary applicant");
+
+    const [isShePregnant, setIsShePregnant] = useState("yes");
+    const [nameofSpouse, setNameofSpouse] = useState("tempo");
+    let tempDelDate = "11/30/2023";
+    const [deliveryDate, setDeliveryDate] = useState(tempDelDate);
+    const [delDate, setDelDate] = useState(tempDelDate.split('/')[1]);
+    const [delMonth, setDelMonth] = useState(tempDelDate.split('/')[0]);
+    const [delYear, setDelYear] = useState(tempDelDate.split('/')[2]);
+    const [telephone, setTelephone] = useState("02014526325");
+    const [workPhone, setWorkPhone] = useState("01245874956");
+    const [mobile, setMobile] = useState("07865248965");
+    const [email, setEmail] = useState("msn@msn.com");
+    const [areYouWorker, setAreYouWorker] = useState("no");
     const [healthCondition, setHealthCondition] = useState("no");
+    const [comments, setComments] = useState("none");
 
     const gotoAccountPage = (e) => {
         navigate('/account');
-
     }
 
     const saveJointMember = (e) => {
         e.preventDefault();
-        setMovedDate(movedInMonth + '/' + movedInDate + '/'+ movedInYear);
-        console.log(`Ready to save ${movedDate} ${currentlyLiveWithYou} ${healthCondition}`);
-    }
 
+        const moved = movedInMonth + '/' + movedInDate + '/' + movedInYear;
+        setMovedDate(moved);
+        const delvy = delMonth + '/' + delDate + '/' + delYear;
+        setDeliveryDate(delvy);
+
+        const deliveryErr = validDate(delvy);
+        const moveDateErr = validDate(moved);
+        const emailErr = validEmail(email);
+        const telephoneErr = validNumber(telephone);
+        const workphoneErr = validNumber(workPhone);
+        const mobileErr = validNumber(mobile);
+
+        console.log(`Validation result is  email ${emailErr}, 
+        home telephone ${telephoneErr}, work telephone ${workphoneErr}, 
+        mobile ${mobileErr}, delivery ${deliveryErr}, moveDate ${moveDateErr}`)
+
+        if ((!deliveryErr) || (!moveDateErr) || (!emailErr) || (!telephoneErr) || (!workphoneErr) || (!mobileErr)) {
+
+            !deliveryErr && alert('Delivery date error');
+            !moveDateErr && alert('Moved In date error');
+            !emailErr && alert('Email error');
+            !telephoneErr && alert('Home telephone number error');
+            !workphoneErr && alert('Work telephone number error');
+            !mobileErr && alert('Mobile number error');
+
+        } else {
+            console.log('FINAL Result passed', healthCondition, currentlyLiveWithYou, currentAddress,
+                movedDate, areYouWorker, isShePregnant, deliveryDate, nameofSpouse, telephone,
+                mobile, workPhone, email, comments);
+        }
+    }
     return (
         <React.Fragment>
 
-            <h5>{householdMemberID}</h5>
             <MDBCard className='w-100 mx-auto' style={{ backgroundColor: '#f7f2f287' }} >
-                <p style={{ fontSize: '17px' }}><strong>Edit Member</strong></p>
 
-                {/* ********** Household member relationship  */}
-
-                <MDBCardBody >
-                    <div >
-                        <MDBTypography className='card-header' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
-                            <strong>Main Details</strong>
+                <MDBCardBody className='p-1' >
+                    <MDBRow alignment='center'>
+                        <MDBTypography className='card-header mb-4' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
+                            <strong>Edit Member Details</strong>
                         </MDBTypography>
-                        <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Relationship to primary applicant *</strong></p>
-                        <input style={inputStyle} className='form-control' type='text'
-                            value={relationWithPrimaryApplicant} readOnly >
-                        </input>
+                        <MDBRow>
+                            <MDBCol className='col-lg-4 col-md-4 col-sm-6 col-xs-6'>
+                                <MDBTypography style={labelStyle}>Full Name: <strong style={memberStyle}>{fName.toUpperCase() + " " + mName.toUpperCase() + " " + sName.toUpperCase()}</strong></MDBTypography>
+
+                            </MDBCol>
+                            <MDBCol className='col-lg-3 col-md-4 col-sm-6 col-xs-6'>
+                                <MDBTypography style={labelStyle}>NINO:  <strong style={memberStyle}>{nINO.toUpperCase()}</strong></MDBTypography>
+
+                            </MDBCol>
+                            <MDBCol className='col-lg-3 col-md-2 col-sm-6 col-xs-6'>
+                                <MDBTypography style={labelStyle}>DOB: <strong style={memberStyle}>{dateofbirth.toUpperCase()}</strong></MDBTypography>
+
+                            </MDBCol>
+                            <MDBCol className='col-lg-2 col-md-2 col-sm-6 col-xs-6'>
+                                <MDBTypography style={labelStyle}>Relation:  <strong style={memberStyle}>{relationship.toUpperCase()}</strong></MDBTypography>
+                            </MDBCol>
+                        </MDBRow>
+                    </MDBRow>
+
+                    <hr style={{ height: '4px' }}></hr>
+
+                    <MDBTypography className='card-header mb-2'
+                        style={headerStyle} >
+                        <strong>Does this member have any physical or mental health conditions or illnesses lasting or expected to last for 12 months or more?</strong>
+                    </MDBTypography>
+                    <div className='px-4 mb-2' >
+                        <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
+                            onChange={(e) => { let newEdit = { ...healthCondition }; newEdit = e.target.value; setHealthCondition(newEdit) }} >
+                            <option >{healthCondition}</option>
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                            <option value="prefer not to say">Prefer not to say</option>
+                        </select>
                     </div>
 
-                    {/* ********** First name  */}
-                    <div>
-                        <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Title</strong></p>
-                        <div className='mb-4' >
-                            <input style={inputStyle} className='form-control' type='text' placeholder='First name...'
-                                maxLength={20} value={title} readOnly ></input>
-                        </div>
-                    </div>
-
-                    {/* ********** First name  */}
-                    <div>
-                        <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>First name(s)</strong></p>
-                        <div className='mb-4' >
-                            <input style={inputStyle} className='form-control' type='text' placeholder='First name...'
-                                maxLength={20} value={fName} readOnly ></input>
-                        </div>
-                    </div>
-
-                    {/* ********** Middle name  */}
-                    <div>
-
-                        <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Middle name(s)</strong></p>
-
-                        <div className='mb-4' >
-                            <input style={inputStyle} className='form-control' type='text' placeholder='Middle name...'
-                                maxLength={20} value={mName} readOnly ></input>
-                        </div>
-                    </div>
-
-                    {/* ********** Surname  */}
-                    <div>
-
-                        <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Surname</strong></p>
-
-                        <div className='mb-4' >
-                            <input style={inputStyle} className='form-control' type='text' placeholder='Surname...'
-                                maxLength={20} value={sName} readOnly ></input>
-                        </div>
-
-                    </div>
-
-                    {/* ********** NINO   */}
-                    <div>
-                        <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>NINO</strong></p>
-                        <div className='mb-4' >
-                            <input style={inputStyle} className='form-control' type='text'
-                                maxLength={9} value={nINO} readOnly ></input>
-                        </div>
-                    </div>
-
-                    {/* *********** Date of Birth  */}
-                    <div>
-                        <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Date of birth</strong></p>
-
-                        <div >
-                            <input style={inputStyle} className='form-control' type='text'
-                                maxLength={9} value={dateofbirth} readOnly ></input>
-                        </div>
-                    </div>
-                </MDBCardBody>
-            </MDBCard>
-
-            {/* ********** Does you this household member currently live with you?  */}
-
-            <MDBCard className='mt-4 mb-2' style={{ backgroundColor: '#f7f2f287' }}>
-                <MDBCardBody>
-                    <div className='mb-2'>
-                        <MDBTypography className='card-header'
-                            style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
-                            <strong>Does this household member currently live with you?</strong>
-                        </MDBTypography>
-                    </div>
-                    <div >
+                    <MDBTypography className='card-header mb-2'
+                        style={headerStyle} >
+                        <strong>Does this member currently live with you?</strong>
+                    </MDBTypography>
+                    <div className='px-4 mb-2' >
                         <MDBRow>
                             <MDBCol className='col-3'>
                                 <MDBRadio name='currentlyLiveWithYouRadio' label='Yes' value='yes'
                                     inline id='currentlyLiveWithYouYes' htmlFor="currentlyLiveWithYouYes"
-                                    onClick={(e) => { setCurrentlyLiveWithYou(e.target.value) }}></MDBRadio>
+                                    onClick={(e) => { let newEdit = { ...currentlyLiveWithYou }; newEdit = e.target.value; setCurrentlyLiveWithYou(newEdit) }}></MDBRadio>
                             </MDBCol>
 
                             <MDBCol className='col-3'>
                                 <MDBRadio name='currentlyLiveWithYouRadio' label='No' value='no'
                                     inline id='currentlyLiveWithYouNo' htmlFor='currentlyLiveWithYouNo'
-                                    onClick={(e) => { setCurrentlyLiveWithYou(e.target.value) }}></MDBRadio>
+                                    onClick={(e) => { let newEdit = { ...currentlyLiveWithYou }; newEdit = e.target.value; setCurrentlyLiveWithYou(newEdit) }}></MDBRadio>
                             </MDBCol>
                         </MDBRow>
                     </div>
 
-                    {/* *********** When moved to this address  */}
-
-                    <div className='mt-4'>
-                        <p style={{ fontSize: '16px' }}><strong>Date moved into this address?</strong></p>
-
-                        <div className='mt-1'>
-                            <div className='btn-group' >
-                                <select style={datePickerStyle}
-                                    className="form-select rounded"
-                                    onChange={(e) => { setMovedInDate(e.target.value) }} >
-                                    {datesData.map((option) => (
-                                        <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
-                                    ))}
-                                </select>
-
-                                <select style={monthPickerStyle}
-                                    className="form-select rounded"
-                                    onChange={(e) => { setMovedInMonth(e.target.value) }} >
-                                    {monthsData.map((option) => (
-                                        <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
-                                    ))}
-                                </select>
-
-                                <input className='form-control rounded'
-                                    style={yearPickerStyle}
-                                    type='number'
-                                    min={yearMin + 70}
-                                    max={yearMax}
-                                    placeholder='year'
-                                    onChange={(e) => { setMovedInYear(e.target.value) }} >
-                                </input>
-                            </div>
-                        </div>
+                    <MDBTypography className='card-header mb-2'
+                        style={headerStyle} >
+                        <strong>Current address</strong>
+                    </MDBTypography>
+                    <div className='px-4 mb-2' >
+                        <MDBRow>
+                            <MDBCol className='col-8'>
+                                <div  >
+                                    <input style={inputStyle} className='form-control' type='text' placeholder='Spouse name...'
+                                        maxLength={20} value={currentAddress}
+                                        onChange={(e) => { let newEdit = { ...currentAddress }; newEdit = e.target.value; setCurrentAddress(newEdit) }}></input>
+                                </div>
+                            </MDBCol>
+                        </MDBRow>
                     </div>
-                </MDBCardBody>
-            </MDBCard>
 
-            {/**********  Health condition */}
-
-            <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
-                <MDBCardBody>
-                    <div>
-                        <div className='mt-4'>
-                            <p style={{ fontSize: '17px' }}><strong>Does this have any physical or mental health conditions or illnesses lasting or expected to last for 12 months or more? *</strong></p>
-                        </div>
-                        <div className='mt-2' >
-                            <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
-                                onChange={(e) => { setHealthCondition(e.target.value) }} >
-                                <option >{healthCondition}</option>
-                                <option value="no">No</option>
-                                <option value="yes">Yes</option>
-                                <option value="prefer not to say">Prefer not to say</option>
+                    <MDBTypography className='card-header mb-2'
+                        style={headerStyle} >
+                        <strong>Date moved into this address?</strong>
+                    </MDBTypography>
+                    <div className='px-4 mb-2' >
+                        <div className='btn-group' >
+                            <select style={datePickerStyle}
+                                className="form-select rounded"
+                                value={movedInDate}
+                                onChange={(e) => { let newEdit = { ...movedInDate }; newEdit = e.target.value; setMovedInDate(newEdit) }} >
+                                {datesData.map((option) => (
+                                    <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
+                                ))}
                             </select>
+
+                            <select style={monthPickerStyle}
+                                className="form-select rounded"
+                                value={movedInMonth}
+                                onChange={(e) => { let newEdit = { ...movedInMonth }; newEdit = e.target.value; setMovedInMonth(newEdit) }} >
+                                {monthsData.map((option) => (
+                                    <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
+                                ))}
+                            </select>
+
+                            <input className='form-control rounded'
+                                style={yearPickerStyle}
+                                type='number'
+                                min={yearMin + 70}
+                                max={yearMax}
+                                placeholder='year'
+                                value={movedInYear}
+                                onChange={(e) => { let newEdit = { ...movedInYear }; newEdit = e.target.value; setMovedInYear(newEdit) }} >
+                            </input>
                         </div>
                     </div>
-                </MDBCardBody>
-            </MDBCard>
 
-            {/**********  Confirmat and save */}
+                    <MDBTypography className='card-header mb-2'
+                        style={headerStyle} >
+                        <strong>Does this member work?</strong>
+                    </MDBTypography>
+                    <div className='px-4 mb-2' >
+                        <MDBRow>
+                            <MDBCol className='col-3'>
+                                <MDBRadio name='currentlyLiveWithYouRadio' label='Yes' value='yes'
+                                    inline id='currentlyLiveWithYouYes' htmlFor="currentlyLiveWithYouYes"
+                                    onClick={(e) => { let newEdit = { ...areYouWorker }; newEdit = e.target.value; setAreYouWorker(newEdit) }}></MDBRadio>
+                            </MDBCol>
 
-            <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
-                <MDBCardBody>
-                    <form className='d-flex w-auto mt-3'>
-                        <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }}
-                            color='success me-1' onClick={saveJointMember} >
+                            <MDBCol className='col-3'>
+                                <MDBRadio name='currentlyLiveWithYouRadio' label='No' value='no'
+                                    inline id='currentlyLiveWithYouNo' htmlFor='currentlyLiveWithYouNo'
+                                    onClick={(e) => { let newEdit = { ...areYouWorker }; newEdit = e.target.value; setAreYouWorker(newEdit) }}></MDBRadio>
+                            </MDBCol>
+                        </MDBRow>
+                    </div>
+
+                    <MDBTypography className='card-header mb-2'
+                        style={headerStyle} >
+                        <strong>Is she pregnant?</strong>
+                    </MDBTypography>
+                    <div className='px-4 mb-2' >
+                        <MDBRow>
+                            <MDBCol className='col-3'>
+                                <MDBRadio name='currentlyLiveWithYouRadio' label='Yes' value='yes'
+                                    inline id='currentlyLiveWithYouYes' htmlFor="currentlyLiveWithYouYes"
+                                    onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit) }}></MDBRadio>
+                            </MDBCol>
+
+                            <MDBCol className='col-3'>
+                                <MDBRadio name='currentlyLiveWithYouRadio' label='No' value='no'
+                                    inline id='currentlyLiveWithYouNo' htmlFor='currentlyLiveWithYouNo'
+                                    onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit) }}></MDBRadio>
+                            </MDBCol>
+                        </MDBRow>
+                    </div>
+
+                    <MDBTypography className='card-header mb-2'
+                        style={headerStyle} >
+                        <strong>Delivery date</strong>
+                    </MDBTypography>
+                    <div className='px-4 mb-2' >
+                        <div className='btn-group' >
+                            <select style={datePickerStyle}
+                                className="form-select rounded"
+                                value={delDate}
+                                onChange={(e) => { let newEdit = { ...delDate }; newEdit = e.target.value; setDelDate(newEdit) }} >
+                                {datesData.map((option) => (
+                                    <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
+                                ))}
+                            </select>
+
+                            <select style={monthPickerStyle}
+                                className="form-select rounded"
+                                value={delMonth}
+                                onChange={(e) => { let newEdit = { ...delMonth }; newEdit = e.target.value; setDelMonth(newEdit) }} >
+                                {monthsData.map((option) => (
+                                    <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
+                                ))}
+                            </select>
+
+                            <input className='form-control rounded'
+                                style={yearPickerStyle}
+                                type='number'
+                                min={yearMin + 70}
+                                max={yearMax}
+                                placeholder='year'
+                                value={delYear}
+                                onChange={(e) => { let newEdit = { ...delYear }; newEdit = e.target.value; setDelYear(newEdit) }} >
+                            </input>
+                        </div>
+                    </div>
+
+                    <MDBTypography className='card-header mb-2'
+                        style={headerStyle} >
+                        <strong>Spouse Name</strong>
+                    </MDBTypography>
+                    <div className='px-4 mb-2' >
+                        <MDBRow>
+                            <MDBCol className='col-6'>
+                                <div  >
+                                    <input style={inputStyle} className='form-control' type='text' placeholder='Spouse name...'
+                                        maxLength={20} value={nameofSpouse}
+                                        onChange={(e) => { let newEdit = { ...nameofSpouse }; newEdit = e.target.value; setNameofSpouse(newEdit) }}></input>
+                                </div>
+                            </MDBCol>
+                        </MDBRow>
+                    </div>
+
+                    <MDBTypography className='card-header mb-2'
+                        style={headerStyle} >
+                        <strong>Home telephone</strong>
+                    </MDBTypography>
+                    <div className='px-4 mb-2' >
+                        <MDBRow>
+                            <MDBCol className='col-6'>
+                                <div  >
+                                    <input style={inputStyle} className='form-control' type='text' placeholder='Home telephone...'
+                                        maxLength={20} value={telephone}
+                                        onChange={(e) => { let newEdit = { ...telephone }; newEdit = e.target.value; setTelephone(newEdit) }}></input>
+                                </div>
+                            </MDBCol>
+                        </MDBRow>
+                    </div>
+
+                    <MDBTypography className='card-header mb-2'
+                        style={headerStyle} >
+                        <strong>Work telephone</strong>
+                    </MDBTypography>
+                    <div className='px-4 mb-2' >
+                        <MDBRow>
+                            <MDBCol className='col-6'>
+                                <div  >
+                                    <input style={inputStyle} className='form-control' type='text' placeholder='Work phone...'
+                                        maxLength={20} value={workPhone}
+                                        onChange={(e) => { let newEdit = { ...workPhone }; newEdit = e.target.value; setWorkPhone(newEdit) }}></input>
+                                </div>
+                            </MDBCol>
+                        </MDBRow>
+                    </div>
+
+                    <MDBTypography className='card-header mb-2'
+                        style={headerStyle} >
+                        <strong>Mobile</strong>
+                    </MDBTypography>
+                    <div className='px-4 mb-2' >
+                        <MDBRow>
+                            <MDBCol className='col-6'>
+                                <div  >
+                                    <input style={inputStyle} className='form-control' type='text' placeholder='Mobile...'
+                                        maxLength={20} value={mobile}
+                                        onChange={(e) => { let newEdit = { ...mobile }; newEdit = e.target.value; setMobile(newEdit) }}></input>
+                                </div>
+                            </MDBCol>
+                        </MDBRow>
+                    </div>
+
+                    <MDBTypography className='card-header mb-2'
+                        style={headerStyle} >
+                        <strong>Email</strong>
+                    </MDBTypography>
+                    <div className='px-4 mb-2' >
+                        <MDBRow>
+                            <MDBCol className='col-6'>
+                                <div  >
+                                    <input style={inputStyle} className='form-control' type='text' placeholder='Email...'
+                                        maxLength={20} value={email}
+                                        onChange={(e) => { let newEdit = { ...email }; newEdit = e.target.value; setEmail(newEdit) }}></input>
+                                </div>
+                            </MDBCol>
+                        </MDBRow>
+                    </div>
+
+                    <MDBTypography className='card-header mb-2'
+                        style={headerStyle} >
+                        <strong>Comments</strong>
+                    </MDBTypography>
+                    <div className='px-4 mb-2' >
+                        <MDBRow>
+                            <MDBCol className='col-8'>
+                                <div  >
+                                    <textarea style={commentStyle} className='form-control' type='text' placeholder='Comments...'
+                                        maxLength={20} value={comments}
+                                        onChange={(e) => { let newEdit = { ...comments }; newEdit = e.target.value; setComments(newEdit) }}></textarea>
+                                </div>
+                            </MDBCol>
+                        </MDBRow>
+                    </div>
+
+                    {/**********  Confirmat and save */}
+                    <form className='d-flex w-auto mt-3 p-4'>
+                        <MDBBtn style={btnSytle}
+                            onClick={saveJointMember} >
                             Save
                         </MDBBtn>
-                        <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }}
-                            color='warning' onClick={gotoAccountPage}>
+                        <MDBBtn style={btnSytle}
+                            color='secondary' onClick={gotoAccountPage}>
                             Cancel
                         </MDBBtn>
                     </form>
                 </MDBCardBody>
             </MDBCard>
+
         </React.Fragment >
 
     );

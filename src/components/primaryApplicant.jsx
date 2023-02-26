@@ -44,7 +44,7 @@ export default function PrimaryApplicant() {
     const ageMin = new Date().getFullYear() - 120;  // year picker 120 year back from current year
 
     const inputStyle = { fontSize: '14px', width: '250px' };
-    const ninoInputStyle= {fontSize: '14px', fontWeight:'bold', width: '250px',borderColor: '#79baf3' , backgroundColor:'#b8ffb8', color:'black'}
+    const ninoInputStyle = { fontSize: '14px', fontWeight: 'bold', width: '250px', borderColor: '#79baf3', backgroundColor: '#b8ffb8', color: 'black' }
     const comboBoxStyle = { maxWidth: '250px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
@@ -63,12 +63,9 @@ export default function PrimaryApplicant() {
     const [nameChange, setNameChange] = useState("");
     const [nINO, setNINO] = useState(memberid.toUpperCase());
     const [dateofbirth, setdateofbirth] = useState("");
-    const [dobDate, setDOBDate] = useState("");
-    const [dobMonth, setDOBMonth] = useState("");
-    const [dobYear, setDOBYear] = useState("");
     const [sex, setSex] = useState("");
-
     const [livedAbroad, setLivedAbroad] = useState("no");
+    const [movedInDate, setMovedInDate] = useState("");
 
     const [postcode, setPostcode] = useState("");
     const [addLine1, setAddLine1] = useState("");
@@ -76,7 +73,10 @@ export default function PrimaryApplicant() {
     const [addLine3, setAddLine3] = useState("");
     const [addLine4, setAddLine4] = useState("");
 
-    const [movedInDate, setMovedInDate] = useState("");
+    const [dobDate, setDOBDate] = useState("");
+    const [dobMonth, setDOBMonth] = useState("");
+    const [dobYear, setDOBYear] = useState("");
+
     const [movedDate, setMovedDate] = useState("");
     const [movedMonth, setMovedMonth] = useState("");
     const [movedYear, setMovedYear] = useState("");
@@ -86,7 +86,6 @@ export default function PrimaryApplicant() {
     const [landlordAddress, setLandlordAddress] = useState("");
     const [currentTenancyType, setCurrentTenancyType] = useState("");
     const [infoAboutCurrentAddress, setInfoAboutCurrentAddress] = useState("");
-
 
     const [addressDifferent, setAddressDifferent] = useState("");
     const [correspondenceType, setCorrespondenceType] = useState("")
@@ -117,7 +116,7 @@ export default function PrimaryApplicant() {
     const [tenure, setTenure] = useState("");
     const [tenancyRefNo, setTenancyRefNo] = useState("");
 
-    const [areyou, setAreYou] = useState("");
+    const [areyou, setAreYou] = useState("");       // this field is mentioned as 'client_from_which_country'
     const [connection, setConnection] = useState([]);
 
     const [memorableDate, setMemorableDate] = useState("");
@@ -264,7 +263,7 @@ export default function PrimaryApplicant() {
                             <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} tag='h6'><strong>Primary Applicant Details</strong></MDBTypography>
                             <p style={{ fontSize: '16px' }}><strong>Title *</strong></p>
                             <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded" aria-label="Default select example"
-                                value={title} onChange={(e) => { setTitle(e.target.value) }}>
+                                value={title} onChange={(e) => { let newEdit = { ...title }; newEdit = e.target.value; setTitle(newEdit) }}>
                                 <option defaultValue={title}>Please Choose</option>
                                 <option value="1">Dr</option>
                                 <option value="2">Miss</option>

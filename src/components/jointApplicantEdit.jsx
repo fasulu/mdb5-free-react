@@ -65,6 +65,24 @@ export default function JointApplicantEdit() {
     const [postcodeErr, setPostcodeErr] = useState(false);
     const [numberErr, setNumberErr] = useState(false)
 
+// joint:-
+// jointId
+// moved_to_current_address
+// corres_postcode
+// corres_address_line1
+// corres_address_line2
+// corres_address_line3
+// corres_address_line4
+// is_she_pregnant
+// delivery_date
+// illness
+// are_you_worker
+// telephone_home
+// telephone_mobile
+// telephone_work
+// email
+// comments
+
     useEffect(() => {
 
     }, [])
@@ -224,7 +242,6 @@ export default function JointApplicantEdit() {
 
                             {/* *********** What is thier current address? */}
                             <div>
-                                <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Current Address</strong></p>
                                 <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>What is their current address?</strong></p>
                                 <div style={{ fontSize: '13px', height: 'auto', width: 'auto', background: '#e4f5fb' }} className=" help-content border border-grey rounded">
                                     <p className='mx-2 mt-3 mb-2' style={{ fontSize: '12px' }}><strong>Is this person living with one of the following people?</strong></p>

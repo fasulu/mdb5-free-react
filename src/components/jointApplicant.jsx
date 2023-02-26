@@ -44,6 +44,7 @@ export default function JointApplicant() {
     const [showTenancyRef, setShowTenancyRef] = useState(false);
     const [continueApplication, setContinueApplication] = useState(false);
 
+    const [primaryAplcntClientId, setPrimaryAplcntClientId] = useState("")
     const [relationWithPrimaryApplicant, setRelationWithPrimaryApplicant] = useState("")
     const [title, setTitle] = useState("");
     const [fName, setFName] = useState("");
@@ -63,6 +64,12 @@ export default function JointApplicant() {
     const [currentlyLiveWithYou, setCurrentlyLiveWithYou] = useState("no");
     const [livingInDiffAddress, setLivingInDiffAddress] = useState("");
 
+    const [movedInDate, setMovedInDate] = useState("");
+
+    const [movedDate, setMovedDate] = useState("");
+    const [movedMonth, setMovedMonth] = useState("");
+    const [movedYear, setMovedYear] = useState("");
+
     const [corresPostcode, setCorresPostcode] = useState("");
     const [corresAddLine1, setCorresAddLine1] = useState("");
     const [corresAddLine2, setCorresAddLine2] = useState("");
@@ -79,24 +86,24 @@ export default function JointApplicant() {
     const [delMonth, setDelMonth] = useState("");
     const [delYear, setDelYear] = useState("");
 
-    const [movedInDate, setMovedInDate] = useState("");
-    const [movedDate, setMovedDate] = useState("");
-    const [movedMonth, setMovedMonth] = useState("");
-    const [movedYear, setMovedYear] = useState("");
     const [telephone, setTelephone] = useState("");
     const [mobile, setMobile] = useState("");
     const [workPhone, setWorkPhone] = useState("");
     const [email, setEmail] = useState("");
     const [reEnterEmail, setReEnterEmail] = useState("");
+
     const [ethnicity, setEthnicity] = useState("");
     const [nationality, setNationality] = useState("");
     const [sexOrient, setSexOrient] = useState("");
     const [belief, setBelief] = useState("");
     const [healthCondition, setHealthCondition] = useState("");
+
     const [preferedLanguage, setPreferedLanguage] = useState("");
     const [needInterpreter, setNeedInterpreter] = useState("");
+
     const [tenure, setTenure] = useState("");
     const [tenancyRefNo, setTenancyRefNo] = useState("");
+    
     const [isYourPartner, setIsYourPartner] = useState("");
     const [areYouWorker, setAreYouWorker] = useState();
     const [connection, setConnection] = useState([]);
@@ -489,7 +496,7 @@ export default function JointApplicant() {
                                     <p className='mx-2 mt-3 mb-2' style={{ fontSize: '12px' }}><strong>Is this person living with one of the following people?</strong></p>
 
                                     <MDBRadio className='mx-1' name='livingInDiffAddressRadio' id='livingInDiffAddressYes' label="Living with primary applicant" htmlFor='livingInDiffAddressYes'
-                                        value='Living with primary applicant' onChange={(e) => { let newEdit = { ...livingInDiffAddress }; newEdit = e.target.value; setLivingInDiffAddress(newEdit);}}></MDBRadio>     {/* Get and show primary applicant address in this place */}
+                                        value='Living with primary applicant' onChange={(e) => { let newEdit = { ...livingInDiffAddress }; newEdit = e.target.value; setLivingInDiffAddress(newEdit); }}></MDBRadio>     {/* Get and show primary applicant address in this place */}
                                     <MDBRadio className='mx-1' name='livingInDiffAddressRadio' id='livingInDiffAddressNo' label='This person is living at a different address' htmlFor='livingInDiffAddressNo'
                                         value='Living in different address' onChange={(e) => { let newEdit = { ...livingInDiffAddress }; newEdit = e.target.value; setLivingInDiffAddress(newEdit); }}></MDBRadio>     {/* Spouse or partner living in different address */}
                                 </div>
