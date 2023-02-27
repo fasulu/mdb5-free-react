@@ -236,14 +236,14 @@ export default function MemberEdit() {
                     <div className='px-4 mb-2' >
                         <MDBRow>
                             <MDBCol className='col-3'>
-                                <MDBRadio name='currentlyLiveWithYouRadio' label='Yes' value='yes'
-                                    inline id='currentlyLiveWithYouYes' htmlFor="currentlyLiveWithYouYes"
+                                <MDBRadio name='areYouWorkRadio' label='Yes' value='yes'
+                                    inline id='areYouWorkYes' htmlFor="areYouWorkYes"
                                     onClick={(e) => { let newEdit = { ...areYouWorker }; newEdit = e.target.value; setAreYouWorker(newEdit) }}></MDBRadio>
                             </MDBCol>
 
                             <MDBCol className='col-3'>
-                                <MDBRadio name='currentlyLiveWithYouRadio' label='No' value='no'
-                                    inline id='currentlyLiveWithYouNo' htmlFor='currentlyLiveWithYouNo'
+                                <MDBRadio name='areYouWorkRadio' label='No' value='no'
+                                    inline id='areYouWorkNo' htmlFor='areYouWorkNo'
                                     onClick={(e) => { let newEdit = { ...areYouWorker }; newEdit = e.target.value; setAreYouWorker(newEdit) }}></MDBRadio>
                             </MDBCol>
                         </MDBRow>
@@ -256,14 +256,14 @@ export default function MemberEdit() {
                     <div className='px-4 mb-2' >
                         <MDBRow>
                             <MDBCol className='col-3'>
-                                <MDBRadio name='currentlyLiveWithYouRadio' label='Yes' value='yes'
-                                    inline id='currentlyLiveWithYouYes' htmlFor="currentlyLiveWithYouYes"
+                                <MDBRadio name='isShePregnantRadio' label='Yes' value='yes'
+                                    inline id='isShePregnantYes' htmlFor="isShePregnantYes"
                                     onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit) }}></MDBRadio>
                             </MDBCol>
 
                             <MDBCol className='col-3'>
-                                <MDBRadio name='currentlyLiveWithYouRadio' label='No' value='no'
-                                    inline id='currentlyLiveWithYouNo' htmlFor='currentlyLiveWithYouNo'
+                                <MDBRadio name='isShePregnantRadio' label='No' value='no'
+                                    inline id='isShePregnantNo' htmlFor='isShePregnantNo'
                                     onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit) }}></MDBRadio>
                             </MDBCol>
                         </MDBRow>

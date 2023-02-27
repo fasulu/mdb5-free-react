@@ -124,8 +124,7 @@ function memDateMatch(date1, date2) {
 function validDate(date_) {
   // let memDatePattern = '^(?:(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])|(3[01]|[12][0-9]|0[1-9])/(1[0-2]|0[1-9]))/[0-9]{4}$';
   // let resultMemDate = memDate.match(memDatePattern);
-  let result = moment(date_, "MM/DD/YYYY").isValid()
-  console.log(result)
+  let result = moment(date_, "YYYY-MM-DD").isValid()
   if (!result) {
     console.log('Error:- Not a valid date');
     return false

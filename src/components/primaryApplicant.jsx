@@ -11,7 +11,7 @@ import { sexOrients } from '../resources/sexOrient';
 import { beliefs } from '../resources/belief';
 import { languages } from '../resources/language';
 import { dates, months } from '../resources/datePicker';
-import { validEmail, validName, validPostcode, validNumber, emailMatch, validMName, pwdMatch, memDateMatch, validPwd } from '../validations/Validator';
+import { validEmail, validName, validPostcode, validNumber, validDate, emailMatch, validMName, pwdMatch, memDateMatch, validPwd } from '../validations/Validator';
 
 import {
     MDBContainer,
@@ -23,6 +23,8 @@ import {
 } from 'mdb-react-ui-kit';
 
 export default function PrimaryApplicant() {
+
+    const urL = "http://localhost:9001/client/signup";
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -49,6 +51,7 @@ export default function PrimaryApplicant() {
     const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const yearPickerStyle = { width: '80px', float: 'left', border: '5' };
+    const commentStyle = { minHeight: '150px', fontSize: '16px', minWidth: '250px', color: 'black' };
 
     const [showLandlord, setShowLandlord] = useState(false);
     const [showAddress, setShowAddress] = useState(false);
@@ -117,7 +120,7 @@ export default function PrimaryApplicant() {
     const [tenancyRefNo, setTenancyRefNo] = useState("");
 
     const [areyou, setAreYou] = useState("");       // this field is mentioned as 'client_from_which_country'
-    const [connection, setConnection] = useState([]);
+    const [connection, setConnection] = useState("");
 
     const [memorableDate, setMemorableDate] = useState("");
     const [memDate, setMemDate] = useState("");
@@ -133,28 +136,42 @@ export default function PrimaryApplicant() {
     const [reEnterPwd, setReEnterPwd] = useState("");
 
     const [comments, setComments] = useState();
+    const status_ = "active"
+    const todayDate = new Date().toISOString().slice(0, 10);
 
     useEffect(() => {
 
     }, [])
 
-    const savePrimary = (e) => {
+    const handleSubmit = (e) => {
 
         e.preventDefault();
 
-        setdateofbirth(dobMonth + "/" + dobDate + "/" + dobYear);
-        setMovedInDate(movedMonth + "/" + movedDate + "/" + movedYear);
-        setMemorableDate(memMonth + "/" + memDate + "/" + memYear);
-        setReenterMemorableDate(reEnterMemMonth + "/" + reEnterMemDate + "/" + reEnterMemYear);
+        handleConnectionCheckbox();
+        console.log(`Connection checkbox values are ${connection}`)
+
+        const birth_ = dobYear + "-" + dobMonth + "-" + dobDate;
+        setdateofbirth(birth_);
+        const moved_ = movedYear + "-" + movedMonth + "-" + movedDate;
+        setMovedInDate(moved_);
+        const dateMemorable = memYear + "-" + memMonth + "-" + memDate;
+        setMemorableDate(dateMemorable);
+        const reEnteredDateMemorable = reEnterMemYear + "-" + reEnterMemMonth + "-" + reEnterMemDate;
+        setReenterMemorableDate(reEnteredDateMemorable);
 
         const fNameErr = validName(fName);
         const mNameErr = validMName(mName);
         const sNameErr = validName(sName);
         const passwordErr = validPwd(password);
 
+        const birthErr = validDate(birth_);
+        const movedErr = validDate(moved_);
+        const datememorableErr = validDate(dateMemorable);
+        const reEnteredDateMemorableErr = validDate(reEnteredDateMemorable);
         const emailErr = validEmail(email);
+        const reenteredEmailErr = validEmail(reEnterEmail);
         const postcodeErr = validPostcode(postcode);
-        const corrsPostcodeErr = validPostcode(correspondencePostcode);
+        const corresPostcodeErr = validPostcode(correspondencePostcode);
         const telephoneErr = validNumber(telephone);
         const workphoneErr = validNumber(workPhone);
         const mobileErr = validNumber(mobile);
@@ -163,14 +180,16 @@ export default function PrimaryApplicant() {
         const pwdMatchesErr = pwdMatch(password, reEnterPwd)
         const memMatchesErr = memDateMatch(memorableDate, reEntermemorableDate)
 
-        console.log(`Validation result is fname/sname ${fNameErr} ${mNameErr} ${sNameErr} pwd ${passwordErr}, 
-        email ${emailErr}, postcode ${postcodeErr}, email matches ${emailMatchesErr}, 
-        correspondence postcode ${corrsPostcodeErr}, 
-        telephone err ${telephoneErr}, workphone err ${workphoneErr}, mobile err ${mobileErr}, 
-        home telephone ${telephone}, work telephone ${workPhone}, mobile ${mobile},
-        memorable date ${memMatchesErr}, pwd match ${pwdMatchesErr}`)
+        console.log(todayDate)
 
-        console.log('in show in console', title, fName, mName, sName, nameChange,
+        console.log(`Validation result is fname/sname ${fName} ${mName} ${sName}, 
+        email ${email}, email matches ${reEnterEmail}, postcode ${postcode}, 
+        correspondence postcode ${correspondencePostcode}, 
+        home telephone ${telephone}, work telephone ${workPhone}, mobile ${mobile},
+        pwd ${password}, pwd matches ${reEnterPwd}, 
+        memorable date ${dateMemorable}, memorable date matches ${reEnteredDateMemorable}`)
+
+        console.log('FINAL Result passed', title, fName, mName, sName, nameChange,
             nINO, dateofbirth, sex, livedAbroad,
             postcode, addLine1, addLine2, addLine3, addLine4,
             movedInDate,
@@ -180,51 +199,79 @@ export default function PrimaryApplicant() {
             telephone, mobile, workPhone, email, reEnterEmail,
             ethnicity, nationality, sexOrient, belief,
             healthCondition, preferedLanguage, needInterpreter,
-            tenure, tenancyRefNo, areyou, connection, comments,
+            tenure, tenancyRefNo, areyou, connection,
             memorableDate, reEntermemorableDate,
-            password, reEnterPwd
+            password, reEnterPwd, comments, todayDate, status_
         )
-
         if ((!pwdMatchesErr) || (!memMatchesErr) || (!emailMatchesErr) ||
-            (!fNameErr) || (!mNameErr) || (!sNameErr) || (!emailErr) ||
-            (!postcodeErr)) {
+            (!fNameErr) || (!mNameErr) || (!sNameErr) || (!emailErr) || (!reenteredEmailErr) || (!corresPostcodeErr) ||
+            (!postcodeErr) || (!telephoneErr) || (!workphoneErr) || (!mobileErr) ||
+            (!birthErr) || (!movedErr) || (!datememorableErr) || (!reEnteredDateMemorableErr)) {
             !fNameErr && alert('First Name error');
             !mNameErr && alert('Middle Name error');
             !sNameErr && alert('Surname error');
             !emailErr && alert('Email error');
+            !reenteredEmailErr && alert('Reentered email error');
             !postcodeErr && alert('Postcode error');
+            !corresPostcodeErr && alert('Correspondence postcode error');
             !telephoneErr && alert('Telephone number error');
             !workphoneErr && alert('Work telephone number error');
             !mobileErr && alert('Mobile number error');
-            !emailErr && alert('Email error');
             !passwordErr && alert('Password error');
             !emailMatchesErr && alert('Email match error');
             !pwdMatchesErr && alert('Password match error');
             !memMatchesErr && alert('Memorable date error');
+
         } else {
 
+            console.log('FINAL Result passed', title, fName, mName, sName, nameChange,
+                nINO, dateofbirth, sex, livedAbroad,
+                postcode, addLine1, addLine2, addLine3, addLine4,
+                movedInDate,
+                rented, landlordName, landlordAddress, currentTenancyType, infoAboutCurrentAddress,
+                addressDifferent, correspondenceType, placedByLocalAuthrty, localAuthrtyName,
+                correspondencePostcode, correspondenceAddLine1, correspondenceAddLine2, correspondenceAddLine3, correspondenceAddLine4,
+                telephone, mobile, workPhone, email, reEnterEmail,
+                ethnicity, nationality, sexOrient, belief,
+                healthCondition, preferedLanguage, needInterpreter,
+                tenure, tenancyRefNo, areyou, connection,
+                memorableDate, reEntermemorableDate,
+                password, reEnterPwd, comments, todayDate, status_
+            )
+            savePrimaryApplicant()
         }
     }
 
-    const handleCheckbox = (e) => {
-
-        e.preventDefault();
-        try {
-
-            let checkedItems = [...connection];
-            if (e.target.checked) {
-                checkedItems = [...connection, e.target.value];
-            } else {
-                checkedItems.splice(connection.indexOf(e.target.value), 1);
-            }
-            setConnection(checkedItems);
-            console.log(connection);
-
-        } catch (error) {
-            alert("Unable to select your option")
-            console.log(`Connection with birmingham checkbox error:- ${error}`)
+    const handleConnectionCheckbox = () => {
+        var test = "";
+        var markedCheckbox = document.getElementsByName('connectionCheckbox');
+        for (var checkbox of markedCheckbox) {
+            if (checkbox.checked)
+                test += (checkbox.value + ' ');
         }
+        setConnection(test)
     }
+
+    // const handleCheckbox = (e) => {
+
+    //     e.preventDefault();
+    //     try {
+
+    //         let checkedItems = [...connection];
+    //         if (e.target.checked) {
+    //             checkedItems = [...connection, e.target.value];
+    //         } else {
+    //             checkedItems.splice(connection.indexOf(e.target.value), 1);
+    //         }
+
+    //         setConnection(...connection, checkedItems);
+    //         console.log(connection);
+
+    //     } catch (error) {
+    //         alert("Unable to select your option")
+    //         console.log(`Connection with birmingham checkbox error:- ${error}`)
+    //     }
+    // }
 
     const findPostcodeAddress = (e) => {
         e.preventDefault();
@@ -232,7 +279,7 @@ export default function PrimaryApplicant() {
         alert('Sorry... \nPostcode search is not connected to UK Post Office API, \nplease enter the address manually')
     }
 
-    const showAddresCard = (e) => {
+    const showAddressCard = (e) => {
         e.preventDefault();
         setShowAddress(true);
     }
@@ -246,6 +293,71 @@ export default function PrimaryApplicant() {
             alert("Unable to proceed on your request")
             console.log(`Goto previous page error:- ${error}`)
         }
+    }
+
+    const savePrimaryApplicant = async () => {
+
+        const primaryApplicantInfo = {
+            client_title: title,
+            client_firstname: fName,
+            client_middlename: mName,
+            client_surname: sName,
+            client_namechange: nameChange,
+            client_NINO: nINO,
+            client_dateofbirth: dateofbirth,
+            client_sex: sex,
+            client_lived_abroad: livedAbroad,
+            client_moved_to_current_address: movedInDate,
+            client_postcode: postcode,
+            client_address_line1: addLine1,
+            client_address_line2: addLine2,
+            client_address_line3: addLine3,
+            client_address_line4: addLine4,
+            client_is_rented_property: rented,
+            client_landlord_name: landlordName,
+            client_landlord_address: landlordAddress,
+            client_landlord_tenancy_type: currentTenancyType,
+            client_landlord_info_about_this_address: infoAboutCurrentAddress,
+            client_is_correspondence_address: addressDifferent,
+            client_correspondence_type: correspondenceType,
+            client_correspondence_postcode: correspondencePostcode,
+            client_correspondence_address_line1: correspondenceAddLine1,
+            client_correspondence_address_line2: correspondenceAddLine2,
+            client_correspondence_address_line3: correspondenceAddLine3,
+            client_correspondence_address_line4: correspondenceAddLine4,
+            client_placed_by_local_authority: placedByLocalAuthrty,
+            client_if_yes_local_authority: localAuthrtyName,
+            client_telephone_home: telephone,
+            client_telephone_mobile: mobile,
+            client_telephone_work: workPhone,
+            client_email: email,
+            client_ethnicity: ethnicity,
+            client_nationality: nationality,
+            client_sex_orient: sexOrient,
+            client_religion: belief,
+            client_illness: healthCondition,
+            client_interpreter: needInterpreter,
+            client_language_prefer: preferedLanguage,
+            client_current_tenure: tenure,
+            client_current_tenure_TenancyRefNo: tenancyRefNo,
+            client_from_which_country: areyou,
+            client_connection_to_birmingham: connection,
+            client_password: password,
+            client_memorable_date: memorableDate,
+            client_registration_date: todayDate,
+            client_status: status_,
+            client_comments: comments,
+        }
+
+        try {
+            const response = await axios.post(urL, primaryApplicantInfo)
+
+            console.log(`Output from backend ${response.data.message}`)
+
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 
     return (
@@ -474,7 +586,7 @@ export default function PrimaryApplicant() {
                                     onClick={findPostcodeAddress} >
                                     Find address</MDBBtn>
                                 <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
-                                    onClick={showAddresCard} >
+                                    onClick={showAddressCard} >
                                     Enter an address manually</MDBBtn>
                             </form>
 
@@ -733,35 +845,11 @@ export default function PrimaryApplicant() {
                                         <div>
 
                                             <p style={{ fontSize: '17px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Postcode*</strong></p>
-                                            <div style={{ width: '' }} className="mb-2 mt-2 help-content border border-grey rounded">
-                                                <span className="far fa-question-circle help-icon"></span>
-                                                <span className="help-text">
-                                                    <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">Enter the postcode using capital letters. For example: B1 1BB. If your address is outside UK please enter XY1 1YX.</span>
-                                                </span>
-                                            </div>
+
                                             <div className='mb-4' >
                                                 <input style={inputStyle} className='form-control' type='text' placeholder='postcode...'
                                                     maxLength={8} onChange={(e) => { let newEdit = { ...correspondencePostcode }; newEdit = e.target.value; setCorrespondencePostcode(newEdit) }} />
                                             </div>
-
-                                            <div style={{ width: '' }} className="mb-2 mt-2 help-content border border-grey rounded">
-                                                <span className="far fa-question-circle help-icon"></span>
-                                                <span className="help-text">
-                                                    <span style={{ fontSize: '12px', padding: '5px' }} className="configured-help-text">Enter a postcode and click the find address or use the enter address button to fill in the address fields manually.</span>
-                                                </span>
-                                            </div>
-                                            <form className='d-flex input-group w-auto mt-1'>
-                                                <MDBBtn style={{ fontSize: '13px', border: 'solid 1px #bbb', title: 'Not connected with Post Office address search api' }} disabled color='light'>
-
-                                                    Find address
-
-                                                </MDBBtn>
-                                                <MDBBtn style={{ fontSize: '10px', border: 'solid 1px #bbb', marginLeft: '5px' }} color='light'>
-
-                                                    Enter an address manually
-
-                                                </MDBBtn>
-                                            </form>
                                         </div>
 
                                         {/* ***********  Correspondence address line 1  */}
@@ -854,7 +942,8 @@ export default function PrimaryApplicant() {
                                     </MDBCol>
                                     <MDBCol className='col-3'>
                                         <MDBRadio name='placedByLocalAuthrtyRadio' id='placedByLocalAuthrtyNo' label='No' htmlFor='placedByLocalAuthrtyNo' inline
-                                            value='no' onChange={(e) => { let newEdit = { ...placedByLocalAuthrty }; newEdit = e.target.value; setPlacedByLocalAuthrty(newEdit); setShowLocalAuthority(false); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
+                                            value='no' defaultChecked
+                                            onChange={(e) => { let newEdit = { ...placedByLocalAuthrty }; newEdit = e.target.value; setPlacedByLocalAuthrty(newEdit); setShowLocalAuthority(false); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
                                     </MDBCol>
                                 </MDBRow>
 
@@ -1201,46 +1290,27 @@ export default function PrimaryApplicant() {
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '17px' }}><strong>In order to help us understand why you want to live in Birmingham, we need to know about your connection to the city. Please choose from the following options. *</strong></p>
                                 </div>
-
                                 <div>
-                                    <MDBCheckbox name='flexCheck' value='1' id='flexCheck1' label='I have lived in Birmingham for the last 24 months or more'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='2' id='flexCheck2' label='I am currently employed or have a confirmed offer of employment in Birmingham'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='3' id='flexCheck4' label='Birmingham City Council has accepted a homeless duty to me and placed me outside of Birmingham'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='4' id='flexCheck5' label='I am in, or due to undertake training or higher education in Birmingham that will last at least 6 months or more'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='5' id='flexCheck6' label='I have caring responsibility for someone resident in Birmingham'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='6' id='flexCheck7' label='I am a care leaver aged 18 - 21 who is owed a duty of care by Birmingham City Council'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='7' id='flexCheck8' label='I need to be near specialist medical or support services only available in Birmingham'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='8' id='flexCheck9' label='I am care leaver aged 22 to 25 who is owed a duty of care by Birmingham City Council and pursuing a programme of education'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='9' id='flexCheck10' label='I am a current member of His Majestys Armed Forces'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='10' id='flexCheck11' label='I am a current or former member of His Majestys Armed Forces and I need to move due to a medical condition that was caused by my military service'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='11' id='flexCheck12' label='I am the spouse or civil partner of a person who has died as a result of their service in His Majestys Armed Forces and I am now leaving Services Accommodation'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='12' id='flexCheck13' label='I am no longer a member of His Majestys Armed Forces, however I was discharged within the last 5 years'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='13' id='flexCheck14' label='I am a former spouse or civil partner of a person in His Majestys Armed Forces and I am now leaving Services Accommodation'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='14' id='flexCheck15' label='I am an adult child of Service personnel who is no longer able to remain in the family home due to the impact moving from base to base'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='15' id='flexCheck16' label='I have near relatives in Birmingham and they have been resident in Birmingham for the last 5 years or more'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='16' id='flexCheck17' label='I need to move away from another area to escape violence or harm'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='17' id='flexCheck18' label='None of the above'
-                                        onChange={handleCheckbox} />
+                                    <MDBCheckbox name='connectionCheckbox' value='1' id='flexCheck1' label='I have lived in Birmingham for the last 24 months or more' />
+                                    <MDBCheckbox name='connectionCheckbox' value='2' id='flexCheck2' label='I am currently employed or have a confirmed offer of employment in Birmingham' />
+                                    <MDBCheckbox name='connectionCheckbox' value='3' id='flexCheck4' label='Birmingham City Council has accepted a homeless duty to me and placed me outside of Birmingham' />
+                                    <MDBCheckbox name='connectionCheckbox' value='4' id='flexCheck5' label='I am in, or due to undertake training or higher education in Birmingham that will last at least 6 months or more' />
+                                    <MDBCheckbox name='connectionCheckbox' value='5' id='flexCheck6' label='I have caring responsibility for someone resident in Birmingham' />
+                                    <MDBCheckbox name='connectionCheckbox' value='6' id='flexCheck7' label='I am a care leaver aged 18 - 21 who is owed a duty of care by Birmingham City Council' />
+                                    <MDBCheckbox name='connectionCheckbox' value='7' id='flexCheck8' label='I need to be near specialist medical or support services only available in Birmingham' />
+                                    <MDBCheckbox name='connectionCheckbox' value='8' id='flexCheck9' label='I am care leaver aged 22 to 25 who is owed a duty of care by Birmingham City Council and pursuing a programme of education' />
+                                    <MDBCheckbox name='connectionCheckbox' value='9' id='flexCheck10' label='I am a current member of His Majestys Armed Forces' />
+                                    <MDBCheckbox name='connectionCheckbox' value='10' id='flexCheck11' label='I am a current or former member of His Majestys Armed Forces and I need to move due to a medical condition that was caused by my military service' />
+                                    <MDBCheckbox name='connectionCheckbox' value='11' id='flexCheck12' label='I am the spouse or civil partner of a person who has died as a result of their service in His Majestys Armed Forces and I am now leaving Services Accommodation' />
+                                    <MDBCheckbox name='connectionCheckbox' value='12' id='flexCheck13' label='I am no longer a member of His Majestys Armed Forces, however I was discharged within the last 5 years' />
+                                    <MDBCheckbox name='connectionCheckbox' value='13' id='flexCheck14' label='I am a former spouse or civil partner of a person in His Majestys Armed Forces and I am now leaving Services Accommodation' />
+                                    <MDBCheckbox name='connectionCheckbox' value='14' id='flexCheck15' label='I am an adult child of Service personnel who is no longer able to remain in the family home due to the impact moving from base to base' />
+                                    <MDBCheckbox name='connectionCheckbox' value='15' id='flexCheck16' label='I have near relatives in Birmingham and they have been resident in Birmingham for the last 5 years or more' />
+                                    <MDBCheckbox name='connectionCheckbox' value='16' id='flexCheck17' label='I need to move away from another area to escape violence or harm' />
+                                    <MDBCheckbox name='connectionCheckbox' value='17' id='flexCheck18' label='None of the above' />
                                 </div>
                             </div>
                         </div>
-
                     </MDBCardBody>
                 </MDBCard>
 
@@ -1249,12 +1319,13 @@ export default function PrimaryApplicant() {
                     <MDBCardBody>
                         <p className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Any other comments or additional information</strong></p>
                         <div className='mt-4' >
-                            <MDBRow>
-                                <MDBCol >
-                                    <textarea style={{ width: '250px', height: '350px' }} className='form-control' type='text'
-                                        maxLength={250} onChange={(e) => { let newEdit = { ...comments }; newEdit = e.target.value; setComments(newEdit) }} />
-                                </MDBCol>
-                            </MDBRow>
+                            <MDBCol className='col-10'>
+                                <div  >
+                                    <textarea style={commentStyle} className='form-control' type='text' placeholder='Comments...'
+                                        maxLength={20} value={comments}
+                                        onChange={(e) => { let newEdit = { ...comments }; newEdit = e.target.value; setComments(newEdit) }}></textarea>
+                                </div>
+                            </MDBCol>
                         </div>
                     </MDBCardBody>
                 </MDBCard>
@@ -1420,7 +1491,7 @@ export default function PrimaryApplicant() {
                                 Previous Page</MDBBtn>
 
                             <MDBBtn style={{ fontSize: '18px', width: 'auto', textTransform: 'none' }} color='primary'
-                                onClick={savePrimary}>
+                                onClick={handleSubmit}>
                                 {/* <MDBIcon fas icon='caret-right' className='me-2' /> */}
                                 Next Page</MDBBtn>
                         </form>
