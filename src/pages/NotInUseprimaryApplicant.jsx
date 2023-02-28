@@ -74,7 +74,7 @@ export default function PrimaryApplicant() {
     const [currentTenancyType, setCurrentTenancyType] = useState("");
     const [infoAboutCurrentAddress, setInfoAboutCurrentAddress] = useState("");
     const [livedAbroad, setLivedAbroad] = useState("no");
-    const [addressDifferent, setAddressDifferent] = useState("");
+    const [communicationAddress, setCommunicationAddress] = useState("");
     const [correspondenceType, setCorrespondenceType] = useState("")
     const [placedByLocalAuthrty, setPlacedByLocalAuthrty] = useState("");
     const [localAuthrtyName, setLocalAuthrtyName] = useState("");
@@ -158,7 +158,7 @@ export default function PrimaryApplicant() {
             postcode, addLine1, addLine2, addLine3, addLine4,
             movedInDate,
             rented, landlordName, landlordAddress, currentTenancyType, infoAboutCurrentAddress,
-            addressDifferent, correspondenceType, placedByLocalAuthrty, localAuthrtyName,
+            communicationAddress, correspondenceType, placedByLocalAuthrty, localAuthrtyName,
             correspondencePostcode, correspondenceAddLine1, correspondenceAddLine2, correspondenceAddLine3, correspondenceAddLine4,
             telephone, mobile, workPhone, email, reEnterEmail,
             ethnicity, nationality, sexOrient, belief,
@@ -649,10 +649,10 @@ export default function PrimaryApplicant() {
                                             </div>
 
                                             <MDBRow>
-                                                <MDBRadio name='addressDifferentRadio' id='addressDifferentYes' label='To my current address' inline
-                                                    value='current address' onChange={(e) => { setAddressDifferent(e.target.value); setShowCorrespondence(false); }}></MDBRadio>    {/* setShowCorrespondence will  show or hide according to the selection */}
-                                                <MDBRadio name='addressDifferentRadio' id='addressDifferentNo' label='To my correspondence address' inline
-                                                    value='correspondence address' onChange={(e) => { setAddressDifferent(e.target.value); setShowCorrespondence(true); }}></MDBRadio>
+                                                <MDBRadio name='communicationAddressRadio' id='communicationAddressYes' label='To my current address' inline
+                                                    value='current address' onChange={(e) => { setCommunicationAddress(e.target.value); setShowCorrespondence(false); }}></MDBRadio>    {/* setShowCorrespondence will  show or hide according to the selection */}
+                                                <MDBRadio name='communicationAddressRadio' id='communicationAddressNo' label='To my correspondence address' inline
+                                                    value='correspondence address' onChange={(e) => { setCommunicationAddress(e.target.value); setShowCorrespondence(true); }}></MDBRadio>
                                             </MDBRow>
                                         </div>
 

@@ -19,7 +19,7 @@ arry = {
     landlordAddress : landlordAddress, 
     currentTenancyType : currentTenancyType, 
     infoAboutCurrentAddress : infoAboutCurrentAddress,
-    addressDifferent : addressDifferent, 
+    communicationAddress : communicationAddress, 
     correspondenceType : correspondenceType, 
     placedByLocalAuthrty : placedByLocalAuthrty, 
     localAuthrtyName : localAuthrtyName,

@@ -63,7 +63,7 @@ export default function PrimaryApplicant() {
     const [fName, setFName] = useState("");
     const [mName, setMName] = useState("");
     const [sName, setSName] = useState("");
-    const [nameChange, setNameChange] = useState("");
+    const [nameChange, setNameChange] = useState("none");
     const [nINO, setNINO] = useState(memberid.toUpperCase());
     const [dateofbirth, setdateofbirth] = useState("");
     const [sex, setSex] = useState("");
@@ -84,22 +84,22 @@ export default function PrimaryApplicant() {
     const [movedMonth, setMovedMonth] = useState("");
     const [movedYear, setMovedYear] = useState("");
 
-    const [rented, setRented] = useState("");
-    const [landlordName, setLandlordName] = useState("");
-    const [landlordAddress, setLandlordAddress] = useState("");
-    const [currentTenancyType, setCurrentTenancyType] = useState("");
-    const [infoAboutCurrentAddress, setInfoAboutCurrentAddress] = useState("");
+    const [rented, setRented] = useState("no");
+    const [landlordName, setLandlordName] = useState("none");
+    const [landlordAddress, setLandlordAddress] = useState("none");
+    const [currentTenancyType, setCurrentTenancyType] = useState("dont know");
+    const [infoAboutCurrentAddress, setInfoAboutCurrentAddress] = useState("none");
 
-    const [addressDifferent, setAddressDifferent] = useState("");
-    const [correspondenceType, setCorrespondenceType] = useState("")
+    const [communicationAddress, setCommunicationAddress] = useState("current address");
+    const [correspondenceType, setCorrespondenceType] = useState("none")
     const [correspondencePostcode, setCorrespondencePostcode] = useState("");
     const [correspondenceAddLine1, setCorrespondenceAddLine1] = useState("");
     const [correspondenceAddLine2, setCorrespondenceAddLine2] = useState("");
     const [correspondenceAddLine3, setCorrespondenceAddLine3] = useState("");
     const [correspondenceAddLine4, setCorrespondenceAddLine4] = useState("");
 
-    const [placedByLocalAuthrty, setPlacedByLocalAuthrty] = useState("");
-    const [localAuthrtyName, setLocalAuthrtyName] = useState("");
+    const [placedByLocalAuthrty, setPlacedByLocalAuthrty] = useState("no");
+    const [localAuthrtyName, setLocalAuthrtyName] = useState("none");
 
     const [telephone, setTelephone] = useState("");
     const [mobile, setMobile] = useState("");
@@ -107,19 +107,19 @@ export default function PrimaryApplicant() {
     const [email, setEmail] = useState("");
     const [reEnterEmail, setReEnterEmail] = useState("");
 
-    const [ethnicity, setEthnicity] = useState("");
-    const [nationality, setNationality] = useState("");
-    const [sexOrient, setSexOrient] = useState("");
-    const [belief, setBelief] = useState("");
-    const [healthCondition, setHealthCondition] = useState("");
+    const [ethnicity, setEthnicity] = useState("prefer not to say");
+    const [nationality, setNationality] = useState("non-eea national");
+    const [sexOrient, setSexOrient] = useState("prefer not to say");
+    const [belief, setBelief] = useState("prefer not to say");
+    const [healthCondition, setHealthCondition] = useState("no");
 
-    const [preferedLanguage, setPreferedLanguage] = useState("");
-    const [needInterpreter, setNeedInterpreter] = useState("");
+    const [preferedLanguage, setPreferedLanguage] = useState("english");
+    const [needInterpreter, setNeedInterpreter] = useState("no");
 
     const [tenure, setTenure] = useState("");
     const [tenancyRefNo, setTenancyRefNo] = useState("");
 
-    const [areyou, setAreYou] = useState("");       // this field is mentioned as 'client_from_which_country'
+    const [areyou, setAreYou] = useState("none of the above");       // this field is mentioned as 'client_from_which_country'
     const [connection, setConnection] = useState("");
 
     const [memorableDate, setMemorableDate] = useState("");
@@ -135,9 +135,9 @@ export default function PrimaryApplicant() {
     const [password, setPassword] = useState("");
     const [reEnterPwd, setReEnterPwd] = useState("");
 
-    const [comments, setComments] = useState();
+    const [comments, setComments] = useState("None");
     const status_ = "active"
-    const todayDate = new Date().toISOString().slice(0, 10);
+    const todayDate = new Date().toISOString().slice(0, 19); // produces 2023-02-25
 
     useEffect(() => {
 
@@ -147,27 +147,45 @@ export default function PrimaryApplicant() {
 
         e.preventDefault();
 
-        handleConnectionCheckbox();
-        console.log(`Connection checkbox values are ${connection}`)
+        const formatDate = () => {
 
-        const birth_ = dobYear + "-" + dobMonth + "-" + dobDate;
-        setdateofbirth(birth_);
-        const moved_ = movedYear + "-" + movedMonth + "-" + movedDate;
-        setMovedInDate(moved_);
-        const dateMemorable = memYear + "-" + memMonth + "-" + memDate;
-        setMemorableDate(dateMemorable);
-        const reEnteredDateMemorable = reEnterMemYear + "-" + reEnterMemMonth + "-" + reEnterMemDate;
-        setReenterMemorableDate(reEnteredDateMemorable);
+            let birth_ = { ...dateofbirth }; birth_ = (dobYear + "-" + dobMonth + "-" + dobDate); setdateofbirth(birth_)
+            let moved_ = { ...movedInDate }; moved_ = (movedYear + "-" + movedMonth + "-" + movedDate); setMovedInDate(moved_)
+            let dateMemorable = { ...memorableDate }; dateMemorable = (memYear + "-" + memMonth + "-" + memDate); setMemorableDate(dateMemorable)
+            let reEnteredDateMemorable = { ...reEntermemorableDate }; reEnteredDateMemorable = (reEnterMemYear + "-" + reEnterMemMonth + "-" + reEnterMemDate); setReenterMemorableDate(reEnteredDateMemorable)
+
+        }
+
+        const handleConnectionCheckbox = () => {
+
+            var check_ed = "";
+            var markedCheckbox = document.getElementsByName('connectionCheckbox');
+            for (var checkbox of markedCheckbox) {
+                if (checkbox.checked)
+                    check_ed += (checkbox.value + ', ');
+            }
+            // if nothing checked, automatically saves checkbox value 17(None of the above)
+            if (check_ed == "") {
+                check_ed = "17";
+            }
+            let newEdit = { ...connection }; newEdit = check_ed; setConnection(newEdit)
+
+        }
+
+        handleConnectionCheckbox();
+
+        formatDate();
 
         const fNameErr = validName(fName);
         const mNameErr = validMName(mName);
         const sNameErr = validName(sName);
         const passwordErr = validPwd(password);
 
-        const birthErr = validDate(birth_);
-        const movedErr = validDate(moved_);
-        const datememorableErr = validDate(dateMemorable);
-        const reEnteredDateMemorableErr = validDate(reEnteredDateMemorable);
+        const birthErr = validDate(dateofbirth);
+        const movedErr = validDate(movedInDate);
+        const datememorableErr = validDate(memorableDate);
+        const reEnteredDateMemorableErr = validDate(reEntermemorableDate);
+
         const emailErr = validEmail(email);
         const reenteredEmailErr = validEmail(reEnterEmail);
         const postcodeErr = validPostcode(postcode);
@@ -180,21 +198,21 @@ export default function PrimaryApplicant() {
         const pwdMatchesErr = pwdMatch(password, reEnterPwd)
         const memMatchesErr = memDateMatch(memorableDate, reEntermemorableDate)
 
-        console.log(todayDate)
+        // console.log(todayDate)
 
         console.log(`Validation result is fname/sname ${fName} ${mName} ${sName}, 
         email ${email}, email matches ${reEnterEmail}, postcode ${postcode}, 
         correspondence postcode ${correspondencePostcode}, 
         home telephone ${telephone}, work telephone ${workPhone}, mobile ${mobile},
         pwd ${password}, pwd matches ${reEnterPwd}, 
-        memorable date ${dateMemorable}, memorable date matches ${reEnteredDateMemorable}`)
+        memorable date ${memorableDate}, memorable date matches ${reEntermemorableDate}`)
 
         console.log('FINAL Result passed', title, fName, mName, sName, nameChange,
             nINO, dateofbirth, sex, livedAbroad,
             postcode, addLine1, addLine2, addLine3, addLine4,
             movedInDate,
             rented, landlordName, landlordAddress, currentTenancyType, infoAboutCurrentAddress,
-            addressDifferent, correspondenceType, placedByLocalAuthrty, localAuthrtyName,
+            communicationAddress, correspondenceType, placedByLocalAuthrty, localAuthrtyName,
             correspondencePostcode, correspondenceAddLine1, correspondenceAddLine2, correspondenceAddLine3, correspondenceAddLine4,
             telephone, mobile, workPhone, email, reEnterEmail,
             ethnicity, nationality, sexOrient, belief,
@@ -202,8 +220,9 @@ export default function PrimaryApplicant() {
             tenure, tenancyRefNo, areyou, connection,
             memorableDate, reEntermemorableDate,
             password, reEnterPwd, comments, todayDate, status_
-        )
-        if ((!pwdMatchesErr) || (!memMatchesErr) || (!emailMatchesErr) ||
+        );
+
+        if ((!pwdMatchesErr) || (!memMatchesErr) || (!emailMatchesErr) || (sex == "Please Choose") ||
             (!fNameErr) || (!mNameErr) || (!sNameErr) || (!emailErr) || (!reenteredEmailErr) || (!corresPostcodeErr) ||
             (!postcodeErr) || (!telephoneErr) || (!workphoneErr) || (!mobileErr) ||
             (!birthErr) || (!movedErr) || (!datememorableErr) || (!reEnteredDateMemorableErr)) {
@@ -222,6 +241,11 @@ export default function PrimaryApplicant() {
             !pwdMatchesErr && alert('Password match error');
             !memMatchesErr && alert('Memorable date error');
 
+            if (sex == "Please Choose") {
+                alert('Sex is not selected');
+            }
+            console.log(`Unable to save`)
+
         } else {
 
             console.log('FINAL Result passed', title, fName, mName, sName, nameChange,
@@ -229,7 +253,7 @@ export default function PrimaryApplicant() {
                 postcode, addLine1, addLine2, addLine3, addLine4,
                 movedInDate,
                 rented, landlordName, landlordAddress, currentTenancyType, infoAboutCurrentAddress,
-                addressDifferent, correspondenceType, placedByLocalAuthrty, localAuthrtyName,
+                communicationAddress, correspondenceType, placedByLocalAuthrty, localAuthrtyName,
                 correspondencePostcode, correspondenceAddLine1, correspondenceAddLine2, correspondenceAddLine3, correspondenceAddLine4,
                 telephone, mobile, workPhone, email, reEnterEmail,
                 ethnicity, nationality, sexOrient, belief,
@@ -237,19 +261,10 @@ export default function PrimaryApplicant() {
                 tenure, tenancyRefNo, areyou, connection,
                 memorableDate, reEntermemorableDate,
                 password, reEnterPwd, comments, todayDate, status_
-            )
-            savePrimaryApplicant()
-        }
-    }
+            );
 
-    const handleConnectionCheckbox = () => {
-        var test = "";
-        var markedCheckbox = document.getElementsByName('connectionCheckbox');
-        for (var checkbox of markedCheckbox) {
-            if (checkbox.checked)
-                test += (checkbox.value + ' ');
+            savePrimaryApplicant();
         }
-        setConnection(test)
     }
 
     // const handleCheckbox = (e) => {
@@ -318,7 +333,7 @@ export default function PrimaryApplicant() {
             client_landlord_address: landlordAddress,
             client_landlord_tenancy_type: currentTenancyType,
             client_landlord_info_about_this_address: infoAboutCurrentAddress,
-            client_is_correspondence_address: addressDifferent,
+            client_communication_address: communicationAddress,
             client_correspondence_type: correspondenceType,
             client_correspondence_postcode: correspondencePostcode,
             client_correspondence_address_line1: correspondenceAddLine1,
@@ -339,7 +354,7 @@ export default function PrimaryApplicant() {
             client_interpreter: needInterpreter,
             client_language_prefer: preferedLanguage,
             client_current_tenure: tenure,
-            client_current_tenure_TenancyRefNo: tenancyRefNo,
+            client_current_tenure_bhamCouncilTenancyNum: tenancyRefNo,
             client_from_which_country: areyou,
             client_connection_to_birmingham: connection,
             client_password: password,
@@ -541,7 +556,8 @@ export default function PrimaryApplicant() {
                                 </MDBCol>
                                 <MDBCol className='col-3'>
 
-                                    <MDBRadio name='livedAbroadRadio' value='no' label='No' inline id='livedAbroadNo' htmlFor='livedAbroadNo'
+                                    <MDBRadio name='livedAbroadRadio' label='No' inline id='livedAbroadNo' htmlFor='livedAbroadNo'
+                                        defaultChecked
                                         onChange={(e) => { let newEdit = { ...livedAbroad }; newEdit = e.target.value; setLivedAbroad(newEdit) }}></MDBRadio>
                                 </MDBCol>
                             </MDBRow>
@@ -723,7 +739,8 @@ export default function PrimaryApplicant() {
                                     <MDBRadio name='rentedRadio' label='Yes' inline id='rentedYes' htmlFor="rentedYes"
                                         value='yes' onChange={(e) => { let newEdit = { ...rented }; newEdit = e.target.value; setRented(newEdit); setShowLandlord(true); }}></MDBRadio>     {/* setShowLandlord will  show or hide according to the selection */}
                                     <MDBRadio name='rentedRadio' label='No' inline id='rentedNo' htmlFor="rentedNo"
-                                        value='no' onChange={(e) => { let newEdit = { ...rented }; newEdit = e.target.value; setRented(newEdit); setShowLandlord(false); }}></MDBRadio>     {/* setShowLandlord will  show or hide according to the selection */}
+                                        defaultChecked
+                                        onChange={(e) => { let newEdit = { ...rented }; newEdit = e.target.value; setRented(newEdit); setShowLandlord(false); }}></MDBRadio>     {/* setShowLandlord will  show or hide according to the selection */}
 
                                 </div>
                             </div>
@@ -746,7 +763,8 @@ export default function PrimaryApplicant() {
                                         </div>
                                         <div className='mb-4' >
                                             <input style={inputStyle} className='form-control' type='text'
-                                                maxLength={30} onChange={(e) => { let newEdit = { ...landlordName }; newEdit = e.target.value; setLandlordName(newEdit) }} />
+                                                maxLength={30} defaultValue={landlordName}
+                                                onChange={(e) => { let newEdit = { ...landlordName }; newEdit = e.target.value; setLandlordName(newEdit) }} />
                                         </div>
                                         <div className="help-content mt-2">
                                             <span className="help-text">
@@ -756,7 +774,8 @@ export default function PrimaryApplicant() {
                                         </div>
                                         <div className='mb-4' >
                                             <textarea style={{ width: '350px' }} className='form-control' type='text'
-                                                maxLength={100} onChange={(e) => { let newEdit = { ...landlordAddress }; newEdit = e.target.value; setLandlordAddress(newEdit) }} />
+                                                maxLength={100} defaultValue={landlordName}
+                                                onChange={(e) => { let newEdit = { ...landlordAddress }; newEdit = e.target.value; setLandlordAddress(newEdit) }} />
                                         </div>
                                         <div className='mt-4'>
                                             <p style={{ fontSize: '16px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Current tenancy type*</strong></p>
@@ -767,13 +786,15 @@ export default function PrimaryApplicant() {
                                                 <option value="Assured tenancy">Assured tenancy</option>
                                                 <option value="Excluded tenancy or licence (such as lodging)">Excluded tenancy or licence (such as lodging)</option>
                                                 <option value="Regulated tenancy">Regulated tenancy</option>
+                                                <option value="I dont know">I dont know</option>
                                             </select>
                                         </div>
                                         <div className='mt-4'>
                                             <p style={{ fontSize: '16px', backgroundColor: '#c6d1d075', padding: '5px' }}><strong>Any other information about this address</strong></p>
                                             <div className='mb-4' >
                                                 <textarea style={{ width: '350px', height: '75px' }} className='form-control' type='text'
-                                                    maxLength={150} onChange={(e) => { let newEdit = { ...infoAboutCurrentAddress }; newEdit = e.target.value; setInfoAboutCurrentAddress(newEdit) }} />
+                                                    maxLength={150} defaultValue={infoAboutCurrentAddress}
+                                                    onChange={(e) => { let newEdit = { ...infoAboutCurrentAddress }; newEdit = e.target.value; setInfoAboutCurrentAddress(newEdit) }} />
                                             </div>
                                         </div>
                                     </div>
@@ -794,10 +815,12 @@ export default function PrimaryApplicant() {
                                     </div>
 
                                     <MDBRow>
-                                        <MDBRadio name='addressDifferentRadio' id='addressDifferentYes' label='To my current address' inline
-                                            value='current address' onChange={(e) => { let newEdit = { ...addressDifferent }; newEdit = e.target.value; setAddressDifferent(newEdit); setShowCorrespondence(false); }}></MDBRadio>    {/* setShowCorrespondence will  show or hide according to the selection */}
-                                        <MDBRadio name='addressDifferentRadio' id='addressDifferentNo' label='To my correspondence address' inline
-                                            value='correspondence address' onChange={(e) => { let newEdit = { ...addressDifferent }; newEdit = e.target.value; setAddressDifferent(newEdit); setShowCorrespondence(true); }}></MDBRadio>
+                                        <MDBRadio name='communicationAddressRadio' id='communicationAddressYes' label='To my current address' inline
+                                            defaultChecked
+                                            defaultValue={communicationAddress}
+                                            onChange={(e) => { let newEdit = { ...communicationAddress }; newEdit = e.target.value; setCommunicationAddress(newEdit); setShowCorrespondence(false); }}></MDBRadio>    {/* setShowCorrespondence will  show or hide according to the selection */}
+                                        <MDBRadio name='communicationAddressRadio' id='communicationAddressNo' label='To my correspondence address' inline
+                                            value='correspondence address' onChange={(e) => { let newEdit = { ...communicationAddress }; newEdit = e.target.value; setCommunicationAddress(newEdit); setShowCorrespondence(true); }}></MDBRadio>
                                     </MDBRow>
                                 </div>
 
@@ -942,7 +965,7 @@ export default function PrimaryApplicant() {
                                     </MDBCol>
                                     <MDBCol className='col-3'>
                                         <MDBRadio name='placedByLocalAuthrtyRadio' id='placedByLocalAuthrtyNo' label='No' htmlFor='placedByLocalAuthrtyNo' inline
-                                            value='no' defaultChecked
+                                            defaultChecked
                                             onChange={(e) => { let newEdit = { ...placedByLocalAuthrty }; newEdit = e.target.value; setPlacedByLocalAuthrty(newEdit); setShowLocalAuthority(false); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
                                     </MDBCol>
                                 </MDBRow>
@@ -1162,6 +1185,7 @@ export default function PrimaryApplicant() {
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
+                                    value={preferedLanguage}
                                     onChange={(e) => { let newEdit = { ...preferedLanguage }; newEdit = e.target.value; setPreferedLanguage(newEdit) }} >
                                     {languages.map((option) => (
                                         <option key={option.languageKey} value={option.languageKey}>{option.language}</option>
@@ -1183,7 +1207,8 @@ export default function PrimaryApplicant() {
                                 </MDBCol>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='needInterpreterRadio' id='needInterpreterNo' label='No' inline
-                                        value='no' onChange={(e) => { let newEdit = { ...needInterpreter }; newEdit = e.target.value; setNeedInterpreter(newEdit) }} />
+                                        defaultChecked
+                                        onChange={(e) => { let newEdit = { ...needInterpreter }; newEdit = e.target.value; setNeedInterpreter(newEdit) }} />
                                 </MDBCol>
                             </MDBRow>
 
@@ -1211,7 +1236,7 @@ export default function PrimaryApplicant() {
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
                                     aria-label="Default select example"
-                                    onChange={(e) => { let newEdit = { ...tenure }; newEdit = e.target.value; setTenure(newEdit); setShowTenancyRef(!showTenancyRef) }}>
+                                    onChange={(e) => { let newEdit = { ...tenure }; newEdit = e.target.value; setTenure(newEdit); setShowTenancyRef(true) }}>
                                     {tenureData.map((option) => (
                                         <option key={option.tenureKey} value={option.tenureKey}>{option.tenure}</option>
                                     ))}

@@ -12,13 +12,15 @@ function validEmail(email) {
   }
 };
 
+// the below postcode will check, is the postcode is in right format or empty field.
+// if it is right and empty field send true else send false flag
 function validPostcode(postcode) {
   let patternN = '^[a-zA-Z]{1,2}[0-9]{1,2}[ ]{1}[0-9]{1,1}[a-zA-Z]{2}$';
   let validPostcode = postcode.match(patternN);
-  if (!validPostcode) {
-    return false;
-  } else {
+  if(validPostcode || postcode=="") {
     return true;
+  } else if (!validPostcode) {
+    return false;
   }
 };
 
