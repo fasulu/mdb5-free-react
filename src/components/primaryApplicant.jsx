@@ -135,7 +135,7 @@ export default function PrimaryApplicant() {
     const [password, setPassword] = useState("");
     const [reEnterPwd, setReEnterPwd] = useState("");
 
-    const [comments, setComments] = useState("None");
+    const [comments, setComments] = useState("none");
     const status_ = "active"
     const todayDate = new Date().toISOString().slice(0, 19); // produces 2023-02-25
 

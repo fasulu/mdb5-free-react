@@ -8,7 +8,7 @@ import { sexOrients } from '../resources/sexOrient';
 import { beliefs } from '../resources/belief';
 import { languages } from '../resources/language';
 import { dates, months } from '../resources/datePicker';
-import { validEmail, validName, validPostcode, validNumber, emailMatch, validNINO, validMName } from '../validations/Validator.jsx';
+import { validEmail, validName, validPostcode, validNumber, emailMatch, validNINO, validDate, validMName } from '../validations/Validator.jsx';
 
 import {
     MDBContainer,
@@ -38,11 +38,12 @@ export default function JointApplicant() {
     const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const yearPickerStyle = { width: '80px', float: 'left', border: '5' };
+    const commentStyle = { minHeight: '150px', fontSize: '16px', minWidth: '250px', color: 'black' };
 
     const [showAddress, setShowAddress] = useState(false);
     const [showLocalAuthority, setShowLocalAuthority] = useState(false);
     const [showTenancyRef, setShowTenancyRef] = useState(false);
-    const [continueApplication, setContinueApplication] = useState(false);
+    const [continueApplication, setContinueApplication] = useState(true);
 
     const [primaryAplcntClientId, setPrimaryAplcntClientId] = useState("")
     const [relationWithPrimaryApplicant, setRelationWithPrimaryApplicant] = useState("")
@@ -50,7 +51,7 @@ export default function JointApplicant() {
     const [fName, setFName] = useState("");
     const [mName, setMName] = useState("");
     const [sName, setSName] = useState("");
-    const [nameChange, setNameChange] = useState("");
+    const [nameChange, setNameChange] = useState("none");
     const [nINO, setNINO] = useState("");
     const [dateofbirth, setdateofbirth] = useState("");
     const [sex, setSex] = useState("");
@@ -59,10 +60,10 @@ export default function JointApplicant() {
     const [dobMonth, setDOBMonth] = useState("");
     const [dobYear, setDOBYear] = useState("");
 
-    const [livedAbroad, setLivedAbroad] = useState("");
+    const [livedAbroad, setLivedAbroad] = useState("no");
 
     const [currentlyLiveWithYou, setCurrentlyLiveWithYou] = useState("no");
-    const [livingInDiffAddress, setLivingInDiffAddress] = useState("");
+    const [livingInDiffAddress, setLivingInDiffAddress] = useState("yes");
 
     const [movedInDate, setMovedInDate] = useState("");
 
@@ -71,13 +72,13 @@ export default function JointApplicant() {
     const [movedYear, setMovedYear] = useState("");
 
     const [corresPostcode, setCorresPostcode] = useState("");
-    const [corresAddLine1, setCorresAddLine1] = useState("");
-    const [corresAddLine2, setCorresAddLine2] = useState("");
-    const [corresAddLine3, setCorresAddLine3] = useState("");
-    const [corresAddLine4, setCorresAddLine4] = useState("");
+    const [corresAddLine1, setCorresAddLine1] = useState("none");
+    const [corresAddLine2, setCorresAddLine2] = useState("none");
+    const [corresAddLine3, setCorresAddLine3] = useState("none");
+    const [corresAddLine4, setCorresAddLine4] = useState("none");
 
-    const [placedByLocalAuthrty, setPlacedByLocalAuthrty] = useState("");
-    const [localAuthrtyName, setLocalAuthrtyName] = useState("");
+    const [placedByLocalAuthrty, setPlacedByLocalAuthrty] = useState("no");
+    const [localAuthrtyName, setLocalAuthrtyName] = useState("none");
 
     const [isShePregnant, setIsShePregnant] = useState("no");
     const [showDeliveryDate, setShowDeliveryDate] = useState(false);
@@ -92,39 +93,45 @@ export default function JointApplicant() {
     const [email, setEmail] = useState("");
     const [reEnterEmail, setReEnterEmail] = useState("");
 
-    const [ethnicity, setEthnicity] = useState("");
-    const [nationality, setNationality] = useState("");
-    const [sexOrient, setSexOrient] = useState("");
-    const [belief, setBelief] = useState("");
-    const [healthCondition, setHealthCondition] = useState("");
+    const [ethnicity, setEthnicity] = useState("prefer not to say");
+    const [nationality, setNationality] = useState("non-eea national");
+    const [sexOrient, setSexOrient] = useState("prefer not to say");
+    const [belief, setBelief] = useState("prefer not to say");
+    const [healthCondition, setHealthCondition] = useState("no");
 
-    const [preferedLanguage, setPreferedLanguage] = useState("");
-    const [needInterpreter, setNeedInterpreter] = useState("");
+    const [preferedLanguage, setPreferedLanguage] = useState("english");
+    const [needInterpreter, setNeedInterpreter] = useState("no");
 
     const [tenure, setTenure] = useState("");
     const [tenancyRefNo, setTenancyRefNo] = useState("");
-    
-    const [isYourPartner, setIsYourPartner] = useState("");
-    const [areYouWorker, setAreYouWorker] = useState();
-    const [connection, setConnection] = useState([]);
 
-    const [comments, setComments] = useState();
+    const [isYourPartner, setIsYourPartner] = useState("none of the above");
+    const [areYouWorker, setAreYouWorker] = useState("no");
+    const [connection, setConnection] = useState();
+
+    const [comments, setComments] = useState("none");
+
+    const todayDate = new Date().toISOString().slice(0, 19); // produces 2023-02-25
+
 
     useEffect(() => {
 
     }, [])
 
-    const handleCheckbox = (e) => {
+    const handleConnectionCheckbox = () => {
 
-        // e.preventDefault();
-        let checkedItems = [...connection];
-        if (e.target.checked) {
-            checkedItems = [...connection, e.target.value];
-        } else {
-            checkedItems.splice(connection.indexOf(e.target.value), 1);
+        var check_ed = "";
+        var markedCheckbox = document.getElementsByName('connectionCheckbox');
+        for (var checkbox of markedCheckbox) {
+            if (checkbox.checked)
+                check_ed += (checkbox.value + ', ');
         }
-        setConnection(checkedItems);
-        console.log(connection);
+        // if nothing checked, automatically saves checkbox value 17(None of the above)
+        if (check_ed == "") {
+            check_ed = "17";
+        }
+        let newEdit = { ...connection }; newEdit = check_ed; setConnection(newEdit)
+
     }
 
     const findPostcodeAddress = (e) => {
@@ -133,38 +140,27 @@ export default function JointApplicant() {
         alert('Sorry... \nPostcode search is not connected to UK Post Office API, \nplease enter the address manually')
     }
 
-    const showAddresCard = (e) => {
+    const saveJointApplicant = (e) => {
         e.preventDefault();
-        setShowAddress(true);
-    }
 
-    const ContinueOnJointApplicantDetails = (e) => {
-        e.preventDefault();
-        if (livingInDiffAddress == "Living in different address") {
-
-            let newEdit1 = { ...showAddress }; newEdit1 = true; setShowAddress(newEdit1)
-            let newEdit2 = { ...continueApplication }; newEdit2 = true; setContinueApplication(newEdit2)
-
-        } else {
-
-            let newEdit1 = { ...showAddress }; newEdit1 = false; setShowAddress(newEdit1)
-            let newEdit2 = { ...continueApplication }; newEdit2 = true; setContinueApplication(newEdit2)
-
+        const formatDate = () => {
+            let birth_ = { ...dateofbirth }; birth_ = (dobYear + "-" + dobMonth + "-" + dobDate); setdateofbirth(birth_);
+            let moved_ = { ...movedInDate }; moved_ = (movedYear + "-" + movedMonth + "-" + movedDate); setMovedInDate(moved_);
+            let delivry_ = { ...deliveryDate }; delivry_ = (delYear + "-" + delMonth + "-" + delDate); setDeliveryDate(delivry_);
         }
-    }
 
-    const saveJointMember = (e) => {
-        e.preventDefault();
+        handleConnectionCheckbox();
 
-        setdateofbirth(dobMonth + "/" + dobDate + "/" + dobYear);
-        setMovedInDate(movedMonth + "/" + movedDate + "/" + movedYear);
-        setDeliveryDate(delDate + "/" + delMonth + "/" + delYear);
+        formatDate();
 
         const fNameErr = validName(fName);
         const mNameErr = validMName(mName);
         const sNameErr = validName(sName);
         const ninoErr = validNINO(nINO)
         const emailErr = validEmail(email);
+        const dobErr = validDate(dateofbirth);
+        const movedErr = validDate(movedInDate);
+        const delvyErr = validDate(deliveryDate);
         const corresPostcodeErr = validPostcode(corresPostcode);
         const telephoneErr = validNumber(telephone);
         const workphoneErr = validNumber(workPhone);
@@ -172,12 +168,12 @@ export default function JointApplicant() {
         const emailMatchesErr = emailMatch(email, reEnterEmail)
 
         console.log(`Validation result is fname/sname ${fNameErr} ${mNameErr}, ${sNameErr}, 
-        nino ${ninoErr}, email ${emailErr}, email matches ${emailMatchesErr}, 
-        correspondence postcode ${corresPostcodeErr}, 
-        telephone err ${telephoneErr}, workphone err ${workphoneErr}, mobile err ${mobileErr}, 
+        nino ${ninoErr}, email ${emailErr}, email matches ${emailMatchesErr}, correspondence postcode ${corresPostcodeErr}, 
+        dob ${dobErr}, moved ${movedErr}, delvy ${delvyErr},
+        telephone ${telephoneErr}, workphone ${workphoneErr}, mobile ${mobileErr},
         home telephone ${telephone}, work telephone ${workPhone}, mobile ${mobile}`)
 
-        console.log('Im in saveJointMember', relationWithPrimaryApplicant,
+        console.log('Im in saveJointApplicant', relationWithPrimaryApplicant,
             title, fName, mName, sName, nameChange,
             nINO, dateofbirth, sex,
             corresPostcode, corresAddLine1, corresAddLine2, corresAddLine3, corresAddLine4,
@@ -185,36 +181,35 @@ export default function JointApplicant() {
             telephone, mobile, workPhone, email, reEnterEmail,
             ethnicity, nationality, sexOrient, isShePregnant, deliveryDate,
             belief, healthCondition, preferedLanguage, needInterpreter,
-            tenure, tenancyRefNo, isYourPartner, areYouWorker, connection, comments
+            tenure, tenancyRefNo, isYourPartner, areYouWorker, connection, comments, todayDate
         )
 
-        if (showAddress) {
-            if ((!fNameErr) || (!mNameErr) || (!sNameErr) || (!emailErr) || (!emailMatchesErr) || (!ninoErr) ||
-                (!corresPostcodeErr) || (!telephoneErr) || (!workphoneErr) || (!mobileErr)) {
-                !fNameErr && alert('First Name error');
-                !mNameErr && alert('Middle Name error');
-                !sNameErr && alert('Surname error');
-                !telephoneErr && alert('Telephone number error');
-                !workphoneErr && alert('Work telephone number error');
-                !mobileErr && alert('Mobile number error');
-                !emailErr && alert('Email error');
-                !ninoErr && alert('NINO error');
-                !corresPostcodeErr && alert('Postcode error');
-                !emailMatchesErr && alert('Email match error');
-            }
+        if ((!fNameErr) || (!mNameErr) || (!sNameErr) || (!emailErr) || (!emailMatchesErr) || (!ninoErr) ||
+            (!dobErr) || (!movedErr) || (!delvyErr) || (!corresPostcodeErr) || (!telephoneErr) || (!workphoneErr) || (!mobileErr)) {
+            !fNameErr && alert('First Name error');
+            !mNameErr && alert('Middle Name error');
+            !sNameErr && alert('Surname error');
+            !ninoErr && alert('NINO error');
+            !dobErr && alert('dob error');
+            !movedErr && alert('moved error');
+            !delvyErr && alert('delivery error');
+            !telephoneErr && alert('Telephone number error');
+            !workphoneErr && alert('Work telephone number error');
+            !mobileErr && alert('Mobile number error');
+            !emailErr && alert('Email error');
+            !corresPostcodeErr && alert('Postcode error');
+            !emailMatchesErr && alert('Email match error');
         } else {
-            if ((!fNameErr) || (!mNameErr) || (!sNameErr) || (!emailErr) || (!emailMatchesErr) ||
-                (!ninoErr) || (!telephoneErr) || (!workphoneErr) || (!mobileErr)) {
-                !fNameErr && alert('First Name error');
-                !mNameErr && alert('Middle Name error');
-                !sNameErr && alert('Surname error');
-                !telephoneErr && alert('Telephone number error');
-                !workphoneErr && alert('Work telephone number error');
-                !mobileErr && alert('Mobile number error');
-                !emailErr && alert('Email error');
-                !ninoErr && alert('NINO error');
-                !emailMatchesErr && alert('Email match error');
-            }
+
+            console.log(`Final Result passed :- ${relationWithPrimaryApplicant},
+            ${title}, ${fName}, ${mName}, ${sName}, ${nameChange},
+            ${nINO}, ${dateofbirth}, ${sex},
+            ${corresPostcode}, ${corresAddLine1}, ${corresAddLine2}, ${corresAddLine3}, ${corresAddLine4},
+            ${currentlyLiveWithYou}, ${movedInDate}, ${placedByLocalAuthrty}, ${localAuthrtyName},
+            ${telephone}, ${mobile}, ${workPhone}, ${email}, ${reEnterEmail},
+            ${ethnicity}, ${nationality}, ${sexOrient}, ${isShePregnant}, ${deliveryDate},
+            ${belief}, ${healthCondition}, ${preferedLanguage}, ${needInterpreter},
+            ${tenure}, ${tenancyRefNo}, ${isYourPartner}, ${areYouWorker}, ${connection}, ${comments}, ${todayDate}`)
 
         }
     }
@@ -265,11 +260,11 @@ export default function JointApplicant() {
                             <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded" aria-label="Default select example"
                                 value={title} onChange={(e) => { let newEdit = { ...title }; newEdit = e.target.value; setTitle(newEdit) }}>
                                 <option defaultValue={title}>Please Choose</option>
-                                <option value="dr">Dr</option>
-                                <option value="miss">Miss</option>
-                                <option value="mr">Mr</option>
-                                <option value="mrs">Mrs</option>
-                                <option value="ms">Ms</option>
+                                <option value="1">Dr</option>
+                                <option value="2">Miss</option>
+                                <option value="3">Mr</option>
+                                <option value="4">Mrs</option>
+                                <option value="5">Ms</option>
                             </select>
 
                         </div>
@@ -349,7 +344,8 @@ export default function JointApplicant() {
                                 </MDBCol>
                                 <MDBCol className='col-3'>
 
-                                    <MDBRadio name='currentlyLiveWithYouRadio' value='no' label='No' inline id='currentlyLiveWithYouNo' htmlFor='currentlyLiveWithYouNo'
+                                    <MDBRadio name='currentlyLiveWithYouRadio' label='No' inline id='currentlyLiveWithYouNo' htmlFor='currentlyLiveWithYouNo'
+                                        value='no' defaultChecked
                                         onClick={(e) => { let newEdit = { ...currentlyLiveWithYou }; newEdit = e.target.value; setCurrentlyLiveWithYou(newEdit) }}></MDBRadio>
                                 </MDBCol>
                             </MDBRow>
@@ -446,7 +442,8 @@ export default function JointApplicant() {
                                 </MDBCol>
                                 <MDBCol className='col-3'>
 
-                                    <MDBRadio name='livedAbroadRadio' value='no' label='No' inline id='livedAbroadNo' htmlFor='livedAbroadNo'
+                                    <MDBRadio name='livedAbroadRadio' label='No' inline id='livedAbroadNo' htmlFor='livedAbroadNo'
+                                        value='no' defaultChecked
                                         onClick={(e) => { let newEdit = { ...livedAbroad }; newEdit = e.target.value; setLivedAbroad(newEdit) }}></MDBRadio>
                                 </MDBCol>
                             </MDBRow>
@@ -471,13 +468,13 @@ export default function JointApplicant() {
                                 </MDBCol>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='placedByLocalAuthrtyRadio' id='placedByLocalAuthrtyNo' label='No' htmlFor='placedByLocalAuthrtyNo' inline
-                                        value='no' onChange={(e) => { let newEdit = { ...placedByLocalAuthrty }; newEdit = e.target.value; setPlacedByLocalAuthrty(newEdit); setShowLocalAuthority(false); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
+                                        value='no' defaultChecked
+                                        onChange={(e) => { let newEdit = { ...placedByLocalAuthrty }; newEdit = e.target.value; setPlacedByLocalAuthrty(newEdit); setShowLocalAuthority(false); }}></MDBRadio>     {/* setShowLocalAuthority will  show or hide according to the selection */}
                                 </MDBCol>
                             </MDBRow>
 
                             {showLocalAuthority &&
                                 <div>
-
                                     <div className='mt-4'>
                                         <p style={{ fontSize: '16px' }}><strong>If yes, by which local authority?</strong></p>
                                     </div>
@@ -490,27 +487,21 @@ export default function JointApplicant() {
                             }
 
                             {/* *********** What is thier current address? */}
-                            <div>
+                            <div className=''>
                                 <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>What is their current address?</strong></p>
                                 <div style={{ fontSize: '13px', height: 'auto', width: 'auto', background: '#e4f5fb' }} className=" help-content border border-grey rounded">
                                     <p className='mx-2 mt-3 mb-2' style={{ fontSize: '12px' }}><strong>Is this person living with one of the following people?</strong></p>
-
-                                    <MDBRadio className='mx-1' name='livingInDiffAddressRadio' id='livingInDiffAddressYes' label="Living with primary applicant" htmlFor='livingInDiffAddressYes'
-                                        value='Living with primary applicant' onChange={(e) => { let newEdit = { ...livingInDiffAddress }; newEdit = e.target.value; setLivingInDiffAddress(newEdit); }}></MDBRadio>     {/* Get and show primary applicant address in this place */}
-                                    <MDBRadio className='mx-1' name='livingInDiffAddressRadio' id='livingInDiffAddressNo' label='This person is living at a different address' htmlFor='livingInDiffAddressNo'
-                                        value='Living in different address' onChange={(e) => { let newEdit = { ...livingInDiffAddress }; newEdit = e.target.value; setLivingInDiffAddress(newEdit); }}></MDBRadio>     {/* Spouse or partner living in different address */}
+                                    <div className='mx-2 mb-2'>
+                                        <MDBRadio className='mx-1' name='livingInDiffAddressRadio' id='livingInDiffAddressYes' label="Living with primary applicant" htmlFor='livingInDiffAddressYes'
+                                            value='Living with primary applicant'
+                                            onChange={(e) => { let newEdit = { ...livingInDiffAddress }; newEdit = e.target.value; setLivingInDiffAddress(newEdit); setContinueApplication(false); setShowAddress(false) }}></MDBRadio>     {/* Get and show primary applicant address in this place */}
+                                        <MDBRadio className='mx-1' name='livingInDiffAddressRadio' id='livingInDiffAddressNo' label='This person is living at a different address' htmlFor='livingInDiffAddressNo'
+                                            value='Living in different address' onChange={(e) => { let newEdit = { ...livingInDiffAddress }; newEdit = e.target.value; setLivingInDiffAddress(newEdit); setContinueApplication(false); setShowAddress(true) }}></MDBRadio>     {/* Spouse or partner living in different address */}
+                                    </div>
                                 </div>
                                 <p className='mt-3 mb-2' style={{ fontSize: '13px' }}>You must select an option to conitue</p>
-
-                                <form className='d-flex w-auto mx-2'>
-                                    <MDBBtn style={{ fontSize: '12px', width: 'auto', textTransform: 'none' }} color='btn btn-outline-secondary me-1'
-                                        onClick={ContinueOnJointApplicantDetails}>
-                                        Continue</MDBBtn>
-                                </form>
-
                             </div>
                         </div>
-
                     </MDBCardBody>
                 </MDBCard>
 
@@ -565,7 +556,6 @@ export default function JointApplicant() {
 
                                 {/* ***********  Address line 2  */}
                                 <div>
-
                                     <div className='mt-4'>
                                         <p style={{ fontSize: '16px' }}><strong>Address line 2*</strong></p>
                                     </div>
@@ -583,7 +573,6 @@ export default function JointApplicant() {
 
                                 {/* ***********  Address line 3  */}
                                 <div>
-
                                     <div className='mt-4'>
                                         <p style={{ fontSize: '16px' }}><strong>Address line 3*</strong></p>
                                     </div>
@@ -601,7 +590,6 @@ export default function JointApplicant() {
 
                                 {/* ***********  Address line 4  */}
                                 <div>
-
                                     <div className='mt-4'>
                                         <p style={{ fontSize: '16px' }}><strong>Address line 4*</strong></p>
                                     </div>
@@ -650,7 +638,6 @@ export default function JointApplicant() {
 
                         {/* ***********  Work telephone  */}
                         <div>
-
                             <div className='mt-4'>
                                 <p style={{ fontSize: '17px' }}><strong>Work telephone*</strong></p>
                             </div>
@@ -664,7 +651,6 @@ export default function JointApplicant() {
 
                         {/* ***********  Mobile telephone  */}
                         <div>
-
                             <div className='mt-4'>
                                 <p style={{ fontSize: '17px' }}><strong>Mobile telephone*</strong></p>
                             </div>
@@ -678,7 +664,6 @@ export default function JointApplicant() {
 
                         {/* ***********  Email address  */}
                         <div>
-
                             <div className='mt-4'>
                                 <p style={{ fontSize: '17px' }}><strong>Email address*</strong></p>
                             </div>
@@ -688,8 +673,8 @@ export default function JointApplicant() {
                                         minLength={6} maxLength={40} onChange={(e) => { let newEdit = { ...email }; newEdit = e.target.value; setEmail(newEdit) }} />
                                 </div>
                             </div>
-                            <div className='mt-4  help-content border border-grey rounded' style={{ background: '#e4f5fb' }}>
-                                <p style={{ fontSize: '17px' }}><strong>Please re-enter your email address*</strong></p>
+                            <div className='mt-4 help-content border border-grey rounded' style={{ background: '#e4f5fb' }}>
+                                <p style={{ marginLeft:'5px', fontSize: '17px' }}><strong>Please re-enter your email address*</strong></p>
                             </div>
                             <div>
                                 <div className='mt-2' >
@@ -697,7 +682,6 @@ export default function JointApplicant() {
                                         minLength={6} maxLength={40} onChange={(e) => { let newEdit = { ...reEnterEmail }; newEdit = e.target.value; setReEnterEmail(newEdit) }} />
                                 </div>
                             </div>
-
                         </div>
 
                     </MDBCardBody>
@@ -714,7 +698,6 @@ export default function JointApplicant() {
 
                         {/**********  Ethnic group  */}
                         <div>
-
                             <div className='mt-4'>
                                 <div >
                                     <p style={{ fontSize: '17px' }}><strong>What is your ethnic group? *</strong></p>
@@ -739,7 +722,6 @@ export default function JointApplicant() {
                             <div className='mt-4'>
                                 <p style={{ fontSize: '17px' }}><strong>What is your nationality? *</strong></p>
                             </div>
-
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
@@ -757,7 +739,6 @@ export default function JointApplicant() {
                             <div className='mt-4'>
                                 <p style={{ fontSize: '17px' }}><strong>What is your religion or belief? *</strong></p>
                             </div>
-
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
@@ -773,9 +754,8 @@ export default function JointApplicant() {
                         <div>
 
                             <div className='mt-4  help-content border border-grey rounded' style={{ background: '#e4f5fb' }}>
-                                <p style={{ fontSize: '17px' }}><strong>What is your sexual orientation? *</strong></p>
+                                <p style={{ marginLeft:'5px', fontSize: '17px' }}><strong>What is your sexual orientation? *</strong></p>
                             </div>
-
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
@@ -802,7 +782,8 @@ export default function JointApplicant() {
                                 </MDBCol>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='isShePregnantRadio' id='isShePregnantNo' label='No' htmlFor='isShePregnantNo' inline
-                                        value='no' onChange={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); setShowDeliveryDate(false); }}></MDBRadio>     {/* setShowDeliveryDate will  show or hide according to the selection */}
+                                        value='no' defaultChecked
+                                        onChange={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); setShowDeliveryDate(false); }}></MDBRadio>     {/* setShowDeliveryDate will  show or hide according to the selection */}
                                 </MDBCol>
                             </MDBRow>
                         </div>
@@ -849,7 +830,6 @@ export default function JointApplicant() {
                                             placeholder='year'
                                             onChange={(e) => { let newEdit = { ...delYear }; newEdit = e.target.value; setDelYear(newEdit) }}>
                                         </input>
-
                                     </div>
                                 </div>
                             </div>
@@ -864,6 +844,7 @@ export default function JointApplicant() {
 
                             <div className='mt-2' >
                                 <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
+                                    value={healthCondition}
                                     onChange={(e) => { let newEdit = { ...healthCondition }; newEdit = e.target.value; setHealthCondition(newEdit) }} >
                                     <option defaultValue>Please Select</option>
                                     <option value="no">No</option>
@@ -883,6 +864,7 @@ export default function JointApplicant() {
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
+                                    value={preferedLanguage}
                                     onChange={(e) => { let newEdit = { ...preferedLanguage }; newEdit = e.target.value; setPreferedLanguage(newEdit) }} >
                                     {languages.map((option) => (
                                         <option key={option.languageKey} value={option.languageKey}>{option.language}</option>
@@ -892,24 +874,20 @@ export default function JointApplicant() {
                         </div>
 
                         {/**********  Interpreter */}
-                        <div >
-
-                            <div className='mt-4  help-content border border-grey rounded' style={{ background: '#e4f5fb' }}>
-                                <p style={{ fontSize: '17px' }}><strong>Does your partner require an interpreter? *</strong></p>
-                                <MDBRow >
-                                    <MDBCol className='col-3 mx-2 mb-2'>
-                                        <MDBRadio name='needInterpreterRadio' id='needInterpreterYes' label='Yes' inline
-                                            value='yes' onChange={(e) => { let newEdit = { ...needInterpreter }; newEdit = e.target.value; setNeedInterpreter(newEdit) }} />
-                                    </MDBCol>
-                                    <MDBCol className='col-3'>
-                                        <MDBRadio name='needInterpreterRadio' id='needInterpreterNo' label='No' inline
-                                            value='no' onChange={(e) => { let newEdit = { ...needInterpreter }; newEdit = e.target.value; setNeedInterpreter(newEdit) }} />
-                                    </MDBCol>
-                                </MDBRow>
-                            </div>
-
+                        <div className='mt-4  help-content border border-grey rounded' style={{ background: '#e4f5fb' }}>
+                            <p style={{ marginLeft:'5px', fontSize: '17px' }}><strong>Does your partner require an interpreter? *</strong></p>
+                            <MDBRow >
+                                <MDBCol className='col-3 mx-2 mb-2'>
+                                    <MDBRadio name='needInterpreterRadio' id='needInterpreterYes' label='Yes' inline
+                                        value='yes' onChange={(e) => { let newEdit = { ...needInterpreter }; newEdit = e.target.value; setNeedInterpreter(newEdit) }} />
+                                </MDBCol>
+                                <MDBCol className='col-3'>
+                                    <MDBRadio name='needInterpreterRadio' id='needInterpreterNo' label='No' inline
+                                        value='no' defaultChecked
+                                        onChange={(e) => { let newEdit = { ...needInterpreter }; newEdit = e.target.value; setNeedInterpreter(newEdit) }} />
+                                </MDBCol>
+                            </MDBRow>
                         </div>
-
                     </MDBCardBody>
                 </MDBCard>
 
@@ -985,6 +963,7 @@ export default function JointApplicant() {
                                 <select style={comboBoxStyle}
                                     className="form-select rounded"
                                     aria-label="Default select example"
+                                    value={isYourPartner}
                                     onChange={(e) => { let newEdit = { ...isYourPartner }; newEdit = e.target.value; setIsYourPartner(newEdit) }}>
                                     {areyouData.map((option) => (
                                         <option key={option.areYouKey} value={option.areYouKey}>{option.areYou}</option>
@@ -1036,15 +1015,16 @@ export default function JointApplicant() {
                             </div>
                         </div>
 
-                        {/**********  Are you  a worker, self-employed or a student?*/}
+                        {/**********  Is your partner a worker, self-employed or a student?*/}
                         <div className=" mt-2 help-content border border-grey rounded" style={{ fontSize: '13px', width: 'auto', background: '#e4f5fb' }}>
                             <div className='mt-2'>
-                                <p style={{ fontSize: '17px' }}><strong>Are you  a worker, self-employed or a student?*</strong></p>
+                                <p style={{ marginLeft:'5px', fontSize: '17px' }}><strong>Is your partner a worker, self-employed or a student?*</strong></p>
                             </div>
                             <MDBRow className='mb-2'>
                                 <MDBCol className='col-3 mx-2 mb-2'>
                                     <MDBRadio name='areYouWorkerRadio' id='areYouWorkerYes' label='Yes' inline
-                                        value='yes' onChange={(e) => { let newEdit = { ...areYouWorker }; newEdit = e.target.value; setAreYouWorker(newEdit) }} />
+                                        value='yes' defaultChecked
+                                        onChange={(e) => { let newEdit = { ...areYouWorker }; newEdit = e.target.value; setAreYouWorker(newEdit) }} />
                                 </MDBCol>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='areYouWorkerRadio' id='areYouWorkerNo' label='No' inline
@@ -1065,42 +1045,24 @@ export default function JointApplicant() {
                                 <div className='mt-4'>
                                     <p style={{ fontSize: '17px' }}><strong>In order to help us understand why you want to live in Birmingham, we need to know about your connection to the city. Please choose from the following options. *</strong></p>
                                 </div>
-
                                 <div>
-                                    <MDBCheckbox name='flexCheck' value='1' id='flexCheck1' label='I have lived in Birmingham for the last 24 months or more'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='2' id='flexCheck2' label='I am currently employed or have a confirmed offer of employment in Birmingham'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='3' id='flexCheck4' label='Birmingham City Council has accepted a homeless duty to me and placed me outside of Birmingham'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='4' id='flexCheck5' label='I am in, or due to undertake training or higher education in Birmingham that will last at least 6 months or more'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='5' id='flexCheck6' label='I have caring responsibility for someone resident in Birmingham'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='6' id='flexCheck7' label='I am a care leaver aged 18 - 21 who is owed a duty of care by Birmingham City Council'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='7' id='flexCheck8' label='I need to be near specialist medical or support services only available in Birmingham'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='8' id='flexCheck9' label='I am care leaver aged 22 to 25 who is owed a duty of care by Birmingham City Council and pursuing a programme of education'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='9' id='flexCheck10' label='I am a current member of His Majestys Armed Forces'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='10' id='flexCheck11' label='I am a current or former member of His Majestys Armed Forces and I need to move due to a medical condition that was caused by my military service'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='11' id='flexCheck12' label='I am the spouse or civil partner of a person who has died as a result of their service in His Majestys Armed Forces and I am now leaving Services Accommodation'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='12' id='flexCheck13' label='I am no longer a member of His Majestys Armed Forces, however I was discharged within the last 5 years'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='13' id='flexCheck14' label='I am a former spouse or civil partner of a person in His Majestys Armed Forces and I am now leaving Services Accommodation'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='14' id='flexCheck15' label='I am an adult child of Service personnel who is no longer able to remain in the family home due to the impact moving from base to base'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='15' id='flexCheck16' label='I have near relatives in Birmingham and they have been resident in Birmingham for the last 5 years or more'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='16' id='flexCheck17' label='I need to move away from another area to escape violence or harm'
-                                        onChange={handleCheckbox} />
-                                    <MDBCheckbox name='flexCheck' value='17' id='flexCheck18' label='None of the above'
-                                        onChange={handleCheckbox} />
+                                    <MDBCheckbox name='connectionCheckbox' value='1' id='flexCheck1' label='I have lived in Birmingham for the last 24 months or more' />
+                                    <MDBCheckbox name='connectionCheckbox' value='2' id='flexCheck2' label='I am currently employed or have a confirmed offer of employment in Birmingham' />
+                                    <MDBCheckbox name='connectionCheckbox' value='3' id='flexCheck4' label='Birmingham City Council has accepted a homeless duty to me and placed me outside of Birmingham' />
+                                    <MDBCheckbox name='connectionCheckbox' value='4' id='flexCheck5' label='I am in, or due to undertake training or higher education in Birmingham that will last at least 6 months or more' />
+                                    <MDBCheckbox name='connectionCheckbox' value='5' id='flexCheck6' label='I have caring responsibility for someone resident in Birmingham' />
+                                    <MDBCheckbox name='connectionCheckbox' value='6' id='flexCheck7' label='I am a care leaver aged 18 - 21 who is owed a duty of care by Birmingham City Council' />
+                                    <MDBCheckbox name='connectionCheckbox' value='7' id='flexCheck8' label='I need to be near specialist medical or support services only available in Birmingham' />
+                                    <MDBCheckbox name='connectionCheckbox' value='8' id='flexCheck9' label='I am care leaver aged 22 to 25 who is owed a duty of care by Birmingham City Council and pursuing a programme of education' />
+                                    <MDBCheckbox name='connectionCheckbox' value='9' id='flexCheck10' label='I am a current member of His Majestys Armed Forces' />
+                                    <MDBCheckbox name='connectionCheckbox' value='10' id='flexCheck11' label='I am a current or former member of His Majestys Armed Forces and I need to move due to a medical condition that was caused by my military service' />
+                                    <MDBCheckbox name='connectionCheckbox' value='11' id='flexCheck12' label='I am the spouse or civil partner of a person who has died as a result of their service in His Majestys Armed Forces and I am now leaving Services Accommodation' />
+                                    <MDBCheckbox name='connectionCheckbox' value='12' id='flexCheck13' label='I am no longer a member of His Majestys Armed Forces, however I was discharged within the last 5 years' />
+                                    <MDBCheckbox name='connectionCheckbox' value='13' id='flexCheck14' label='I am a former spouse or civil partner of a person in His Majestys Armed Forces and I am now leaving Services Accommodation' />
+                                    <MDBCheckbox name='connectionCheckbox' value='14' id='flexCheck15' label='I am an adult child of Service personnel who is no longer able to remain in the family home due to the impact moving from base to base' />
+                                    <MDBCheckbox name='connectionCheckbox' value='15' id='flexCheck16' label='I have near relatives in Birmingham and they have been resident in Birmingham for the last 5 years or more' />
+                                    <MDBCheckbox name='connectionCheckbox' value='16' id='flexCheck17' label='I need to move away from another area to escape violence or harm' />
+                                    <MDBCheckbox name='connectionCheckbox' value='17' id='flexCheck18' label='None of the above' />
                                 </div>
                             </div>
                         </div>
@@ -1112,17 +1074,18 @@ export default function JointApplicant() {
                     <MDBCardBody>
                         <p className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Any other comments or additional information</strong></p>
                         <div className='mt-4' >
-                            <MDBRow>
-                                <MDBCol >
-                                    <textarea style={{ width: '250px', height: '350px' }} className='form-control' type='text'
-                                        maxLength={250} onChange={(e) => { let newEdit = { ...comments }; newEdit = e.target.value; setComments(newEdit) }} />
-                                </MDBCol>
-                            </MDBRow>
+                            <MDBCol className='col-10'>
+                                <div  >
+                                    <textarea style={commentStyle} className='form-control' type='text' placeholder='Comments...'
+                                        maxLength={20} value={comments}
+                                        onChange={(e) => { let newEdit = { ...comments }; newEdit = e.target.value; setComments(newEdit) }}></textarea>
+                                </div>
+                            </MDBCol>
                         </div>
 
                         <form className='d-flex w-auto mt-3'>
                             <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
-                                onClick={saveJointMember} >
+                                disabled={continueApplication} onClick={saveJointApplicant}  >
                                 Save Joint Member</MDBBtn>
                             <MDBBtn className='me-1 btn btn-outline-secondary' style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='white'
                                 onClick={cancelEntry}>
