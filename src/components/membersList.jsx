@@ -1,28 +1,76 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import axios from "axios";
+
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../userContext/UserContext"
 
 import MemberEdit from './memberEdit';
+
 import {
   MDBCard,
-  MDBIcon,
   MDBCardBody,
   MDBRipple,
   MDBTypography,
-  MDBBtn,
-  MDBRow,
-  MDBCol,
-  MDBCardFooter
+  MDBRow, MDBCol,
+  MDBIcon, MDBBtn
 } from 'mdb-react-ui-kit';
 
 import { testData } from '../resources/testData';
 
 import { ToCamelCase } from '../validations/Validator'
 
-export default function MembersList(props) {
+
+export default function MembersList() {
+
+  const { clientId, setClientId } = useContext(UserContext);
 
   const navigate = useNavigate();
 
+  const primaryClientIdUrl = "http://localhost:9001/member/clientid/";
+
   const inputStyle = { fontSize: '16px', width: '250px', color: '#464646' };
+
+  const [primaryApplicantClientId, setPrimaryApplicantClientId] = useState(clientId)
+
+  const [membersList, setMembersList] = useState([])
+
+  useEffect(() => {
+    fetchData();
+  }, [])
+
+  async function fetchData() {
+    try {
+      const response = await axios.get(primaryClientIdUrl + primaryApplicantClientId)
+      // const response = await axios.get(primaryClientIdUrl + "63ff81bc0cea542e631b614a")
+      if (response.data) {
+
+        console.log(`Response from backend:- ${response.data.message}`)
+        setMembersList(response.data.memberList)
+
+      } else {
+
+        console.log(`Response from backend:- ${response.data.message}`)
+        navigate('/member', { });
+
+      }
+      // console.log(`UseEffect :- ${primaryClientIdUrl + primaryApplicantClientId}`)
+
+      // const token = TokenVerify()
+
+      // console.log(`adminPage useEffect token result is ${token}`)
+
+      // const response = await axios.get(loggedInUrl, {
+      //     headers: {
+      //         Authorization: "Bearer " + token
+      //     }
+      // })
+
+      // console.log(response.data.validUser)      
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const boxStyle = {
     backgroundColor: '#e0e0e0'
@@ -35,28 +83,35 @@ export default function MembersList(props) {
     const selectedMember1 = e.innerText
     console.log(selectedMember1)
 
-    navigate('/memberedit', { state: { test: selectedMember1 } });
+    navigate('/memberedit', { state: { memberID: selectedMember1 } });
   }
-
+  
   return (
     <React.Fragment>
-      {testData.map((membersList) => {
+      {/* <MDBBtn style={{ backgroundColor: '#3b5998' }} href='#'>
+        <MDBIcon fas icon='plus' />
+      </MDBBtn> */}
+      
+      {membersList.map((memberList) => {
         return (
+
+
           <MDBCard className='m-2' style={boxStyle} >
             {<MDBRipple rippleColor='dark' rippleTag='div' className='hover-overlay'>
-              <MDBCardBody key={membersList.dataKey} item='true' >
+              <MDBCardBody key={membersList._id} item='true' >
                 <MDBRow alignment='center'>
                   <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
-                    <MDBTypography style={{ cursor: 'pointer', fontSize: '16px', color: '#1a82db', textDecoration: 'blue' }}>
-                      Id: <strong onClick={(e) => openMember(e.target)}>{ToCamelCase(membersList.householdMemberID)}</strong>
+                    <MDBTypography style={{ cursor: 'pointer', fontSize: '16px', color: '#1a82db', textDecoration: 'blue' }}
+                      key={memberList._id}>
+                      Id: <strong onClick={(e) => openMember(e.target)}>{ToCamelCase(memberList._id)}</strong>
                     </MDBTypography>
-                    <MDBTypography style={inputStyle}>Date of birth: <strong>{membersList.dob.toUpperCase()}</strong></MDBTypography>
-                    <MDBTypography style={inputStyle}>Relationship:  <strong>{membersList.relationship.toUpperCase()}</strong></MDBTypography>
+                    <MDBTypography style={inputStyle}>Date of birth: <strong>{memberList.clientOtherHousehold_dateofbirth.slice(0, 10)}</strong></MDBTypography>
+                    <MDBTypography style={inputStyle}>Relationship:  <strong>{memberList.clientOtherHousehold_relationshipWithClient}</strong></MDBTypography>
                   </MDBCol>
                   <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
-                    <MDBTypography style={inputStyle}> NINO:  <strong >{membersList.nino.toUpperCase()} </strong> </MDBTypography>
-                    <MDBTypography style={inputStyle}>Illness:  <strong>{membersList.illness.toUpperCase()}</strong></MDBTypography>
-                    <MDBTypography style={inputStyle}>Moved In:  <strong>{membersList.movedin.toUpperCase()}</strong></MDBTypography>
+                    <MDBTypography style={inputStyle}> NINO:  <strong >{memberList.clientOtherHousehold_NINO} </strong> </MDBTypography>
+                    <MDBTypography style={inputStyle}>Illness:  <strong>{memberList.clientOtherHousehold_illness}</strong></MDBTypography>
+                    <MDBTypography style={inputStyle}>Moved In:  <strong>{memberList.clientOtherHousehold_moved_to_current_address.slice(0, 10)}</strong></MDBTypography>
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>
@@ -64,6 +119,30 @@ export default function MembersList(props) {
           </MDBCard>
         );
       })}
+      {/* {testData.map((membersList) => {
+        return (
+          <MDBCard className='m-2' style={boxStyle} >
+            {<MDBRipple rippleColor='dark' rippleTag='div' className='hover-overlay'>
+              <MDBCardBody key={testData.dataKey} item='true' >
+                <MDBRow alignment='center'>
+                  <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
+                    <MDBTypography style={{ cursor: 'pointer', fontSize: '16px', color: '#1a82db', textDecoration: 'blue' }}>
+                      Id: <strong onClick={(e) => openMember(e.target)}>{ToCamelCase(membersList.householdMemberID)}</strong>
+                    </MDBTypography>
+                    <MDBTypography style={inputStyle}>Date of birth: <strong>{membersList.dob.toUpperCase()}</strong></MDBTypography>
+                    <MDBTypography style={inputStyle}>Relationship:  <strong>{membersList.relationship.toUpperCase()}</strong></MDBTypography>
+                    </MDBCol>
+                    <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
+                    <MDBTypography style={inputStyle}> NINO:  <strong >{membersList.nino.toUpperCase()} </strong> </MDBTypography>
+                    <MDBTypography style={inputStyle}>Illness:  <strong>{membersList.illness.toUpperCase()}</strong></MDBTypography>
+                    <MDBTypography style={inputStyle}>Moved In:  <strong>{membersList.movedin.toUpperCase()}</strong></MDBTypography>
+                    </MDBCol>
+                    </MDBRow>
+                    </MDBCardBody>
+                    </MDBRipple>}
+                    </MDBCard>
+                    );
+                  })} */}
     </React.Fragment >
 
   );

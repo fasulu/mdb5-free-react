@@ -3,3 +3,5 @@
 /src/components/temp
 
 env.local
+
+/testArray.js

@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useContext } from 'react';
+import axios from "axios";
+import { UserContext } from "../userContext/UserContext"
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { dates, months } from '../resources/datePicker';
 import { validEmail, validDate, validPostcode, validNumber } from '../validations/Validator.jsx';
@@ -14,8 +16,16 @@ import {
 } from 'mdb-react-ui-kit';
 
 export default function JointApplicantEdit() {
+    
+    const { clientId, setClientId } = useContext(UserContext);
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // var primaryApplicantID = location.state.primaryID;
+
+    const urL = "http://localhost:9001/joint/addclientjoint";
+    const findPrimaryIDurL = "http://localhost:9001/joint/jointid/";
 
     const datesData = dates;
     const monthsData = months;
@@ -93,8 +103,31 @@ export default function JointApplicantEdit() {
     // comments
 
     useEffect(() => {
-
+        fetchData();
     }, [])
+
+    async function fetchData() {
+        try {
+            console.log(`UseEffect :- ${findPrimaryIDurL + clientId}`)
+
+            // const token = TokenVerify()
+
+            // console.log(`adminPage useEffect token result is ${token}`)
+
+            // const response = await axios.get(loggedInUrl, {
+            //     headers: {
+            //         Authorization: "Bearer " + token
+            //     }
+            // })
+
+            // console.log(response.data.validUser)
+
+            const response = await axios.get(findPrimaryIDurL + clientId)
+            console.log(`Response from backend:- ${response.data.message}`)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const findPostcodeAddress = (e) => {
         e.preventDefault();
@@ -153,14 +186,13 @@ export default function JointApplicantEdit() {
             <MDBContainer className='ps-5 pt-3' >
 
                 <MDBCard className='w-100 mx-auto' style={{ backgroundColor: '#f7f2f287' }} >
-                    <p style={{ fontSize: '17px' }}><strong>Edit Your Partner Details</strong></p>
                     <MDBCardBody >
 
                         {/* ********** Applicant relationship  */}
 
                         <MDBRow alignment='center'>
                             <MDBTypography className='card-header mb-4' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
-                                <strong>Partner/Joint Applicant Details</strong>
+                                <strong>Edit Partner/Joint Applicant Details</strong>
                             </MDBTypography>
                             <MDBRow>
                                 <MDBCol className='col-lg-4 col-md-4 col-sm-6 col-xs-6'>

@@ -137,7 +137,8 @@ export default function PrimaryApplicant() {
 
     const [comments, setComments] = useState("none");
     const status_ = "active"
-    const todayDate = new Date().toISOString().slice(0, 19); // produces 2023-02-25
+
+    const todayDate = new Date().toISOString().slice(0, 19); // produces 2023-02-25T00:00:00
 
     useEffect(() => {
 
@@ -230,6 +231,10 @@ export default function PrimaryApplicant() {
             !mNameErr && alert('Middle Name error');
             !sNameErr && alert('Surname error');
             !emailErr && alert('Email error');
+            !dobErr && alert('Please check date of birth');
+            !movedErr && alert('Please check moved in date');
+            !dobErr && alert('Please check date of birth');
+            !datememorableErr && alert('Please check memorable date');
             !reenteredEmailErr && alert('Reentered email error');
             !postcodeErr && alert('Postcode error');
             !corresPostcodeErr && alert('Correspondence postcode error');
@@ -266,27 +271,6 @@ export default function PrimaryApplicant() {
             savePrimaryApplicant();
         }
     }
-
-    // const handleCheckbox = (e) => {
-
-    //     e.preventDefault();
-    //     try {
-
-    //         let checkedItems = [...connection];
-    //         if (e.target.checked) {
-    //             checkedItems = [...connection, e.target.value];
-    //         } else {
-    //             checkedItems.splice(connection.indexOf(e.target.value), 1);
-    //         }
-
-    //         setConnection(...connection, checkedItems);
-    //         console.log(connection);
-
-    //     } catch (error) {
-    //         alert("Unable to select your option")
-    //         console.log(`Connection with birmingham checkbox error:- ${error}`)
-    //     }
-    // }
 
     const findPostcodeAddress = (e) => {
         e.preventDefault();

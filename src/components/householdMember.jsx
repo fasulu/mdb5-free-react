@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { UserContext } from "../userContext/UserContext"
+
 
 import { areyous } from '../resources/areyou';
 import { tenures } from '../resources/tenure';
@@ -20,6 +22,8 @@ import {
 } from 'mdb-react-ui-kit';
 
 export default function HouseholdMember() {
+    
+    const { clientId, setClientId } = useContext(UserContext);
 
     const ethnicityData = ethnicities;
     const nationalityData = nationalities;
@@ -42,6 +46,7 @@ export default function HouseholdMember() {
     
     const [partnerAddress, setPartnerAddress] = useState("Need to fill dynamically")
     
+    const [primaryApplicantClientId, setPrimaryApplicantClientId] = useState(clientId)
     const [relationWithPrimaryApplicant, setRelationWithPrimaryApplicant] = useState("");
     const [assessmentPurposeOnly, setAssessmentPurposeOnly] = useState("no");
     const [title, setTitle] = useState("");
@@ -170,8 +175,7 @@ export default function HouseholdMember() {
         <React.Fragment>
             <MDBContainer className='ps-5 pt-3' >
 
-                <p style={{ fontSize: '17px' }}><strong>Social Housing Application</strong></p>
-                <p style={{ fontSize: '16px', lineHeight: '3px' }}>Your Household Details</p>
+                <p style={{ fontSize: '17px' }}><strong>Register your household - Member </strong></p>
 
                 <MDBCard className='mb-2' style={{ backgroundColor: '#f7f2f287' }} >
                     <MDBTypography className='card-header' style={{ fontSize: '13px', backgroundColor: '#dcdcdc' }} ><strong>Household Members - If you wish to share the tenancy equally and sign for it jointlty, please add you spouse or partner by selectiong "add joint applicant"</strong></MDBTypography>

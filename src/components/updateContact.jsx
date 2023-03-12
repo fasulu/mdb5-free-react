@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
 import { dates, months } from '../resources/datePicker';
 import { validPwd, validEmail, validName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch, validNINO } from '../validations/Validator.jsx';
+// import {UserContext} from "../userContext/UserContext"
 
 import {
     MDBContainer,
@@ -14,7 +15,9 @@ import {
 
 export default function UpdateContact() {
 
-    const navigator = useNavigate();
+    // const { clientId, setClientId } = useContext(UserContext);
+
+    const navigate = useNavigate();
 
     const inputStyle = { marginLeft: '5px' };
     const labelStyle = { maxHeight: 'auto', fontSize: '16px', width: 'auto', color: '#3b71ca' };
@@ -76,14 +79,13 @@ export default function UpdateContact() {
         }
     }
 
-    const cancelEntry = (e) => {
-        // window.location.reload();
-        navigator('/account')
+    const gotoAccountPage = (e) => {
+        navigate('/account');
     }
 
     return (
         <React.Fragment>
-            <MDBContainer className='ps-5 pt-3' alignment='center' >
+            {/* <MDBContainer className='ps-5 pt-3' alignment='center' > */}
                 <MDBCard className='w-100 mx-auto' style={{ backgroundColor: '#f7f2f287' }} >
                     <MDBTypography className='card-header'
                         style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
@@ -214,15 +216,15 @@ export default function UpdateContact() {
                                 Save
                             </MDBBtn>
 
-                            <MDBBtn style={btnSytle}
+                            {/* <MDBBtn style={btnSytle}
                                 color='secondary'
-                                onClick={cancelEntry}>
+                                onClick={gotoAccountPage}>
                                 Cancel
-                            </MDBBtn>
+                            </MDBBtn> */}
                         </form>
                     </MDBCardBody>
                 </MDBCard>
-            </MDBContainer >
+            {/* </MDBContainer > */}
         </React.Fragment>
     );
 }

@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import moment from 'moment/moment';
-
 
 import { dates, months } from '../resources/datePicker';
 import { validDate, validPwd, validEmail, emailMatch, pwdMatch, memDateMatch } from '../validations/Validator.jsx';
-
+// import {UserContext} from "../userContext/UserContext"
 
 import {
     MDBContainer,
@@ -21,7 +19,9 @@ import BtnCancel from './btnCancel';
 
 export default function UpdateLogin() {
 
-    const navigator = useNavigate();
+    // const { clientId, setClientId } = useContext(UserContext);
+
+    const navigate = useNavigate();
 
     const datesData = dates;
     const monthsData = months;
@@ -93,9 +93,8 @@ export default function UpdateLogin() {
         }
     }
 
-    const cancelEntry = (e) => {
-        // window.location.reload();
-        navigator('/account');
+    const gotoAccountPage = (e) => {
+        navigate('/account');
     }
 
     const showDateFields = (e) => {
@@ -104,14 +103,12 @@ export default function UpdateLogin() {
             setShowDateInput(false)
         } else {
             setShowDateInput(true);
-
         }
-
     }
 
     return (
         <React.Fragment>
-            <MDBContainer className='ps-5 pt-3' alignment='center'  >
+            {/* <MDBContainer className='ps-5 pt-3' alignment='center'  > */}
                 <MDBCard className='w-100 mx-auto' style={{ backgroundColor: '#f7f2f287' }} >
                     <MDBTypography className='card-header'
                         style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
@@ -257,17 +254,17 @@ export default function UpdateLogin() {
                                     Save
                                 </MDBBtn>
 
-                                <MDBBtn style={btnSytle}
+                                {/* <MDBBtn style={btnSytle}
                                     color='secondary'
-                                    onClick={cancelEntry}>
+                                    onClick={gotoAccountPage}>
                                     Cancel
-                                </MDBBtn>
+                                </MDBBtn> */}
                             </form>
                         </MDBRow>
 
                     </MDBCardBody>
                 </MDBCard>
-            </MDBContainer >
+            {/* </MDBContainer > */}
         </React.Fragment >
     );
 }

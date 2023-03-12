@@ -22,10 +22,11 @@ export default function HomeLeft() {
             {
                 <MDBContainer >
                     <MDBCard>
-                        <MDBTypography className='card-header' style={{ color: 'black', fontSize: '25px', borderBottom: '3px solid #d7cdcd' }} ><strong>Welcome to Birmingham Choice</strong></MDBTypography>
+                        <MDBTypography className='card-header' style={{ color: 'black', fontSize: '25px', borderBottom: '3px solid #d7cdcd' }} ><strong>Welcome to Bham Choice</strong></MDBTypography>
                         <MDBCardBody>
-                            <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
-                                <p style={{color:'black'}}> <em>This website is for education purpose only,</em> <span style={{color:'red', fontSize: '20px'}}><strong>DO NOT</strong></span> <em>fill the forms with your or anyone else personal information</em> </p>
+                            <MDBRow className='my-3 justify-content-center border border-rounded border-warning' bgcolor='#f7f2f287'>
+                                <p style={{color:'black'}}> <em>This website is for education purpose only,</em> <span style={{color:'red', fontSize: '20px'}}><strong>DO NOT</strong></span> <em>fill the forms with youself or anyone else personal information.</em> </p>
+                                <p style={{color:'black'}}> <em>Try this website with random information,</em> <span style={{color:'red', fontSize: '20px'}}><strong>Make sure to logout</strong></span>. <em>All datas will be deleted from server once logout being clicked.</em> </p>
                             </MDBRow>
                             <MDBRow >
                             </MDBRow>
@@ -39,7 +40,7 @@ export default function HomeLeft() {
                                 <p> <strong>*** New Housing Allocation Scheme Implemented 18th January 2023! ***</strong></p>
                             </MDBRow>
                             <MDBRow >
-                                <p> Birmingham City Council implemented a new Housing Allocations Policy on 18th January 2023.</p>
+                                <p> Bham City Council implemented a new Housing Allocations Policy on 18th January 2023.</p>
                             </MDBRow>
                             <MDBRow >
                                 <p> The new policy aims to ensure the housing register is made up only of people with an identified housing need and we want to make sure it is fairer so that those most in need of social housing are prioritised.</p>
@@ -60,7 +61,7 @@ export default function HomeLeft() {
                                 <p> <strong> Housing advice and information</strong></p>
                             </MDBRow>
                             <MDBRow >
-                                <p> For advice and information of your housing options please visit Birmingham City Council's main website for Housing Advice and Information and advice.  Alternatively, please see our Birmingham Housing Advice pack.  </p>
+                                <p> For advice and information of your housing options please visit Bham City Council's main website for Housing Advice and Information and advice.  Alternatively, please see our Bham Housing Advice pack.  </p>
                             </MDBRow>
                         </MDBCardBody>
                     </MDBCard>

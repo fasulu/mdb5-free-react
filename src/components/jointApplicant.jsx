@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import axios from "axios";
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { areyous } from '../resources/areyou';
 import { tenures } from '../resources/tenure';
@@ -9,6 +11,7 @@ import { beliefs } from '../resources/belief';
 import { languages } from '../resources/language';
 import { dates, months } from '../resources/datePicker';
 import { validEmail, validName, validPostcode, validNumber, emailMatch, validNINO, validDate, validMName } from '../validations/Validator.jsx';
+import { UserContext } from "../userContext/UserContext"
 
 import {
     MDBContainer,
@@ -20,6 +23,15 @@ import {
 } from 'mdb-react-ui-kit';
 
 export default function JointApplicant() {
+    
+    const { clientId, setClientId } = useContext(UserContext);
+
+    const navigate = useNavigate();
+
+    // let primaryApplicantID = location.state.primaryID;
+
+    const urL = "http://localhost:9001/joint/addclientjoint";
+    const findPrimaryIDurL = "http://localhost:9001/joint/jointid/";
 
     const areyouData = areyous;
     const tenureData = tenures;
@@ -45,15 +57,15 @@ export default function JointApplicant() {
     const [showTenancyRef, setShowTenancyRef] = useState(false);
     const [continueApplication, setContinueApplication] = useState(true);
 
-    const [primaryAplcntClientId, setPrimaryAplcntClientId] = useState("")
-    const [relationWithPrimaryApplicant, setRelationWithPrimaryApplicant] = useState("")
+    const [primaryApplicantClientId, setPrimaryApplicantClientId] = useState(clientId)
+    const [relationship, setRelationship] = useState("")
     const [title, setTitle] = useState("");
     const [fName, setFName] = useState("");
     const [mName, setMName] = useState("");
     const [sName, setSName] = useState("");
     const [nameChange, setNameChange] = useState("none");
     const [nINO, setNINO] = useState("");
-    const [dateofbirth, setdateofbirth] = useState("");
+    const [dateofbirth, setDateofbirth] = useState("");
     const [sex, setSex] = useState("");
 
     const [dobDate, setDOBDate] = useState("");
@@ -113,26 +125,34 @@ export default function JointApplicant() {
 
     const todayDate = new Date().toISOString().slice(0, 19); // produces 2023-02-25
 
-
     useEffect(() => {
-
+        fetchData();
     }, [])
 
-    const handleConnectionCheckbox = () => {
+    async function fetchData() {
+        try {
+            console.log(`UseEffect :- ${findPrimaryIDurL + primaryApplicantClientId}`)
 
-        var check_ed = "";
-        var markedCheckbox = document.getElementsByName('connectionCheckbox');
-        for (var checkbox of markedCheckbox) {
-            if (checkbox.checked)
-                check_ed += (checkbox.value + ', ');
-        }
-        // if nothing checked, automatically saves checkbox value 17(None of the above)
-        if (check_ed == "") {
-            check_ed = "17";
-        }
-        let newEdit = { ...connection }; newEdit = check_ed; setConnection(newEdit)
+            // const token = TokenVerify()
 
+            // console.log(`adminPage useEffect token result is ${token}`)
+
+            // const response = await axios.get(loggedInUrl, {
+            //     headers: {
+            //         Authorization: "Bearer " + token
+            //     }
+            // })
+
+            // console.log(response.data.validUser)
+
+            const response = await axios.get(findPrimaryIDurL + primaryApplicantClientId)
+            console.log(`Response from backend:- ${response.data.message}`)
+            
+        } catch (error) {
+            
+        }
     }
+
 
     const findPostcodeAddress = (e) => {
         e.preventDefault();
@@ -140,18 +160,34 @@ export default function JointApplicant() {
         alert('Sorry... \nPostcode search is not connected to UK Post Office API, \nplease enter the address manually')
     }
 
-    const saveJointApplicant = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
+        const handleConnectionCheckbox = () => {
+
+            var check_ed = "";
+            var markedCheckbox = document.getElementsByName('connectionCheckbox');
+            for (var checkbox of markedCheckbox) {
+                if (checkbox.checked)
+                    check_ed += (checkbox.value + ',');
+            }
+            // if nothing checked, automatically saves checkbox value 17(None of the above)
+            if (check_ed == "") {
+                check_ed = "17";
+            }
+            let newChecked = { ...connection }; newChecked = check_ed; setConnection(newChecked)
+
+        }
+
         const formatDate = () => {
-            let birth_ = { ...dateofbirth }; birth_ = (dobYear + "-" + dobMonth + "-" + dobDate); setdateofbirth(birth_);
+            let birth_ = { ...dateofbirth }; birth_ = (dobYear + "-" + dobMonth + "-" + dobDate); setDateofbirth(birth_);
             let moved_ = { ...movedInDate }; moved_ = (movedYear + "-" + movedMonth + "-" + movedDate); setMovedInDate(moved_);
             let delivry_ = { ...deliveryDate }; delivry_ = (delYear + "-" + delMonth + "-" + delDate); setDeliveryDate(delivry_);
         }
 
-        handleConnectionCheckbox();
-
         formatDate();
+
+        handleConnectionCheckbox();
 
         const fNameErr = validName(fName);
         const mNameErr = validMName(mName);
@@ -173,7 +209,7 @@ export default function JointApplicant() {
         telephone ${telephoneErr}, workphone ${workphoneErr}, mobile ${mobileErr},
         home telephone ${telephone}, work telephone ${workPhone}, mobile ${mobile}`)
 
-        console.log('Im in saveJointApplicant', relationWithPrimaryApplicant,
+        console.log('Im in saveJointApplicant', relationship,
             title, fName, mName, sName, nameChange,
             nINO, dateofbirth, sex,
             corresPostcode, corresAddLine1, corresAddLine2, corresAddLine3, corresAddLine4,
@@ -190,9 +226,9 @@ export default function JointApplicant() {
             !mNameErr && alert('Middle Name error');
             !sNameErr && alert('Surname error');
             !ninoErr && alert('NINO error');
-            !dobErr && alert('dob error');
-            !movedErr && alert('moved error');
-            !delvyErr && alert('delivery error');
+            !dobErr && alert('Please check date of birth');
+            !movedErr && alert('Please check moved in date');
+            !delvyErr && alert('Please check delivery date');
             !telephoneErr && alert('Telephone number error');
             !workphoneErr && alert('Work telephone number error');
             !mobileErr && alert('Mobile number error');
@@ -200,8 +236,7 @@ export default function JointApplicant() {
             !corresPostcodeErr && alert('Postcode error');
             !emailMatchesErr && alert('Email match error');
         } else {
-
-            console.log(`Final Result passed :- ${relationWithPrimaryApplicant},
+            console.log(`Final Result passed :- ${relationship},
             ${title}, ${fName}, ${mName}, ${sName}, ${nameChange},
             ${nINO}, ${dateofbirth}, ${sex},
             ${corresPostcode}, ${corresAddLine1}, ${corresAddLine2}, ${corresAddLine3}, ${corresAddLine4},
@@ -209,8 +244,84 @@ export default function JointApplicant() {
             ${telephone}, ${mobile}, ${workPhone}, ${email}, ${reEnterEmail},
             ${ethnicity}, ${nationality}, ${sexOrient}, ${isShePregnant}, ${deliveryDate},
             ${belief}, ${healthCondition}, ${preferedLanguage}, ${needInterpreter},
-            ${tenure}, ${tenancyRefNo}, ${isYourPartner}, ${areYouWorker}, ${connection}, ${comments}, ${todayDate}`)
+            ${tenure}, ${tenancyRefNo}, ${isYourPartner}, ${areYouWorker}, ${connection}, ${comments}, ${todayDate}`);
 
+            saveJointApplicant();
+        }
+    }
+
+    const saveJointApplicant = async () => {
+
+        console.log(`In save joint applicant`);
+
+        const JointApplicantInfo = {
+            clientId: primaryApplicantClientId,
+            clientJoint_relationship: relationship,
+            clientJoint_title: title,
+            clientJoint_firstname: fName,
+            clientJoint_middlename: mName,
+            clientJoint_surname: sName,
+            clientJoint_namechange: nameChange,
+            clientJoint_NINO: nINO,
+            clientJoint_dateofbirth: dateofbirth,
+            clientJoint_sex: sex,
+
+            clientJoint_lived_abroad: livedAbroad,
+            clientJoint_moved_to_current_address: movedInDate,
+
+            clientJoint_current_live_with_you: currentlyLiveWithYou,
+            clientJoint_livingin_different_address: livingInDiffAddress,
+
+            clientJoint_correspondence_postcode: corresPostcode,
+            clientJoint_correspondence_address_line1: corresAddLine1,
+            clientJoint_correspondence_address_line2: corresAddLine2,
+            clientJoint_correspondence_address_line3: corresAddLine3,
+            clientJoint_correspondence_address_line4: corresAddLine4,
+
+            clientJoint_placed_by_local_authority: placedByLocalAuthrty,
+            clientJoint_if_yes_local_authority: localAuthrtyName,
+
+            clientJoint_is_she_pregnant: isShePregnant,
+            clientJoint_delivery_date: deliveryDate,
+
+            clientJoint_telephone_home: telephone,
+            clientJoint_telephone_mobile: mobile,
+            clientJoint_telephone_work: workPhone,
+            clientJoint_email: email,
+
+            clientJoint_ethnicity: ethnicity,
+            clientJoint_nationality: nationality,
+            clientJoint_sex_orient: sexOrient,
+            clientJoint_religion: belief,
+            clientJoint_illness: healthCondition,
+
+            clientJoint_interpreter: needInterpreter,
+            clientJoint_language_prefer: preferedLanguage,
+
+            clientJoint_current_tenure: tenure,
+            clientJoint_current_tenure_bhamCouncilTenancyNum: tenancyRefNo,
+
+            clientJoint_from_which_country: isYourPartner,
+            clientJoint_are_you_worker: areYouWorker,
+            clientJoint_connection_to_birmingham: connection,
+
+            clientJoint_registration_date: todayDate,
+            clientJoint_comments: comments,
+        }
+
+        try {
+
+            const response = await axios.post(urL, JointApplicantInfo);
+
+            console.log(`Output from backend ${response.data.message}`)
+
+            if (response.status === 200) {
+                console.log(`Status from backend ${response.status}`);                
+                navigate('/account', { state: { jointName: fName } });
+            }
+
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -224,8 +335,7 @@ export default function JointApplicant() {
 
                 <MDBCard className='w-100 mx-auto' style={{ backgroundColor: '#f7f2f287' }} >
 
-                    <p style={{ fontSize: '17px' }}><strong>Register your household</strong></p>
-                    <p style={{ fontSize: '16px', lineHeight: '3px' }}>Joint Applicant</p>
+                    <p style={{ fontSize: '17px' }}><strong>Register your household - Joint Applicant</strong></p>
 
                     <MDBTypography className='card-header' style={{ fontSize: '13px', backgroundColor: '#dcdcdc' }} ><strong>Household Members - If you wish to share the tenancy equally and sign for it jointlty, please add you spouse or partner by selectiong "add joint applicant"</strong></MDBTypography>
 
@@ -238,11 +348,15 @@ export default function JointApplicant() {
 
                             <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Relationship to main applicant *</strong></p>
                             <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded mb-2"
-                                value={relationWithPrimaryApplicant} onChange={(e) => { let newEdit = { ...relationWithPrimaryApplicant }; newEdit = e.target.value; setRelationWithPrimaryApplicant(newEdit) }}>
-                                <option defaultValue={relationWithPrimaryApplicant} >Spouse or Partnership</option>
-                                <option value="1">Civil Partner</option>
-                                <option value="2">Husband</option>
-                                <option value="3">Wife</option>
+                                value={relationship} onChange={(e) => { let newEdit = { ...relationship }; newEdit = e.target.value; setRelationship(newEdit) }}>
+                                <option defaultValue >Spouse or Partnership</option>
+                                <option value="Husband">Husband</option>
+                                <option value="Wife">Wife</option>
+                                <option value="Civil Partner">Civil Partner</option>
+                                <option value="Daughter">Daughter</option>
+                                <option value="Son">Son</option>
+                                <option value="Relative">Relative</option>
+                                <option value="Friend">Friend</option>
                             </select>
 
                             <div style={{ width: 'auto' }} className="mb-4 help-content border border-grey rounded">
@@ -260,11 +374,11 @@ export default function JointApplicant() {
                             <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded" aria-label="Default select example"
                                 value={title} onChange={(e) => { let newEdit = { ...title }; newEdit = e.target.value; setTitle(newEdit) }}>
                                 <option defaultValue={title}>Please Choose</option>
-                                <option value="1">Dr</option>
-                                <option value="2">Miss</option>
-                                <option value="3">Mr</option>
-                                <option value="4">Mrs</option>
-                                <option value="5">Ms</option>
+                                <option value="Dr">Dr</option>
+                                <option value="Miss">Miss</option>
+                                <option value="Mr">Mr</option>
+                                <option value="Mrs">Mrs</option>
+                                <option value="Ms">Ms</option>
                             </select>
 
                         </div>
@@ -481,7 +595,8 @@ export default function JointApplicant() {
 
                                     <div className='' >
                                         <input style={inputStyle} className='form-control' type='text' placeholder='Enter the local authority name'
-                                            maxLength={25} onChange={(e) => { let newEdit = { ...localAuthrtyName }; newEdit = e.target.value; setLocalAuthrtyName(newEdit) }} />
+                                            maxLength={25} value={localAuthrtyName}
+                                            onChange={(e) => { let newEdit = { ...localAuthrtyName }; newEdit = e.target.value; setLocalAuthrtyName(newEdit) }} />
                                     </div>
                                 </div>
                             }
@@ -493,10 +608,11 @@ export default function JointApplicant() {
                                     <p className='mx-2 mt-3 mb-2' style={{ fontSize: '12px' }}><strong>Is this person living with one of the following people?</strong></p>
                                     <div className='mx-2 mb-2'>
                                         <MDBRadio className='mx-1' name='livingInDiffAddressRadio' id='livingInDiffAddressYes' label="Living with primary applicant" htmlFor='livingInDiffAddressYes'
-                                            value='Living with primary applicant'
+                                            defaultValue='Living with primary applicant'
                                             onChange={(e) => { let newEdit = { ...livingInDiffAddress }; newEdit = e.target.value; setLivingInDiffAddress(newEdit); setContinueApplication(false); setShowAddress(false) }}></MDBRadio>     {/* Get and show primary applicant address in this place */}
                                         <MDBRadio className='mx-1' name='livingInDiffAddressRadio' id='livingInDiffAddressNo' label='This person is living at a different address' htmlFor='livingInDiffAddressNo'
-                                            value='Living in different address' onChange={(e) => { let newEdit = { ...livingInDiffAddress }; newEdit = e.target.value; setLivingInDiffAddress(newEdit); setContinueApplication(false); setShowAddress(true) }}></MDBRadio>     {/* Spouse or partner living in different address */}
+                                            value='Living in different address'
+                                            onChange={(e) => { let newEdit = { ...livingInDiffAddress }; newEdit = e.target.value; setLivingInDiffAddress(newEdit); setContinueApplication(false); setShowAddress(true) }}></MDBRadio>     {/* Spouse or partner living in different address */}
                                     </div>
                                 </div>
                                 <p className='mt-3 mb-2' style={{ fontSize: '13px' }}>You must select an option to conitue</p>
@@ -674,7 +790,7 @@ export default function JointApplicant() {
                                 </div>
                             </div>
                             <div className='mt-4 help-content border border-grey rounded' style={{ background: '#e4f5fb' }}>
-                                <p style={{ marginLeft:'5px', fontSize: '17px' }}><strong>Please re-enter your email address*</strong></p>
+                                <p style={{ marginLeft: '5px', fontSize: '17px' }}><strong>Please re-enter your email address*</strong></p>
                             </div>
                             <div>
                                 <div className='mt-2' >
@@ -754,7 +870,7 @@ export default function JointApplicant() {
                         <div>
 
                             <div className='mt-4  help-content border border-grey rounded' style={{ background: '#e4f5fb' }}>
-                                <p style={{ marginLeft:'5px', fontSize: '17px' }}><strong>What is your sexual orientation? *</strong></p>
+                                <p style={{ marginLeft: '5px', fontSize: '17px' }}><strong>What is your sexual orientation? *</strong></p>
                             </div>
                             <div className='mt-2' >
                                 <select style={comboBoxStyle}
@@ -875,7 +991,7 @@ export default function JointApplicant() {
 
                         {/**********  Interpreter */}
                         <div className='mt-4  help-content border border-grey rounded' style={{ background: '#e4f5fb' }}>
-                            <p style={{ marginLeft:'5px', fontSize: '17px' }}><strong>Does your partner require an interpreter? *</strong></p>
+                            <p style={{ marginLeft: '5px', fontSize: '17px' }}><strong>Does your partner require an interpreter? *</strong></p>
                             <MDBRow >
                                 <MDBCol className='col-3 mx-2 mb-2'>
                                     <MDBRadio name='needInterpreterRadio' id='needInterpreterYes' label='Yes' inline
@@ -1018,7 +1134,7 @@ export default function JointApplicant() {
                         {/**********  Is your partner a worker, self-employed or a student?*/}
                         <div className=" mt-2 help-content border border-grey rounded" style={{ fontSize: '13px', width: 'auto', background: '#e4f5fb' }}>
                             <div className='mt-2'>
-                                <p style={{ marginLeft:'5px', fontSize: '17px' }}><strong>Is your partner a worker, self-employed or a student?*</strong></p>
+                                <p style={{ marginLeft: '5px', fontSize: '17px' }}><strong>Is your partner a worker, self-employed or a student?*</strong></p>
                             </div>
                             <MDBRow className='mb-2'>
                                 <MDBCol className='col-3 mx-2 mb-2'>
@@ -1085,7 +1201,7 @@ export default function JointApplicant() {
 
                         <form className='d-flex w-auto mt-3'>
                             <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
-                                disabled={continueApplication} onClick={saveJointApplicant}  >
+                                disabled={continueApplication} onClick={handleSubmit}  >
                                 Save Joint Member</MDBBtn>
                             <MDBBtn className='me-1 btn btn-outline-secondary' style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='white'
                                 onClick={cancelEntry}>

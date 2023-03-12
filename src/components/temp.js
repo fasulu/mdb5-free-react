@@ -1,54 +1,5 @@
-arry = {
-    title: title, 
-    fName: fName, 
-    mName: mName, 
-    sName: sName, 
-    nameChange: nameChange,
-    nINO : nINO, 
-    dateofbirth : dateofbirth, 
-    sex : sex, 
-    livedAbroad : livedAbroad,
-    postcode : postcode, 
-    addLine1 : addLine1, 
-    addLine2 : addLine2, 
-    addLine3 : addLine3, 
-    addLine4 : addLine4,
-    movedInDate : movedInDate,
-    rented : rented, 
-    landlordName : landlordName, 
-    landlordAddress : landlordAddress, 
-    currentTenancyType : currentTenancyType, 
-    infoAboutCurrentAddress : infoAboutCurrentAddress,
-    communicationAddress : communicationAddress, 
-    correspondenceType : correspondenceType, 
-    placedByLocalAuthrty : placedByLocalAuthrty, 
-    localAuthrtyName : localAuthrtyName,
-    correspondencePostcode : correspondencePostcode, 
-    correspondenceAddLine1 : correspondenceAddLine1, 
-    correspondenceAddLine2 : correspondenceAddLine2, 
-    correspondenceAddLine3 : correspondenceAddLine3, 
-    correspondenceAddLine4 : correspondenceAddLine4,
-    telephone : telephone,
-    mobile : mobile, 
-    workPhone : workPhone, 
-    email : email, 
-    reEnterEmail : reEnterEmail,
-    ethnicity : ethnicity, 
-    nationality : nationality, 
-    sexOrient : sexOrient, 
-    belief : belief,
-    healthCondition, preferedLanguage, 
-    needInterpreter : needInterpreter,
-    tenure : tenure, 
-    tenancyRefNo : tenancyRefNo, 
-    areyou : areyou, 
-    connection : connection, 
-    comments : comments,
-    memorableDate : memorableDate, 
-    reEntermemorableDate : reEntermemorableDate,
-    password : password, 
-    reEnterPwd : reEnterPwd
-}
+// Output: {"data":{"errors:[{"value":"","msg":"Invalid value","param":"clientId","location":"body"},{"msg":"Invalid value","param":"client_password","location":"body"}]},"status":200,"statusText":"OK","headers":{"content-length":"152","content-type":"application/json; charset=utf-8"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":["xhr","http"],"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"method":"post","url":"http://localhost:9001/client/clientref","data":"{\"client_reference\":\"bs61864\"}"},"request":{}}
+
 
 // {
 //     "client_title": "1",
@@ -153,3 +104,11 @@ arry = {
 //     "client_status": "active",
 //     "client_comments": "None"
 // }
+
+
+basket = ['banana',
+    ['apple',
+        ['orange'],
+        'blueberry']
+]
+console.log([0][0]);

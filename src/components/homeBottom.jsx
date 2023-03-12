@@ -43,7 +43,7 @@ export default function HomeBottom() {
                                 <strong><MDBIcon style={{ marginRight: '10px' }} fas icon="comments" />Latest News  </strong>
                             </MDBTypography>
                             <MDBCardBody>
-                                <a href="https://www.birminghamchoice.co.uk/LatestNews/Page#Article_43_Bookmark">Birmingham Choice - Latest news</a>
+                                <a href="https://www.birminghamchoice.co.uk/LatestNews/Page#Article_43_Bookmark">Bham Choice - Latest news</a>
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>
