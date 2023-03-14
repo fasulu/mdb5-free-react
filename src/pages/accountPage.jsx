@@ -58,19 +58,28 @@ export default function AccountPage() {
 
     const iconRight = "fa-solid fa-caret-right";
 
+    const logInOutBtn = () => {
+        var btn = window.document.getElementById('LogInOutBtn');
+        btn.innerText = btn.textContent = 'Log Out';
+    }
+
+    const hideRegisterBtn = () => {
+        window.document.getElementById('RegisterBtn').style.visibility='hidden';
+    }
+
     async function fetchData(getName) {
 
         // Whenever account page loaded check for make sure same 
         // applicant logged in by his/her id exist in primary client collection.
         // Verify the primary applicant is exist
-  
+
         console.log(`Get name is ${getName}`)
         try {
             const response = await axios.get(getName)
             if (response) {
                 console.log(response.data)
                 setClientName(response.data.clientExist.client_firstname + " " + response.data.clientExist.client_surname);
-                
+
                 console.log(clientName);
             } else {
                 console.log(`Unable to identify primary applicant`);
@@ -84,15 +93,19 @@ export default function AccountPage() {
     }
 
     useEffect(() => {
-        
+
         if (clientId) {
             fetchData(primaryApplicantNameUrl + clientId)
         }
+
         const id = decryptDetails();
 
         console.log(`${id}`)
         fetchData(primaryApplicantNameUrl + id)
         setClientId(id);
+
+        logInOutBtn();
+        hideRegisterBtn();
 
     }, [])
 
@@ -124,13 +137,12 @@ export default function AccountPage() {
 
         try {
 
-            console.log(`${jointExistUrl}${clientId} In fetch data`)
-
+            console.log(`${jointExistUrl} In fetch data`)
             const clientIdExist = await axios.get(jointExistUrl, {})
 
-            if (clientIdExist.data.clientId) {
+            if (clientIdExist.data) {
 
-                console.log('Iam in edit joint applicant' + clientIdExist.data.clientId)
+                console.log('Iam in edit joint applicant' + clientIdExist.data.jointApplicantDetails.clientId)
 
                 setShowAccountPage(false);
                 setShowJointApplicantPage(false);
@@ -141,7 +153,7 @@ export default function AccountPage() {
                 setShowUpdateLoginPage(false);
                 setShowHouseholdMemberPage(false);
             } else {
-                console.log('Iam in new joint applicant' + clientIdExist.data.clientId)
+                console.log('Iam in new joint applicant' + clientIdExist.data.jointApplicantDetails.clientId)
 
                 setShowAccountPage(false);
                 setShowJointApplicantPage(true);

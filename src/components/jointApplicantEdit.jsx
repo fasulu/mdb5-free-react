@@ -5,6 +5,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import { dates, months } from '../resources/datePicker';
 import { validEmail, validDate, validPostcode, validNumber } from '../validations/Validator.jsx';
+import { ToCamelCase } from '../validations/Validator.jsx';
+import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 
 import {
     MDBContainer,
@@ -16,7 +18,7 @@ import {
 } from 'mdb-react-ui-kit';
 
 export default function JointApplicantEdit() {
-    
+
     const { clientId, setClientId } = useContext(UserContext);
 
     const navigate = useNavigate();
@@ -24,8 +26,10 @@ export default function JointApplicantEdit() {
 
     // var primaryApplicantID = location.state.primaryID;
 
-    const urL = "http://localhost:9001/joint/addclientjoint";
-    const findPrimaryIDurL = "http://localhost:9001/joint/jointid/";
+    const findPrimaryIDInClientUrl = "http://localhost:9001/client/clientid/";
+    const findPrimaryIDInJointUrl = "http://localhost:9001/joint/clientid/";
+
+    const updateJointApplicantUrl = "http://localhost:9001/joint/update/";
 
     const datesData = dates;
     const monthsData = months;
@@ -33,7 +37,7 @@ export default function JointApplicantEdit() {
     const yearMax = new Date().getFullYear();        // year picker up to current year
     const yearMin = new Date().getFullYear() - 120;  // year picker 120 year back from current year
 
-    const labelStyle = { maxHeight: 'auto', fontSize: '16px', width: 'auto', color: '#4f4f4f' };
+    const labelStyle = { maxHeight: 'auto', fontSize: '15px', width: 'auto', color: '#4f4f4f', padding: '0px', marginLeft: '0px' };
     const inputStyle = { maxHeight: 'auto', fontSize: '16px', minwidth: '250px', color: 'black' };
     const commentStyle = { minHeight: '150px', fontSize: '16px', minWidth: '250px', color: 'black' };
     const memberStyle = { paddingLeft: '10px', color: 'black', };
@@ -45,62 +49,45 @@ export default function JointApplicantEdit() {
     const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const yearPickerStyle = { width: '80px', float: 'left', border: '5' };
 
-    const [relationWithPrimaryApplicant, setRelationWithPrimaryApplicant] = useState("Wife")
-    const [fName, setFName] = useState("Prity");
+    const [relationWithPrimaryApplicant, setRelationWithPrimaryApplicant] = useState("")
+    const [_id, set_id] = useState("");
+    const [fName, setFName] = useState("");
     const [mName, setMName] = useState("");
-    const [sName, setSName] = useState("Patel");
-    const [nINO, setNINO] = useState("WF123456A");
-    let tempDOB = "10/25/1975"
-    tempDOB = tempDOB.split('/')[1] + '/' + tempDOB.split('/')[0] + '/' + tempDOB.split('/')[2]
-    const [dateofbirth, setdateofbirth] = useState(tempDOB);
-    const [primaryApplicantAddress, setPrimaryApplicantAddress] = useState("Need to fill dynamically")
+    const [sName, setSName] = useState("");
+    const [nINO, setNINO] = useState("");
+    let tempDOB = ""
+    // tempDOB = tempDOB.split('-')[2] + '-' + tempDOB.split('-')[1] + '-' + tempDOB.split('-')[0]
+    const [dateofbirth, setdateofbirth] = useState("");
+    const [primaryApplicantAddress, setPrimaryApplicantAddress] = useState("")
     const [currentlyLiveWithYou, setCurrentlyLiveWithYou] = useState("yes");
-    let tempMovedDate = "12/20/2019";
+    let tempMovedDate = "";
     const [movedDate, setMovedDate] = useState(tempMovedDate);
-    const [movedInDate, setMovedInDate] = useState(tempMovedDate.split('/')[1]);
-    const [movedInMonth, setMovedInMonth] = useState(tempMovedDate.split('/')[0]);
-    const [movedInYear, setMovedInYear] = useState(tempMovedDate.split('/')[2]);
+    const [movedInDate, setMovedInDate] = useState(tempMovedDate.split('-')[1]);
+    const [movedInMonth, setMovedInMonth] = useState(tempMovedDate.split('-')[0]);
+    const [movedInYear, setMovedInYear] = useState(tempMovedDate.split('-')[2]);
 
-    const [livingInDiffAddress, setLivingInDiffAddress] = useState("no");
+    const [livingInDiffAddress, setLivingInDiffAddress] = useState("");
     const [showCorrespondenceAddress, setShowCorrespondenceAddress] = useState(false)
-    const [corresPostcode, setCorresPostcode] = useState("LP1 1QW");
-    const [addLine1, setAddLine1] = useState("12 Blackpool Avenue");
-    const [addLine2, setAddLine2] = useState("Kensington");
-    const [addLine3, setAddLine3] = useState("London");
-    const [addLine4, setAddLine4] = useState("UK");
+    const [corresPostcode, setCorresPostcode] = useState("");
+    const [corresLine1, setCorresLine1] = useState("");
+    const [corresLine2, setCorresLine2] = useState("");
+    const [corresLine3, setCorresLine3] = useState("");
+    const [corresLine4, setCorresLine4] = useState("");
     const [isShePregnant, setIsShePregnant] = useState("no");
     const [showDeliveryDate, setShowDeliveryDate] = useState(false);
 
-    let tempDelDate = "11/30/2023";
+    let tempDelDate = "";
     const [deliveryDate, setDeliveryDate] = useState(tempDelDate);
-    const [delDate, setDelDate] = useState(tempDelDate.split('/')[1]);
-    const [delMonth, setDelMonth] = useState(tempDelDate.split('/')[0]);
-    const [delYear, setDelYear] = useState(tempDelDate.split('/')[2]);
-    const [telephone, setTelephone] = useState("0204568542");
-    const [mobile, setMobile] = useState("07874598965");
-    const [workPhone, setWorkPhone] = useState("02012564789");
-    const [email, setEmail] = useState("pretypaty@msn.com");
-    const [healthCondition, setHealthCondition] = useState("no");
+    const [delDate, setDelDate] = useState(tempDelDate.split('-')[1]);
+    const [delMonth, setDelMonth] = useState(tempDelDate.split('-')[0]);
+    const [delYear, setDelYear] = useState(tempDelDate.split('-')[2]);
+    const [telephone, setTelephone] = useState("");
+    const [workPhone, setWorkPhone] = useState("");
+    const [mobile, setMobile] = useState("");
+    const [email, setEmail] = useState("");
+    const [healthCondition, setHealthCondition] = useState("");
     const [areYouWorker, setAreYouWorker] = useState("no");
-    const [comments, setComments] = useState("none");
-
-    // joint:-
-    // jointId
-    // moved_to_current_address
-    // corres_postcode
-    // corres_address_line1
-    // corres_address_line2
-    // corres_address_line3
-    // corres_address_line4
-    // is_she_pregnant
-    // delivery_date
-    // illness
-    // are_you_worker
-    // telephone_home
-    // telephone_mobile
-    // telephone_work
-    // email
-    // comments
+    const [comments, setComments] = useState("");
 
     useEffect(() => {
         fetchData();
@@ -108,7 +95,7 @@ export default function JointApplicantEdit() {
 
     async function fetchData() {
         try {
-            console.log(`UseEffect :- ${findPrimaryIDurL + clientId}`)
+            console.log(`UseEffect :- ${findPrimaryIDInJointUrl + clientId}`)
 
             // const token = TokenVerify()
 
@@ -122,8 +109,60 @@ export default function JointApplicantEdit() {
 
             // console.log(response.data.validUser)
 
-            const response = await axios.get(findPrimaryIDurL + clientId)
-            console.log(`Response from backend:- ${response.data.message}`)
+            const responseClient = await axios.get(findPrimaryIDInClientUrl + clientId)
+            console.log(`Primary applicant found in primary client collection:- ${responseClient.data.clientExist._id}`)
+            if (responseClient) {
+                const responseJoint = await axios.get(findPrimaryIDInJointUrl + clientId)
+                if (responseJoint) {
+                    console.log(`Primary applicant found in joint collection:- ${responseJoint.data.jointApplicantDetails.clientId}`)
+                    set_id(responseJoint.data.jointApplicantDetails._id)
+                    setRelationWithPrimaryApplicant(responseJoint.data.jointApplicantDetails.clientJoint_relationship)
+                    setFName(responseJoint.data.jointApplicantDetails.clientJoint_firstname)
+                    setMName(responseJoint.data.jointApplicantDetails.clientJoint_middlename)
+                    setSName(responseJoint.data.jointApplicantDetails.clientJoint_surname)
+                    setNINO(responseJoint.data.jointApplicantDetails.clientJoint_NINO)
+
+                    tempDOB = (responseJoint.data.jointApplicantDetails.clientJoint_dateofbirth).slice(0, 10)
+                    setdateofbirth(tempDOB.split('-')[2] + '-' + tempDOB.split('-')[1] + '-' + tempDOB.split('-')[0]);
+
+                    setCurrentlyLiveWithYou(responseJoint.data.jointApplicantDetails.clientJoint_current_live_with_you)
+                    setHealthCondition(responseJoint.data.jointApplicantDetails.clientJoint_illness);
+
+                    // tempMovedDate = (responseJoint.data.jointApplicantDetails.clientJoint_moved_to_current_address).slice(0, 10)
+                    // setMovedInDate(tempMovedDate.split('-')[2]); setMovedInMonth(tempMovedDate.split('-')[1]); setMovedInYear(tempMovedDate.split('-')[0]);
+                    tempMovedDate = (responseJoint.data.jointApplicantDetails.clientJoint_moved_to_current_address);
+                    console.log(tempMovedDate)
+                    tempMovedDate = ConvertToDate(tempMovedDate);
+                    setMovedInDate(tempMovedDate.split('-')[2]); setMovedInMonth(tempMovedDate.split('-')[1]); setMovedInYear(tempMovedDate.split('-')[0]);
+
+                    setTelephone(responseJoint.data.jointApplicantDetails.clientJoint_telephone_home)
+                    setWorkPhone(responseJoint.data.jointApplicantDetails.clientJoint_telephone_work)
+                    setMobile(responseJoint.data.jointApplicantDetails.clientJoint_telephone_mobile)
+                    setEmail(responseJoint.data.jointApplicantDetails.clientJoint_email)
+
+                    // tempDelDate = (responseJoint.data.jointApplicantDetails.clientJoint_delivery_date).slice(0, 10)
+                    // console.log(tempDelDate);
+                    // if (tempDelDate) {
+                    //     setShowDeliveryDate(true); setIsShePregnant("yes")
+                    // }
+                    // setDelDate(tempDelDate.split('-')[2]); setDelMonth(tempDelDate.split('-')[1]); setDelYear(tempDelDate.split('-')[0]);
+
+                    tempDelDate = (responseJoint.data.jointApplicantDetails.clientJoint_delivery_date)
+                    tempDelDate=ConvertToDate(tempDelDate)
+                    setDelDate(tempDelDate.split('-')[2]); setDelMonth(tempDelDate.split('-')[1]); setDelYear(tempDelDate.split('-')[0]);
+
+
+                    setAreYouWorker(responseJoint.data.jointApplicantDetails.clientJoint_are_you_worker)
+                    setComments(responseJoint.data.jointApplicantDetails.clientJoint_comments)
+
+                    setCorresPostcode(responseJoint.data.jointApplicantDetails.clientJoint_corres_postcode)
+                    setCorresLine1(responseJoint.data.jointApplicantDetails.clientJoint_corres_address_line1)
+                    setCorresLine2(responseJoint.data.jointApplicantDetails.clientJoint_corres_address_line2)
+                    setCorresLine3(responseJoint.data.jointApplicantDetails.clientJoint_corres_address_line3)
+                    setCorresLine4(responseJoint.data.jointApplicantDetails.clientJoint_corres_address_line4)
+                }
+            }
+
         } catch (error) {
             console.log(error)
         }
@@ -138,22 +177,41 @@ export default function JointApplicantEdit() {
     const saveJointMember = (e) => {
         e.preventDefault();
 
-        const delvy = delMonth + '/' + delDate + '/' + delYear;
+        const delvy = delYear + '-' + delMonth + '-' + delDate;
         setDeliveryDate(delvy);
-        const moved = movedInMonth + '/' + movedInDate + '/' + movedInYear;
+        const moved = movedInYear + '-' + movedInMonth + '-' + movedInDate;
         setMovedDate(moved);
 
-        if (currentlyLiveWithYou === 'yes') {
-            setCurrentlyLiveWithYou(true);
-        } else { setCurrentlyLiveWithYou(false) };
-
         const postcodeErr = validPostcode(corresPostcode);
+
         const movedDateErr = validDate(moved)
+        if (movedDateErr) {
+            const moved_ = ConvertToTimeStamp(moved)
+            console.log(moved_)
+            setMovedDate(moved_)
+        }
         const deliveryErr = validDate(delvy);
+        if (deliveryErr) {
+            const delDate_ = ConvertToTimeStamp(delvy)
+            console.log(delDate_)
+            setDeliveryDate(delDate_)
+        }
         const emailErr = validEmail(email);
         const telephoneErr = validNumber(telephone);
         const workphoneErr = validNumber(workPhone);
         const mobileErr = validNumber(mobile);
+
+        // if not pregnant set data to empty string
+        if (!isShePregnant) {
+            setDeliveryDate("")
+        }
+        if (currentlyLiveWithYou == "yes") {
+            setCorresPostcode("")
+            setCorresLine1("")
+            setCorresLine2("")
+            setCorresLine3("")
+            setCorresLine4("")
+        }
 
         console.log(`Validation result is postcode ${postcodeErr} email ${emailErr}, 
         home telephone ${telephoneErr}, work telephone ${workphoneErr}, 
@@ -170,11 +228,61 @@ export default function JointApplicantEdit() {
             !mobileErr && alert('Mobile number error');
         } else {
             console.log('FINAL Result passed', healthCondition, currentlyLiveWithYou,
-                movedDate, corresPostcode, addLine1, addLine2, addLine3, addLine4,
+                movedDate, corresPostcode, corresLine1, corresLine2, corresLine3, corresLine4,
                 currentlyLiveWithYou, telephone, mobile, workPhone,
                 isShePregnant, deliveryDate, areYouWorker
             )
+            saveJointApplicant()
         }
+    }
+
+    const saveJointApplicant = async () => {
+
+        console.log(`In save joint applicant jointId is ${_id}`);
+
+        const JointApplicantInfo = {
+            clientJoint_moved_to_current_address: movedDate,
+
+            clientJoint_current_live_with_you: currentlyLiveWithYou,
+            clientJoint_livingin_different_address: livingInDiffAddress,
+
+            clientJoint_corres_postcode: corresPostcode,
+            clientJoint_corres_address_line1: corresLine1,
+            clientJoint_corres_address_line2: corresLine2,
+            clientJoint_corres_address_line3: corresLine3,
+            clientJoint_corres_address_line4: corresLine4,
+
+            clientJoint_is_she_pregnant: isShePregnant,
+            clientJoint_delivery_date: deliveryDate,
+
+            clientJoint_telephone_home: telephone,
+            clientJoint_telephone_work: workPhone,
+            clientJoint_telephone_mobile: mobile,
+            clientJoint_email: email,
+
+            clientJoint_illness: healthCondition,
+
+            clientJoint_are_you_worker: areYouWorker,
+
+            clientJoint_comments: comments,
+        }
+
+        try {
+
+            const response = await axios.put(updateJointApplicantUrl + _id, JointApplicantInfo, {})
+            console.log(`Output from backend ${response.data.message}`)
+
+            if (response.status === 200) {
+                console.log(`Status from backend ${response.status}`);
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const cancelEntry = (e) => {
+        window.location.reload();
     }
 
     const gotoAccountPage = (e) => {
@@ -195,20 +303,20 @@ export default function JointApplicantEdit() {
                                 <strong>Edit Partner/Joint Applicant Details</strong>
                             </MDBTypography>
                             <MDBRow>
-                                <MDBCol className='col-lg-4 col-md-4 col-sm-6 col-xs-6'>
-                                    <MDBTypography style={labelStyle}>Full Name: <strong style={memberStyle}>{fName.toUpperCase() + " " + mName.toUpperCase() + " " + sName.toUpperCase()}</strong></MDBTypography>
+                                <MDBCol className='col-lg-3 col-md-4 col-sm-6 col-xs-6'>
+                                    <MDBTypography style={labelStyle}>Full Name:<strong style={memberStyle}>{ToCamelCase(fName) + " " + ToCamelCase(sName)}</strong></MDBTypography>
 
                                 </MDBCol>
                                 <MDBCol className='col-lg-3 col-md-4 col-sm-6 col-xs-6'>
-                                    <MDBTypography style={labelStyle}>NINO:  <strong style={memberStyle}>{nINO.toUpperCase()}</strong></MDBTypography>
+                                    <MDBTypography style={labelStyle}>NINO:<strong style={memberStyle}>{nINO.toUpperCase()}</strong></MDBTypography>
 
                                 </MDBCol>
                                 <MDBCol className='col-lg-3 col-md-2 col-sm-6 col-xs-6'>
-                                    <MDBTypography style={labelStyle}>DOB: <strong style={memberStyle}>{dateofbirth.toUpperCase()}</strong></MDBTypography>
+                                    <MDBTypography style={labelStyle}>DOB:<strong style={memberStyle}>{ToCamelCase(dateofbirth)}</strong></MDBTypography>
 
                                 </MDBCol>
-                                <MDBCol className='col-lg-2 col-md-2 col-sm-6 col-xs-6'>
-                                    <MDBTypography style={labelStyle}>Relation:  <strong style={memberStyle}>{relationWithPrimaryApplicant.toUpperCase()}</strong></MDBTypography>
+                                <MDBCol className='col-lg-3 col-md-2 col-sm-6 col-xs-6'>
+                                    <MDBTypography style={labelStyle}>Relation:<strong style={memberStyle}>{ToCamelCase(relationWithPrimaryApplicant)}</strong></MDBTypography>
                                 </MDBCol>
                             </MDBRow>
                         </MDBRow>
@@ -222,7 +330,7 @@ export default function JointApplicantEdit() {
                         <div className='px-4 mb-2' >
                             <select style={{ overflow: 'scroll', width: '150px' }} className="form-select rounded"
                                 onChange={(e) => { let newEdit = { ...healthCondition }; newEdit = e.target.value; setHealthCondition(newEdit) }} >
-                                <option >{healthCondition}</option>
+                                <option defaultValue >Please choose</option>
                                 <option value="no">No</option>
                                 <option value="yes">Yes</option>
                                 <option value="prefer not to say">Prefer not to say</option>
@@ -237,7 +345,7 @@ export default function JointApplicantEdit() {
                             <MDBRow>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='currentlyLiveWithYouRadio' label='Yes' value='yes'
-                                        inline id='currentlyLiveWithYouYes' 
+                                        inline id='currentlyLiveWithYouYes'
                                         htmlFor="currentlyLiveWithYouYes" defaultChecked
                                         onClick={(e) => { let newEdit = { ...currentlyLiveWithYou }; newEdit = e.target.value; setCurrentlyLiveWithYou(newEdit); setShowCorrespondenceAddress(false) }}></MDBRadio>
                                 </MDBCol>
@@ -294,14 +402,17 @@ export default function JointApplicantEdit() {
                                 </MDBTypography>
                             </div>
                             <MDBRow className='mt-2 mb-2'>
-                                <MDBRadio className='mx-3' name='livingInDiffAddressRadio' id='livingInDiffAddressYes' 
-                                label={primaryApplicantAddress} htmlFor='livingInDiffAddressYes'
-                                    value='yes' defaultChecked onChange={(e) => { setLivingInDiffAddress("Living with primary applicant"); setShowCorrespondenceAddress(false); }}></MDBRadio>     {/* Get and show primary applicant address in this place */}
+                                <MDBRadio className='mx-3' name='livingInDiffAddressRadio' id='livingInDiffAddressYes'
+                                    htmlFor='livingInDiffAddressYes' label='Living with primary applicant'
+                                    value='Living with primary applicant' defaultChecked
+                                    onChange={(e) => { setLivingInDiffAddress("Living with primary applicant"); setShowCorrespondenceAddress(false); }}></MDBRadio>     {/* Get and show primary applicant address in this place */}
 
                             </MDBRow>
                             <MDBRow>
-                                <MDBRadio className='mx-3' name='livingInDiffAddressRadio' id='livingInDiffAddressNo' label='This person is living at a different addres' htmlFor='livingInDiffAddressNo'
-                                    value='no' onChange={(e) => { setLivingInDiffAddress("Living in different address"); setShowCorrespondenceAddress(true); }}></MDBRadio>     {/* Spouse or partner living in different address */}
+                                <MDBRadio className='mx-3' name='livingInDiffAddressRadio' id='livingInDiffAddressNo'
+                                    label='This person is living at a different address' htmlFor='livingInDiffAddressNo'
+                                    value='Living in different address'
+                                    onChange={(e) => { setLivingInDiffAddress("Living in different address"); setShowCorrespondenceAddress(true); }}></MDBRadio>     {/* Spouse or partner living in different address */}
                             </MDBRow>
 
                         </div>
@@ -317,7 +428,7 @@ export default function JointApplicantEdit() {
 
                                             <div className='mt-3 mb-2' >
                                                 <input style={inputStyle} className='form-control' type='text' placeholder='postcode...'
-                                                    maxLength={8} value={corresPostcode} onChange={(e) => { setCorresPostcode(e.target.value) }} />
+                                                    maxLength={8} value={corresPostcode} onChange={(e) => { let newEdit = { ...corresPostcode }; newEdit = e.target.value; setCorresPostcode(newEdit) }} />
                                             </div>
 
                                             <form className='d-flex w-auto mb-3'>
@@ -336,7 +447,7 @@ export default function JointApplicantEdit() {
 
                                                 <div className='' >
                                                     <input style={inputStyle} className='form-control ' type='text' placeholder='house or flat number and street'
-                                                        maxLength={75} value={addLine1} onChange={(e) => { setAddLine1(e.target.value) }} />
+                                                        maxLength={75} value={corresLine1} onChange={(e) => { let newEdit = { ...corresLine1 }; newEdit = e.target.value; setCorresLine1(newEdit) }} />
                                                 </div>
                                             </div>
 
@@ -348,7 +459,7 @@ export default function JointApplicantEdit() {
                                                 </div>
                                                 <div className='' >
                                                     <input style={inputStyle} className='form-control' type='text' placeholder='Address line 2'
-                                                        maxLength={75} value={addLine2} onChange={(e) => { setAddLine2(e.target.value) }} />
+                                                        maxLength={75} value={corresLine2} onChange={(e) => { let newEdit = { ...corresLine2 }; newEdit = e.target.value; setCorresLine2(newEdit) }} />
                                                 </div>
                                             </div>
 
@@ -360,7 +471,7 @@ export default function JointApplicantEdit() {
                                                 </div>
                                                 <div className='' >
                                                     <input style={inputStyle} className='form-control' type='text' placeholder='Address line 3'
-                                                        maxLength={75} value={addLine3} onChange={(e) => { setAddLine3(e.target.value) }} />
+                                                        maxLength={75} value={corresLine3} onChange={(e) => { let newEdit = { ...corresLine3 }; newEdit = e.target.value; setCorresLine3(newEdit) }} />
                                                 </div>
                                             </div>
 
@@ -372,7 +483,7 @@ export default function JointApplicantEdit() {
                                                 </div>
                                                 <div className='' >
                                                     <input style={inputStyle} className='form-control' type='text' placeholder='Address line 4'
-                                                        maxLength={75} value={addLine4} onChange={(e) => { setAddLine4(e.target.value) }} />
+                                                        maxLength={75} value={corresLine4} onChange={(e) => { let newEdit = { ...corresLine4 }; newEdit = e.target.value; setCorresLine4(newEdit) }} />
                                                 </div>
                                             </div>
                                         </div>
@@ -438,7 +549,7 @@ export default function JointApplicantEdit() {
                                 <MDBCol className='col-6'>
                                     <div  >
                                         <input style={inputStyle} className='form-control' type='text' placeholder='Email...'
-                                            maxLength={20} value={email}
+                                            maxLength={50} value={email}
                                             onChange={(e) => { let newEdit = { ...email }; newEdit = e.target.value; setEmail(newEdit) }}></input>
                                     </div>
                                 </MDBCol>
@@ -472,12 +583,12 @@ export default function JointApplicantEdit() {
                                     style={headerStyle} >
                                     <strong>Delivery date</strong>
                                 </MDBTypography>
-                                    <div style={{ marginLeft: '25px', fontSize: '12px', padding: '5px' }}>
-                                        <span className="far fa-question-circle help-icon"></span>
-                                        <span className="help-text">
-                                            <span  className="configured-help-text">This information can be found in the pregnancy green book.</span>
-                                        </span>
-                                    </div>
+                                <div style={{ marginLeft: '25px', fontSize: '12px', padding: '5px' }}>
+                                    <span className="far fa-question-circle help-icon"></span>
+                                    <span className="help-text">
+                                        <span className="configured-help-text">This information can be found in the pregnancy green book.</span>
+                                    </span>
+                                </div>
                                 <div className="help-content">
                                     <span className="help-text">
                                         <span style={{ marginLeft: '30px', fontSize: '12px' }} className="configured-help-text">For example 27 01 2000</span>
