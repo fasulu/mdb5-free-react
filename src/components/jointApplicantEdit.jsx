@@ -55,6 +55,8 @@ export default function JointApplicantEdit() {
     const [mName, setMName] = useState("");
     const [sName, setSName] = useState("");
     const [nINO, setNINO] = useState("");
+    const [sex, setSex] = useState("");
+
     let tempDOB = ""
     // tempDOB = tempDOB.split('-')[2] + '-' + tempDOB.split('-')[1] + '-' + tempDOB.split('-')[0]
     const [dateofbirth, setdateofbirth] = useState("");
@@ -89,8 +91,14 @@ export default function JointApplicantEdit() {
     const [areYouWorker, setAreYouWorker] = useState("no");
     const [comments, setComments] = useState("");
 
+    const [showPregnantField, setShowPregnantField] = useState(false)
+
     useEffect(() => {
         fetchData();
+
+        if (sex.toLowerCase() == "male") {
+            setShowPregnantField(false);
+        } else { setShowPregnantField(true) }
     }, [])
 
     async function fetchData() {
@@ -121,6 +129,7 @@ export default function JointApplicantEdit() {
                     setMName(responseJoint.data.jointApplicantDetails.clientJoint_middlename)
                     setSName(responseJoint.data.jointApplicantDetails.clientJoint_surname)
                     setNINO(responseJoint.data.jointApplicantDetails.clientJoint_NINO)
+                    setSex(responseJoint.data.jointApplicantDetails.clientJoint_Sex)
 
                     tempDOB = (responseJoint.data.jointApplicantDetails.clientJoint_dateofbirth).slice(0, 10)
                     setdateofbirth(tempDOB.split('-')[2] + '-' + tempDOB.split('-')[1] + '-' + tempDOB.split('-')[0]);
@@ -128,8 +137,6 @@ export default function JointApplicantEdit() {
                     setCurrentlyLiveWithYou(responseJoint.data.jointApplicantDetails.clientJoint_current_live_with_you)
                     setHealthCondition(responseJoint.data.jointApplicantDetails.clientJoint_illness);
 
-                    // tempMovedDate = (responseJoint.data.jointApplicantDetails.clientJoint_moved_to_current_address).slice(0, 10)
-                    // setMovedInDate(tempMovedDate.split('-')[2]); setMovedInMonth(tempMovedDate.split('-')[1]); setMovedInYear(tempMovedDate.split('-')[0]);
                     tempMovedDate = (responseJoint.data.jointApplicantDetails.clientJoint_moved_to_current_address);
                     console.log(tempMovedDate)
                     tempMovedDate = ConvertToDate(tempMovedDate);
@@ -140,17 +147,9 @@ export default function JointApplicantEdit() {
                     setMobile(responseJoint.data.jointApplicantDetails.clientJoint_telephone_mobile)
                     setEmail(responseJoint.data.jointApplicantDetails.clientJoint_email)
 
-                    // tempDelDate = (responseJoint.data.jointApplicantDetails.clientJoint_delivery_date).slice(0, 10)
-                    // console.log(tempDelDate);
-                    // if (tempDelDate) {
-                    //     setShowDeliveryDate(true); setIsShePregnant("yes")
-                    // }
-                    // setDelDate(tempDelDate.split('-')[2]); setDelMonth(tempDelDate.split('-')[1]); setDelYear(tempDelDate.split('-')[0]);
-
                     tempDelDate = (responseJoint.data.jointApplicantDetails.clientJoint_delivery_date)
-                    tempDelDate=ConvertToDate(tempDelDate)
+                    tempDelDate = ConvertToDate(tempDelDate)
                     setDelDate(tempDelDate.split('-')[2]); setDelMonth(tempDelDate.split('-')[1]); setDelYear(tempDelDate.split('-')[0]);
-
 
                     setAreYouWorker(responseJoint.data.jointApplicantDetails.clientJoint_are_you_worker)
                     setComments(responseJoint.data.jointApplicantDetails.clientJoint_comments)
@@ -174,7 +173,7 @@ export default function JointApplicantEdit() {
         alert('Sorry... \nPostcode search is not able to connect with UK Post Office API, \nplease enter the address manually')
     }
 
-    const saveJointMember = (e) => {
+    const handleJointApplicant = (e) => {
         e.preventDefault();
 
         const delvy = delYear + '-' + delMonth + '-' + delDate;
@@ -279,10 +278,6 @@ export default function JointApplicantEdit() {
         } catch (error) {
             console.log(error)
         }
-    }
-
-    const cancelEntry = (e) => {
-        window.location.reload();
     }
 
     const gotoAccountPage = (e) => {
@@ -430,14 +425,12 @@ export default function JointApplicantEdit() {
                                                 <input style={inputStyle} className='form-control' type='text' placeholder='postcode...'
                                                     maxLength={8} value={corresPostcode} onChange={(e) => { let newEdit = { ...corresPostcode }; newEdit = e.target.value; setCorresPostcode(newEdit) }} />
                                             </div>
-
                                             <form className='d-flex w-auto mb-3'>
                                                 <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
                                                     onClick={findPostcodeAddress} >
                                                     Find address
                                                 </MDBBtn>
                                             </form>
-
                                             {/* ***********  Address line 1  */}
                                             <div>
 
@@ -450,10 +443,8 @@ export default function JointApplicantEdit() {
                                                         maxLength={75} value={corresLine1} onChange={(e) => { let newEdit = { ...corresLine1 }; newEdit = e.target.value; setCorresLine1(newEdit) }} />
                                                 </div>
                                             </div>
-
                                             {/* ***********  Address line 2  */}
                                             <div>
-
                                                 <div className='mt-4'>
                                                     <p style={{ fontSize: '16px' }}><strong>Address line 2*</strong></p>
                                                 </div>
@@ -465,7 +456,6 @@ export default function JointApplicantEdit() {
 
                                             {/* ***********  Address line 3  */}
                                             <div>
-
                                                 <div className='mt-4'>
                                                     <p style={{ fontSize: '16px' }}><strong>Address line 3*</strong></p>
                                                 </div>
@@ -477,7 +467,6 @@ export default function JointApplicantEdit() {
 
                                             {/* ***********  Address line 4  */}
                                             <div>
-
                                                 <div className='mt-4'>
                                                     <p style={{ fontSize: '16px' }}><strong>Address line 4*</strong></p>
                                                 </div>
@@ -556,79 +545,84 @@ export default function JointApplicantEdit() {
                             </MDBRow>
                         </div>
 
-                        <MDBTypography className='card-header mt-4 mb-2'
-                            style={headerStyle} >
-                            <strong>Is she pregnant?</strong>
-                        </MDBTypography>
-                        <div className='px-4 mb-2' >
-                            <MDBRow>
-                                <MDBCol className='col-3'>
-                                    <MDBRadio name='isShePregnantRadio' label='Yes' value='yes'
-                                        inline id='isShePregnantYes' htmlFor="isShePregnantYes"
-                                        onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); setShowDeliveryDate(true) }}></MDBRadio>
-                                </MDBCol>
-
-                                <MDBCol className='col-3'>
-                                    <MDBRadio name='isShePregnantRadio' label='No' value='no'
-                                        inline id='isShePregnantNo' htmlFor='isShePregnantNo' defaultChecked
-                                        onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); setShowDeliveryDate(false) }}></MDBRadio>
-                                </MDBCol>
-                            </MDBRow>
-                        </div>
-
-                        {showDeliveryDate &&
-                            <div id='showDeliveryDate'>
-
+                        {showPregnantField &&
+                            <>
                                 <MDBTypography className='card-header mt-4 mb-2'
                                     style={headerStyle} >
-                                    <strong>Delivery date</strong>
+                                    <strong>Is she pregnant?</strong>
                                 </MDBTypography>
-                                <div style={{ marginLeft: '25px', fontSize: '12px', padding: '5px' }}>
-                                    <span className="far fa-question-circle help-icon"></span>
-                                    <span className="help-text">
-                                        <span className="configured-help-text">This information can be found in the pregnancy green book.</span>
-                                    </span>
-                                </div>
-                                <div className="help-content">
-                                    <span className="help-text">
-                                        <span style={{ marginLeft: '30px', fontSize: '12px' }} className="configured-help-text">For example 27 01 2000</span>
-                                    </span>
+                                <div className='px-4 mb-2' >
+                                    <MDBRow>
+                                        <MDBCol className='col-3'>
+                                            <MDBRadio id='IsShePregnantYes' name='isShePregnantRadio'
+                                                inline htmlFor="isShePregnantYes" label='Yes' value='yes'
+                                                onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); setShowDeliveryDate(true) }}></MDBRadio>
+                                        </MDBCol>
+
+                                        <MDBCol className='col-3'>
+                                            <MDBRadio id='IsShePregnantNo' name='isShePregnantRadio'
+                                                inline htmlFor='isShePregnantNo' defaultChecked label='No' value='no'
+                                                onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); setShowDeliveryDate(false) }}></MDBRadio>
+                                        </MDBCol>
+                                    </MDBRow>
                                 </div>
 
-                                <div className='mt-2 m-4'>
-                                    <div className='btn-group'>
-                                        <select style={datePickerStyle}
-                                            className="form-select rounded"
-                                            aria-label="Default select example"
-                                            value={delDate}
-                                            onChange={(e) => { let newEdit = { ...delDate }; newEdit = e.target.value; setDelDate(newEdit) }} >
-                                            {datesData.map((option) => (
-                                                <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
-                                            ))}
-                                        </select>
-                                        <select style={monthPickerStyle}
-                                            className="form-select rounded"
-                                            value={delMonth}
-                                            onChange={(e) => { let newEdit = { ...delMonth }; newEdit = e.target.value; setDelMonth(newEdit) }} >
-                                            {monthsData.map((option) => (
-                                                <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
-                                            ))}
-                                        </select>
-                                        <input className='form-control rounded'
-                                            style={yearPickerStyle}
-                                            type='number'
-                                            border={5}
-                                            min={new Date().getFullYear()}
-                                            max={new Date().getFullYear() + 1}
-                                            placeholder='year'
-                                            value={delYear}
-                                            onChange={(e) => { let newEdit = { ...delYear }; newEdit = e.target.value; setDelYear(newEdit) }} >
-                                        </input>
+                                {showDeliveryDate &&
+                                    <div id='showDeliveryDate'>
 
+                                        <MDBTypography className='card-header mt-4 mb-2'
+                                            style={headerStyle} >
+                                            <strong>Delivery date</strong>
+                                        </MDBTypography>
+                                        <div style={{ marginLeft: '25px', fontSize: '12px', padding: '5px' }}>
+                                            <span className="far fa-question-circle help-icon"></span>
+                                            <span className="help-text">
+                                                <span className="configured-help-text">This information can be found in the pregnancy green book.</span>
+                                            </span>
+                                        </div>
+                                        <div className="help-content">
+                                            <span className="help-text">
+                                                <span style={{ marginLeft: '30px', fontSize: '12px' }} className="configured-help-text">For example 27 01 2000</span>
+                                            </span>
+                                        </div>
+
+                                        <div className='mt-2 m-4'>
+                                            <div className='btn-group'>
+                                                <select style={datePickerStyle}
+                                                    className="form-select rounded"
+                                                    aria-label="Default select example"
+                                                    value={delDate}
+                                                    onChange={(e) => { let newEdit = { ...delDate }; newEdit = e.target.value; setDelDate(newEdit) }} >
+                                                    {datesData.map((option) => (
+                                                        <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
+                                                    ))}
+                                                </select>
+                                                <select style={monthPickerStyle}
+                                                    className="form-select rounded"
+                                                    value={delMonth}
+                                                    onChange={(e) => { let newEdit = { ...delMonth }; newEdit = e.target.value; setDelMonth(newEdit) }} >
+                                                    {monthsData.map((option) => (
+                                                        <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
+                                                    ))}
+                                                </select>
+                                                <input className='form-control rounded'
+                                                    style={yearPickerStyle}
+                                                    type='number'
+                                                    border={5}
+                                                    min={new Date().getFullYear()}
+                                                    max={new Date().getFullYear() + 1}
+                                                    placeholder='year'
+                                                    value={delYear}
+                                                    onChange={(e) => { let newEdit = { ...delYear }; newEdit = e.target.value; setDelYear(newEdit) }} >
+                                                </input>
+
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
+                                }
+                            </>
                         }
+
 
                         <MDBTypography className='card-header mt-4 mb-2'
                             style={headerStyle} >
@@ -669,7 +663,7 @@ export default function JointApplicantEdit() {
                         {/**********  Confirm and save */}
                         <form className='d-flex w-auto mt-3 p-4'>
                             <MDBBtn style={btnSytle}
-                                onClick={saveJointMember} >
+                                onClick={handleJointApplicant} >
                                 Save </MDBBtn>
                             <MDBBtn style={btnSytle}
                                 color='secondary' onClick={gotoAccountPage}>

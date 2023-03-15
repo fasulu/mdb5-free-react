@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from "axios";
+import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../userContext/UserContext"
@@ -11,14 +12,10 @@ import {
   MDBCardBody,
   MDBRipple,
   MDBTypography,
-  MDBRow, MDBCol,
-  MDBIcon, MDBBtn
+  MDBRow, MDBCol
 } from 'mdb-react-ui-kit';
 
-import { testData } from '../resources/testData';
-
 import { ToCamelCase } from '../validations/Validator'
-
 
 export default function MembersList() {
 
@@ -101,17 +98,19 @@ export default function MembersList() {
               <MDBCardBody key={membersList._id} item='true' >
                 <MDBRow alignment='center'>
                   <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
-                    <MDBTypography style={{ cursor: 'pointer', fontSize: '16px', color: '#1a82db', textDecoration: 'blue' }}
+                    <MDBTypography className='text-uppercase text-decoration-underline' style={{ cursor: 'pointer', fontSize: '16px', color: '#1a82db' }}
                       key={memberList._id}>
-                      Id: <strong onClick={(e) => openMember(e.target)}>{ToCamelCase(memberList._id)}</strong>
+                      <strong onClick={(e) => openMember(e.target)}>{(memberList._id)}</strong>
                     </MDBTypography>
+                    <MDBTypography style={inputStyle}>Name: <strong>{ToCamelCase(memberList.clientOtherHousehold_firstname)} {ToCamelCase(memberList.clientOtherHousehold_surname)}</strong></MDBTypography>
                     <MDBTypography style={inputStyle}>Date of birth: <strong>{memberList.clientOtherHousehold_dateofbirth.slice(0, 10)}</strong></MDBTypography>
-                    <MDBTypography style={inputStyle}>Relationship:  <strong>{memberList.clientOtherHousehold_relationshipWithClient}</strong></MDBTypography>
+                    <MDBTypography style={inputStyle}>Relationship:  <strong>{ToCamelCase(memberList.clientOtherHousehold_relationshipWithClient)}</strong></MDBTypography>
                   </MDBCol>
                   <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
-                    <MDBTypography style={inputStyle}> NINO:  <strong >{memberList.clientOtherHousehold_NINO} </strong> </MDBTypography>
-                    <MDBTypography style={inputStyle}>Illness:  <strong>{memberList.clientOtherHousehold_illness}</strong></MDBTypography>
-                    <MDBTypography style={inputStyle}>Moved In:  <strong>{memberList.clientOtherHousehold_moved_to_current_address.slice(0, 10)}</strong></MDBTypography>
+                    <MDBTypography className='text-uppercase'  style={inputStyle}> NINO:  <strong >{memberList.clientOtherHousehold_NINO} </strong> </MDBTypography>
+                    <MDBTypography style={inputStyle}>Illness:  <strong>{ToCamelCase(memberList.clientOtherHousehold_illness)}</strong></MDBTypography>
+                    <MDBTypography style={inputStyle}>Moved In:  <strong>{ConvertToDate(memberList.clientOtherHousehold_moved_to_current_address)}</strong></MDBTypography>
+                    <MDBTypography style={inputStyle}>Sex:  <strong>{ToCamelCase(memberList.clientOtherHousehold_sex)}</strong></MDBTypography>
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>

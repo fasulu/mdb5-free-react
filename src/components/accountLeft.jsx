@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { decryptDetails } from '../utility/hashDetails';
+
 
 import {
     MDBIcon, MDBBtn, MDBTypography,
@@ -16,6 +18,17 @@ const AccountLeft = (props) => {
 
     const iconStatus = props.iconStatus;
 
+    const [loginReference, setLoginReference] = useState()
+
+    useEffect(() => {
+
+        const loginRef = decryptDetails();
+
+        console.log(`${loginRef.loginRef}`)
+        setLoginReference((loginRef.loginRef).toUpperCase())
+
+    }, [])
+
     return (
         <React.Fragment>
             {
@@ -27,7 +40,7 @@ const AccountLeft = (props) => {
                         <MDBCol>
                             <p style={{ color: '#4f83c3', fontSize: '20px', borderBottom: '4px solid #4f83c3a3' }} ><strong>My Activity</strong></p>
 
-                            <p> Your Login Reference:</p>
+                            <p> Your Login Reference: <strong>{loginReference}</strong></p>
                             <p> Please make a note of this login reference and your memorable date as you will need them to login again the next time you visit this site </p>
                         </MDBCol>
                     </MDBRow>
@@ -35,7 +48,7 @@ const AccountLeft = (props) => {
                         <MDBCol>
                             <p style={{ color: '#4f83c3', fontSize: '20px', borderBottom: '4px solid #4f83c3a3' }} ><strong>My Application</strong></p>
                             <MDBCard>
-                                <MDBTypography className='card-header' style={{ fontSize: '15px', backgroundColor: '#dcdcdc', color:'black' }} ><strong>Social housing</strong></MDBTypography>
+                                <MDBTypography className='card-header' style={{ fontSize: '15px', backgroundColor: '#dcdcdc', color: 'black' }} ><strong>Social housing</strong></MDBTypography>
 
                                 <MDBRow>
                                     <p>Applicaiton reference: </p>

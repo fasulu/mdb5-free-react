@@ -11,8 +11,6 @@ import {
     MDBCol
 } from 'mdb-react-ui-kit';
 
-import { validNINO } from '../validations/Validator';
-import AccountRight from '../components/accountRight';
 import AccountLeft from '../components/accountLeft';
 import Navbar from '../components/Navbar';
 import NavbarSecondary from '../components/NavbarSecondary';
@@ -50,7 +48,13 @@ export default function AccountPage() {
 
     console.log(clientId);
 
+    const [loginReference, setLoginReference] = useState();
     const [clientName, setClientName] = useState();
+    const [jointName, setJointName] = useState();
+    const [postcode, setPostcode] = useState();
+    const [addressLine1, setAddressLine1] = useState("");
+    const [addressLine3, setAddressLine3] = useState("");
+    const [addressLine4, setAddressLine4] = useState();
 
     const styleBtn = { fontSize: '13px', color: '#4f83c3', textTransform: 'none' };
 
@@ -60,14 +64,14 @@ export default function AccountPage() {
 
     const logInOutBtn = () => {
         var btn = window.document.getElementById('LogInOutBtn');
-        btn.innerText = btn.textContent = 'Log Out';
+        btn.innerText = btn.textContent = 'Log Out';        
     }
-
+    
     const hideRegisterBtn = () => {
-        window.document.getElementById('RegisterBtn').style.visibility='hidden';
+        window.document.getElementById('RegisterBtn').style.visibility = 'hidden';
     }
 
-    async function fetchData(getName) {
+    async function fetchDataPrimary(getName) {
 
         // Whenever account page loaded check for make sure same 
         // applicant logged in by his/her id exist in primary client collection.
@@ -79,6 +83,10 @@ export default function AccountPage() {
             if (response) {
                 console.log(response.data)
                 setClientName(response.data.clientExist.client_firstname + " " + response.data.clientExist.client_surname);
+                setAddressLine1(response.data.clientExist.client_address_line1 +" "+response.data.clientExist.client_address_line2);
+                setAddressLine3(response.data.clientExist.client_address_line3);
+                setAddressLine4(response.data.clientExist.client_address_line4);
+                setPostcode(response.data.clientExist.client_postcode);
 
                 console.log(clientName);
             } else {
@@ -92,17 +100,44 @@ export default function AccountPage() {
         }
     }
 
+    async function fetchDataJoint(getName) {
+
+        // Whenever account page loaded check for make sure same 
+        // applicant logged in by his/her id exist in primary client collection.
+        // Verify the primary applicant is exist
+
+        console.log(`Get name is ${getName}`)
+        try {
+            const response = await axios.get(getName)
+            if (response) {
+                console.log(response.data)
+                setJointName(response.data.jointApplicantDetails.clientJoint_firstname + " " + response.data.jointApplicantDetails.clientJoint_surname);
+
+                console.log(jointName,);
+            } else {
+                console.log(`Unable to identify joint applicant`);
+                navigate('/login');
+            }
+        } catch (error) {
+            console.log(`Unable to identify joint applicant`);
+            console.log(error)
+            navigate('/login');
+        }
+    }
+
     useEffect(() => {
 
         if (clientId) {
-            fetchData(primaryApplicantNameUrl + clientId)
+            fetchDataPrimary(primaryApplicantNameUrl + clientId)
+            fetchDataJoint(jointApplicantNameUrl + clientId)
         }
 
-        const id = decryptDetails();
+        const idRef = decryptDetails();
 
-        console.log(`${id}`)
-        fetchData(primaryApplicantNameUrl + id)
-        setClientId(id);
+        setClientId(idRef.decryptedID);
+        console.log(`${idRef.decryptedID}`)
+        fetchDataPrimary(primaryApplicantNameUrl + idRef.decryptedID)
+        fetchDataJoint(jointApplicantNameUrl + idRef.decryptedID)
 
         logInOutBtn();
         hideRegisterBtn();
@@ -255,8 +290,8 @@ export default function AccountPage() {
                             <MDBContainer className='pe-5 pt-3' >
                                 <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
                                     <div style={{ backgroundColor: '#b0cce3' }} className="list-group-item list-group-item-primary">
-                                        <p style={{ fontSize: '12px', color: 'black' }} ><strong>{clientId}</strong></p>
                                         <p style={{ color: 'black' }} ><strong>{clientName} </strong></p>
+                                        <p style={{ color: 'black' }} ><strong>{jointName} </strong></p>
                                     </div >
                                 </MDBRow>
                                 <MDBRow >
@@ -295,9 +330,11 @@ export default function AccountPage() {
                                     </MDBCol>
                                 </MDBRow>
                                 <MDBRow >
-                                    <p><strong>My contact details</strong></p>
-                                    <p style={{ fontSize: '13px', fontWeight: 'bold', textTransform: 'none' }} >Address</p>
-                                    <p style={{ fontSize: '13px', fontWeight: 'bold', textTransform: 'none' }} >Contact details</p>
+                                    <p><strong>My contact details</strong> Id:- {clientId}</p>
+                                    <p style={{ margin:'0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{addressLine1}</p>
+                                    <p style={{ margin:'0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{addressLine3}</p>
+                                    <p style={{ margin:'0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{addressLine4}</p>
+                                    <p style={{ margin:'0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{postcode}</p>
                                 </MDBRow>
                                 <MDBRow >
                                     <MDBCol>

@@ -219,7 +219,7 @@ export default function Login() {
             console.log(`Output from backend 
             ${id_}, ${newFNameEdit}, ${newSNameEdit}`);
 
-            encryptDetails(id_);
+            encryptDetails(id_, loginReference);
 
             navigate('/account', {
                 state:

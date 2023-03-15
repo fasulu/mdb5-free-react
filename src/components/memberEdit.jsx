@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigation } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 import { dates, months } from '../resources/datePicker';
-import { testData } from '../resources/testData';
 import { validEmail, validNumber, validDate } from '../validations/Validator';
+import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 
 import {
     MDBCard,
@@ -25,9 +24,10 @@ export default function MemberEdit() {
     const location = useLocation();
 
     const findOneMemberUrl = "http://localhost:9001/member/member/";
+    const memberUpdateUrl = "http://localhost:9001/member/update/"
 
     let memberid = location.state.memberID
-    console.log(memberid);
+    // console.log(memberid);
 
     const datesData = dates;
     const monthsData = months;
@@ -47,21 +47,19 @@ export default function MemberEdit() {
 
     const [member, setMember] = useState([]);
 
-    const [primaryApplicantID, setPrimaryApplicantID] = useState("asd34dfsg324fdg65hgj");
+    const [primaryApplicantID, setPrimaryApplicantID] = useState("");
     const [householdMemberID, setHouseholdMemberID] = useState(memberid);
     const [relationship, setRelationship] = useState("")
-    const [title, setTitle] = useState("");
     const [fName, setFName] = useState("");
     const [mName, setMName] = useState("");
     const [sName, setSName] = useState("");
     const [nINO, setNINO] = useState("");
     const [sex, setSex] = useState("");
+
     var tempDOB = ""; tempDOB = tempDOB.split('/')[2] + '/' + tempDOB.split('/')[1] + tempDOB.split('/')[0] + '/';
     const [dateofbirth, setdateofbirth] = useState(tempDOB);
+
     var tempMovedDate = "";
-    // const [movedInDate, setMovedInDate] = useState(tempMovedDate.split('/')[1]);
-    // const [movedInMonth, setMovedInMonth] = useState(tempMovedDate.split('/')[0]);
-    // const [movedInYear, setMovedInYear] = useState(tempMovedDate.split('/')[2]);
     const [movedInDate, setMovedInDate] = useState();
     const [movedInMonth, setMovedInMonth] = useState();
     const [movedInYear, setMovedInYear] = useState();
@@ -71,31 +69,35 @@ export default function MemberEdit() {
     const [currentAddress, setCurrentAddress] = useState("");
 
     const [isShePregnant, setIsShePregnant] = useState("");
-    const [nameofSpouse, setNameofSpouse] = useState("tempo");
+    const [nameofSpouse, setNameofSpouse] = useState("");
     var tempDelDate = "";
-    // const [delDate, setDelDate] = useState(tempDelDate.split('/')[1]);
-    // const [delMonth, setDelMonth] = useState(tempDelDate.split('/')[0]);
-    // const [delYear, setDelYear] = useState(tempDelDate.split('/')[2]);
     const [delDate, setDelDate] = useState();
     const [delMonth, setDelMonth] = useState();
     const [delYear, setDelYear] = useState();
-    const [deliveryDate, setDeliveryDate] = useState(tempDelDate);
+    const [deliveryDate, setDeliveryDate, getDeliveryDate] = useState(tempDelDate);
+
     const [telephone, setTelephone] = useState("");
     const [workPhone, setWorkPhone] = useState("");
     const [mobile, setMobile] = useState("");
     const [email, setEmail] = useState("");
+
     const [areYouWorker, setAreYouWorker] = useState("");
     const [healthCondition, setHealthCondition] = useState("");
     const [comments, setComments] = useState("");
 
-    const [showPregnantField, setShowPregnantField] = useState(false)
+    const [showPregnantField, setShowPregnantField] = useState()
+    const [showPregnantOption, setShowPregnantOption] = useState()
 
     useEffect(() => {
         fetchData();
 
-        if (sex.toLowerCase() == "male") {
-            setShowPregnantField(false);
-        } else { setShowPregnantField(true) }
+        if (sex.toLowerCase() == "female") {
+            setShowPregnantOption(true)
+            // window.document.getElementById('PregnantOption').hidden = 'true';
+        } else {
+            setShowPregnantOption(false)
+            // window.document.getElementById('PregnantOption').hidden = 'false';
+        }
 
     }, [sex])
 
@@ -109,6 +111,7 @@ export default function MemberEdit() {
                 setMember(response.data.memberExist);
 
                 setRelationship(response.data.memberExist.clientOtherHousehold_relationshipWithClient);
+                setHouseholdMemberID(response.data.memberExist._id)
                 setFName(response.data.memberExist.clientOtherHousehold_firstname);
                 setMName(response.data.memberExist.clientOtherHousehold_middlename);
                 setSName(response.data.memberExist.clientOtherHousehold_surname);
@@ -116,20 +119,33 @@ export default function MemberEdit() {
                 setdateofbirth(response.data.memberExist.clientOtherHousehold_dateofbirth.slice(0, 10));
                 setSex(response.data.memberExist.clientOtherHousehold_sex);
                 setCurrentlyLiveWithYou(response.data.memberExist.clientOtherHousehold_live_with_you);
-                tempMovedDate = (response.data.memberExist.clientOtherHousehold_moved_to_current_address.slice(0, 10));
-                console.log(tempMovedDate)
-                setMovedInDate(tempMovedDate.split('-')[2])
-                setMovedInMonth(tempMovedDate.split('-')[1])
-                setMovedInYear(tempMovedDate.split('-')[0])
-                setCurrentAddress(response.data.memberExist.clientOtherHousehold_current_address);
-                setIsShePregnant(response.data.memberExist.clientOtherHousehold_is_she_pregnant);
-                if(response.data.memberExist.clientOtherHousehold_DeliveryDate){
-                    tempDelDate = (response.data.memberExist.clientOtherHousehold_DeliveryDate.slice(0, 10));
+                if (response.data.memberExist.clientOtherHousehold_live_with_you == 'yes') {
+                    window.document.getElementById('CurrentlyLiveWithYouYes').checked = 'true';
+                } else {
+                    window.document.getElementById('CurrentlyLiveWithYouNo').checked = 'false';
                 }
-                console.log(tempDelDate)
-                setDelDate(tempDelDate.split('-')[2])
-                setDelMonth(tempDelDate.split('-')[1])
-                setDelYear(tempDelDate.split('-')[0])
+
+                tempMovedDate = (response.data.memberExist.clientOtherHousehold_moved_to_current_address);
+                console.log(tempMovedDate)
+                tempMovedDate = ConvertToDate(tempMovedDate);
+                setMovedInDate(tempMovedDate.split('-')[2]); setMovedInMonth(tempMovedDate.split('-')[1]); setMovedInYear(tempMovedDate.split('-')[0]);
+
+                setIsShePregnant(response.data.memberExist.clientOtherHousehold_is_she_pregnant);
+                tempDelDate = (response.data.memberExist.clientOtherHousehold_DeliveryDate)
+                tempDelDate = ConvertToDate(tempDelDate)
+                setDelDate(tempDelDate.split('-')[2]); setDelMonth(tempDelDate.split('-')[1]); setDelYear(tempDelDate.split('-')[0]);
+
+                // if (response.data.memberExist.clientOtherHousehold_is_she_pregnant == 'yes') {
+                //     window.document.getElementById('IsShePregnantYes').checked = 'true';
+                //     tempDelDate = (response.data.memberExist.clientOtherHousehold_DeliveryDate)
+                //     tempDelDate = ConvertToDate(tempDelDate)
+                //     setDelDate(tempDelDate.split('-')[2]); setDelMonth(tempDelDate.split('-')[1]); setDelYear(tempDelDate.split('-')[0]);
+                // } else {
+                //     window.document.getElementById('IsShePregnantNo').checked = 'false';
+                // }
+
+                setCurrentAddress(response.data.memberExist.clientOtherHousehold_current_address);
+
                 setNameofSpouse(response.data.memberExist.clientOtherHousehold_Nameof_spouse);
                 setTelephone(response.data.memberExist.clientOtherHousehold_telephone_home);
                 setWorkPhone(response.data.memberExist.clientOtherHousehold_telephone_work);
@@ -140,24 +156,8 @@ export default function MemberEdit() {
                 setComments(response.data.memberExist.clientOtherHousehold_comments);
 
             } else {
-
                 console.log(`Response from backend:- ${response.data.message}`)
-
             }
-            // console.log(`UseEffect :- ${primaryClientIdUrl + primaryApplicantClientId}`)
-
-            // const token = TokenVerify()
-
-            // console.log(`adminPage useEffect token result is ${token}`)
-
-            // const response = await axios.get(loggedInUrl, {
-            //     headers: {
-            //         Authorization: "Bearer " + token
-            //     }
-            // })
-
-            // console.log(response.data.validUser)      
-
         } catch (error) {
             console.log(error)
         }
@@ -167,16 +167,29 @@ export default function MemberEdit() {
         navigate('/account');
     }
 
-    const saveJointMember = (e) => {
+    const handleJointMember = (e) => {
         e.preventDefault();
 
-        const moved = movedInMonth + '/' + movedInDate + '/' + movedInYear;
-        setMovedDate(moved);
-        const delvy = delMonth + '/' + delDate + '/' + delYear;
-        setDeliveryDate(delvy);
+        const moved = movedInYear + '-' + movedInMonth + '-' + movedInDate;
+        const delvy = delYear + '-' + delMonth + '-' + delDate;
 
-        const deliveryErr = validDate(delvy);
         const moveDateErr = validDate(moved);
+        console.log(moved);
+        if (moveDateErr) {
+            tempMovedDate = ConvertToTimeStamp(moved)
+            let newEdit = { ...movedDate }; newEdit = tempMovedDate; setMovedDate(newEdit) 
+            console.log(tempMovedDate)
+            console.log(movedDate)
+
+        }
+        const deliveryErr = validDate(delvy);
+        console.log(delvy);
+        if (deliveryErr) {
+            tempDelDate = ConvertToTimeStamp(delvy)
+            let newEdit = { ...deliveryDate }; newEdit = tempDelDate; setDeliveryDate(newEdit)
+            console.log(tempDelDate)
+            console.log(deliveryDate)
+        }
         const emailErr = validEmail(email);
         const telephoneErr = validNumber(telephone);
         const workphoneErr = validNumber(workPhone);
@@ -199,6 +212,48 @@ export default function MemberEdit() {
             console.log('FINAL Result passed', healthCondition, currentlyLiveWithYou, currentAddress,
                 movedDate, areYouWorker, isShePregnant, deliveryDate, nameofSpouse, telephone,
                 mobile, workPhone, email, comments);
+
+            //  if not pregnant set data to empty string
+            if (isShePregnant == "no") {
+                tempDelDate="";
+            }
+            saveMember();
+        }
+    }
+
+    const saveMember = async () => {
+
+        console.log(`In save household member id is ${householdMemberID}`);
+
+        const memberInfo = {
+            clientOtherHousehold_live_with_you: currentlyLiveWithYou,
+            clientOtherHousehold_moved_to_current_address: tempMovedDate,
+            clientOtherHousehold_is_she_pregnant: isShePregnant,
+            clientOtherHousehold_DeliveryDate: tempDelDate,
+            clientOtherHousehold_current_address: currentAddress,
+            clientOtherHousehold_Nameof_spouse: nameofSpouse,
+            clientOtherHousehold_telephone_home: telephone,
+            clientOtherHousehold_telephone_work: workPhone,
+            clientOtherHousehold_telephone_mobile: mobile,
+            clientOtherHousehold_email: email,
+            clientOtherHousehold_are_you_work: areYouWorker,
+            clientOtherHousehold_illness: healthCondition,
+            clientOtherHousehold_comments: comments,
+        }
+        console.table(memberInfo)
+        try {
+
+            console.log(`Saving household member ${householdMemberID} ${memberUpdateUrl}`);
+
+            const response = await axios.put(memberUpdateUrl + householdMemberID, memberInfo, {})
+            console.log(`Output from backend ${response.data.MemberId}`)
+
+            if (response.status === 200) {
+                console.log(`Status from backend ${response.data.message}`);
+            }
+
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -210,7 +265,7 @@ export default function MemberEdit() {
                 <MDBCardBody className='p-1' >
                     <MDBRow alignment='center'>
                         <MDBTypography className='card-header mb-4' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
-                            <strong>Edit Member Details</strong>
+                            <strong>Edit Member Details {householdMemberID}</strong>
                         </MDBTypography>
                         <MDBRow>
                             <MDBCol className='col-lg-4 col-md-4 col-sm-6 col-xs-6'>
@@ -254,8 +309,8 @@ export default function MemberEdit() {
                     <div className='px-4 mb-2' >
                         <MDBRow>
                             <MDBCol className='col-3'>
-                                <MDBRadio name='currentlyLiveWithYouRadio' label='Yes' value='yes'
-                                    inline id='currentlyLiveWithYouYes' htmlFor="currentlyLiveWithYouYes"
+                                <MDBRadio id='CurrentlyLiveWithYouYes' name='currentlyLiveWithYouRadio'
+                                    inline htmlFor="currentlyLiveWithYouYes" label='Yes' value='yes'
                                     onClick={(e) => {
                                         let newEdit1 = { ...currentlyLiveWithYou }; newEdit1 = e.target.value; setCurrentlyLiveWithYou(newEdit1);
                                         let newEdit2 = { ...currentAddress }; newEdit2 = "Living with primary applicant"; setCurrentAddress(newEdit2)
@@ -263,8 +318,8 @@ export default function MemberEdit() {
                             </MDBCol>
 
                             <MDBCol className='col-3'>
-                                <MDBRadio name='currentlyLiveWithYouRadio' label='No' value='no'
-                                    inline id='currentlyLiveWithYouNo' htmlFor='currentlyLiveWithYouNo'
+                                <MDBRadio id='CurrentlyLiveWithYouNo' name='currentlyLiveWithYouRadio'
+                                    inline htmlFor='currentlyLiveWithYouNo' label='No' value='no'
                                     onClick={(e) => {
                                         let newEdit = { ...currentlyLiveWithYou }; newEdit = e.target.value; setCurrentlyLiveWithYou(newEdit)
                                         let newEdit2 = { ...currentAddress }; newEdit2 = "Living in different address"; setCurrentAddress(newEdit2)
@@ -333,7 +388,7 @@ export default function MemberEdit() {
                         <MDBRow>
                             <MDBCol className='col-3'>
                                 <MDBRadio name='areYouWorkRadio' label='Yes' value='yes'
-                                    inline id='areYouWorkYes' htmlFor="areYouWorkYes"
+                                    inline id='areYouWorkYes' htmlFor="areYouWorkYes" defaultChecked
                                     onClick={(e) => { let newEdit = { ...areYouWorker }; newEdit = e.target.value; setAreYouWorker(newEdit) }}></MDBRadio>
                             </MDBCol>
 
@@ -425,64 +480,66 @@ export default function MemberEdit() {
                         </MDBRow>
                     </div>
 
-                    {showPregnantField &&
-                        <>
+                    {showPregnantOption &&
+
+                        <div id="" className=' mb-2' >
                             <MDBTypography className='card-header mb-2'
                                 style={headerStyle} >
                                 <strong>Is she pregnant?</strong>
                             </MDBTypography>
-                            <div className='px-4 mb-2' >
-                                <MDBRow>
-                                    <MDBCol className='col-3'>
-                                        <MDBRadio name='isShePregnantRadio' label='Yes' value='yes'
-                                            inline id='isShePregnantYes' htmlFor="isShePregnantYes"
-                                            onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit) }}></MDBRadio>
-                                    </MDBCol>
+                            <MDBRow className=' px-4' >
+                                <MDBCol className='col-3'>
+                                    <MDBRadio id='IsShePregnantYes' name='isShePregnantRadio' label='Yes' value='yes'
+                                        inline htmlFor="isShePregnantYes"
+                                        onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); setShowPregnantField(true) }}></MDBRadio>
+                                </MDBCol>
 
-                                    <MDBCol className='col-3'>
-                                        <MDBRadio name='isShePregnantRadio' label='No' value='no'
-                                            inline id='isShePregnantNo' htmlFor='isShePregnantNo'
-                                            onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit) }}></MDBRadio>
-                                    </MDBCol>
-                                </MDBRow>
-                            </div>
+                                <MDBCol className='col-3'>
+                                    <MDBRadio id='IsShePregnantNo' name='isShePregnantRadio' label='No' value='no'
+                                        inline htmlFor='isShePregnantNo' defaultChecked
+                                        onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); setShowPregnantField(false) }}></MDBRadio>
+                                </MDBCol>
+                            </MDBRow>
+                        </div>
+                    }
 
+                    {showPregnantField &&
+                        <div id='PregnantDate' className='px-4 mb-2' >
                             <MDBTypography className='card-header mb-2'
                                 style={headerStyle} >
                                 <strong>Delivery date</strong>
                             </MDBTypography>
-                            <div className='px-4 mb-2' >
-                                <div className='btn-group' >
-                                    <select style={datePickerStyle}
-                                        className="form-select rounded"
-                                        value={delDate}
-                                        onChange={(e) => { let newEdit = { ...delDate }; newEdit = e.target.value; setDelDate(newEdit) }} >
-                                        {datesData.map((option) => (
-                                            <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
-                                        ))}
-                                    </select>
+                            <div className='btn-group' >
+                                <select style={datePickerStyle}
+                                    className="form-select rounded"
+                                    value={delDate}
+                                    onChange={(e) => { let newEdit = { ...delDate }; newEdit = e.target.value; setDelDate(newEdit) }} >
+                                    {datesData.map((option) => (
+                                        <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
+                                    ))}
+                                </select>
 
-                                    <select style={monthPickerStyle}
-                                        className="form-select rounded"
-                                        value={delMonth}
-                                        onChange={(e) => { let newEdit = { ...delMonth }; newEdit = e.target.value; setDelMonth(newEdit) }} >
-                                        {monthsData.map((option) => (
-                                            <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
-                                        ))}
-                                    </select>
+                                <select style={monthPickerStyle}
+                                    className="form-select rounded"
+                                    value={delMonth}
+                                    onChange={(e) => { let newEdit = { ...delMonth }; newEdit = e.target.value; setDelMonth(newEdit) }} >
+                                    {monthsData.map((option) => (
+                                        <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
+                                    ))}
+                                </select>
 
-                                    <input className='form-control rounded'
-                                        style={yearPickerStyle}
-                                        type='number'
-                                        min={yearMin + 70}
-                                        max={yearMax}
-                                        placeholder='year'
-                                        value={delYear}
-                                        onChange={(e) => { let newEdit = { ...delYear }; newEdit = e.target.value; setDelYear(newEdit) }} >
-                                    </input>
-                                </div>
+                                <input className='form-control rounded'
+                                    style={yearPickerStyle}
+                                    type='number'
+                                    border={5}
+                                    min={new Date().getFullYear()}
+                                    max={new Date().getFullYear() + 1}
+                                    placeholder='year'
+                                    value={delYear}
+                                    onChange={(e) => { let newEdit = { ...delYear }; newEdit = e.target.value; setDelYear(newEdit) }} >
+                                </input>
                             </div>
-                        </>
+                        </div>
                     }
 
                     <MDBTypography className='card-header mb-2'
@@ -504,7 +561,7 @@ export default function MemberEdit() {
                     {/**********  Confirmat and save */}
                     <form className='d-flex w-auto mt-3 p-4'>
                         <MDBBtn style={btnSytle}
-                            onClick={saveJointMember} >
+                            onClick={handleJointMember} >
                             Save
                         </MDBBtn>
                         <MDBBtn style={btnSytle}
