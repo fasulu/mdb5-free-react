@@ -15,12 +15,12 @@ import {
   MDBCollapse,
 } from 'mdb-react-ui-kit';
 
-export default function Navbar() {
+export default function Navbar(props) {
 
   const navigate = useNavigate();
 
   const [showBasic, setShowBasic] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(props.loginStatus);
 
   const gotoRegisterPage = () => {
     navigate('/nino');
@@ -31,6 +31,7 @@ export default function Navbar() {
   }
 
   const gotoLoginPage = () => {
+    window.localStorage.removeItem('cref')
     navigate('/login');
   }
 
@@ -45,42 +46,47 @@ export default function Navbar() {
       <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
         <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
         Messages</MDBBtn>
-
+{/* 
       <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
         <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
         Logout</MDBBtn>
-
+ */}
     </form>
   );
 
   const element2 = (
-    <form className='d-flex mr-auto mb-2 mb-lg-0'>
-      <MDBBtn id="RegisterBtn" style={{ margin: '10px', width: '135px', textTransform: 'none' }}
-        className='form-control' color='primary' onClick={gotoRegisterPage}>
-        <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
-        Register</MDBBtn>
+    <>
+      <MDBNavbarNav className='mr-auto mb-2 mb-lg-0 '>
+        <MDBNavbarItem>
+          <MDBNavbarLink style={{ fontSize: '18px' }} active aria-current='page' href='#'>
+            <strong></strong>
+          </MDBNavbarLink>
+        </MDBNavbarItem>
+        <MDBNavbarItem>
+          <MDBNavbarLink id='' style={{ fontSize: '18px' }} active aria-current='page' href='/accessibility'>
+            <strong>Accessibility</strong>
+          </MDBNavbarLink>
+        </MDBNavbarItem>
+        <MDBNavbarItem>
+          <MDBNavbarLink id='' style={{ fontSize: '18px' }} active aria-current='page' href='/help'>
+            <strong>Help</strong>
+          </MDBNavbarLink>
+        </MDBNavbarItem>
+      </MDBNavbarNav>
+      <form className='d-flex mr-auto mb-2 mb-lg-0'>
+        <MDBBtn id="RegisterBtn" style={{ margin: '10px', width: '135px', textTransform: 'none' }}
+          className='form-control' color='primary' onClick={gotoRegisterPage}>
+          <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
+          Register</MDBBtn>
 
-      <MDBBtn id="LogInOutBtn" style={{ margin: '10px', width: '135px', textTransform: 'none' }}
-        className='form-control' color='primary' onClick={gotoLoginPage}>
-        <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
-        Login</MDBBtn>
+        <MDBBtn id="LogInOutBtn" style={{ margin: '10px', width: '135px', textTransform: 'none' }}
+          className='form-control' color='primary' onClick={gotoLoginPage}>
+          <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
+          Login</MDBBtn>
 
-    </form>
-  )
+      </form>
+    </>
 
-  const element3 = (
-    <form className='d-flex mr-auto mb-2 mb-lg-0'>
-      <MDBBtn id="RegisterBtn" style={{ margin: '10px', width: '135px', textTransform: 'none' }}
-        className='form-control' color='primary' onClick={gotoRegisterPage}>
-        <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
-        Register</MDBBtn>
-
-      <MDBBtn id="LogInOutBtn" style={{ margin: '10px', width: '135px', textTransform: 'none' }}
-        className='form-control' color='primary' onClick={gotoLoginPage}>
-        <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
-        Login</MDBBtn>
-
-    </form>
   )
 
   return (
@@ -104,55 +110,11 @@ export default function Navbar() {
           </MDBNavbarToggler>
 
           <MDBCollapse navbar show={showBasic}>
-            <MDBNavbarNav className='mr-auto mb-2 mb-lg-0 '>
-                <MDBNavbarItem>
-                  <MDBNavbarLink style={{ fontSize: '18px' }} active aria-current='page' href='#'>
-                    <strong></strong>
-                  </MDBNavbarLink>
-                </MDBNavbarItem>
-                <MDBNavbarItem>
-                  <MDBNavbarLink id='' style={{ fontSize: '18px' }} active aria-current='page' href='/accessibility'>
-                    <strong>Accessibility</strong>
-                  </MDBNavbarLink>
-                </MDBNavbarItem>
-                <MDBNavbarItem>
-                  <MDBNavbarLink id='' style={{ fontSize: '18px' }} active aria-current='page' href='/help'>
-                    <strong>Help</strong>
-                  </MDBNavbarLink>
-                </MDBNavbarItem>
-            </MDBNavbarNav>
 
-            {/* <form className='d-flex w-auto'> */}
             {
               loggedIn ? element1 : element2
             }
-            {/* <form className='d-flex mr-auto mb-2 mb-lg-0'>
-              <div>
-                <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
-                  <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
-                  My account</MDBBtn>
-
-                <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
-                  <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
-                  Messages</MDBBtn>
-
-                <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
-                  <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
-                  Logout</MDBBtn>
-              </div>
-
-
-              <div>
-                <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
-                  <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
-                  Register</MDBBtn>
-
-                <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
-                  <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
-                  Login</MDBBtn>
-              </div>
-
-            </form> */}
+            
           </MDBCollapse>
         </div>
       </MDBContainer>

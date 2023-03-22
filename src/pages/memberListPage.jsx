@@ -7,7 +7,7 @@ import {
 } from 'mdb-react-ui-kit';
 
 import { validNINO } from '../validations/Validator';
-import AccountRight from '../components/accountRight';
+// import AccountRight from '../components/accountRight';
 import Navbar from '../components/Navbar';
 import NavbarSecondary from '../components/NavbarSecondary';
 import Footer from '../components/footer';
@@ -51,7 +51,7 @@ export default function MemberListPage() {
                     <MembersList></MembersList>
                 </MDBCol>
                 <MDBCol className='col-lg-4 col-md-4 col-sm-4'>
-                    <AccountRight></AccountRight>
+                    {/* <AccountRight></AccountRight> */}
                 </MDBCol>
             </MDBRow>
             <Footer />

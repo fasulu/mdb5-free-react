@@ -15,19 +15,20 @@ import AccountLeft from '../components/accountLeft';
 import Navbar from '../components/Navbar';
 import NavbarSecondary from '../components/NavbarSecondary';
 import Footer from '../components/footer';
-import JointApplicant from '../components/jointApplicant';
-import MemberEdit from '../components/memberEdit';
 import MembersList from '../components/membersList';
+// import MemberEdit from '../components/memberEdit';
 import UpdateContact from '../components/updateContact';
 import UpdateLogin from '../components/updateLogin';
+import JointApplicant from '../components/jointApplicant';
 import JointApplicantEdit from '../components/jointApplicantEdit';
 import HouseholdMember from '../components/householdMember';
 import { decryptDetails } from '../utility/hashDetails';
 
 export default function AccountPage() {
 
-    const { clientId, setClientId } = useContext(UserContext);
-    // const [clientId, setClientId] = useState("6401c0931f74dea710de3e82");
+    // const { clientId, setClientId } = useContext(UserContext);
+    // const [clientId, setClientId] = useState("64182ff5c11918c62cd57a13");
+    const [clientId, setClientId] = useState("6401c0931f74dea710de3e82");
 
     const [showAccountPage, setShowAccountPage] = useState(true);
     const [showHouseholdMemberPage, setShowHouseholdMemberPage] = useState(false);
@@ -46,13 +47,14 @@ export default function AccountPage() {
     const memmberExistUrl = "http://localhost:9001/member/clientid/" + clientId
     const jointExistUrl = "http://localhost:9001/joint/clientid/" + clientId
 
-    console.log(clientId);
-
+    let memberid = location.state.nino
     const [loginReference, setLoginReference] = useState();
+    // const [clientName, setClientName] = useState(location.state.clientName);
     const [clientName, setClientName] = useState();
     const [jointName, setJointName] = useState();
     const [postcode, setPostcode] = useState();
     const [addressLine1, setAddressLine1] = useState("");
+    const [addressLine2, setAddressLine2] = useState("");
     const [addressLine3, setAddressLine3] = useState("");
     const [addressLine4, setAddressLine4] = useState();
 
@@ -61,15 +63,6 @@ export default function AccountPage() {
     const styleBorder = { color: '#4f83c3', borderTop: '1px solid #d7cdcd', borderBottom: '1px solid #d7cdcd' };
 
     const iconRight = "fa-solid fa-caret-right";
-
-    const logInOutBtn = () => {
-        var btn = window.document.getElementById('LogInOutBtn');
-        btn.innerText = btn.textContent = 'Log Out';        
-    }
-    
-    const hideRegisterBtn = () => {
-        window.document.getElementById('RegisterBtn').style.visibility = 'hidden';
-    }
 
     async function fetchDataPrimary(getName) {
 
@@ -83,7 +76,8 @@ export default function AccountPage() {
             if (response) {
                 console.log(response.data)
                 setClientName(response.data.clientExist.client_firstname + " " + response.data.clientExist.client_surname);
-                setAddressLine1(response.data.clientExist.client_address_line1 +" "+response.data.clientExist.client_address_line2);
+                setAddressLine1(response.data.clientExist.client_address_line1); 
+                setAddressLine2(response.data.clientExist.client_address_line2);
                 setAddressLine3(response.data.clientExist.client_address_line3);
                 setAddressLine4(response.data.clientExist.client_address_line4);
                 setPostcode(response.data.clientExist.client_postcode);
@@ -127,20 +121,22 @@ export default function AccountPage() {
 
     useEffect(() => {
 
+        console.log(`Im in accountPage useEffect`)
+        const idRef = decryptDetails();     // get id and reference from local storage using dcrypDetails() module.
+
+        setClientId(idRef.decryptedID);     // get id and reference from local storage using dcrypDetails() module.
+        console.log(clientId);
+
         if (clientId) {
             fetchDataPrimary(primaryApplicantNameUrl + clientId)
-            fetchDataJoint(jointApplicantNameUrl + clientId)
+            
+            // fetchDataJoint(jointApplicantNameUrl + clientId)
         }
 
-        const idRef = decryptDetails();
-
-        setClientId(idRef.decryptedID);
         console.log(`${idRef.decryptedID}`)
         fetchDataPrimary(primaryApplicantNameUrl + idRef.decryptedID)
-        fetchDataJoint(jointApplicantNameUrl + idRef.decryptedID)
 
-        logInOutBtn();
-        hideRegisterBtn();
+        // fetchDataJoint(jointApplicantNameUrl + idRef.decryptedID)
 
     }, [])
 
@@ -174,10 +170,11 @@ export default function AccountPage() {
 
             console.log(`${jointExistUrl} In fetch data`)
             const clientIdExist = await axios.get(jointExistUrl, {})
+            console.log(clientIdExist.data)
 
-            if (clientIdExist.data) {
+            if (clientIdExist.data.jointApplicantDetails) {
 
-                console.log('Iam in edit joint applicant' + clientIdExist.data.jointApplicantDetails.clientId)
+                console.log('Iam in edit joint applicant')
 
                 setShowAccountPage(false);
                 setShowJointApplicantPage(false);
@@ -188,7 +185,7 @@ export default function AccountPage() {
                 setShowUpdateLoginPage(false);
                 setShowHouseholdMemberPage(false);
             } else {
-                console.log('Iam in new joint applicant' + clientIdExist.data.jointApplicantDetails.clientId)
+                console.log('Iam in new joint applicant')
 
                 setShowAccountPage(false);
                 setShowJointApplicantPage(true);
@@ -201,7 +198,6 @@ export default function AccountPage() {
             }
         } catch (error) {
             console.log(error)
-
         }
     }
 
@@ -214,48 +210,50 @@ export default function AccountPage() {
         setShowJointApplicantEditPage(false);
         setShowHouseholdMemberPage(false);
         setShowUpdateLoginPage(false);
-
     }
 
     const gotoMembersList = async () => {
-        try {
-            console.log(`${memmberExistUrl + clientId} In fetch data`)
-            const clientIdExist = await axios.get(memmberExistUrl)
-            console.log(`${clientIdExist.data.message}, ${clientId}`)
-            if (clientIdExist.data.clientId) {
-                setShowAccountPage(false);
-                setShowJointApplicantPage(false);
-                setShowMemberEditPage(false);
-                setShowMemberListPage(false);
-                setShowUpdateContactPage(false);
-                setShowJointApplicantEditPage(false);
-                setShowHouseholdMemberPage(true);
-                setShowUpdateLoginPage(false);
 
-            } else {
-                setShowAccountPage(false);
-                setShowJointApplicantPage(false);
-                setShowMemberEditPage(false);
-                setShowMemberListPage(true);
-                setShowUpdateContactPage(false);
-                setShowJointApplicantEditPage(false);
-                setShowUpdateLoginPage(false);
-                setShowHouseholdMemberPage(false);
+        try {
+                console.log(`${memmberExistUrl + clientId} In fetch data`)
+                const clientIdExist = await axios.get(memmberExistUrl)
+                console.log(`${clientIdExist.data.message}, ${clientId}`)
+                if (!clientIdExist.data.clientId) {
+                    setShowAccountPage(false);
+                    setShowJointApplicantPage(false);
+                    setShowMemberEditPage(false);
+                    setShowMemberListPage(true);
+                    setShowUpdateContactPage(false);
+                    setShowJointApplicantEditPage(false);
+                    setShowHouseholdMemberPage(false);
+                    setShowUpdateLoginPage(false);
+    
+                } else {
+                    setShowAccountPage(false);
+                    setShowJointApplicantPage(false);
+                    setShowMemberEditPage(false);
+                    setShowMemberListPage(false);
+                    setShowUpdateContactPage(false);
+                    setShowJointApplicantEditPage(false);
+                    setShowUpdateLoginPage(false);
+                    setShowHouseholdMemberPage(true);
+                }
+    
+            } catch (error) {
+                console.log(error)
             }
 
-        } catch (error) {
-
-        }
     }
 
     const logout = () => {
+        window.localStorage.removeItem('cref')
         navigate('/login');
     }
 
     return (
         <React.Fragment>
-            <Navbar />
-            <NavbarSecondary />
+            <Navbar loginStatus={true}></Navbar>
+            <NavbarSecondary loginStatus={true}></NavbarSecondary>
             <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
                 <MDBCol className='col-lg-8 col-md-8 col-sm-8'>
                     {
@@ -274,7 +272,7 @@ export default function AccountPage() {
                         showMemberListPage && <MembersList />
                     }
                     {
-                        showMemberEditPage && <MemberEdit />
+                        // showMemberEditPage && <MemberEdit />
                     }
                     {
                         showUpdateContactPage && <UpdateContact />
@@ -332,6 +330,7 @@ export default function AccountPage() {
                                 <MDBRow >
                                     <p><strong>My contact details</strong> Id:- {clientId}</p>
                                     <p style={{ margin:'0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{addressLine1}</p>
+                                    <p style={{ margin:'0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{addressLine2}</p>
                                     <p style={{ margin:'0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{addressLine3}</p>
                                     <p style={{ margin:'0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{addressLine4}</p>
                                     <p style={{ margin:'0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{postcode}</p>

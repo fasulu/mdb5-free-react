@@ -6,6 +6,7 @@ import { validDate, validPwd } from '../validations/Validator';
 import { UserContext } from "../userContext/UserContext"
 
 import { encryptDetails, decryptDetails } from '../utility/hashDetails';
+import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 
 import {
     MDBIcon,
@@ -38,12 +39,14 @@ export default function Login() {
     const [loginReference, setLoginReference] = useState("");
     // const [loginReference, setLoginReference] = useState("bs61864");
 
+    var returnedId = "";
+    var returnedRef = "";
+    var returnedpwd = "";
+    var returnedMemoDate = "";
 
     const [ref_, setRef_] = useState("")
     const [id_, setId_] = useState("")
     const [pwd, setPwd] = useState("");
-    var newFNameEdit = "";
-    var newSNameEdit = "";
 
     const [memo, setMemo] = useState("");
     const [password, setPassword] = useState("");
@@ -154,7 +157,7 @@ export default function Login() {
                     <form className='d-flex input-group w-auto mt-5'>
                         <MDBBtn style={btnSytle}
                             color='primary'
-                            onClick={(e) => { handleReference(e), setShowGetLoginInfo(true) }}>
+                            onClick={(e) => { handleReference(e) }}>
                             Continue<MDBIcon fas icon='caret-right' className='mx-2' />
                         </MDBBtn>
                     </form>
@@ -170,62 +173,73 @@ export default function Login() {
         try {
             console.log(clientRefUrl + loginReference)
             const response = await axios.get(clientRefUrl + loginReference, {})
+            // const tempData = JSON.stringify(response.data.message);
+            const tempData = response.data;
+            console.log(tempData);
+            if (!tempData) {
+                alert("Invalid login reference");
+                setLoginReference(null);
+            } else {
 
-            setRef_(response.data.clientRef)
-            setId_(response.data.clientid)
-            setPwd(response.data.clientPwd)
-            setMemo(response.data.clientDt)
-            console.log(`Output from backend ${setRef_,
-                setId_,
-                setPassword,
-                setMemorableDate}`
-            );
-            console.log(response.request.status, response.data.clientPwd, response.data.clientDt)
+                setShowGetLoginInfo(true)
+                // returnedRef = response.data.clientRef;
+                // returnedId = response.data.clientid
+                // returnedpwd = response.data.clientPwd
+                // returnedMemoDate = response.data.clientDt
+                setClientId(response.data.clientid);
+                
+                console.log(`Output from backend ${returnedRef}
+                ${returnedId}
+                ${returnedpwd}
+                ${returnedMemoDate}`);
 
-            if (response.data.message === "Client reference found") {
-                setShowGetLoginRefInfo(false);
-                setShowGetLoginInfo(true);
+                if (response.data.message === "Client reference found") {
+                    setShowGetLoginRefInfo(false);
+                    setShowGetLoginInfo(true);
+                }
             }
-
         } catch (error) {
-            console.log(error)
+            let result = error.request
+            console.log(result)
+            alert("Invalid login reference");
             setShowGetLoginRefInfo(true);
             setShowGetLoginInfo(false);
         }
     }
 
-    const formatDate = () => {
-
-        let dateMemorable = { ...memorableDate }; dateMemorable = (memYear + "-" + memMonth + "-" + memDate); setMemorableDate(dateMemorable);
-
-        console.log(`Validation result is dateMemorable date ${dateMemorable}`)
-    }
-
-    const Login_ = async () => {
-
+    const handleLogin = async (e) => {
+        e.preventDefault();
         const primaryLoginInfo = {
-            clientId: id_,
+            client_reference: loginReference,
             client_password: password,
-            client_memorable_date: memorableDate,
+            client_memorable_date: ConvertToTimeStamp(memYear + "-" + memMonth + "-" + memDate)
         }
-
+        console.table(primaryLoginInfo)
         try {
             console.log(clientRefUrl, primaryLoginInfo)
             const response = await axios.post(clientLoginUrl, primaryLoginInfo)
 
-            newFNameEdit = response.data.FName;
-            newSNameEdit = response.data.SName;
+            if(response){
+                console.log(response.data.message)
+                console.log(response.data.Status_Reply)
+                console.log(response.data.ClientID)
+                console.log(response.data.ClientFName)
+                console.log(response.data.ClientSName)
+            }
+            let newFNameEdit = response.data.ClientFName;
+            let newSNameEdit = response.data.ClientSName;
             const name = newFNameEdit + " " + newSNameEdit;
-            console.log(`Output from backend 
-            ${id_}, ${newFNameEdit}, ${newSNameEdit}`);
+            // console.log(`Output from backend 
+            // ${id_}, ${newFNameEdit}, ${newSNameEdit}`);
 
-            encryptDetails(id_, loginReference);
+            encryptDetails(response.data.ClientID, loginReference);
 
             navigate('/account', {
                 state:
                 {
-                    // clientid: id_
-                    // clientRef: loginReference
+                    // clientid: response.data.ClientID,
+                    // clientRef: loginReference,
+                    clientName: name
                 }
             });
 
@@ -234,17 +248,12 @@ export default function Login() {
         }
     }
 
-    const handleLogin = async (e) => {
+    // const handleLogin = async (e) => {
 
-        e.preventDefault();
+    //     e.preventDefault();
 
-        formatDate();
-
-        console.log(`Validation result is pwd ${password} and 
-        memorable date ${memorableDate}`)
-
-        Login_();
-    }
+    //     Login_();
+    // }
 
     return (
         <React.Fragment>

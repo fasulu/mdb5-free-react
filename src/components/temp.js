@@ -106,9 +106,34 @@
 // }
 
 
-basket = ['banana',
-    ['apple',
-        ['orange'],
-        'blueberry']
+const test = [
+    {
+        "client_title": "4", "client_firstname": "adsdsafasd", "client_middlename": "gf", "client_surname": "dsfggaafd", "client_namechange": "none", "client_NINO": "qq123456q", "client_dateofbirth": "-2114380800", "client_sex": "male", "client_lived_abroad": "no", "client_moved_to_current_address": "95472000", "client_postcode": "ty67 6ty", "client_address_line1": "dfgdfhfh", "client_address_line2": "hfjfgjgj", "client_address_line3": "asdfasdfasdf", "client_address_line4": "hkhkfghdf", "client_is_rented_property": "no", "client_landlord_name": "none", "client_landlord_address": "none", "client_landlord_tenancy_type": "dont know", "client_landlord_info_about_this_address": "none", "client_communication_address": "current address", "client_correspondence_type": "none", "client_correspondence_postcode": "", "client_correspondence_address_line1": "", "client_correspondence_address_line2": "", "client_correspondence_address_line3": "", "client_correspondence_address_line4": "", "client_placed_by_local_authority": "no", "client_if_yes_local_authority": "none", "client_telephone_home": "07894561231", "client_telephone_mobile": "03214587454", "client_telephone_work": "02451254142", "client_email": "adkfjhasdkf@skjdf.com", "client_ethnicity": "prefer not to say", "client_nationality": "non-eea national", "client_sex_orient": "prefer not to say", "client_religion": "prefer not to say", "client_illness": "no", "client_language_prefer": "english", "client_interpreter": "no", "client_current_tenure": "", "client_from_which_country": "none of the above", "client_connection_to_birmingham": "17", "client_password": "$2a$10$a0zbeYyKblROQrMlW/nK..ChUx6PCWnYCqr5zWddEe0pmZVUsxRI6", "client_memorable_date": "-2114380800", "client_registration_date": "2023-03-18T20:39:59.000Z", "client_status": "active", "client_comments": "none", "_id": "641621adf9989c0fac606114", "__v": 0
+    }
 ]
-console.log([0][0]);
+
+AxiosError {message: 'Request failed with status code 404', name: 'AxiosError', code: 'ERR_BAD_REQUEST', config: {…}, request: XMLHttpRequest, …}
+code
+: 
+"ERR_BAD_REQUEST"
+config
+: 
+{transitional: {…}, adapter: Array(2), transformRequest: Array(1), transformResponse: Array(1), timeout: 0, …}
+message
+: 
+"Request failed with status code 404"
+name
+: 
+"AxiosError"
+request
+: 
+XMLHttpRequest {onreadystatechange: null, readyState: 4, timeout: 0, withCredentials: false, upload: XMLHttpRequestUpload, …}
+response
+: 
+{data: {…}, status: 404, statusText: 'Not Found', headers: AxiosHeaders, config: {…}, …}
+stack
+: 
+"AxiosError: Request failed with status code 404\n    at settle (http://localhost:3000/static/js/bundle.js:94625:12)\n    at XMLHttpRequest.onloadend (http://localhost:3000/static/js/bundle.js:93333:66)"
+[[Prototype]]
+: 
+Error

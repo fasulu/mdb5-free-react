@@ -6,11 +6,11 @@ import {
 } from 'mdb-react-ui-kit';
 
 import { validNINO } from '../validations/Validator';
-import AccountRight from '../components/accountRight';
+// import AccountRight from '../components/accountRight';
 import Navbar from '../components/Navbar';
 import NavbarSecondary from '../components/NavbarSecondary';
 import Footer from '../components/footer';
-import MemberEdit from '../components/memberEdit';
+// import MemberEdit from '../components/memberEdit';
 
 export default function MemberEditPage() {
 
@@ -43,10 +43,10 @@ export default function MemberEditPage() {
             <MDBRow className='my-3 justify-content-center' alignment='center' bgcolor='#f7f2f287'>
                 {/* <MDBTypography className='card-header' style={{ fontSize: '18px' }} ><strong>Member</strong></MDBTypography> */}
                 <MDBCol md='8'>
-                    <MemberEdit></MemberEdit>
+                    {/* <MemberEdit></MemberEdit> */}
                 </MDBCol>
                 <MDBCol className='col-lg-3 col-md-3 col-sm-3'>
-                    <AccountRight></AccountRight>
+                    {/* <AccountRight></AccountRight> */}
                 </MDBCol>
             </MDBRow>
             <Footer />

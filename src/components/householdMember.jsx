@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
+import axios from "axios";
 import { UserContext } from "../userContext/UserContext"
-
 
 import { areyous } from '../resources/areyou';
 import { tenures } from '../resources/tenure';
@@ -9,8 +9,8 @@ import { nationalities } from '../resources/nationality';
 import { sexOrients } from '../resources/sexOrient';
 import { beliefs } from '../resources/belief';
 import { dates, months } from '../resources/datePicker';
-import { validEmail, validName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch, validNINO } from '../validations/Validator.jsx';
-import ApplicationProgress from '../components/applicationProgress'
+import { validEmail, validName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch, validNINO, validDate } from '../validations/Validator.jsx';
+import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 
 import {
     MDBContainer,
@@ -22,7 +22,7 @@ import {
 } from 'mdb-react-ui-kit';
 
 export default function HouseholdMember() {
-    
+
     const { clientId, setClientId } = useContext(UserContext);
 
     const ethnicityData = ethnicities;
@@ -32,6 +32,9 @@ export default function HouseholdMember() {
     const datesData = dates;
     const monthsData = months;
 
+    const addMemberUrl = "http://localhost:9001/member/addclientmember";
+    
+
     const yearMax = new Date().getFullYear();        // year picker up to current year
     const yearMin = new Date().getFullYear() - 120;  // year picker 120 year back from current year
 
@@ -40,12 +43,12 @@ export default function HouseholdMember() {
     const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const yearPickerStyle = { width: '80px', float: 'left', border: '5' };
-    
+
     const [showAddress, setShowAddress] = useState(false);
     const [showLocalAuthority, setShowLocalAuthority] = useState(false);
-    
+
     const [partnerAddress, setPartnerAddress] = useState("Need to fill dynamically")
-    
+
     const [primaryApplicantClientId, setPrimaryApplicantClientId] = useState(clientId)
     const [relationWithPrimaryApplicant, setRelationWithPrimaryApplicant] = useState("");
     const [assessmentPurposeOnly, setAssessmentPurposeOnly] = useState("no");
@@ -53,7 +56,7 @@ export default function HouseholdMember() {
     const [fName, setFName] = useState("");
     const [mName, setMName] = useState("");
     const [sName, setSName] = useState("");
-    const [nameChange, setNameChange] = useState("");
+    const [nameChange, setNameChange] = useState("none");
     const [nINO, setNINO] = useState("");
     const [dateofbirth, setdateofbirth] = useState("");
     const [dobDate, setDOBDate] = useState("");
@@ -75,8 +78,8 @@ export default function HouseholdMember() {
     const [delMonth, setDelMonth] = useState("");
     const [delYear, setDelYear] = useState("");
 
-    const [placedByLocalAuthrty, setPlacedByLocalAuthrty] = useState("");
-    const [localAuthrtyName, setLocalAuthrtyName] = useState("");
+    const [placedByLocalAuthrty, setPlacedByLocalAuthrty] = useState("no");
+    const [localAuthrtyName, setLocalAuthrtyName] = useState("none");
 
     const [isSpouseOfAnotherMember, setIsSpouseOfAnotherMember] = useState("no");
     const [spouseAnotherMember, setSpouseAnotherMember] = useState(false);
@@ -88,14 +91,16 @@ export default function HouseholdMember() {
     const [email, setEmail] = useState("");
     const [reEnterEmail, setReEnterEmail] = useState("");
 
-    const [ethnicity, setEthnicity] = useState("");
-    const [nationality, setNationality] = useState("");
-    const [sexOrient, setSexOrient] = useState("");
-    const [belief, setBelief] = useState("");
+    const [ethnicity, setEthnicity] = useState("16");
+    const [nationality, setNationality] = useState("16");
+    const [sexOrient, setSexOrient] = useState("3");
+    const [belief, setBelief] = useState("9");
     const [healthCondition, setHealthCondition] = useState("no");
 
     const [areYouWorker, setAreYouWorker] = useState("no");
-    const [comments, setComments] = useState("");
+    const [comments, setComments] = useState("none");
+
+    const todayDate = new Date().toISOString().slice(0, 19); // produces 2023-02-25
 
     useEffect(() => {
 
@@ -103,7 +108,8 @@ export default function HouseholdMember() {
 
     const handleCheckbox = (e) => {
 
-        // e.preventDefault();
+        e.preventDefault();
+
         let checkedItems = [...connection];
         if (e.target.checked) {
             checkedItems = [...connection, e.target.value];
@@ -120,29 +126,74 @@ export default function HouseholdMember() {
         alert('Sorry... \nPostcode search is not connected to UK Post Office API, \nplease enter the address manually')
     }
 
-    const saveJointMember = (e) => {
+    var birth_ = "";
+    var moved_ = "";
+    var del_ = "";
+
+    const formatDate = () => {
+
+        birth_ = dobYear + "-" + dobMonth + "-" + dobDate;
+        moved_ = movedYear + "-" + movedMonth + "-" + movedDate;
+        del_ = delYear + "-" + delMonth + "-" + delDate;
+
+        // setdateofbirth(dobYear + "-" + dobMonth + "-" + dobDate);
+        // setMovedInDate(movedYear + "-" + movedMonth + "-" + movedDate);
+        // setDeliveryDate(delYear + "-" + delMonth + "-" + delDate);
+
+        const birthValid = validDate(birth_);
+        if (birthValid) {
+            const timeStampedDOB = ConvertToTimeStamp(birth_);
+            console.log(birth_, timeStampedDOB)
+            setdateofbirth(timeStampedDOB);
+        } else {
+            alert(`Date of birth invalid date`)
+        }
+
+        const movedValid = validDate(moved_);
+        if (movedValid) {
+            const timeStampedMovedInDate = ConvertToTimeStamp(moved_);
+            console.log(moved_, timeStampedMovedInDate)
+            setMovedInDate(timeStampedMovedInDate);
+        } else {
+            alert(`Invalid moved in date`)
+        }
+
+        if (isShePregnant == "yes") {
+            const delValid = validDate(del_);
+            if (delValid) {
+                const timeStampedDelDate = ConvertToTimeStamp(del_);
+                console.log(del_, timeStampedDelDate)
+                setDeliveryDate(timeStampedDelDate);
+            } else {
+                alert(`Invalid delivery date`)
+            }
+        } else {
+            setDeliveryDate("");
+        }
+
+    }
+
+    const handleJointMember = (e) => {
         e.preventDefault();
 
-        setdateofbirth(dobMonth + "/" + dobDate + "/" + dobYear);
-        setMovedInDate(movedMonth + "/" + movedDate + "/" + movedYear);
-        setDeliveryDate(delMonth + "/" + delDate + "/" + delYear);
+        formatDate();
 
-        const fNameErr = validName(fName);
-        const mNameErr = validName(sName);
-        const sNameErr = validName(sName);
-        const spouseNameErr = validName(spouseAnotherMemberName);
-        const ninoErr = validNINO(nINO);
-        const emailErr = validEmail(email);
-        const telephoneErr = validNumber(telephone);
-        const workphoneErr = validNumber(workPhone);
-        const mobileErr = validNumber(mobile);
-        const emailMatchesErr = emailMatch(email, reEnterEmail);
+        const fNameValid = validName(fName);
+        const mNameValid = validName(sName);
+        const sNameValid = validName(sName);
+        const spouseNameValid = validName(spouseAnotherMemberName);
+        const ninoValid = validNINO(nINO);
+        const emailValid = validEmail(email);
+        const telephoneValid = validNumber(telephone);
+        const workphoneValid = validNumber(workPhone);
+        const mobileValid = validNumber(mobile);
+        const emailMatchesValid = emailMatch(email, reEnterEmail);
 
-        console.log(`Validation result is fname/mname/sname ${fNameErr} ${mNameErr} ${sNameErr}, 
-        ninoErr ${ninoErr}, spouse name ${spouseNameErr}, home telephone ${telephoneErr}, work telephone ${workphoneErr}, 
-        mobile ${mobileErr},email ${emailErr}, email matches ${emailMatchesErr}`)
+        console.log(`Validation result is fname/mname/sname ${fNameValid} ${mNameValid} ${sNameValid}, 
+        ninoValid ${ninoValid}, spouse name ${spouseNameValid}, home telephone ${telephoneValid}, work telephone ${workphoneValid}, 
+        mobile ${mobileValid},email ${emailValid}, email matches ${emailMatchesValid}`)
 
-        console.log('Im in saveJointMember', relationWithPrimaryApplicant,
+        console.log('Im in handleJointMember', relationWithPrimaryApplicant,
             assessmentPurposeOnly, title, fName, mName, sName, nameChange,
             currentlyLiveWithYou, isSpouseOfAnotherMember, spouseAnotherMemberName,
             nINO, dateofbirth, sex, placedByLocalAuthrty, localAuthrtyName,
@@ -152,20 +203,76 @@ export default function HouseholdMember() {
             healthCondition, areYouWorker
         )
 
-        if ((!fNameErr) || (!mNameErr) || (!sNameErr) || (!emailErr) || (!emailMatchesErr) ||
-            (!ninoErr) || (!telephoneErr) || (!workphoneErr) || (!mobileErr)) {
-            !fNameErr && alert('First Name error');
-            !mNameErr && alert('Middle Name error');
-            !sNameErr && alert('Surname error');
-            !telephoneErr && alert('Telephone number error');
-            !workphoneErr && alert('Work telephone number error');
-            !mobileErr && alert('Mobile number error');
-            !emailErr && alert('Email error');
-            !ninoErr && alert('NINO error');
-            !emailMatchesErr && alert('Email match error');
+        if ((!fNameValid) || (!mNameValid) || (!sNameValid) || (!emailValid) || (!emailMatchesValid) ||
+            (!ninoValid) || (!telephoneValid) || (!workphoneValid) || (!mobileValid)) {
+            !fNameValid && alert('First Name error');
+            !mNameValid && alert('Middle Name error');
+            !sNameValid && alert('Surname error');
+            !telephoneValid && alert('Telephone number error');
+            !workphoneValid && alert('Work telephone number error');
+            !mobileValid && alert('Mobile number error');
+            !emailValid && alert('Email error');
+            !ninoValid && alert('NINO error');
+            !emailMatchesValid && alert('Email match error');
 
+        } else {
+            saveJointMember()
         }
     }
+
+    const saveJointMember = async () => {
+
+        const memberInfo = {
+            clientId: primaryApplicantClientId,
+            clientOtherHousehold_relationshipWithClient: relationWithPrimaryApplicant,
+            clientOtherHousehold_assessment_purpose_only: assessmentPurposeOnly,
+            clientOtherHousehold_title: title,
+            clientOtherHousehold_firstname: fName,
+            clientOtherHousehold_middlename: mName,
+            clientOtherHousehold_surname: sName,
+            clientOtherHousehold_namechange: nameChange,
+            clientOtherHousehold_NINO: nINO,
+            clientOtherHousehold_dateofbirth: ConvertToTimeStamp(birth_),
+            clientOtherHousehold_sex: sex,
+            clientOtherHousehold_live_with_you: currentlyLiveWithYou,
+            clientOtherHousehold_moved_to_current_address: ConvertToTimeStamp(moved_),
+            clientOtherHousehold_current_address: currentAddress,
+            clientOtherHousehold_is_she_pregnant: isShePregnant,
+            clientOtherHousehold_spouse_another_member_name: spouseAnotherMemberName,
+            clientOtherHousehold_DeliveryDate: deliveryDate,
+            clientOtherHousehold_placed_by_local_authority: placedByLocalAuthrty,
+            clientOtherHousehold_if_yes_local_authority: localAuthrtyName,
+            clientOtherHousehold_telephone_home: telephone,
+            clientOtherHousehold_telephone_mobile: mobile,
+            clientOtherHousehold_telephone_work: workPhone,
+            clientOtherHousehold_email: email,
+            clientOtherHousehold_nationality: ethnicity,
+            clientOtherHousehold_sex_orient: nationality,
+            clientOtherHousehold_ethnicity: sexOrient,
+            clientOtherHousehold_religion: belief,
+            clientOtherHousehold_illness: healthCondition,
+            clientOtherHousehold_are_you_worker: areYouWorker,
+            clientOtherHousehold_registration_date: todayDate,
+            clientOtherHousehold_comments: comments
+        }
+        console.table(memberInfo)
+        try {
+
+            const response = await axios.post(addMemberUrl, memberInfo);
+
+            console.log(`Output from backend ${response.data.message}`)
+            console.log(`Output from backend ${response.data.error}`)
+
+            if (response.status === 200) {
+                console.log(`Status from backend ${response.status}`);                
+                // navigate('/account', { state: { jointName: fName } });
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
     const cancelEntry = (e) => {
         window.location.reload();
@@ -933,7 +1040,7 @@ export default function HouseholdMember() {
                 </MDBCard>
                 <form className='d-flex w-auto mt-4'>
                     <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
-                        onClick={saveJointMember} >
+                        onClick={handleJointMember} >
                         Save Household Member</MDBBtn>
                     <MDBBtn className='me-1 btn btn-outline-secondary' style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='white'
                         onClick={cancelEntry}>

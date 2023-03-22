@@ -12,6 +12,7 @@ import { beliefs } from '../resources/belief';
 import { languages } from '../resources/language';
 import { dates, months } from '../resources/datePicker';
 import { validEmail, validName, validPostcode, validNumber, validDate, emailMatch, validMName, pwdMatch, memDateMatch, validPwd } from '../validations/Validator';
+import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 
 import {
     MDBContainer,
@@ -25,6 +26,8 @@ import {
 export default function PrimaryApplicant() {
 
     const urL = "http://localhost:9001/client/signup";
+    const clientNinoUrl = "http://localhost:9001/client/clientnino/"
+    const createClientLoginUrl = "http://localhost:9001/client/clientref"
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -46,7 +49,7 @@ export default function PrimaryApplicant() {
     const ageMin = new Date().getFullYear() - 120;  // year picker 120 year back from current year
 
     const inputStyle = { fontSize: '14px', width: '250px' };
-    const ninoInputStyle = { fontSize: '14px', fontWeight: 'bold', width: '250px', borderColor: '#79baf3', backgroundColor: '#b8ffb8', color: 'black' }
+    const ninoInputStyle = { fontSize: '14px', fontWeight: 'bold', width: '250px', borderColor: '#79baf3', backgroundColor: '#b8ffb8', color: 'grey' }
     const comboBoxStyle = { maxWidth: '250px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
@@ -59,16 +62,15 @@ export default function PrimaryApplicant() {
     const [showLocalAuthority, setShowLocalAuthority] = useState(false);
     const [showTenancyRef, setShowTenancyRef] = useState(false);
 
+    const [currentSavedClientId, setCurrentSavedClientId] = useState({});
     const [title, setTitle] = useState("");
     const [fName, setFName] = useState("");
     const [mName, setMName] = useState("");
     const [sName, setSName] = useState("");
     const [nameChange, setNameChange] = useState("none");
-    const [nINO, setNINO] = useState(memberid.toUpperCase());
-    const [dateofbirth, setdateofbirth] = useState("");
+    const nINO = memberid.toUpperCase();
     const [sex, setSex] = useState("");
     const [livedAbroad, setLivedAbroad] = useState("no");
-    const [movedInDate, setMovedInDate] = useState("");
 
     const [postcode, setPostcode] = useState("");
     const [addLine1, setAddLine1] = useState("");
@@ -76,10 +78,12 @@ export default function PrimaryApplicant() {
     const [addLine3, setAddLine3] = useState("");
     const [addLine4, setAddLine4] = useState("");
 
+    const [dateofbirth, setDateofbirth] = useState("");
     const [dobDate, setDOBDate] = useState("");
     const [dobMonth, setDOBMonth] = useState("");
     const [dobYear, setDOBYear] = useState("");
 
+    const [movedInDate, setMovedInDate] = useState("");
     const [movedDate, setMovedDate] = useState("");
     const [movedMonth, setMovedMonth] = useState("");
     const [movedYear, setMovedYear] = useState("");
@@ -127,7 +131,7 @@ export default function PrimaryApplicant() {
     const [memMonth, setMemMonth] = useState("");
     const [memYear, setMemYear] = useState("");
 
-    const [reEntermemorableDate, setReenterMemorableDate] = useState("");
+    const [reEnterMemorableDate, setReEnterMemorableDate] = useState("");
     const [reEnterMemDate, setReenterMemDate] = useState("");
     const [reEnterMemMonth, setReenterMemMonth] = useState("");
     const [reEnterMemYear, setReenterMemYear] = useState("");
@@ -144,60 +148,95 @@ export default function PrimaryApplicant() {
 
     }, [])
 
+    var birth_ = ""
+    var moved_ = ""
+    var dateMemorable = ""
+    var reEnteredDateMemorable = ""
+    var corresPostcodeValid = "";
+
+    const formatDate = () => {
+
+        birth_ = dobYear + "-" + dobMonth + "-" + dobDate;
+        moved_ = movedYear + "-" + movedMonth + "-" + movedDate;
+        dateMemorable = memYear + "-" + memMonth + "-" + memDate;
+        reEnteredDateMemorable = reEnterMemYear + "-" + reEnterMemMonth + "-" + reEnterMemDate;
+
+    }
+
+    const handleConnectionCheckbox = () => {
+
+        var check_ed = "";
+        var markedCheckbox = document.getElementsByName('connectionCheckbox');
+        for (var checkbox of markedCheckbox) {
+            if (checkbox.checked)
+                check_ed += (checkbox.value + ', ');
+        }
+        // if nothing checked, automatically saves checkbox value 17(None of the above)
+        if (check_ed == "") {
+            check_ed = "17";
+        }
+        let newEdit = { ...connection }; newEdit = check_ed; setConnection(newEdit)
+    }
+
     const handleSubmit = (e) => {
 
         e.preventDefault();
-
-        const formatDate = () => {
-
-            let birth_ = { ...dateofbirth }; birth_ = (dobYear + "-" + dobMonth + "-" + dobDate); setdateofbirth(birth_)
-            let moved_ = { ...movedInDate }; moved_ = (movedYear + "-" + movedMonth + "-" + movedDate); setMovedInDate(moved_)
-            let dateMemorable = { ...memorableDate }; dateMemorable = (memYear + "-" + memMonth + "-" + memDate); setMemorableDate(dateMemorable)
-            let reEnteredDateMemorable = { ...reEntermemorableDate }; reEnteredDateMemorable = (reEnterMemYear + "-" + reEnterMemMonth + "-" + reEnterMemDate); setReenterMemorableDate(reEnteredDateMemorable)
-
-        }
-
-        const handleConnectionCheckbox = () => {
-
-            var check_ed = "";
-            var markedCheckbox = document.getElementsByName('connectionCheckbox');
-            for (var checkbox of markedCheckbox) {
-                if (checkbox.checked)
-                    check_ed += (checkbox.value + ', ');
-            }
-            // if nothing checked, automatically saves checkbox value 17(None of the above)
-            if (check_ed == "") {
-                check_ed = "17";
-            }
-            let newEdit = { ...connection }; newEdit = check_ed; setConnection(newEdit)
-
-        }
 
         handleConnectionCheckbox();
 
         formatDate();
 
-        const fNameErr = validName(fName);
-        const mNameErr = validMName(mName);
-        const sNameErr = validName(sName);
-        const passwordErr = validPwd(password);
+        const fNameValid = validName(fName);
+        const mNameValid = validMName(mName);
+        const sNameValid = validName(sName);
+        const passwordValid = validPwd(password);
 
-        const birthErr = validDate(dateofbirth);
-        const movedErr = validDate(movedInDate);
-        const datememorableErr = validDate(memorableDate);
-        const reEnteredDateMemorableErr = validDate(reEntermemorableDate);
+        const birthValid = validDate(birth_);
+        if (birthValid) {
+            const timeStampedDOB = ConvertToTimeStamp(birth_);
+            console.log(birth_, timeStampedDOB)
+            setDateofbirth(timeStampedDOB);
+        } else {
+            alert('Date of birth invalid date');
+        }
 
-        const emailErr = validEmail(email);
-        const reenteredEmailErr = validEmail(reEnterEmail);
-        const postcodeErr = validPostcode(postcode);
-        const corresPostcodeErr = validPostcode(correspondencePostcode);
-        const telephoneErr = validNumber(telephone);
-        const workphoneErr = validNumber(workPhone);
-        const mobileErr = validNumber(mobile);
+        const movedValid = validDate(moved_);
+        if (movedValid) {
+            const timeStampedMovedInDate = ConvertToTimeStamp(moved_);
+            console.log(moved_, timeStampedMovedInDate)
+            setMovedInDate(timeStampedMovedInDate);
+        }
 
-        const emailMatchesErr = emailMatch(email, reEnterEmail)
-        const pwdMatchesErr = pwdMatch(password, reEnterPwd)
-        const memMatchesErr = memDateMatch(memorableDate, reEntermemorableDate)
+        const dateMemorableValid = validDate(dateMemorable);
+        if (dateMemorableValid) {
+            const timeStampedMemorableDate = ConvertToTimeStamp(dateMemorable);
+            console.log(dateMemorable, timeStampedMemorableDate)
+            setMemorableDate(timeStampedMemorableDate);
+        }
+
+        const reEnteredDateMemorableValid = validDate(reEnteredDateMemorable);
+        var timeStampedReEnteredMemorableDate;
+        if (reEnteredDateMemorableValid) {
+            timeStampedReEnteredMemorableDate = ConvertToTimeStamp(reEnteredDateMemorable);
+            console.log(reEnteredDateMemorable, timeStampedReEnteredMemorableDate)
+            setReEnterMemorableDate(timeStampedReEnteredMemorableDate);
+        }
+
+        const emailValid = validEmail(email);
+        const reenteredEmailValid = validEmail(reEnterEmail);
+        const postcodeValid = validPostcode(postcode);
+
+        if (!correspondencePostcode.trim() == "") {
+            corresPostcodeValid = validPostcode(correspondencePostcode);
+            !corresPostcodeValid && alert('Correspondence postcode error');
+        }
+        const telephoneValid = validNumber(telephone);
+        const workphoneValid = validNumber(workPhone);
+        const mobileValid = validNumber(mobile);
+
+        const emailMatchesValid = emailMatch(email, reEnterEmail)
+        const pwdMatchesValid = pwdMatch(password, reEnterPwd)
+        const memMatchesValid = memDateMatch(dateMemorable, reEnteredDateMemorable)
 
         // console.log(todayDate)
 
@@ -206,12 +245,12 @@ export default function PrimaryApplicant() {
         correspondence postcode ${correspondencePostcode}, 
         home telephone ${telephone}, work telephone ${workPhone}, mobile ${mobile},
         pwd ${password}, pwd matches ${reEnterPwd}, 
-        memorable date ${memorableDate}, memorable date matches ${reEntermemorableDate}`)
+        memorable date ${memorableDate}, memorable date matches ${reEnteredDateMemorable}`)
 
         console.log('FINAL Result passed', title, fName, mName, sName, nameChange,
-            nINO, dateofbirth, sex, livedAbroad,
+            nINO, birth_, dateofbirth, sex, livedAbroad,
             postcode, addLine1, addLine2, addLine3, addLine4,
-            movedInDate,
+            moved_, movedInDate,
             rented, landlordName, landlordAddress, currentTenancyType, infoAboutCurrentAddress,
             communicationAddress, correspondenceType, placedByLocalAuthrty, localAuthrtyName,
             correspondencePostcode, correspondenceAddLine1, correspondenceAddLine2, correspondenceAddLine3, correspondenceAddLine4,
@@ -219,42 +258,37 @@ export default function PrimaryApplicant() {
             ethnicity, nationality, sexOrient, belief,
             healthCondition, preferedLanguage, needInterpreter,
             tenure, tenancyRefNo, areyou, connection,
-            memorableDate, reEntermemorableDate,
+            memorableDate, reEnteredDateMemorable,
             password, reEnterPwd, comments, todayDate, status_
         );
 
-        if ((!pwdMatchesErr) || (!memMatchesErr) || (!emailMatchesErr) || (sex == "Please Choose") ||
-            (!fNameErr) || (!mNameErr) || (!sNameErr) || (!emailErr) || (!reenteredEmailErr) || (!corresPostcodeErr) ||
-            (!postcodeErr) || (!telephoneErr) || (!workphoneErr) || (!mobileErr) ||
-            (!birthErr) || (!movedErr) || (!datememorableErr) || (!reEnteredDateMemorableErr)) {
-            !fNameErr && alert('First Name error');
-            !mNameErr && alert('Middle Name error');
-            !sNameErr && alert('Surname error');
-            !emailErr && alert('Email error');
-            !dobErr && alert('Please check date of birth');
-            !movedErr && alert('Please check moved in date');
-            !dobErr && alert('Please check date of birth');
-            !datememorableErr && alert('Please check memorable date');
-            !reenteredEmailErr && alert('Reentered email error');
-            !postcodeErr && alert('Postcode error');
-            !corresPostcodeErr && alert('Correspondence postcode error');
-            !telephoneErr && alert('Telephone number error');
-            !workphoneErr && alert('Work telephone number error');
-            !mobileErr && alert('Mobile number error');
-            !passwordErr && alert('Password error');
-            !emailMatchesErr && alert('Email match error');
-            !pwdMatchesErr && alert('Password match error');
-            !memMatchesErr && alert('Memorable date error');
+        if ((!pwdMatchesValid) || (!memMatchesValid) || (!emailMatchesValid) || (sex == "Please Choose") ||
+            (!fNameValid) || (!mNameValid) || (!sNameValid) || (!emailValid) || (!reenteredEmailValid) ||
+            (!postcodeValid) || (!telephoneValid) || (!workphoneValid) || (!mobileValid) ||
+            (!birthValid) || (!movedValid) || (!dateMemorableValid) || (!reEnteredDateMemorableValid)) {
+            !fNameValid && alert('First Name error');
+            !mNameValid && alert('Middle Name error');
+            !sNameValid && alert('Surname error');
+            !emailValid && alert('Email error');
+            !movedValid && alert('Please check moved in date');
+            !dateMemorableValid && alert('Please check memorable date');
+            !reEnteredDateMemorableValid && alert('Reentered email error');
+            !postcodeValid && alert('Postcode error');
+            !telephoneValid && alert('Telephone number error');
+            !workphoneValid && alert('Work telephone number error');
+            !mobileValid && alert('Mobile number error');
+            !passwordValid && alert('Password error');
+            !emailMatchesValid && alert('Email match error');
+            !pwdMatchesValid && alert('Password match error');
+            !memMatchesValid && alert('Memorable date error');
 
             if (sex == "Please Choose") {
                 alert('Sex is not selected');
             }
             console.log(`Unable to save`)
-
         } else {
-
             console.log('FINAL Result passed', title, fName, mName, sName, nameChange,
-                nINO, dateofbirth, sex, livedAbroad,
+                nINO, birth_, dateofbirth, sex, livedAbroad,
                 postcode, addLine1, addLine2, addLine3, addLine4,
                 movedInDate,
                 rented, landlordName, landlordAddress, currentTenancyType, infoAboutCurrentAddress,
@@ -264,18 +298,20 @@ export default function PrimaryApplicant() {
                 ethnicity, nationality, sexOrient, belief,
                 healthCondition, preferedLanguage, needInterpreter,
                 tenure, tenancyRefNo, areyou, connection,
-                memorableDate, reEntermemorableDate,
+                memorableDate, reEnteredDateMemorable,
                 password, reEnterPwd, comments, todayDate, status_
             );
-
             savePrimaryApplicant();
+            setTimeout(function () { getThisClientID() }, 10000);
+            setTimeout(function () { createLoginReference() }, 2000);
+
         }
     }
 
     const findPostcodeAddress = (e) => {
         e.preventDefault();
         setShowAddress(true);
-        alert('Sorry... \nPostcode search is not connected to UK Post Office API, \nplease enter the address manually')
+        alert('Sorry... \nPostcode auto-fill not available rightnow, \nplease enter your address manually')
     }
 
     const showAddressCard = (e) => {
@@ -350,23 +386,64 @@ export default function PrimaryApplicant() {
 
         try {
             const response = await axios.post(urL, primaryApplicantInfo)
+            const tempData=response.data
 
-            console.log(`Output from backend ${response.data.message}`)
+            console.log(`Output from backend ${tempData.message}`)
+            console.log(`Output from backend ${tempData.status}`)
+            console.log(`Output from backend ${tempData.clientAdded}`)
+            console.log(`Output from backend ${JSON.stringify(tempData.clientAdded)}`)
 
         } catch (error) {
             console.log(error)
         }
+    }
 
+    const getThisClientID = async () => {
+
+        try {
+            const response = await axios.get(clientNinoUrl + nINO)
+            setCurrentSavedClientId(response.data);
+
+            console.log(`Output from nino check message ${JSON.stringify(currentSavedClientId.message)}`)
+            console.log(`Output id ${JSON.stringify(currentSavedClientId.clientId)}`)
+            console.log(`Output nino ${JSON.stringify(currentSavedClientId.clientNINO)}`)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const createLoginReference = async () => {
+
+        console.log(nINO,
+            fName,
+            sName,
+            password,
+            memorableDate)
+
+        const clientLoginSaveInfo = {
+            client_NINO: nINO,
+            client_firstname: fName,
+            client_surname: sName,
+            client_password: password,
+            client_memorable_date: memorableDate,
+        }
+        try {
+            const response = await axios.post(createClientLoginUrl, clientLoginSaveInfo)
+            console.log(JSON.stringify(response.data));
+            console.log(response.data);
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
         <React.Fragment>
             <MDBContainer className='ps-5 pt-3'  >
 
+                <p style={{ fontSize: '17px' }}><strong>Register your household</strong></p>
                 <MDBCard className='w-100 mx-auto' style={{ backgroundColor: '#f7f2f287' }} >
-
-                    <p style={{ fontSize: '16px', lineHeight: '3px' }}>Household Registration</p>
-                    <p style={{ fontSize: '17px' }}><strong>Register your household</strong></p>
 
                     {/* ********** Primary Applicant Details  */}
                     <MDBCardBody >
@@ -454,8 +531,10 @@ export default function PrimaryApplicant() {
 
                             <p style={{ fontSize: '16px' }}><strong>Your National Insurance Number *</strong></p>
                             <div className='mb-4' >
-                                <input style={ninoInputStyle} className='form-control' type='text'
-                                    maxLength={9} value={nINO} readOnly></input>
+                                <input className='form-control'
+                                    style={ninoInputStyle} type='text'
+                                    maxLength={9} value={nINO} readOnly ></input>
+
                             </div>
                         </div>
 

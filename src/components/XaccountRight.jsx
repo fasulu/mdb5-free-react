@@ -64,7 +64,7 @@ const AccountRight = () => {
                     {
                         state:
                         {
-                            // primaryID: clientId
+                            primaryID: clientId
                         }
                     });
             } else {
@@ -72,7 +72,7 @@ const AccountRight = () => {
                     {
                         state:
                         {
-                            // primaryID: clientId
+                            primaryID: clientId
                         }
                     });
 

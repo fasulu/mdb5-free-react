@@ -139,6 +139,7 @@ function validDate(date_) {
 function ToCamelCase(props) {
   return props.replace(/\b(\w)/g, s => s.toUpperCase());
 }
+
 export {
   ToCamelCase,
   validNINO,

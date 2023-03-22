@@ -35,7 +35,7 @@ export default function NINOCheckPage() {
     }
     return (
         <React.Fragment>
-            <Navbar />
+            <Navbar ></Navbar> 
             <NavbarSecondary />
             <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
                 <MDBCol className='col-lg-6 col-md-6 col-sm-6'>
