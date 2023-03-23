@@ -57,12 +57,17 @@ export default function JointApplicantEdit() {
     const [nINO, setNINO] = useState("");
     const [sex, setSex] = useState("");
 
-    let tempDOB = ""
+    var tempDOB = ""
+    var tempMovedDate = "";
+    var tempDelDate = "";
+    var moved_ = "";
+    var delDate_ = "";
+
     // tempDOB = tempDOB.split('-')[2] + '-' + tempDOB.split('-')[1] + '-' + tempDOB.split('-')[0]
     const [dateofbirth, setdateofbirth] = useState("");
     const [primaryApplicantAddress, setPrimaryApplicantAddress] = useState("")
-    const [currentlyLiveWithYou, setCurrentlyLiveWithYou] = useState("yes");
-    let tempMovedDate = "";
+    const [currentlyLiveWithYou, setCurrentlyLiveWithYou] = useState();
+
     const [movedDate, setMovedDate] = useState(tempMovedDate);
     const [movedInDate, setMovedInDate] = useState(tempMovedDate.split('-')[1]);
     const [movedInMonth, setMovedInMonth] = useState(tempMovedDate.split('-')[0]);
@@ -78,7 +83,6 @@ export default function JointApplicantEdit() {
     const [isShePregnant, setIsShePregnant] = useState("no");
     const [showDeliveryDate, setShowDeliveryDate] = useState(false);
 
-    let tempDelDate = "";
     const [deliveryDate, setDeliveryDate] = useState(tempDelDate);
     const [delDate, setDelDate] = useState(tempDelDate.split('-')[1]);
     const [delMonth, setDelMonth] = useState(tempDelDate.split('-')[0]);
@@ -103,19 +107,7 @@ export default function JointApplicantEdit() {
 
     async function fetchData() {
         try {
-            console.log(`UseEffect :- ${findPrimaryIDInJointUrl + clientId}`)
-
-            // const token = TokenVerify()
-
-            // console.log(`adminPage useEffect token result is ${token}`)
-
-            // const response = await axios.get(loggedInUrl, {
-            //     headers: {
-            //         Authorization: "Bearer " + token
-            //     }
-            // })
-
-            // console.log(response.data.validUser)
+            console.log(`UseEffect :- ${findPrimaryIDInJointUrl + clientId}`);
 
             const responseClient = await axios.get(findPrimaryIDInClientUrl + clientId)
             console.log(`Primary applicant found in primary client collection:- ${responseClient.data.clientExist._id}`)
@@ -131,15 +123,28 @@ export default function JointApplicantEdit() {
                     setNINO(responseJoint.data.jointApplicantDetails.clientJoint_NINO)
                     setSex(responseJoint.data.jointApplicantDetails.clientJoint_Sex)
 
-                    tempDOB = (responseJoint.data.jointApplicantDetails.clientJoint_dateofbirth).slice(0, 10)
+                    tempDOB = ConvertToDate(responseJoint.data.jointApplicantDetails.clientJoint_dateofbirth);
                     setdateofbirth(tempDOB.split('-')[2] + '-' + tempDOB.split('-')[1] + '-' + tempDOB.split('-')[0]);
 
                     setCurrentlyLiveWithYou(responseJoint.data.jointApplicantDetails.clientJoint_current_live_with_you)
+                    if (responseJoint.data.jointApplicantDetails.clientJoint_current_live_with_you === 'yes') {
+
+                        window.document.getElementById('livingInDiffAddressYes').checked = true;
+                        window.document.getElementById('livingInDiffAddressNo').checked = false;
+                        setShowCorrespondenceAddress(false);
+
+                    } else {
+                        window.document.getElementById('livingInDiffAddressNo').checked = true;;
+                        window.document.getElementById('livingInDiffAddressYes').checked = false;
+                        setShowCorrespondenceAddress(true);
+                    }
+
+                    setLivingInDiffAddress(responseJoint.data.jointApplicantDetails.clientJoint_livingin_different_address)
+
                     setHealthCondition(responseJoint.data.jointApplicantDetails.clientJoint_illness);
 
-                    tempMovedDate = (responseJoint.data.jointApplicantDetails.clientJoint_moved_to_current_address);
-                    console.log(tempMovedDate)
-                    tempMovedDate = ConvertToDate(tempMovedDate);
+                    tempMovedDate = ConvertToDate(responseJoint.data.jointApplicantDetails.clientJoint_moved_to_current_address);
+                    console.log(`temp date ${tempMovedDate}`)
                     setMovedInDate(tempMovedDate.split('-')[2]); setMovedInMonth(tempMovedDate.split('-')[1]); setMovedInYear(tempMovedDate.split('-')[0]);
 
                     setTelephone(responseJoint.data.jointApplicantDetails.clientJoint_telephone_home)
@@ -147,8 +152,10 @@ export default function JointApplicantEdit() {
                     setMobile(responseJoint.data.jointApplicantDetails.clientJoint_telephone_mobile)
                     setEmail(responseJoint.data.jointApplicantDetails.clientJoint_email)
 
-                    tempDelDate = (responseJoint.data.jointApplicantDetails.clientJoint_delivery_date)
-                    tempDelDate = ConvertToDate(tempDelDate)
+                    if (responseJoint.data.jointApplicantDetails.clientJoint_delivery_date === "") {
+                        setDelDate("dd"); setDelMonth("mm"); setDelYear("yy");
+                    }
+                    tempDelDate = ConvertToDate(responseJoint.data.jointApplicantDetails.clientJoint_delivery_date)
                     setDelDate(tempDelDate.split('-')[2]); setDelMonth(tempDelDate.split('-')[1]); setDelYear(tempDelDate.split('-')[0]);
 
                     setAreYouWorker(responseJoint.data.jointApplicantDetails.clientJoint_are_you_worker)
@@ -176,34 +183,35 @@ export default function JointApplicantEdit() {
     const handleJointApplicant = (e) => {
         e.preventDefault();
 
-        const delvy = delYear + '-' + delMonth + '-' + delDate;
-        setDeliveryDate(delvy);
-        const moved = movedInYear + '-' + movedInMonth + '-' + movedInDate;
-        setMovedDate(moved);
+        // const delvy = delYear + '-' + delMonth + '-' + delDate;
+        // setDeliveryDate(delvy);
+        // const moved = movedInYear + '-' + movedInMonth + '-' + movedInDate;
+        // setMovedDate(moved);
 
-        const postcodeErr = validPostcode(corresPostcode);
+        const postcodeValid = validPostcode(corresPostcode);
 
-        const movedDateErr = validDate(moved)
-        if (movedDateErr) {
-            const moved_ = ConvertToTimeStamp(moved)
+        const movedDateValid = validDate(movedInYear + '-' + movedInMonth + '-' + movedInDate)
+        if (movedDateValid) {
+            moved_ = ConvertToTimeStamp(movedInYear + '-' + movedInMonth + '-' + movedInDate)
             console.log(moved_)
             setMovedDate(moved_)
         }
-        const deliveryErr = validDate(delvy);
-        if (deliveryErr) {
-            const delDate_ = ConvertToTimeStamp(delvy)
+        const deliveryValid = validDate(delYear + '-' + delMonth + '-' + delDate);
+        if (deliveryValid) {
+            delDate_ = ConvertToTimeStamp(delYear + '-' + delMonth + '-' + delDate)
             console.log(delDate_)
             setDeliveryDate(delDate_)
         }
-        const emailErr = validEmail(email);
-        const telephoneErr = validNumber(telephone);
-        const workphoneErr = validNumber(workPhone);
-        const mobileErr = validNumber(mobile);
+        const emailValid = validEmail(email);
+        const telephoneValid = validNumber(telephone);
+        const workphoneValid = validNumber(workPhone);
+        const mobileValid = validNumber(mobile);
 
         // if not pregnant set data to empty string
         if (!isShePregnant) {
             setDeliveryDate("")
         }
+        // on changing to living with primary applicant empty all corres address
         if (currentlyLiveWithYou == "yes") {
             setCorresPostcode("")
             setCorresLine1("")
@@ -212,19 +220,19 @@ export default function JointApplicantEdit() {
             setCorresLine4("")
         }
 
-        console.log(`Validation result is postcode ${postcodeErr} email ${emailErr}, 
-        home telephone ${telephoneErr}, work telephone ${workphoneErr}, 
-        mobile ${mobileErr}, delivery ${deliveryErr}, movedDate ${movedDateErr}`)
+        console.log(`Validation result is postcode ${postcodeValid} email ${emailValid}, 
+        home telephone ${telephoneValid}, work telephone ${workphoneValid}, 
+        mobile ${mobileValid}, delivery ${deliveryValid}, movedDate ${movedDateValid}`)
 
-        if ((!postcodeErr) || (!movedDateErr) || (!deliveryErr) ||
-            (!emailErr) || (!telephoneErr) || (!workphoneErr) || (!mobileErr)) {
-            !postcodeErr && alert('Postcode error');
-            !movedDateErr && alert('Moved In date error');
-            !deliveryErr && alert('Delivery date error');
-            !emailErr && alert('Email error');
-            !telephoneErr && alert('Telephone number error');
-            !workphoneErr && alert('Work telephone number error');
-            !mobileErr && alert('Mobile number error');
+        if ((!postcodeValid) || (!movedDateValid) || (!deliveryValid) ||
+            (!emailValid) || (!telephoneValid) || (!workphoneValid) || (!mobileValid)) {
+            !postcodeValid && alert('Postcode error');
+            !movedDateValid && alert('Moved In date error');
+            !deliveryValid && alert('Delivery date error');
+            !emailValid && alert('Email error');
+            !telephoneValid && alert('Telephone number error');
+            !workphoneValid && alert('Work telephone number error');
+            !mobileValid && alert('Mobile number error');
         } else {
             console.log('FINAL Result passed', healthCondition, currentlyLiveWithYou,
                 movedDate, corresPostcode, corresLine1, corresLine2, corresLine3, corresLine4,
@@ -240,10 +248,10 @@ export default function JointApplicantEdit() {
         console.log(`In save joint applicant jointId is ${_id}`);
 
         const JointApplicantInfo = {
-            clientJoint_moved_to_current_address: movedDate,
 
             clientJoint_current_live_with_you: currentlyLiveWithYou,
             clientJoint_livingin_different_address: livingInDiffAddress,
+            clientJoint_moved_to_current_address: moved_,
 
             clientJoint_corres_postcode: corresPostcode,
             clientJoint_corres_address_line1: corresLine1,
@@ -252,7 +260,7 @@ export default function JointApplicantEdit() {
             clientJoint_corres_address_line4: corresLine4,
 
             clientJoint_is_she_pregnant: isShePregnant,
-            clientJoint_delivery_date: deliveryDate,
+            clientJoint_delivery_date: delDate_,
 
             clientJoint_telephone_home: telephone,
             clientJoint_telephone_work: workPhone,
@@ -265,7 +273,7 @@ export default function JointApplicantEdit() {
 
             clientJoint_comments: comments,
         }
-
+        console.table(JointApplicantInfo)
         try {
 
             const response = await axios.put(updateJointApplicantUrl + _id, JointApplicantInfo, {})
@@ -341,7 +349,7 @@ export default function JointApplicantEdit() {
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='currentlyLiveWithYouRadio' label='Yes' value='yes'
                                         inline id='currentlyLiveWithYouYes'
-                                        htmlFor="currentlyLiveWithYouYes" defaultChecked
+                                        htmlFor="currentlyLiveWithYouYes"
                                         onClick={(e) => { let newEdit = { ...currentlyLiveWithYou }; newEdit = e.target.value; setCurrentlyLiveWithYou(newEdit); setShowCorrespondenceAddress(false) }}></MDBRadio>
                                 </MDBCol>
 
@@ -357,6 +365,7 @@ export default function JointApplicantEdit() {
                             style={headerStyle} >
                             <strong>Date moved into this address?</strong>
                         </MDBTypography>
+
                         <div className='px-4 mb-2' >
                             <div className='btn-group' >
                                 <select style={datePickerStyle}
@@ -399,7 +408,7 @@ export default function JointApplicantEdit() {
                             <MDBRow className='mt-2 mb-2'>
                                 <MDBRadio className='mx-3' name='livingInDiffAddressRadio' id='livingInDiffAddressYes'
                                     htmlFor='livingInDiffAddressYes' label='Living with primary applicant'
-                                    value='Living with primary applicant' defaultChecked
+                                    value='Living with primary applicant'
                                     onChange={(e) => { setLivingInDiffAddress("Living with primary applicant"); setShowCorrespondenceAddress(false); }}></MDBRadio>     {/* Get and show primary applicant address in this place */}
 
                             </MDBRow>
@@ -423,7 +432,8 @@ export default function JointApplicantEdit() {
 
                                             <div className='mt-3 mb-2' >
                                                 <input style={inputStyle} className='form-control' type='text' placeholder='postcode...'
-                                                    maxLength={8} value={corresPostcode} onChange={(e) => { let newEdit = { ...corresPostcode }; newEdit = e.target.value; setCorresPostcode(newEdit) }} />
+                                                    maxLength={8} value={corresPostcode || ""}
+                                                    onChange={(e) => { let newEdit = { ...corresPostcode }; newEdit = e.target.value; setCorresPostcode(newEdit) }} />
                                             </div>
                                             <form className='d-flex w-auto mb-3'>
                                                 <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
@@ -440,7 +450,8 @@ export default function JointApplicantEdit() {
 
                                                 <div className='' >
                                                     <input style={inputStyle} className='form-control ' type='text' placeholder='house or flat number and street'
-                                                        maxLength={75} value={corresLine1} onChange={(e) => { let newEdit = { ...corresLine1 }; newEdit = e.target.value; setCorresLine1(newEdit) }} />
+                                                        maxLength={75} value={corresLine1 || ""}
+                                                        onChange={(e) => { let newEdit = { ...corresLine1 }; newEdit = e.target.value; setCorresLine1(newEdit) }} />
                                                 </div>
                                             </div>
                                             {/* ***********  Address line 2  */}
@@ -450,7 +461,8 @@ export default function JointApplicantEdit() {
                                                 </div>
                                                 <div className='' >
                                                     <input style={inputStyle} className='form-control' type='text' placeholder='Address line 2'
-                                                        maxLength={75} value={corresLine2} onChange={(e) => { let newEdit = { ...corresLine2 }; newEdit = e.target.value; setCorresLine2(newEdit) }} />
+                                                        maxLength={75} value={corresLine2 || ""}
+                                                        onChange={(e) => { let newEdit = { ...corresLine2 }; newEdit = e.target.value; setCorresLine2(newEdit) }} />
                                                 </div>
                                             </div>
 
@@ -461,7 +473,8 @@ export default function JointApplicantEdit() {
                                                 </div>
                                                 <div className='' >
                                                     <input style={inputStyle} className='form-control' type='text' placeholder='Address line 3'
-                                                        maxLength={75} value={corresLine3} onChange={(e) => { let newEdit = { ...corresLine3 }; newEdit = e.target.value; setCorresLine3(newEdit) }} />
+                                                        maxLength={75} value={corresLine3 || ""}
+                                                        onChange={(e) => { let newEdit = { ...corresLine3 }; newEdit = e.target.value; setCorresLine3(newEdit) }} />
                                                 </div>
                                             </div>
 
@@ -472,7 +485,8 @@ export default function JointApplicantEdit() {
                                                 </div>
                                                 <div className='' >
                                                     <input style={inputStyle} className='form-control' type='text' placeholder='Address line 4'
-                                                        maxLength={75} value={corresLine4} onChange={(e) => { let newEdit = { ...corresLine4 }; newEdit = e.target.value; setCorresLine4(newEdit) }} />
+                                                        maxLength={75} value={corresLine4 || ""}
+                                                        onChange={(e) => { let newEdit = { ...corresLine4 }; newEdit = e.target.value; setCorresLine4(newEdit) }} />
                                                 </div>
                                             </div>
                                         </div>
@@ -665,9 +679,9 @@ export default function JointApplicantEdit() {
                             <MDBBtn style={btnSytle}
                                 onClick={handleJointApplicant} >
                                 Save </MDBBtn>
-                            <MDBBtn style={btnSytle}
+                            {/* <MDBBtn style={btnSytle}
                                 color='secondary' onClick={gotoAccountPage}>
-                                Cancel</MDBBtn>
+                                Cancel</MDBBtn> */}
                         </form>
 
                     </MDBCardBody>

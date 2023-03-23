@@ -205,6 +205,8 @@ export default function PrimaryApplicant() {
             const timeStampedMovedInDate = ConvertToTimeStamp(moved_);
             console.log(moved_, timeStampedMovedInDate)
             setMovedInDate(timeStampedMovedInDate);
+        } else {
+            alert('Invalid Moved-In date');
         }
 
         const dateMemorableValid = validDate(dateMemorable);
@@ -453,11 +455,11 @@ export default function PrimaryApplicant() {
                             <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded" aria-label="Default select example"
                                 value={title} onChange={(e) => { let newEdit = { ...title }; newEdit = e.target.value; setTitle(newEdit) }}>
                                 <option defaultValue={title}>Please Choose</option>
-                                <option value="1">Dr</option>
-                                <option value="2">Miss</option>
-                                <option value="3">Mr</option>
-                                <option value="4">Mrs</option>
-                                <option value="5">Ms</option>
+                                <option value="Dr">Dr</option>
+                                <option value="Miss">Miss</option>
+                                <option value="Mr">Mr</option>
+                                <option value="Mrs">Mrs</option>
+                                <option value="Ms">Ms</option>
                             </select>
 
                         </div>

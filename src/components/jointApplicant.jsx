@@ -11,6 +11,8 @@ import { beliefs } from '../resources/belief';
 import { languages } from '../resources/language';
 import { dates, months } from '../resources/datePicker';
 import { validEmail, validName, validPostcode, validNumber, emailMatch, validNINO, validDate, validMName } from '../validations/Validator.jsx';
+import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
+
 import { UserContext } from "../userContext/UserContext"
 
 import {
@@ -23,7 +25,7 @@ import {
 } from 'mdb-react-ui-kit';
 
 export default function JointApplicant() {
-    
+
     const { clientId, setClientId } = useContext(UserContext);
 
     const navigate = useNavigate();
@@ -147,12 +149,15 @@ export default function JointApplicant() {
 
             const response = await axios.get(findPrimaryIDurL + primaryApplicantClientId)
             console.log(`Response from backend:- ${response.data.message}`)
-            
+
         } catch (error) {
-            
+
         }
     }
 
+    var birth_ = "";
+    var moved_ = "";
+    let delivry_ = "";
 
     const findPostcodeAddress = (e) => {
         e.preventDefault();
@@ -179,34 +184,60 @@ export default function JointApplicant() {
 
         }
 
+
         const formatDate = () => {
-            let birth_ = { ...dateofbirth }; birth_ = (dobYear + "-" + dobMonth + "-" + dobDate); setDateofbirth(birth_);
-            let moved_ = { ...movedInDate }; moved_ = (movedYear + "-" + movedMonth + "-" + movedDate); setMovedInDate(moved_);
-            let delivry_ = { ...deliveryDate }; delivry_ = (delYear + "-" + delMonth + "-" + delDate); setDeliveryDate(delivry_);
+            birth_ = dobYear + "-" + dobMonth + "-" + dobDate;
+            moved_ = movedYear + "-" + movedMonth + "-" + movedDate;
+            delivry_ = delYear + "-" + delMonth + "-" + delDate;
         }
 
         formatDate();
 
         handleConnectionCheckbox();
 
-        const fNameErr = validName(fName);
-        const mNameErr = validMName(mName);
-        const sNameErr = validName(sName);
-        const ninoErr = validNINO(nINO)
-        const emailErr = validEmail(email);
-        const dobErr = validDate(dateofbirth);
-        const movedErr = validDate(movedInDate);
-        const delvyErr = validDate(deliveryDate);
-        const corresPostcodeErr = validPostcode(corresPostcode);
-        const telephoneErr = validNumber(telephone);
-        const workphoneErr = validNumber(workPhone);
-        const mobileErr = validNumber(mobile);
-        const emailMatchesErr = emailMatch(email, reEnterEmail)
+        const fNameValid = validName(fName);
+        const mNameValid = validMName(mName);
+        const sNameValid = validName(sName);
+        const ninoValid = validNINO(nINO)
+        const emailValid = validEmail(email);
 
-        console.log(`Validation result is fname/sname ${fNameErr} ${mNameErr}, ${sNameErr}, 
-        nino ${ninoErr}, email ${emailErr}, email matches ${emailMatchesErr}, correspondence postcode ${corresPostcodeErr}, 
-        dob ${dobErr}, moved ${movedErr}, delvy ${delvyErr},
-        telephone ${telephoneErr}, workphone ${workphoneErr}, mobile ${mobileErr},
+        const dobValid = validDate(birth_);
+        if (dobValid) {
+            const timeStampedDOB = ConvertToTimeStamp(birth_);
+            console.log(birth_, timeStampedDOB)
+            setDateofbirth(timeStampedDOB);
+        } else {
+            alert('Date of birth invalid date');
+        }
+
+        const movedValid = validDate(moved_);
+        if (movedValid) {
+            const timeStampedMovedInDate = ConvertToTimeStamp(moved_);
+            console.log(moved_, timeStampedMovedInDate)
+            setMovedInDate(timeStampedMovedInDate);
+        } else {
+            alert('Invalid Moved-In date');
+        }
+
+        const delvyValid = validDate(delivry_);
+        if (delvyValid) {
+            const timeStampedDelvyDate = ConvertToTimeStamp(delivry_);
+            console.log(delivry_, timeStampedDelvyDate)
+            setDeliveryDate(timeStampedDelvyDate);
+        } else {
+            alert('Invalid Moved-In date');
+        }
+
+        const corresPostcodeValid = validPostcode(corresPostcode);
+        const telephoneValid = validNumber(telephone);
+        const workphoneValid = validNumber(workPhone);
+        const mobileValid = validNumber(mobile);
+        const emailMatchesValid = emailMatch(email, reEnterEmail)
+
+        console.log(`Validation result is fname/sname ${fNameValid} ${mNameValid}, ${sNameValid}, 
+        nino ${ninoValid}, email ${emailValid}, email matches ${emailMatchesValid}, correspondence postcode ${corresPostcodeValid}, 
+        dob ${dobValid}, moved ${movedValid}, delvy ${delvyValid},
+        telephone ${telephoneValid}, workphone ${workphoneValid}, mobile ${mobileValid},
         home telephone ${telephone}, work telephone ${workPhone}, mobile ${mobile}`)
 
         console.log('Im in saveJointApplicant', relationship,
@@ -220,21 +251,19 @@ export default function JointApplicant() {
             tenure, tenancyRefNo, isYourPartner, areYouWorker, connection, comments, todayDate
         )
 
-        if ((!fNameErr) || (!mNameErr) || (!sNameErr) || (!emailErr) || (!emailMatchesErr) || (!ninoErr) ||
-            (!dobErr) || (!movedErr) || (!delvyErr) || (!corresPostcodeErr) || (!telephoneErr) || (!workphoneErr) || (!mobileErr)) {
-            !fNameErr && alert('First Name error');
-            !mNameErr && alert('Middle Name error');
-            !sNameErr && alert('Surname error');
-            !ninoErr && alert('NINO error');
-            !dobErr && alert('Please check date of birth');
-            !movedErr && alert('Please check moved in date');
-            !delvyErr && alert('Please check delivery date');
-            !telephoneErr && alert('Telephone number error');
-            !workphoneErr && alert('Work telephone number error');
-            !mobileErr && alert('Mobile number error');
-            !emailErr && alert('Email error');
-            !corresPostcodeErr && alert('Postcode error');
-            !emailMatchesErr && alert('Email match error');
+        if ((!fNameValid) || (!mNameValid) || (!sNameValid) || (!emailValid) || (!emailMatchesValid) ||
+            (!ninoValid) || (!corresPostcodeValid) || (!telephoneValid) || (!workphoneValid) || (!mobileValid)) {
+            !fNameValid && alert('First Name error');
+            !mNameValid && alert('Middle Name error');
+            !sNameValid && alert('Surname error');
+            !ninoValid && alert('NINO error');
+
+            !telephoneValid && alert('Telephone number error');
+            !workphoneValid && alert('Work telephone number error');
+            !mobileValid && alert('Mobile number error');
+            !emailValid && alert('Email error');
+            !corresPostcodeValid && alert('Postcode error');
+            !emailMatchesValid && alert('Email match error');
         } else {
             console.log(`Final Result passed :- ${relationship},
             ${title}, ${fName}, ${mName}, ${sName}, ${nameChange},
@@ -263,11 +292,11 @@ export default function JointApplicant() {
             clientJoint_surname: sName,
             clientJoint_namechange: nameChange,
             clientJoint_NINO: nINO,
-            clientJoint_dateofbirth: dateofbirth,
+            clientJoint_dateofbirth: ConvertToTimeStamp(birth_),
             clientJoint_sex: sex,
 
             clientJoint_lived_abroad: livedAbroad,
-            clientJoint_moved_to_current_address: movedInDate,
+            clientJoint_moved_to_current_address: ConvertToTimeStamp(moved_),
 
             clientJoint_current_live_with_you: currentlyLiveWithYou,
             clientJoint_livingin_different_address: livingInDiffAddress,
@@ -282,7 +311,7 @@ export default function JointApplicant() {
             clientJoint_if_yes_local_authority: localAuthrtyName,
 
             clientJoint_is_she_pregnant: isShePregnant,
-            clientJoint_delivery_date: deliveryDate,
+            clientJoint_delivery_date: ConvertToTimeStamp(delivry_),
 
             clientJoint_telephone_home: telephone,
             clientJoint_telephone_mobile: mobile,
@@ -316,7 +345,7 @@ export default function JointApplicant() {
             console.log(`Output from backend ${response.data.message}`)
 
             if (response.status === 200) {
-                console.log(`Status from backend ${response.status}`);                
+                console.log(`Status from backend ${response.status}`);
                 navigate('/account', { state: { jointName: fName } });
             }
 

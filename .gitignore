@@ -5,3 +5,7 @@
 env.local
 
 /testArray.js
+
+/src/Query/fetchData.js
+
+/src/components/temp.js

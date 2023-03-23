@@ -21,6 +21,7 @@ import {
 } from 'mdb-react-ui-kit';
 
 import { ToCamelCase } from '../validations/Validator'
+import HouseholdMember from './householdMember';
 
 export default function MembersList() {
 
@@ -34,6 +35,7 @@ export default function MembersList() {
 
 
   const inputStyle1 = { fontSize: '16px', width: '250px', color: '#464646' };
+  const styleBtn = { fontSize: '16px', color: '#4f83c3', textTransform: 'none' };
 
   const [primaryApplicantClientId, setPrimaryApplicantClientId] = useState(clientId)
 
@@ -67,8 +69,9 @@ export default function MembersList() {
   const [nINO, setNINO] = useState("");
   const [sex, setSex] = useState("");
 
-  var tempDOB = ""; tempDOB = tempDOB.split('/')[2] + '/' + tempDOB.split('/')[1] + tempDOB.split('/')[0] + '/';
-  const [dateofbirth, setdateofbirth] = useState(tempDOB);
+  // var tempDOB = ""; tempDOB = tempDOB.split('/')[2] + '/' + tempDOB.split('/')[1] + tempDOB.split('/')[0] + '/';
+  // const [dateofbirth, setdateofbirth] = useState(tempDOB);
+  const [dateofbirth, setdateofbirth] = useState();
 
   var tempMovedDate = "";
   const [movedInDate, setMovedInDate] = useState();
@@ -79,29 +82,28 @@ export default function MembersList() {
 
   const [currentAddress, setCurrentAddress] = useState("");
 
-  const [isShePregnant, setIsShePregnant] = useState("");
+  const [isShePregnant, setIsShePregnant] = useState("no");
   const [nameofSpouse, setNameofSpouse] = useState("");
-  var tempDelDate = "";
-  const [delDate, setDelDate] = useState();
-  const [delMonth, setDelMonth] = useState();
-  const [delYear, setDelYear] = useState();
-  const [deliveryDate, setDeliveryDate, getDeliveryDate] = useState(tempDelDate);
+  // var tempDelDate = "";
+  // const [delDate, setDelDate] = useState();
+  // const [delMonth, setDelMonth] = useState();
+  // const [delYear, setDelYear] = useState();
+  // const [deliveryDate, setDeliveryDate, getDeliveryDate] = useState(tempDelDate);
 
   const [telephone, setTelephone] = useState("");
   const [workPhone, setWorkPhone] = useState("");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
 
-  const [areYouWorker, setAreYouWorker] = useState("");
-  const [healthCondition, setHealthCondition] = useState("");
-  const [comments, setComments] = useState("");
+  const [areYouWorker, setAreYouWorker] = useState("yes");
+  const [healthCondition, setHealthCondition] = useState("no");
+  const [comments, setComments] = useState("none");
 
-  const [showPregnantField, setShowPregnantField] = useState()
-  const [showPregnantOption, setShowPregnantOption] = useState()
+  const [showPregnantOption, setShowPregnantOption] = useState(false)
 
   const [showMemberToEdit, setShowMemberToEdit] = useState(false)
   const [showMemberToList, setShowMemberToList] = useState(false)
-  const [showMemberToAdd, setShowMemberToAdd] = useState(false)
+  const [showMemberToAdd, setShowMemberToAdd] = useState(false);  
 
   useEffect(() => {
     fetchData();
@@ -116,7 +118,7 @@ export default function MembersList() {
 
       const response = await axios.get(primaryClientIdUrl + idRef.decryptedID)
       // const response = await axios.get(primaryClientIdUrl + "63ff81bc0cea542e631b614a")
-      if (response.data) {
+      if (response.data.memberList.length > 0) {
 
         console.log(`Response from backend:- ${response.data.message}`)
         setMembersList(response.data.memberList)
@@ -159,52 +161,56 @@ export default function MembersList() {
     e.preventDefault();
 
     const moved = movedInYear + '-' + movedInMonth + '-' + movedInDate;
-    const delvy = delYear + '-' + delMonth + '-' + delDate;
+    // const delvy = delYear + '-' + delMonth + '-' + delDate;
 
-    const moveDateErr = validDate(moved);
+    const moveDateValid = validDate(moved);
     console.log(moved);
-    if (moveDateErr) {
+    if (moveDateValid) {
       tempMovedDate = ConvertToTimeStamp(moved)
       let newEdit = { ...movedDate }; newEdit = tempMovedDate; setMovedDate(newEdit)
       console.log(tempMovedDate)
       console.log(movedDate)
-
+    } else {
+      alert("Invalid Moved-In date")
     }
-    const deliveryErr = validDate(delvy);
-    console.log(delvy);
-    if (deliveryErr) {
-      tempDelDate = ConvertToTimeStamp(delvy)
-      let newEdit = { ...deliveryDate }; newEdit = tempDelDate; setDeliveryDate(newEdit)
-      console.log(tempDelDate)
-      console.log(deliveryDate)
-    }
-    const emailErr = validEmail(email);
-    const telephoneErr = validNumber(telephone);
-    const workphoneErr = validNumber(workPhone);
-    const mobileErr = validNumber(mobile);
 
-    console.log(`Validation result is  email ${emailErr}, 
-    home telephone ${telephoneErr}, work telephone ${workphoneErr}, 
-    mobile ${mobileErr}, delivery ${deliveryErr}, moveDate ${moveDateErr}`)
+    // const deliveryValid = validDate(delvy);
+    // console.log(delvy);
+    // if (deliveryValid) {
+    //   tempDelDate = ConvertToTimeStamp(delvy)
+    //   let newEdit = { ...deliveryDate }; newEdit = tempDelDate; setDeliveryDate(newEdit)
+    //   console.log(tempDelDate)
+    //   console.log(deliveryDate)
+    // } else {
+    //   alert("Invalid delivery date");
+    // }
 
-    if ((!deliveryErr) || (!moveDateErr) || (!emailErr) || (!telephoneErr) || (!workphoneErr) || (!mobileErr)) {
+    const emailValid = validEmail(email);
+    const telephoneValid = validNumber(telephone);
+    const workphoneValid = validNumber(workPhone);
+    const mobileValid = validNumber(mobile);
 
-      !deliveryErr && alert('Delivery date error');
-      !moveDateErr && alert('Moved In date error');
-      !emailErr && alert('Email error');
-      !telephoneErr && alert('Home telephone number error');
-      !workphoneErr && alert('Work telephone number error');
-      !mobileErr && alert('Mobile number error');
+    console.log(`Validation result is  email ${emailValid}, 
+    home telephone ${telephoneValid}, work telephone ${workphoneValid}, 
+    mobile ${mobileValid},  moveDate ${moveDateValid}`)
+
+    if ((!moveDateValid) || (!emailValid) || (!telephoneValid) || (!workphoneValid) || (!mobileValid)) {
+
+      !moveDateValid && alert('Moved In date error');
+      !emailValid && alert('Email error');
+      !telephoneValid && alert('Home telephone number error');
+      !workphoneValid && alert('Work telephone number error');
+      !mobileValid && alert('Mobile number error');
 
     } else {
       console.log('FINAL Result passed', healthCondition, currentlyLiveWithYou, currentAddress,
-        movedDate, areYouWorker, isShePregnant, deliveryDate, nameofSpouse, telephone,
+        movedDate, areYouWorker, isShePregnant, nameofSpouse, telephone,
         mobile, workPhone, email, comments);
 
       //  if not pregnant set data to empty string
-      if (isShePregnant == "no") {
-        tempDelDate = "";
-      }
+      // if ((isShePregnant == "no") || (sex == "male") || (sex == "Male")) {
+      //   tempDelDate = "";
+      // }
       saveMember();
     }
   }
@@ -217,7 +223,7 @@ export default function MembersList() {
       clientOtherHousehold_live_with_you: currentlyLiveWithYou,
       clientOtherHousehold_moved_to_current_address: tempMovedDate,
       clientOtherHousehold_is_she_pregnant: isShePregnant,
-      clientOtherHousehold_DeliveryDate: tempDelDate,
+      // clientOtherHousehold_DeliveryDate: tempDelDate,
       clientOtherHousehold_current_address: currentAddress,
       clientOtherHousehold_Nameof_spouse: nameofSpouse,
       clientOtherHousehold_telephone_home: telephone,
@@ -245,6 +251,10 @@ export default function MembersList() {
     }
   }
 
+  const handleAddNewMember = (e) => {
+    e.preventDefault();
+  }
+
   const fetchMemberData = async (props) => {
     console.log(props)
 
@@ -263,8 +273,19 @@ export default function MembersList() {
         setMName(response.data.memberExist.clientOtherHousehold_middlename);
         setSName(response.data.memberExist.clientOtherHousehold_surname);
         setNINO(response.data.memberExist.clientOtherHousehold_NINO);
-        setdateofbirth(response.data.memberExist.clientOtherHousehold_dateofbirth.slice(0, 10));
+
+        // setdateofbirth(response.data.memberExist.clientOtherHousehold_dateofbirth.slice(0, 10));
+        let birth_ = ConvertToDate(response.data.memberExist.clientOtherHousehold_dateofbirth)
+        console.log(birth_)
+        setdateofbirth(birth_)
+
         setSex(response.data.memberExist.clientOtherHousehold_sex);
+        if(sex === 'female'){
+          setShowPregnantOption(true);
+        }else{
+          setShowPregnantOption(false);
+        }
+
         setCurrentlyLiveWithYou(response.data.memberExist.clientOtherHousehold_live_with_you);
         if (response.data.memberExist.clientOtherHousehold_live_with_you == 'yes') {
           window.document.getElementById('CurrentlyLiveWithYouYes').checked = 'true';
@@ -278,13 +299,13 @@ export default function MembersList() {
         setMovedInDate(tempMovedDate.split('-')[2]); setMovedInMonth(tempMovedDate.split('-')[1]); setMovedInYear(tempMovedDate.split('-')[0]);
 
         setIsShePregnant(response.data.memberExist.clientOtherHousehold_is_she_pregnant);
-        tempDelDate = (response.data.memberExist.clientOtherHousehold_DeliveryDate)
-        tempDelDate = ConvertToDate(tempDelDate)
-        setDelDate(tempDelDate.split('-')[2]); setDelMonth(tempDelDate.split('-')[1]); setDelYear(tempDelDate.split('-')[0]);
+        // tempDelDate = (response.data.memberExist.clientOtherHousehold_DeliveryDate)
+        // tempDelDate = ConvertToDate(tempDelDate)
+        // setDelDate(tempDelDate.split('-')[2]); setDelMonth(tempDelDate.split('-')[1]); setDelYear(tempDelDate.split('-')[0]);
 
         setCurrentAddress(response.data.memberExist.clientOtherHousehold_current_address);
 
-        setNameofSpouse(response.data.memberExist.clientOtherHousehold_Nameof_spouse);
+        setNameofSpouse(response.data.memberExist.clientOtherHousehold_spouse_another_member_name);
         setTelephone(response.data.memberExist.clientOtherHousehold_telephone_home);
         setWorkPhone(response.data.memberExist.clientOtherHousehold_telephone_work);
         setMobile(response.data.memberExist.clientOtherHousehold_telephone_mobile);
@@ -380,9 +401,10 @@ export default function MembersList() {
               <MDBRow>
                 <MDBCol className='col-8'>
                   <div  >
-                    <input style={inputStyle} className='form-control' type='text' placeholder='Spouse name...'
-                      maxLength={20} value={currentAddress} readOnly
-                      onChange={(e) => { let newEdit = { ...currentAddress }; newEdit = e.target.value; setCurrentAddress(newEdit) }}></input>
+                    <input className='form-control' type='text' placeholder='Spouse name...'
+                      maxLength={20} value={currentAddress} disabled
+                      onChange={(e) => { let newEdit = { ...currentAddress }; newEdit = e.target.value; setCurrentAddress(newEdit) }} ></input>
+                    {/* <MDBTypography style={inputStyle}>{currentAddress}</MDBTypography> */}
                   </div>
                 </MDBCol>
               </MDBRow>
@@ -443,6 +465,30 @@ export default function MembersList() {
                 </MDBCol>
               </MDBRow>
             </div>
+
+            {showPregnantOption &&
+              <>
+                <MDBTypography className='card-header mt-4 mb-2'
+                  style={headerStyle} >
+                  <strong>Is she pregnant?</strong>
+                </MDBTypography>
+                <div className='px-4 mb-2' >
+                  <MDBRow>
+                    <MDBCol className='col-3'>
+                      <MDBRadio id='IsShePregnantYes' name='isShePregnantRadio'
+                        inline htmlFor="isShePregnantYes" label='Yes' value='yes'
+                        onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit);}}></MDBRadio>
+                    </MDBCol>
+
+                    <MDBCol className='col-3'>
+                      <MDBRadio id='IsShePregnantNo' name='isShePregnantRadio'
+                        inline htmlFor='isShePregnantNo' label='No' value='no'
+                        onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); }}></MDBRadio>
+                    </MDBCol>
+                  </MDBRow>
+                </div>
+              </>
+            }
 
             <MDBTypography className='card-header mb-2'
               style={headerStyle} >
@@ -524,7 +570,7 @@ export default function MembersList() {
               </MDBRow>
             </div>
 
-            {showPregnantOption &&
+            {/* {showPregnantOption &&
 
               <div id="" className=' mb-2' >
                 <MDBTypography className='card-header mb-2'
@@ -545,9 +591,9 @@ export default function MembersList() {
                   </MDBCol>
                 </MDBRow>
               </div>
-            }
+            } */}
 
-            {showPregnantField &&
+            {/* {showPregnantField &&
               <div id='PregnantDate' className='px-4 mb-2' >
                 <MDBTypography className='card-header mb-2'
                   style={headerStyle} >
@@ -584,7 +630,7 @@ export default function MembersList() {
                   </input>
                 </div>
               </div>
-            }
+            } */}
 
             <MDBTypography className='card-header mb-2'
               style={headerStyle} >
@@ -636,7 +682,7 @@ export default function MembersList() {
                         {/* <MemberEdit memberID={memberList._id}></MemberEdit> */}
                       </MDBTypography>
                       <MDBTypography style={inputStyle1}>Name: <strong>{(memberList.clientOtherHousehold_firstname)} {(memberList.clientOtherHousehold_surname)}</strong></MDBTypography>
-                      <MDBTypography style={inputStyle1}>Date of birth: <strong>{memberList.clientOtherHousehold_dateofbirth.slice(0, 10)}</strong></MDBTypography>
+                      <MDBTypography style={inputStyle1}>Date of birth: <strong>{ConvertToDate(memberList.clientOtherHousehold_dateofbirth)}</strong></MDBTypography>
                       <MDBTypography style={inputStyle1}>Relationship:  <strong>{(memberList.clientOtherHousehold_relationshipWithClient)}</strong></MDBTypography>
                     </MDBCol>
                     <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
@@ -679,12 +725,14 @@ export default function MembersList() {
     </React.Fragment >
   )
 
+  //Not in use
   const showAddNewMember = (
     <React.Fragment>
       <MDBContainer className='' >
         <MDBCard className='my-5 w-100 mx-auto' style={{ backgroundColor: '#f7f2f287' }} >
           <MDBTypography className='card-header mb-4' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
-            <strong>New Member</strong>
+            <MDBBtn className='btn btn-lg' style={styleBtn}
+              color='tertiary' onClick={handleAddNewMember}> Add New Member </MDBBtn>
           </MDBTypography>
         </MDBCard>
       </MDBContainer >
@@ -695,7 +743,8 @@ export default function MembersList() {
   return (
     <>
       {
-        showMemberToAdd ? showAddNewMember : function () { setShowMemberToEdit(false); setShowMemberToList(false) }
+        // showMemberToAdd ? showAddNewMember : function () { setShowMemberToEdit(false); setShowMemberToList(false) }
+        showMemberToAdd ? <HouseholdMember></HouseholdMember> : function () { setShowMemberToEdit(false); setShowMemberToList(false) }
       }
 
       {

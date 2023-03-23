@@ -261,7 +261,10 @@ export default function HouseholdMember() {
             const response = await axios.post(addMemberUrl, memberInfo);
 
             console.log(`Output from backend ${response.data.message}`)
-            console.log(`Output from backend ${response.data.error}`)
+            console.log(`Output from backend ${response.data.MemberID}`)
+            console.log(`Output from backend ${response.data.Status_Info}`)
+            console.log(`Output from backend ${response.data.MemberInfo}`)
+            
 
             if (response.status === 200) {
                 console.log(`Status from backend ${response.status}`);                
@@ -298,10 +301,10 @@ export default function HouseholdMember() {
                             <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded mb-2"
                                 value={relationWithPrimaryApplicant} onChange={(e) => { let newEdit = { ...relationWithPrimaryApplicant }; newEdit = e.target.value; setRelationWithPrimaryApplicant(newEdit) }}>
                                 <option defaultValue>Please choose</option>
-                                <option value="1">Daughter</option>
-                                <option value="2">Relative</option>
-                                <option value="3">Son</option>
-                                <option value="4">Friend</option>
+                                <option value="Daughter">Daughter</option>
+                                <option value="Relative">Relative</option>
+                                <option value="Son">Son</option>
+                                <option value="Friend">Friend</option>
                             </select>
 
                             <div style={{ width: 'auto' }} className="mb-4 help-content border border-grey rounded">
@@ -335,11 +338,11 @@ export default function HouseholdMember() {
                             <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded" aria-label="Default select example"
                                 value={title} onChange={(e) => { let newEdit = { ...title }; newEdit = e.target.value; setTitle(newEdit) }}>
                                 <option defaultValue>Please Choose</option>
-                                <option value="1">Dr</option>
-                                <option value="2">Miss</option>
-                                <option value="3">Mr</option>
-                                <option value="4">Mrs</option>
-                                <option value="5">Ms</option>
+                                <option value="Dr">Dr</option>
+                                <option value="Miss">Miss</option>
+                                <option value="Mr">Mr</option>
+                                <option value="Mrs">Mrs</option>
+                                <option value="Ms">Ms</option>
                             </select>
 
                         </div>
@@ -1042,9 +1045,9 @@ export default function HouseholdMember() {
                     <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
                         onClick={handleJointMember} >
                         Save Household Member</MDBBtn>
-                    <MDBBtn className='me-1 btn btn-outline-secondary' style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='white'
+                    {/* <MDBBtn className='me-1 btn btn-outline-secondary' style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='white'
                         onClick={cancelEntry}>
-                        Cancel</MDBBtn>
+                        Cancel</MDBBtn> */}
                 </form>
                 <MDBCardBody>
                 </MDBCardBody>

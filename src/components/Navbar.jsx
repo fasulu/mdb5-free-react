@@ -95,7 +95,9 @@ export default function Navbar(props) {
         <MDBNavbarBrand href='/home'>
           <img
             // src="https://www.birminghamchoice.co.uk/Data/pub/PublicWebsite/SiteLogos/BCCLogo_Mobile.jpg" width="189" height="45" alt="Scheme logo"
-            src="https://drive.google.com/uc?export=view&id=1Qtctbw5JRzHJUYu_bdJ-wCL7C-sj50dD" width="189" height="45" alt="Logo"
+            // src="https://drive.google.com/uc?export=view&id=1Qtctbw5JRzHJUYu_bdJ-wCL7C-sj50dD" width="189" height="45" alt="Logo"
+            // className='img-fluid rounded hover-shadow'
+            src="https://birminghamwatch.org/wp-content/uploads/2019/03/Birmingham-City-Council-new-logo-300x169.png" width="189" height="45" alt="Logo"
             className='img-fluid rounded hover-shadow'
           />
         </MDBNavbarBrand>

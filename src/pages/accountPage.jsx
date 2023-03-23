@@ -26,9 +26,9 @@ import { decryptDetails } from '../utility/hashDetails';
 
 export default function AccountPage() {
 
-    // const { clientId, setClientId } = useContext(UserContext);
+    const { clientId, setClientId } = useContext(UserContext);
     // const [clientId, setClientId] = useState("64182ff5c11918c62cd57a13");
-    const [clientId, setClientId] = useState("6401c0931f74dea710de3e82");
+    // const [clientId, setClientId] = useState("6401c0931f74dea710de3e82");
 
     const [showAccountPage, setShowAccountPage] = useState(true);
     const [showHouseholdMemberPage, setShowHouseholdMemberPage] = useState(false);
@@ -121,7 +121,8 @@ export default function AccountPage() {
 
     useEffect(() => {
 
-        console.log(`Im in accountPage useEffect`)
+        try {
+            console.log(`Im in accountPage useEffect`)
         const idRef = decryptDetails();     // get id and reference from local storage using dcrypDetails() module.
 
         setClientId(idRef.decryptedID);     // get id and reference from local storage using dcrypDetails() module.
@@ -137,6 +138,9 @@ export default function AccountPage() {
         fetchDataPrimary(primaryApplicantNameUrl + idRef.decryptedID)
 
         // fetchDataJoint(jointApplicantNameUrl + idRef.decryptedID)
+        } catch (error) {
+            console.log(error)
+        }        
 
     }, [])
 

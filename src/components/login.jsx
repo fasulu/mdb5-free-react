@@ -12,8 +12,7 @@ import {
     MDBIcon,
     MDBCard, MDBCardBody,
     MDBRow, MDBCol,
-    MDBTypography,
-    MDBInputGroup, MDBBtn
+    MDBTypography, MDBBtn
 } from 'mdb-react-ui-kit';
 
 export default function Login() {
@@ -30,11 +29,11 @@ export default function Login() {
     const ageMax = new Date().getFullYear();        // year picker up to current year
     const ageMin = new Date().getFullYear() - 120;  // year picker 120 year back from current year
 
-    const inputStyle = { fontSize: '14px', width: '270px' };
+    const inputStyle = { fontSize: '14px', width: '270px', marginLeft: '10px' };
     const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const yearPickerStyle = { width: '80px', float: 'left', border: '5' };
-    const btnSytle = { fontSize: '16px', width: 'auto', textTransform: 'none', marginRight: '10px' };
+    const btnSytle = { fontSize: '16px', width: 'auto', textTransform: 'none', marginLeft: '10px' };
 
     const [loginReference, setLoginReference] = useState("");
     // const [loginReference, setLoginReference] = useState("bs61864");
@@ -77,7 +76,7 @@ export default function Login() {
                     {/**********  Password */}
                     <MDBRow>
                         <MDBCol className='size=md p-2'>
-                            <div className='p-2'>
+                            <div className=''>
                                 <p style={{ fontSize: '17px' }}>Enter your new password</p>
                                 <input style={inputStyle} className='form-control' type='password' placeholder='Password...'
                                     minLength={6} maxLength={10} value={password}
@@ -89,9 +88,9 @@ export default function Login() {
                     {/**********  Memorable date */}
                     <MDBRow>
                         <MDBCol className='size=md p-2'>
-                            <div className='p-2'>
+                            <div className=''>
                                 <p style={{ fontSize: '16px' }}><strong>Enter your new memorable date*</strong></p>
-                                <div className='btn-group'>
+                                <div className='btn-group mx-2'>
                                     <select style={datePickerStyle}
                                         className="form-select rounded"
                                         onChange={(e) => { let newEdit = { ...setMemDate }; newEdit = e.target.value; setMemDate(newEdit) }} >
@@ -120,19 +119,17 @@ export default function Login() {
                             </div>
                         </MDBCol>
                     </MDBRow>
-                    <MDBRow>
-                        <form className='d-flex w-auto p-2'>
-                            <MDBBtn style={btnSytle}
-                                onClick={(e) => { handleLogin(e) }}>
-                                Continue
-                            </MDBBtn>
+                    <MDBRow className='d-flex w-auto p-2'>
+                        <MDBBtn style={btnSytle}
+                            onClick={(e) => { handleLogin(e) }}>
+                            Continue
+                        </MDBBtn>
 
-                            <MDBBtn style={btnSytle}
-                                color='secondary'
-                                onClick={cancelEntry}>
-                                Cancel
-                            </MDBBtn>
-                        </form>
+                        <MDBBtn style={btnSytle}
+                            color='secondary'
+                            onClick={cancelEntry}>
+                            Cancel
+                        </MDBBtn>
                     </MDBRow>
                 </MDBCardBody>
             </MDBCard>
@@ -144,23 +141,24 @@ export default function Login() {
             <MDBCard style={{ backgroundColor: '#f7f2f287' }} className='w-100 mx-auto' >
 
                 <MDBCardBody>
-                    <MDBTypography style={{ fontSize: '18px' }}><strong>Login</strong></MDBTypography>
+                    <MDBRow>
+                        <MDBTypography style={{ fontSize: '18px' }}><strong>Login</strong></MDBTypography>
 
-                    <MDBTypography style={{ fontSize: '17px' }}>Your login reference*</MDBTypography>
+                        <MDBTypography style={{ fontSize: '17px' }}>Your login reference*</MDBTypography>
 
-                    <input className='form-control' type='text' placeholder='login reference'
-                        onChange={(e) => { let newEdit = { ...loginReference }; newEdit = e.target.value; setLoginReference(newEdit) }} >
-                    </input>
+                        <input style={inputStyle} className='form-control' type='text' placeholder='login reference'
+                            onChange={(e) => { let newEdit = { ...loginReference }; newEdit = e.target.value; setLoginReference(newEdit) }} >
+                        </input>
 
-                    <a href='' className="">I have forgotten my login reference</a>
-
-                    <form className='d-flex input-group w-auto mt-5'>
+                        <a href='' className="">I have forgotten my login reference</a>
+                    </MDBRow>
+                    <MDBRow className='d-flex input-group w-auto mt-5'>
                         <MDBBtn style={btnSytle}
                             color='primary'
                             onClick={(e) => { handleReference(e) }}>
                             Continue<MDBIcon fas icon='caret-right' className='mx-2' />
                         </MDBBtn>
-                    </form>
+                    </MDBRow>
                 </MDBCardBody>
             </MDBCard>
         </>
@@ -187,7 +185,7 @@ export default function Login() {
                 // returnedpwd = response.data.clientPwd
                 // returnedMemoDate = response.data.clientDt
                 setClientId(response.data.clientid);
-                
+
                 console.log(`Output from backend ${returnedRef}
                 ${returnedId}
                 ${returnedpwd}
@@ -208,18 +206,20 @@ export default function Login() {
     }
 
     const handleLogin = async (e) => {
+
         e.preventDefault();
-        const primaryLoginInfo = {
-            client_reference: loginReference,
-            client_password: password,
-            client_memorable_date: ConvertToTimeStamp(memYear + "-" + memMonth + "-" + memDate)
-        }
-        console.table(primaryLoginInfo)
+
         try {
+            const primaryLoginInfo = {
+                client_reference: loginReference,
+                client_password: password,
+                client_memorable_date: ConvertToTimeStamp(memYear + "-" + memMonth + "-" + memDate)
+            }
+            console.table(primaryLoginInfo)
             console.log(clientRefUrl, primaryLoginInfo)
             const response = await axios.post(clientLoginUrl, primaryLoginInfo)
 
-            if(response){
+            if (response) {
                 console.log(response.data.message)
                 console.log(response.data.Status_Reply)
                 console.log(response.data.ClientID)

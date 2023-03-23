@@ -22,10 +22,16 @@ const AccountLeft = (props) => {
 
     useEffect(() => {
 
-        const loginRef = decryptDetails();
+        try {
 
-        console.log(`${loginRef.loginRef}`)
-        setLoginReference((loginRef.loginRef).toUpperCase())
+            const loginRef = decryptDetails();
+
+            console.log(`${loginRef.loginRef}`)
+            setLoginReference((loginRef.loginRef).toUpperCase())
+
+        } catch (error) {
+            console.log(error)
+        }
 
     }, [])
 
