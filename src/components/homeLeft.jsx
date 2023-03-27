@@ -26,7 +26,7 @@ export default function HomeLeft() {
                         <MDBCardBody>
                             <MDBRow className='my-3 justify-content-center border border-rounded border-warning' bgcolor='#f7f2f287'>
                                 <p style={{color:'black'}}> <em>This website is for education purpose only,</em> <span style={{color:'red', fontSize: '20px'}}><strong>DO NOT</strong></span> <em>fill the forms with youself or anyone else personal information.</em> </p>
-                                <p style={{color:'black'}}> <em>Try this website with random information,</em> <span style={{color:'red', fontSize: '20px'}}><strong>Make sure to logout</strong></span>. <em>All datas will be deleted from server once logout being clicked.</em> </p>
+                                <p style={{color:'black'}}> <em>Try this website with random information,</em> <span style={{color:'red', fontSize: '20px'}}><strong>Make sure to logout</strong></span>. </p>
                             </MDBRow>
                             <MDBRow >
                             </MDBRow>

@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { dates, months } from '../resources/datePicker';
 import { validEmail, validDate, validPostcode, validNumber } from '../validations/Validator.jsx';
 import { ToCamelCase } from '../validations/Validator.jsx';
-import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
+import { ConvertToLocalDate, ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 
 import {
     MDBContainer,
@@ -16,6 +16,7 @@ import {
     MDBBtn,
     MDBRadio
 } from 'mdb-react-ui-kit';
+import { refreshPage } from '../utility/refreshPage';
 
 export default function JointApplicantEdit() {
 
@@ -123,8 +124,9 @@ export default function JointApplicantEdit() {
                     setNINO(responseJoint.data.jointApplicantDetails.clientJoint_NINO)
                     setSex(responseJoint.data.jointApplicantDetails.clientJoint_Sex)
 
-                    tempDOB = ConvertToDate(responseJoint.data.jointApplicantDetails.clientJoint_dateofbirth);
-                    setdateofbirth(tempDOB.split('-')[2] + '-' + tempDOB.split('-')[1] + '-' + tempDOB.split('-')[0]);
+                    tempDOB = ConvertToLocalDate(responseJoint.data.jointApplicantDetails.clientJoint_dateofbirth);
+                    // setdateofbirth(tempDOB.split('-')[2] + '-' + tempDOB.split('-')[1] + '-' + tempDOB.split('-')[0]);
+                    setdateofbirth(tempDOB);
 
                     setCurrentlyLiveWithYou(responseJoint.data.jointApplicantDetails.clientJoint_current_live_with_you)
                     if (responseJoint.data.jointApplicantDetails.clientJoint_current_live_with_you === 'yes') {
@@ -281,6 +283,9 @@ export default function JointApplicantEdit() {
 
             if (response.status === 200) {
                 console.log(`Status from backend ${response.status}`);
+                refreshPage(response.data.message);
+            } else {
+                alert('Something went wrong, please try again...')
             }
 
         } catch (error) {

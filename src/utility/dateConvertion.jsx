@@ -25,7 +25,20 @@ function ConvertToDate(timeStamp_){
     }
 }
 
+function ConvertToLocalDate(formatdate_){
+
+    try {
+        const givenDate = moment.unix(formatdate_).format('DD MMMM YYYY')
+        console.log(`converted timeStamp_ in to local date ${givenDate}`)
+        return givenDate
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export {
     ConvertToTimeStamp,
-    ConvertToDate
+    ConvertToDate,
+    ConvertToLocalDate
 }

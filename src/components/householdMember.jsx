@@ -20,6 +20,7 @@ import {
     MDBBtn,
     MDBRadio
 } from 'mdb-react-ui-kit';
+import { refreshPage } from '../utility/refreshPage';
 
 export default function HouseholdMember() {
 
@@ -269,6 +270,9 @@ export default function HouseholdMember() {
             if (response.status === 200) {
                 console.log(`Status from backend ${response.status}`);                
                 // navigate('/account', { state: { jointName: fName } });
+                refreshPage('Household member information updated successfully')
+            } else {
+                alert('Something went wrong, please try again...')
             }
 
         } catch (error) {

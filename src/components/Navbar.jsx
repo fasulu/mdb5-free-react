@@ -97,6 +97,10 @@ export default function Navbar(props) {
             // src="https://www.birminghamchoice.co.uk/Data/pub/PublicWebsite/SiteLogos/BCCLogo_Mobile.jpg" width="189" height="45" alt="Scheme logo"
             // src="https://drive.google.com/uc?export=view&id=1Qtctbw5JRzHJUYu_bdJ-wCL7C-sj50dD" width="189" height="45" alt="Logo"
             // className='img-fluid rounded hover-shadow'
+            // https://drive.google.com/file/d/1A87RhgLrjddXEOrSTJFvL-Zt--laTl_R/view?usp=sharing
+            //https://drive.google.com/file/d/19LGGcZjnB3DLJMfZ1GwxHpm07BPqfiuV/view?usp=share_link
+            // src="https://drive.google.com/uc?export=view&id=1A87RhgLrjddXEOrSTJFvL-Zt--laTl_R" width="189" height="45" alt="Logo"
+            // src="https://drive.google.com/uc?export=view&id=19LGGcZjnB3DLJMfZ1GwxHpm07BPqfiuV" width="189" height="45" alt="Logo"
             src="https://birminghamwatch.org/wp-content/uploads/2019/03/Birmingham-City-Council-new-logo-300x169.png" width="189" height="45" alt="Logo"
             className='img-fluid rounded hover-shadow'
           />

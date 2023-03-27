@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { dates, months } from '../resources/datePicker';
 import { validEmail, validNumber, validDate } from '../validations/Validator';
-import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
+import { ConvertToLocalDate, ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 import { decryptDetails } from '../utility/hashDetails';
 
 import { useNavigate } from "react-router-dom";
@@ -22,6 +22,7 @@ import {
 
 import { ToCamelCase } from '../validations/Validator'
 import HouseholdMember from './householdMember';
+import { refreshPage } from '../utility/refreshPage';
 
 export default function MembersList() {
 
@@ -241,10 +242,7 @@ export default function MembersList() {
 
       const response = await axios.put(memberUpdateUrl + householdMemberID, memberInfo, {})
       console.log(`Output from backend ${response.data.MemberId}`)
-
-      if (response.status === 200) {
-        console.log(`Status from backend ${response.data.message}`);
-      }
+      refreshPage(response.data.message)
 
     } catch (error) {
       console.log(error)
@@ -275,7 +273,7 @@ export default function MembersList() {
         setNINO(response.data.memberExist.clientOtherHousehold_NINO);
 
         // setdateofbirth(response.data.memberExist.clientOtherHousehold_dateofbirth.slice(0, 10));
-        let birth_ = ConvertToDate(response.data.memberExist.clientOtherHousehold_dateofbirth)
+        let birth_ = ConvertToLocalDate(response.data.memberExist.clientOtherHousehold_dateofbirth)
         console.log(birth_)
         setdateofbirth(birth_)
 
@@ -682,13 +680,14 @@ export default function MembersList() {
                         {/* <MemberEdit memberID={memberList._id}></MemberEdit> */}
                       </MDBTypography>
                       <MDBTypography style={inputStyle1}>Name: <strong>{(memberList.clientOtherHousehold_firstname)} {(memberList.clientOtherHousehold_surname)}</strong></MDBTypography>
-                      <MDBTypography style={inputStyle1}>Date of birth: <strong>{ConvertToDate(memberList.clientOtherHousehold_dateofbirth)}</strong></MDBTypography>
+                      {/* <MDBTypography style={inputStyle1}>Date of birth: <strong>{ConvertToDate(memberList.clientOtherHousehold_dateofbirth)}</strong></MDBTypography> */}
+                      <MDBTypography style={inputStyle1}>Date of birth: <strong>{ConvertToLocalDate(memberList.clientOtherHousehold_dateofbirth) }</strong></MDBTypography>
                       <MDBTypography style={inputStyle1}>Relationship:  <strong>{(memberList.clientOtherHousehold_relationshipWithClient)}</strong></MDBTypography>
                     </MDBCol>
                     <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
                       <MDBTypography className='text-uppercase' style={inputStyle}> NINO:  <strong >{memberList.clientOtherHousehold_NINO} </strong> </MDBTypography>
                       <MDBTypography style={inputStyle1}>Illness:  <strong>{ToCamelCase(memberList.clientOtherHousehold_illness)}</strong></MDBTypography>
-                      <MDBTypography style={inputStyle1}>Moved In:  <strong>{ConvertToDate(memberList.clientOtherHousehold_moved_to_current_address)}</strong></MDBTypography>
+                      <MDBTypography style={inputStyle1}>Moved In:  <strong>{ConvertToLocalDate(memberList.clientOtherHousehold_moved_to_current_address)}</strong></MDBTypography>
                       <MDBTypography style={inputStyle1}>Sex:  <strong>{ToCamelCase(memberList.clientOtherHousehold_sex)}</strong></MDBTypography>
                     </MDBCol>
                   </MDBRow>
