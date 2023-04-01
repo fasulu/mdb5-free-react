@@ -47,7 +47,6 @@ export default function AccountPage() {
     const memmberExistUrl = "http://localhost:9001/member/clientid/" + clientId
     const jointExistUrl = "http://localhost:9001/joint/clientid/" + clientId
 
-    let memberid = location.state.nino
     const [loginReference, setLoginReference] = useState();
     // const [clientName, setClientName] = useState(location.state.clientName);
     const [clientName, setClientName] = useState();

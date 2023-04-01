@@ -1,0 +1,162 @@
+import React, { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
+
+import { dates, months } from '../resources/datePicker';
+import { refreshPage } from '../utility/refreshPage';
+import { validEmail, validDate } from '../validations/Validator';
+import { ConvertToTimeStamp } from '../utility/dateConvertion';
+
+
+import {
+    MDBIcon,
+    MDBCard, MDBCardBody,
+    MDBRow,
+    MDBTypography, MDBBtn
+} from 'mdb-react-ui-kit';
+
+export default function forgotLoginRef() {
+
+    const primaryClientUrl = "http://localhost:9001/client/clientemail/";
+
+    const datesData = dates;
+    const monthsData = months;
+    const ageMax = new Date().getFullYear();        // year picker up to current year
+    const ageMin = new Date().getFullYear() - 120;  // year picker 120 year back from current year
+
+    const inputStyle = { fontSize: '14px', width: '270px', marginLeft: '10px' };
+    const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
+    const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
+    const yearPickerStyle = { width: '80px', float: 'left', border: '5' };
+    const btnSytle = { fontSize: '16px', width: 'auto', textTransform: 'none', marginLeft: '10px' };
+
+    const [email, setEmail] = useState("");
+    const [dateofbirth, setDateofbirth] = useState("");
+    const [dobDate, setDOBDate] = useState("");
+    const [dobMonth, setDOBMonth] = useState("");
+    const [dobYear, setDOBYear] = useState("");
+
+    var birth_ = ""
+    var timeStampedDOB = ""
+
+    useEffect(() => {
+
+    }, [])
+
+    const handleForgottenDetails = (e) => {
+
+        e.preventDefault();
+
+        console.log('I am in handleForgottenDetails');
+
+        birth_ = dobYear + "-" + dobMonth + "-" + dobDate;
+
+        const birthValid = validDate(birth_);
+        const emailValid = validEmail(email);
+
+        if (birthValid || emailValid) {
+            timeStampedDOB = ConvertToTimeStamp(birth_);
+            console.log(birth_, timeStampedDOB)
+            setDateofbirth(timeStampedDOB);
+
+            sendLoginRefByEmail();
+        } else {
+            !birthValid && alert(`Invalid Date of birth`);
+            !emailValid && alert(`Invalid Email address /n ${email}`);
+        }
+    }
+
+    const sendLoginRefByEmail = async (e) => {
+
+        e.preventDefault()
+        console.log('I am in sendLoginRefByEmail');
+
+        const primaryApplicantInfo = {
+            client_dateofbirth: timeStampedDOB,
+            client_email: email
+        }
+        try {
+
+            const response = await axios.post(primaryClientUrl, primaryApplicantInfo)
+            const tempData = response.data;
+            if (tempData.Status_Reply == "Success") {
+
+                alert("Login reference sent to your email")
+
+            } else {
+                alert("Invalid Request");
+            }
+
+        } catch (error) {
+            let result = error.request
+            console.log(result)
+            alert("Invalid login reference");
+            setShowGetLoginRefInfo(true);
+            setShowGetLoginInfo(false);
+        }
+    }
+
+    return (
+        <React.Fragment>
+            <MDBCard style={{ backgroundColor: '#f7f2f287' }} className='w-100 mx-auto' >
+
+                <MDBCardBody>
+                    <MDBRow>
+                        <MDBTypography style={{ fontSize: '18px' }}><strong>Recover your login reference</strong></MDBTypography>
+
+                        <div>
+                            {/* *********** Email  */}
+                            <MDBTypography style={{ fontSize: '17px' }}>Please enter your email address*</MDBTypography>
+
+                            <input style={inputStyle} className='form-control' type='text' placeholder='login reference'
+                                onChange={(e) => { let newEdit = { ...email }; newEdit = e.target.value; setEmail(newEdit) }} >
+                            </input>
+
+                            {/* *********** Date of Birth  */}
+                            <MDBTypography style={{ fontSize: '17px' }}>Please enter your date of birth*</MDBTypography>
+
+                            <div className='mt-2'>
+                                <div className='btn-group'>
+                                    <select style={datePickerStyle}
+                                        className="form-select rounded"
+                                        aria-label="Default select example"
+                                        onChange={(e) => { let newEdit = { ...dobDate }; newEdit = e.target.value; setDOBDate(newEdit) }}>
+                                        {datesData.map((option) => (
+                                            <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
+                                        ))}
+                                    </select>
+                                    <select style={monthPickerStyle}
+                                        className="form-select rounded"
+                                        onChange={(e) => { let newEdit = { ...dobMonth }; newEdit = e.target.value; setDOBMonth(newEdit) }}>
+                                        {monthsData.map((option) => (
+                                            <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
+                                        ))}
+                                    </select>
+                                    <input className='form-control rounded'
+                                        style={yearPickerStyle}
+                                        type='number'
+                                        border={5}
+                                        min={ageMin}
+                                        max={ageMax}
+                                        placeholder='year'
+                                        onChange={(e) => { let newEdit = { ...dobYear }; newEdit = e.target.value; setDOBYear(newEdit) }}>
+                                    </input>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href='' className="">If you have forgotten email address, please call councile housing department</a>
+
+                    </MDBRow>
+                    <MDBRow className='d-flex input-group w-auto mt-5'>
+                        <MDBBtn style={btnSytle}
+                            color='primary'
+                            onClick={(e) => { handleForgottenDetails(e) }}>
+                            Continue<MDBIcon fas icon='caret-right' className='mx-2' />
+                        </MDBBtn>
+                    </MDBRow>
+                </MDBCardBody>
+            </MDBCard>
+        </React.Fragment >
+    );
+}

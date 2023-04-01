@@ -5,7 +5,7 @@ import axios from "axios";
 import { dates, months } from '../resources/datePicker';
 import { correspondences } from '../resources/correspondence';
 
-import { validEmail, validPostcode, validNumber, emailMatch, validDate } from '../validations/Validator.jsx';
+import { validEmail, validPostcode, validNumber, emailMatch, validDate, ToCamelCase } from '../validations/Validator.jsx';
 import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 import { decryptDetails } from '../utility/hashDetails';
 import { UserContext } from "../userContext/UserContext"
@@ -30,11 +30,10 @@ export default function UpdateContact() {
     const primaryClientIdUrl = "http://localhost:9001/client/clientid/";
     const primaryClientUpdateUrl = "http://localhost:9001/client/update/";
 
-
     const inputStyle = { marginLeft: '15px' };
     const labelStyle = { paddingLeft: '0px', maxHeight: 'auto', fontSize: '17px', width: 'auto', color: '#3b71ca' };
     const btnSytle = { fontSize: '16px', width: 'auto', textTransform: 'none', marginRight: '10px' };
-    const commentStyle = {marginLeft: '15px', minHeight: '150px', fontSize: '16px', minWidth: '250px', color: 'black' };
+    const commentStyle = { marginLeft: '15px', minHeight: '150px', fontSize: '16px', minWidth: '250px', color: 'black' };
     const comboBoxStyle = { marginLeft: '15px', maxWidth: '250px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
 
     const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
@@ -49,10 +48,9 @@ export default function UpdateContact() {
     const [primaryApplicantClientId, setPrimaryApplicantClientId] = useState(clientId)
 
     var movedDate = "";
-    // const [movedDate, setMovedDate] = useState(tempMovedDate);
-    const [movedInDate, setMovedInDate] = useState();
-    const [movedInMonth, setMovedInMonth] = useState();
-    const [movedInYear, setMovedInYear] = useState();
+    const [movedInDate, setMovedInDate] = useState("");
+    const [movedInMonth, setMovedInMonth] = useState("");
+    const [movedInYear, setMovedInYear] = useState("");
 
     const [postcode, setPostcode] = useState("");
     const [addLine1, setAddLine1] = useState("");
@@ -75,17 +73,11 @@ export default function UpdateContact() {
     const [reEnterEmail, setReEnterEmail] = useState("");
     const [comments, setComments] = useState("none");
 
-
     const [showCorrespondence, setShowCorrespondence] = useState(false);
 
     useEffect(() => {
 
         fetchData();
-
-        // movedDate = (response.data.memberExist.clientOtherHousehold_moved_to_current_address);
-        // console.log(movedDate)
-        // movedDate = ConvertToDate(movedDate);
-        // setMovedInDate(movedDate.split('-')[2]); setMovedInMonth(movedDate.split('-')[1]); setMovedInYear(movedDate.split('-')[0]);
 
     }, [])
 
@@ -112,6 +104,13 @@ export default function UpdateContact() {
                 setAddLine3(response.data.clientExist.client_address_line3)
                 setAddLine4(response.data.clientExist.client_address_line4)
                 setCommunicationAddress(response.data.clientExist.client_communication_address)
+                if (response.data.clientExist.client_communication_address == 'current address') {
+                    window.document.getElementById('CommunicationAddressCurrent').checked = true;
+                    setShowCorrespondence(false)
+                } else {
+                    window.document.getElementById('CommunicationAddressCorrespondence').checked = true;
+                    setShowCorrespondence(true);
+                }
                 setCorrespondenceType(response.data.clientExist.client_correspondence_type)
                 setCorresPostcode(response.data.clientExist.client_correspondence_postcode)
                 setCorresAddLine1(response.data.clientExist.client_correspondence_address_line1)
@@ -154,7 +153,7 @@ export default function UpdateContact() {
         if (!corresPostcode == "") {
             const corresPostcodeValid = validPostcode(corresPostcode);
             if (!corresPostcodeValid) {
-                alert(' Correspondence postcode invalid')
+                alert(' Correspondence postcode is invalid or not in UK standard')
             }
         }
 
@@ -173,14 +172,16 @@ export default function UpdateContact() {
             setCorrespondenceType("5")
         }
 
-        var radioBtn = window.document.getElementById('communicationAddressYes');
+        var radioBtn = window.document.getElementById('CommunicationAddressCurrent');
         if (radioBtn.checked == true) {
             setCommunicationAddress('current address')
+
         } else {
+            window.document.getElementById('CommunicationAddressCorrespondence').checked = true
             setCommunicationAddress('correspondence address')
         }
 
-        if ((!emailValid) || (!telephoneValid) || (!movedInValid) || (!postcode) || (!corresPostcode) ||
+        if ((!emailValid) || (!telephoneValid) || (!movedInValid) || (!postcode) ||
             (!workphoneValid) || (!mobileValid) || (!EmailMatchesValid)) {
 
             !telephoneValid && alert('Telephone number error');
@@ -207,14 +208,14 @@ export default function UpdateContact() {
 
         const clientInfo = {
             client_moved_to_current_address: movedDate,
-            client_postcode: postcode,
+            client_postcode: postcode.toLowerCase(),
             client_address_line1: addLine1,
             client_address_line2: addLine2,
             client_address_line3: addLine3,
             client_address_line4: addLine4,
-            client_communication_address: communicationAddress,
-            client_correspondence_type: correspondenceType,
-            client_correspondence_postcode: corresPostcode,
+            client_communication_address: communicationAddress.toLowerCase(),
+            client_correspondence_type: correspondenceType.toLowerCase(),
+            client_correspondence_postcode: corresPostcode.toLowerCase(),
             client_correspondence_address_line1: corresAddLine1,
             client_correspondence_address_line2: corresAddLine2,
             client_correspondence_address_line3: corresAddLine3,
@@ -282,6 +283,7 @@ export default function UpdateContact() {
                                 </div>
                             </div>
 
+                            {/* Permanent Address */}
                             <div className=''>
                                 <MDBTypography className='card-header'
                                     style={labelStyle} >
@@ -290,27 +292,27 @@ export default function UpdateContact() {
 
                                 <p className='mt-3' ><strong>1st line of address</strong>
                                     <input style={inputStyle} className='form-control' type='test' placeholder='1st line of your address'
-                                        minLength={9} maxLength={20} value={addLine1}
+                                        minLength={9} maxLength={20} value={addLine1 && ToCamelCase(addLine1)}
                                         onChange={(e) => { let newEdit = { ...addLine1 }; newEdit = e.target.value; setAddLine1(newEdit) }} /></p>
 
                                 <p className=' mt-3'><strong>2nd line of address</strong>
                                     <input style={inputStyle} className='form-control' type='test' placeholder='2nd line of your address'
-                                        minLength={9} maxLength={20} value={addLine2}
+                                        minLength={9} maxLength={20} value={addLine2 && ToCamelCase(addLine2)}
                                         onChange={(e) => { let newEdit = { ...addLine2 }; newEdit = e.target.value; setAddLine2(newEdit) }} /></p>
 
                                 <p className=' mt-3'><strong>3rd line of address</strong>
                                     <input style={inputStyle} className='form-control' type='test' placeholder='3rd line of your address'
-                                        minLength={9} maxLength={20} value={addLine3}
+                                        minLength={9} maxLength={20} value={addLine3 && ToCamelCase(addLine3)}
                                         onChange={(e) => { let newEdit = { ...addLine3 }; newEdit = e.target.value; setAddLine3(newEdit) }} /></p>
 
                                 <p className=' mt-3' ><strong>4th line of address</strong>
                                     <input style={inputStyle} className='form-control' type='test' placeholder='4th line of your address'
-                                        minLength={9} maxLength={20} value={addLine4}
+                                        minLength={9} maxLength={20} value={addLine4 && ToCamelCase(addLine4)}
                                         onChange={(e) => { let newEdit = { ...addLine4 }; newEdit = e.target.value; setAddLine4(newEdit) }} /></p>
 
                                 <p className=' mt-3' ><strong>Postcode</strong>
                                     <input style={inputStyle} className='form-control' type='test' placeholder='Postcode'
-                                        minLength={6} maxLength={9} value={postcode}
+                                        minLength={6} maxLength={9} value={postcode && postcode.toUpperCase()}
                                         onChange={(e) => { let newEdit = { ...postcode }; newEdit = e.target.value; setPostcode(newEdit) }} /></p>
 
                             </div>
@@ -325,23 +327,24 @@ export default function UpdateContact() {
                                 <div className=''>
                                     <MDBRow >
                                         <div className='mt-2'>
-                                            <MDBRadio className='mx-2' name='communicationAddressRadio' id='communicationAddressYes' label='To my permanent address' inline
-                                                defaultChecked
-                                                defaultValue='current address'
+                                            <MDBRadio className='mx-2' name='communicationAddressRadio' id='CommunicationAddressCurrent'
+                                                label='To my permanent address' inline
+                                                value='current address'
                                                 onChange={(e) => { let newEdit = { ...communicationAddress }; newEdit = e.target.value; setCommunicationAddress(newEdit); setShowCorrespondence(false) }}></MDBRadio>    {/* setShowCorrespondence will  show or hide according to the selection */}
                                         </div>
                                         <div className='mt-2'>
-                                            <MDBRadio className='mx-2' name='communicationAddressRadio' id='communicationAddressNo' label='To my correspondence address' inline
-                                                value='correspondence address'
+                                            <MDBRadio className='mx-2' name='communicationAddressRadio' id='CommunicationAddressCorrespondence'
+                                                label='To my correspondence address' inline value='correspondence address'
                                                 onChange={(e) => { let newEdit = { ...communicationAddress }; newEdit = e.target.value; setCommunicationAddress(newEdit); setShowCorrespondence(true) }}></MDBRadio>
                                         </div>
 
                                     </MDBRow>
                                 </div>
+
+                                {/* Correspondence description */}
                                 {
                                     showCorrespondence &&
                                     <>
-
                                         < p className=' mt-3' ><strong>Correspondence description</strong>
                                             <select style={comboBoxStyle}
                                                 className="form-select rounded"
@@ -353,27 +356,27 @@ export default function UpdateContact() {
                                         </p>
                                         < p className=' mt-3' ><strong>1st line of address</strong>
                                             <input style={inputStyle} className='form-control' type='test' placeholder='1st line of correspondence address'
-                                                minLength={9} maxLength={20} value={corresAddLine1}
+                                                minLength={9} maxLength={20} value={corresAddLine1 && ToCamelCase(corresAddLine1)}
                                                 onChange={(e) => { let newEdit = { ...corresAddLine1 }; newEdit = e.target.value; setCorresAddLine1(newEdit) }} /></p>
 
                                         <p className=' mt-3' ><strong>2nd line of address</strong>
                                             <input style={inputStyle} className='form-control' type='test' placeholder='2nd line of correspondence address'
-                                                minLength={9} maxLength={20} value={corresAddLine2}
+                                                minLength={9} maxLength={20} value={corresAddLine2 && ToCamelCase(corresAddLine2)}
                                                 onChange={(e) => { let newEdit = { ...corresAddLine2 }; newEdit = e.target.value; setCorresAddLine2(newEdit) }} /></p>
 
                                         <p className=' mt-3' ><strong>3rd line of address</strong>
                                             <input style={inputStyle} className='form-control' type='test' placeholder='3rd line of correspondence address'
-                                                minLength={9} maxLength={20} value={corresAddLine3}
+                                                minLength={9} maxLength={20} value={corresAddLine3 && ToCamelCase(corresAddLine3)}
                                                 onChange={(e) => { let newEdit = { ...corresAddLine3 }; newEdit = e.target.value; setCorresAddLine3(newEdit) }} /></p>
 
                                         <p className=' mt-3' ><strong>4th line of address</strong>
                                             <input style={inputStyle} className='form-control' type='test' placeholder='4th line of correspondence address'
-                                                minLength={9} maxLength={20} value={corresAddLine4}
+                                                minLength={9} maxLength={20} value={corresAddLine4 && ToCamelCase(corresAddLine4)}
                                                 onChange={(e) => { let newEdit = { ...corresAddLine4 }; newEdit = e.target.value; setCorresAddLine4(newEdit) }} /></p>
 
                                         <p className=' mt-3' ><strong>Postcode</strong>
                                             <input style={inputStyle} className='form-control' type='test' placeholder='Correspondence postcode'
-                                                minLength={6} maxLength={9} value={corresPostcode}
+                                                minLength={6} maxLength={9} value={corresPostcode && corresPostcode.toUpperCase()}
                                                 onChange={(e) => { let newEdit = { ...corresPostcode }; newEdit = e.target.value; setCorresPostcode(newEdit) }} /></p>
                                     </>
                                 }
@@ -404,6 +407,7 @@ export default function UpdateContact() {
                                 </p>
                             </div>
 
+                            {/* Email Detail */}
                             <div >
                                 <MDBTypography className='card-header'
                                     style={labelStyle} >
@@ -421,6 +425,7 @@ export default function UpdateContact() {
                                 </p>
                             </div>
 
+                            {/* Comments */}
                             <div>
                                 <MDBTypography className='card-header'
                                     style={labelStyle} >
@@ -441,7 +446,7 @@ export default function UpdateContact() {
                                     Save
                                 </MDBBtn>
 
-                            </form>                            
+                            </form>
                         </MDBCol>
                     </MDBRow>
                 </MDBCardBody>

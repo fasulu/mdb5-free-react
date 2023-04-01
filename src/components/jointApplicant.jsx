@@ -121,7 +121,7 @@ export default function JointApplicant() {
 
     const [isYourPartner, setIsYourPartner] = useState("none of the above");
     const [areYouWorker, setAreYouWorker] = useState("no");
-    const [connection, setConnection] = useState();
+    const [connection, setConnection] = useState("");
 
     const [comments, setComments] = useState("none");
 
