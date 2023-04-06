@@ -4,6 +4,7 @@
   "description": "template for mdb-react-ui-kit",
   "private": true,
   "dependencies": {
+    "@emailjs/browser": "^3.10.0",
     "axios": "^1.2.6",
     "bcryptjs": "^2.4.3",
     "crypto-js": "^4.1.1",

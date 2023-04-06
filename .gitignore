@@ -4,8 +4,12 @@
 
 env.local
 
+/src/ConfigEmail
+
 /testArray.js
 
 /src/Query/fetchData.js
 
 /src/components/temp.js
+
+/src/components/temp.*

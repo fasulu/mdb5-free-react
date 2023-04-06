@@ -22,6 +22,9 @@ import UpdateLogin from '../components/updateLogin';
 import JointApplicant from '../components/jointApplicant';
 import JointApplicantEdit from '../components/jointApplicantEdit';
 import HouseholdMember from '../components/householdMember';
+import CardHouse from '../components/cardHouse';
+
+import { ToCamelCase } from '../validations/Validator';
 import { decryptDetails } from '../utility/hashDetails';
 
 export default function AccountPage() {
@@ -38,6 +41,7 @@ export default function AccountPage() {
     const [showMemberListPage, setShowMemberListPage] = useState(false);
     const [showUpdateContactPage, setShowUpdateContactPage] = useState(false);
     const [showUpdateLoginPage, setShowUpdateLoginPage] = useState(false);
+    const [showBidPage, setShowBidPage] = useState(false);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -75,13 +79,13 @@ export default function AccountPage() {
             if (response) {
                 console.log(response.data)
                 setClientName(response.data.clientExist.client_firstname + " " + response.data.clientExist.client_surname);
-                setAddressLine1(response.data.clientExist.client_address_line1); 
-                setAddressLine2(response.data.clientExist.client_address_line2);
-                setAddressLine3(response.data.clientExist.client_address_line3);
-                setAddressLine4(response.data.clientExist.client_address_line4);
-                setPostcode(response.data.clientExist.client_postcode);
 
-                console.log(clientName);
+                setAddressLine1(() => {let newVal= addressLine1; newVal = response.data.clientExist.client_address_line1; setAddressLine1(ToCamelCase(newVal))});
+                setAddressLine2(() => {let newVal= addressLine2; newVal = response.data.clientExist.client_address_line2; setAddressLine2(ToCamelCase(newVal))});
+                setAddressLine3(() => {let newVal= addressLine3; newVal = response.data.clientExist.client_address_line3; setAddressLine3(ToCamelCase(newVal))});
+                setAddressLine4(() => {let newVal= addressLine4; newVal = response.data.clientExist.client_address_line4; setAddressLine4(ToCamelCase(newVal))});
+                setPostcode(() => {let newVal= postcode; newVal = response.data.clientExist.client_postcode; setPostcode(newVal.toUpperCase())});
+
             } else {
                 console.log(`Unable to identify primary applicant`);
                 navigate('/login');
@@ -122,24 +126,24 @@ export default function AccountPage() {
 
         try {
             console.log(`Im in accountPage useEffect`)
-        const idRef = decryptDetails();     // get id and reference from local storage using dcrypDetails() module.
+            const idRef = decryptDetails();     // get id and reference from local storage using dcrypDetails() module.
 
-        setClientId(idRef.decryptedID);     // get id and reference from local storage using dcrypDetails() module.
-        console.log(clientId);
+            setClientId(idRef.decryptedID);     // get id and reference from local storage using dcrypDetails() module.
+            console.log(clientId);
 
-        if (clientId) {
-            fetchDataPrimary(primaryApplicantNameUrl + clientId)
-            
-            // fetchDataJoint(jointApplicantNameUrl + clientId)
-        }
+            if (clientId) {
+                fetchDataPrimary(primaryApplicantNameUrl + clientId)
 
-        console.log(`${idRef.decryptedID}`)
-        fetchDataPrimary(primaryApplicantNameUrl + idRef.decryptedID)
+                // fetchDataJoint(jointApplicantNameUrl + clientId)
+            }
 
-        // fetchDataJoint(jointApplicantNameUrl + idRef.decryptedID)
+            console.log(`${idRef.decryptedID}`)
+            fetchDataPrimary(primaryApplicantNameUrl + idRef.decryptedID)
+
+            // fetchDataJoint(jointApplicantNameUrl + idRef.decryptedID)
         } catch (error) {
             console.log(error)
-        }        
+        }
 
     }, [])
 
@@ -152,6 +156,7 @@ export default function AccountPage() {
         setShowUpdateLoginPage(false);
         setShowJointApplicantEditPage(false);
         setShowHouseholdMemberPage(false);
+        setShowBidPage(false);
     }
 
     const gotoUpdateLoginPage = () => {
@@ -162,6 +167,20 @@ export default function AccountPage() {
         setShowMemberListPage(false);
         setShowUpdateContactPage(false);
         setShowUpdateLoginPage(true);
+        setShowJointApplicantPage(false);
+        setShowHouseholdMemberPage(false);
+        setShowJointApplicantEditPage(false);
+        setShowBidPage(false);
+    }
+    const gotoBid = () => {
+        // navigate('/updatelogin');
+        setShowBidPage(true)
+        setShowAccountPage(false);
+        setShowJointApplicantPage(false);
+        setShowMemberEditPage(false);
+        setShowMemberListPage(false);
+        setShowUpdateContactPage(false);
+        setShowUpdateLoginPage(false);
         setShowJointApplicantPage(false);
         setShowHouseholdMemberPage(false);
         setShowJointApplicantEditPage(false);
@@ -187,6 +206,7 @@ export default function AccountPage() {
                 setShowUpdateContactPage(false);
                 setShowUpdateLoginPage(false);
                 setShowHouseholdMemberPage(false);
+                setShowBidPage(false);
             } else {
                 console.log('Iam in new joint applicant')
 
@@ -198,6 +218,7 @@ export default function AccountPage() {
                 setShowUpdateContactPage(false);
                 setShowUpdateLoginPage(false);
                 setShowHouseholdMemberPage(false);
+                setShowBidPage(false);
             }
         } catch (error) {
             console.log(error)
@@ -213,38 +234,41 @@ export default function AccountPage() {
         setShowJointApplicantEditPage(false);
         setShowHouseholdMemberPage(false);
         setShowUpdateLoginPage(false);
+        setShowBidPage(false);
     }
 
     const gotoMembersList = async () => {
 
         try {
-                console.log(`${memmberExistUrl + clientId} In fetch data`)
-                const clientIdExist = await axios.get(memmberExistUrl)
-                console.log(`${clientIdExist.data.message}, ${clientId}`)
-                if (!clientIdExist.data.clientId) {
-                    setShowAccountPage(false);
-                    setShowJointApplicantPage(false);
-                    setShowMemberEditPage(false);
-                    setShowMemberListPage(true);
-                    setShowUpdateContactPage(false);
-                    setShowJointApplicantEditPage(false);
-                    setShowHouseholdMemberPage(false);
-                    setShowUpdateLoginPage(false);
-    
-                } else {
-                    setShowAccountPage(false);
-                    setShowJointApplicantPage(false);
-                    setShowMemberEditPage(false);
-                    setShowMemberListPage(false);
-                    setShowUpdateContactPage(false);
-                    setShowJointApplicantEditPage(false);
-                    setShowUpdateLoginPage(false);
-                    setShowHouseholdMemberPage(true);
-                }
-    
-            } catch (error) {
-                console.log(error)
+            console.log(`${memmberExistUrl + clientId} In fetch data`)
+            const clientIdExist = await axios.get(memmberExistUrl)
+            console.log(`${clientIdExist.data.message}, ${clientId}`)
+            if (!clientIdExist.data.clientId) {
+                setShowAccountPage(false);
+                setShowJointApplicantPage(false);
+                setShowMemberEditPage(false);
+                setShowMemberListPage(true);
+                setShowUpdateContactPage(false);
+                setShowJointApplicantEditPage(false);
+                setShowHouseholdMemberPage(false);
+                setShowUpdateLoginPage(false);
+                setShowBidPage(false);
+
+            } else {
+                setShowAccountPage(false);
+                setShowJointApplicantPage(false);
+                setShowMemberEditPage(false);
+                setShowMemberListPage(false);
+                setShowUpdateContactPage(false);
+                setShowJointApplicantEditPage(false);
+                setShowUpdateLoginPage(false);
+                setShowHouseholdMemberPage(true);
+                setShowBidPage(false);
             }
+
+        } catch (error) {
+            console.log(error)
+        }
 
     }
 
@@ -275,13 +299,13 @@ export default function AccountPage() {
                         showMemberListPage && <MembersList />
                     }
                     {
-                        // showMemberEditPage && <MemberEdit />
-                    }
-                    {
                         showUpdateContactPage && <UpdateContact />
                     }
                     {
                         showUpdateLoginPage && <UpdateLogin />
+                    }
+                    {
+                        showBidPage && <CardHouse />
                     }
 
                 </MDBCol>
@@ -308,7 +332,8 @@ export default function AccountPage() {
                                 </MDBRow>
                                 <MDBRow >
                                     <MDBCol>
-                                        <MDBBtn style={styleBtn} color='tertiary' > My bids </MDBBtn>
+                                        <MDBBtn style={styleBtn} color='tertiary'
+                                            onClick={gotoBid} > My bids </MDBBtn>
                                     </MDBCol>
                                 </MDBRow>
                                 <MDBRow >
@@ -332,11 +357,11 @@ export default function AccountPage() {
                                 </MDBRow>
                                 <MDBRow >
                                     <p><strong>My contact details</strong> Id:- {clientId}</p>
-                                    <p style={{ margin:'0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{addressLine1}</p>
-                                    <p style={{ margin:'0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{addressLine2}</p>
-                                    <p style={{ margin:'0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{addressLine3}</p>
-                                    <p style={{ margin:'0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{addressLine4}</p>
-                                    <p style={{ margin:'0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{postcode}</p>
+                                    <p style={{ margin: '0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{addressLine1}</p>
+                                    <p style={{ margin: '0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{addressLine2}</p>
+                                    <p style={{ margin: '0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{addressLine3}</p>
+                                    <p style={{ margin: '0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{addressLine4}</p>
+                                    <p style={{ margin: '0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' }} >{postcode}</p>
                                 </MDBRow>
                                 <MDBRow >
                                     <MDBCol>

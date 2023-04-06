@@ -10,6 +10,8 @@ import { encryptDetails, decryptDetails } from '../utility/hashDetails';
 import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 import { refreshPage } from '../utility/refreshPage';
 
+import { SendMail } from '../utility/sendMail';
+
 import {
     MDBIcon,
     MDBCard, MDBCardBody,
@@ -26,6 +28,7 @@ export default function Login() {
     const clientRefUrl = "http://localhost:9001/client/clientreflogin/";
     const clientLoginUrl = "http://localhost:9001/client/clientlogin/";
     const clientForgottenRefUrl = "http://localhost:9001/client/forgotref/";
+    const clientForgottenPwdUrl = "http://localhost:9001/client/forgotpwd/";
 
     const datesData = dates;
     const monthsData = months;
@@ -57,9 +60,10 @@ export default function Login() {
     const [dobDate, setDOBDate] = useState("");
     const [dobMonth, setDOBMonth] = useState("");
     const [dobYear, setDOBYear] = useState("");
-    
+
+
     var timeStampedDOB = ""
-    var timeStampedMemo=""
+    var timeStampedMemo = ""
 
     const [showGetLoginRefInfo, setShowGetLoginRefInfo] = useState(true)
     const [showGetLoginInfo, setShowGetLoginInfo] = useState(false)
@@ -70,6 +74,7 @@ export default function Login() {
         if (window.localStorage.getItem('cref')) {
             window.localStorage.removeItem('cref');
         }
+
     }, [])
 
     const cancelEntry = (e) => {
@@ -84,7 +89,7 @@ export default function Login() {
                     <MDBRow>
                         <MDBCol className='size=md'>
                             <MDBTypography style={{ fontSize: '18px' }}><strong>Recover your password</strong></MDBTypography>
-                            
+
                             {/* *********** Email  */}
                             <MDBTypography className='mt-2 ' style={{ fontSize: '17px' }}>Please enter your email address * </MDBTypography>
 
@@ -93,44 +98,44 @@ export default function Login() {
                             </input>
 
                         </MDBCol>
-                        
+
                         {/**********  Memorable date */}
-                    <MDBRow>
-                        <MDBCol className='size=md p-2 mt-2'>
-                            <div className=''>
-                                <p style={{ fontSize: '16px' }}>Enter your new memorable date*</p>
-                                <div className='btn-group mx-2'>
-                                    <select style={datePickerStyle}
-                                        className="form-select rounded"
-                                        onChange={(e) => { let newEdit = { ...setMemDate }; newEdit = e.target.value; setMemDate(newEdit) }} >
-                                        {datesData.map((option) => (
-                                            <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
-                                        ))}
-                                    </select>
+                        <MDBRow>
+                            <MDBCol className='size=md p-2 mt-2'>
+                                <div className=''>
+                                    <p style={{ fontSize: '16px' }}>Enter your new memorable date*</p>
+                                    <div className='btn-group mx-2'>
+                                        <select style={datePickerStyle}
+                                            className="form-select rounded"
+                                            onChange={(e) => { let newEdit = { ...setMemDate }; newEdit = e.target.value; setMemDate(newEdit) }} >
+                                            {datesData.map((option) => (
+                                                <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
+                                            ))}
+                                        </select>
 
-                                    <select style={monthPickerStyle}
-                                        className="form-select rounded"
-                                        onChange={(e) => { let newEdit = { ...setMemMonth }; newEdit = e.target.value; setMemMonth(newEdit) }} >
-                                        {monthsData.map((option) => (
-                                            <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
-                                        ))}
-                                    </select>
+                                        <select style={monthPickerStyle}
+                                            className="form-select rounded"
+                                            onChange={(e) => { let newEdit = { ...setMemMonth }; newEdit = e.target.value; setMemMonth(newEdit) }} >
+                                            {monthsData.map((option) => (
+                                                <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
+                                            ))}
+                                        </select>
 
-                                    <input className='form-control rounded'
-                                        style={yearPickerStyle}
-                                        type='number'
-                                        min={ageMin}
-                                        max={ageMax}
-                                        placeholder='year'
-                                        onChange={(e) => { let newEdit = { ...setMemYear }; newEdit = e.target.value; setMemYear(newEdit) }} >
-                                    </input>
+                                        <input className='form-control rounded'
+                                            style={yearPickerStyle}
+                                            type='number'
+                                            min={ageMin}
+                                            max={ageMax}
+                                            placeholder='year'
+                                            onChange={(e) => { let newEdit = { ...setMemYear }; newEdit = e.target.value; setMemYear(newEdit) }} >
+                                        </input>
+                                    </div>
                                 </div>
-                            </div>
-                            <p style={{ cursor: 'pointer', color: '#6592de' }} className=""
-                            onClick={(e) => { setShowForgottenLoginRef(true); setShowGetLoginRefInfo(false); setShowGetLoginInfo(false); }} >* Forgotten memorable date? Please call housing department</p>
+                                <p style={{ cursor: 'pointer', color: '#6592de' }} className=""
+                                    onClick={(e) => { setShowForgottenLoginRef(true); setShowGetLoginRefInfo(false); setShowGetLoginInfo(false); }} >* Forgotten memorable date? Please call housing department</p>
 
-                        </MDBCol>
-                    </MDBRow>
+                            </MDBCol>
+                        </MDBRow>
 
                     </MDBRow>
                     <MDBRow className='d-flex input-group w-auto mt-3'>
@@ -225,7 +230,7 @@ export default function Login() {
                                     onChange={(e) => { let newEdit = { ...password }; newEdit = e.target.value; setPassword(newEdit) }}></input>
                             </div>
                             <p style={{ cursor: 'pointer', color: '#6592de' }} className=""
-                            onClick={(e) => { setShowForgottenPwd(true); setShowForgottenLoginRef(false); setShowGetLoginRefInfo(false); setShowGetLoginInfo(false); }} >I have forgotten my password</p>
+                                onClick={(e) => { setShowForgottenPwd(true); setShowForgottenLoginRef(false); setShowGetLoginRefInfo(false); setShowGetLoginInfo(false); }} >I have forgotten my password</p>
 
                         </MDBCol>
                     </MDBRow>
@@ -263,7 +268,7 @@ export default function Login() {
                                 </div>
                             </div>
                             <p style={{ cursor: 'pointer', color: '#6592de' }} className=""
-                            onClick={(e) => { setShowForgottenLoginRef(true); setShowGetLoginRefInfo(false); setShowGetLoginInfo(false); }} >* Forgotten memorable date? Please call housing department</p>
+                                onClick={(e) => { setShowForgottenLoginRef(true); setShowGetLoginRefInfo(false); setShowGetLoginInfo(false); }} >* Forgotten memorable date? Please call housing department</p>
 
                         </MDBCol>
                     </MDBRow>
@@ -329,25 +334,22 @@ export default function Login() {
 
                 const response = await axios.post(clientRefUrl, refDetail)
                 const tempData = response.data;
-                console.log(tempData.Status_Reply)
+                console.log(tempData.Status_Reply);
 
                 if (tempData.Status_Reply == "Success") {
                     setShowGetLoginRefInfo(false);
                     setShowGetLoginInfo(true);
 
                 } else {
-                    alert("Invalid login reference");
-                    setLoginReference(null);
+                    refreshPage('Invalid login reference');
                 }
             } else {
-                refreshPage('Please enter a valid client reference')
+                refreshPage('Please enter a valid client reference');
             }
         } catch (error) {
-            let result = error.request
-            console.log(result)
-            alert("Invalid login reference");
-            setShowGetLoginRefInfo(true);
-            setShowGetLoginInfo(false);
+            let result = error.request;
+            console.log(result);
+            refreshPage('Please enter a valid client reference');
         }
     }
 
@@ -417,7 +419,7 @@ export default function Login() {
         const emailValid = validEmail(email);
         const birthValid = validDate(birth_);
 
-        console.log(`birthValid ${birthValid}`);console.log(`emailValid ${emailValid}`)
+        console.log(`birthValid ${birthValid}`); console.log(`emailValid ${emailValid}`)
 
         if (birthValid) {
             if (emailValid) {
@@ -455,24 +457,21 @@ export default function Login() {
         try {
 
             const response = await axios.post(clientForgottenRefUrl, primaryApplicantInfo)
-            const tempData = response.data;
-            if (response) {
+            if (response.data.Status_Reply == "Success") {
 
-                alert("Login reference sent to your email")
-
-                refreshPage(`Status: ${tempData.Status_Reply}\nLogin reference sent to your email`)
+                refreshPage(`${response.data.Status_Reply}\nLogin reference sent by email`)
 
             } else {
-                refreshPage(`Error: ${tempData.Status_Reply}\nInvalid information`)
+                refreshPage(`Invalid information`)
             }
 
         } catch (error) {
             // let result = error.request
             // console.log(result)
-            alert(`Error: Please verify your details`);
-            setShowGetLoginRefInfo(true);
-            setShowGetLoginInfo(false);
-            setShowForgottenLoginRef(false);
+            refreshPage('Please verify your details');
+            // setShowGetLoginRefInfo(true);
+            // setShowGetLoginInfo(false);
+            // setShowForgottenLoginRef(false);
         }
     }
 
@@ -482,14 +481,14 @@ export default function Login() {
         console.log('I am in handleForgottenPwd');
 
         const memoDate = memYear + "-" + memMonth + "-" + memDate;
-        
+
         console.log(`email ${email}`);
         console.log(`memoValid ${memoDate}`)
 
         const emailValid = validEmail(email);
         const memoValid = validDate(memoDate);
 
-        console.log(`emailValid ${emailValid}`);console.log(`memoValid ${memoValid}`)
+        console.log(`emailValid ${emailValid}`); console.log(`memoValid ${memoValid}`)
 
         if (emailValid) {
             if (memoValid) {
@@ -500,9 +499,9 @@ export default function Login() {
                 sendPwdByEmail();
 
             } else {
-                !emailValid && alert(`Invalid email address`);
+                // !emailValid && alert(`Invalid email address`);
                 !memoValid && alert(`Invalid memorable date`);
-                refreshPage();
+                refreshPage(`Invalid memorable date`);
                 // setEmail(null);
                 // setMemDate(null);setMemMonth(null);setMemYear(null);
                 // setShowForgottenPwd(true)
@@ -512,12 +511,57 @@ export default function Login() {
             }
         } else {
             !emailValid && alert(`Invalid email address`);
-            !memoValid && alert(`Invalid memorable date`);
-            refreshPage();
+            // !memoValid && alert(`Invalid memorable date`);
+            refreshPage(`Invalid email address`);
             // setEmail(null);
             // setMemDate(null);setMemMonth(null);setMemYear(null);
             // setShowForgottenPwd(true)
             // setShowGetLoginRefInfo(false);
+            // setShowGetLoginInfo(false);
+            // setShowForgottenLoginRef(false);
+        }
+    }
+
+    const sendPwdByEmail = async () => {
+
+        console.log('I am in sendPwdByEmail', timeStampedMemo, email);
+
+        const primaryApplicantInfo = {
+            client_memorable_date: timeStampedMemo,
+            client_email: email
+        }
+        try {
+
+            const response = await axios.post(clientForgottenPwdUrl, primaryApplicantInfo)
+            if (response.data.Status_Reply == "Success") {
+
+                const name = response.data.ClientName
+                const newPwd = response.data.NewPwd
+
+                const pwdDetails = {
+                    pwd: newPwd,
+                    email: email,
+                    fname: name
+                }
+
+                console.table(pwdDetails);
+
+                const resultEmail = await SendMail(pwdDetails);
+                console.log(resultEmail)
+                refreshPage(`New password being sent by email`)
+
+                console.log(`${response.data.NewPwd} is the new password`)
+
+            } else {
+                refreshPage('Invalid information')
+            }
+
+        } catch (error) {
+            // let result = error.request
+            // console.log(result)
+            // alert(`Error:- Please verify your details`);
+            refreshPage(`Error:- Please verify your details`);
+            // setShowGetLoginRefInfo(true);
             // setShowGetLoginInfo(false);
             // setShowForgottenLoginRef(false);
         }

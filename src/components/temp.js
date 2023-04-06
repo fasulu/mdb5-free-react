@@ -902,3 +902,28 @@ export default function MembersList() {
 
   );
 }
+
+                const [_id, set_id]=useState("");
+                const [propertyId, setPropertyId]=useState("");
+                const [address, setAddress]=useState("");
+                const [type, setType]=useState("");
+                const [bedRoom, setBedRoom]=useState("");
+                const [bathRoom, setBathRoom]=useState("");
+                const [reception, setReception]=useState("");
+                const [cTaxBand, setCTaxBand]=useState("");
+                const [tenancyType, setTenancyType]=useState("");
+                const [availableFrom, setAvailableFrom]=useState("");
+                const [furnished, setFurnished]=useState("");
+                const [parking, setParking]=useState("");
+                const [garage, setGarage]=useState("");
+                const [garden, setGarden]=useState("");
+                const [patio, setPatio]=useState("");
+                const [floor, setFloor]=useState("");
+                const [kitchenFitted, setKitchenFitted]=useState("");
+                const [deposit, setDeposit]=useState("");
+                const [fees, setFees]=useState("");
+                const [rent, setRent]=useState("");
+                const [pets, setPets]=useState("");
+                const [imageUrl, setImageUrl]=useState("");
+                const [comments, setComments]=useState("");
+                const [dateRecorded, setDateRecorded]=useState("");
