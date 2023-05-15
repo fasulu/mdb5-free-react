@@ -139,9 +139,9 @@ export default function Repair() {
                         <li>You should report all other non-urgent repairs to the repairs call centre for your area.</li>
                     </ul>
 
-                    <p class="contentNormal"><strong>Useful Links for New Tenants</strong></p>
+                    <p className="contentNormal"><strong>Useful Links for New Tenants</strong></p>
 
-                    <p class="contentNormal">New tenants to Birmingham City Council may find the following links useful.</p>
+                    <p className="contentNormal">New tenants to Birmingham City Council may find the following links useful.</p>
 
                     <ul>
                         <li><a href="https://www.birminghamchoice.co.uk/Data/Pub/PublicWebsite/ImageLibrary/balcony-safety-nfcc.pdf">Balcony Safety</a></li>

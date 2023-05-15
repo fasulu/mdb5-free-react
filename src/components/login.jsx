@@ -10,6 +10,8 @@ import { encryptDetails, decryptDetails } from '../utility/hashDetails';
 import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 import { refreshPage } from '../utility/refreshPage';
 
+import PopUp from './popUp';
+
 import { SendMail } from '../utility/sendMail';
 
 import {
@@ -29,6 +31,7 @@ export default function Login() {
     const clientLoginUrl = "http://localhost:9001/client/clientlogin/";
     const clientForgottenRefUrl = "http://localhost:9001/client/forgotref/";
     const clientForgottenPwdUrl = "http://localhost:9001/client/forgotpwd/";
+    const msgForgottenLoginRefUrl = "http://localhost:9001/message/newmsg/";
 
     const datesData = dates;
     const monthsData = months;
@@ -48,7 +51,6 @@ export default function Login() {
     const [id_, setId_] = useState("")
     const [pwd, setPwd] = useState("");
 
-    const [memo, setMemo] = useState("");
     const [password, setPassword] = useState("");
     const [memorableDate, setMemorableDate] = useState("");
     const [memDate, setMemDate] = useState("");
@@ -61,20 +63,31 @@ export default function Login() {
     const [dobMonth, setDOBMonth] = useState("");
     const [dobYear, setDOBYear] = useState("");
 
-
     var timeStampedDOB = ""
     var timeStampedMemo = ""
+
+    // const todayDate = ()=>{let date_ = new Date(); date_ = date_.toLocaleString('en-GB', { timeZone: 'UTC' })}
+    // const date_ = new Date().toISOString().slice(0, 10);
+    
+    const date_ = ConvertToTimeStamp(new Date().toISOString().slice(0, 10));
+    const subject_ = "Login Reference sent to you email/post"
+    const From_ = "Housing Department"
+    const message_ = "As per your request we have sent you login reference to your email and by post. This is an auto-generated message, do not reply or request any detail."
 
     const [showGetLoginRefInfo, setShowGetLoginRefInfo] = useState(true)
     const [showGetLoginInfo, setShowGetLoginInfo] = useState(false)
     const [showForgottenLoginRef, setShowForgottenLoginRef] = useState(false)
     const [showForgottenPwd, setShowForgottenPwd] = useState(false)
 
+    const [showInfoModal, setShowInfoModal] = useState(false);
+    const [modalInfo, setModalInfo] = useState("");
+
     useEffect(() => {
         if (window.localStorage.getItem('cref')) {
             window.localStorage.removeItem('cref');
         }
-
+        const input = document.querySelector("input");
+        input.focus();
     }, [])
 
     const cancelEntry = (e) => {
@@ -93,7 +106,10 @@ export default function Login() {
                             {/* *********** Email  */}
                             <MDBTypography className='mt-2 ' style={{ fontSize: '17px' }}>Please enter your email address * </MDBTypography>
 
-                            <input style={inputStyle} className='form-control' type='text' placeholder='email address'
+                            <input style={inputStyle} className='form-control'
+                                type='text'
+                                placeholder='email address'
+                                autoFocus={true}
                                 onChange={(e) => { let newEdit = { ...email }; newEdit = e.target.value; setEmail(newEdit) }} >
                             </input>
 
@@ -162,12 +178,15 @@ export default function Login() {
                             {/* *********** Email  */}
                             <MDBTypography className='mt-2 ' style={{ fontSize: '17px' }}>Please enter your email address * </MDBTypography>
 
-                            <input style={inputStyle} className='form-control' type='text' placeholder='email address'
+                            <input style={inputStyle} className='form-control'
+                                type='text'
+                                placeholder='email address'
+                                autoFocus={true}
                                 onChange={(e) => { let newEdit = { ...email }; newEdit = e.target.value; setEmail(newEdit) }} >
                             </input>
 
                             {/* *********** Date of Birth  */}
-                            <MDBTypography className='mt-3' style={{ fontSize: '17px' }}>Please enter your date of birth</MDBTypography>
+                            <MDBTypography className='mt-3' style={{ fontSize: '17px' }}>Please enter your date of birth *</MDBTypography>
 
                             <div className='mx-2'>
                                 <div className='btn-group'>
@@ -199,7 +218,7 @@ export default function Login() {
                                 </div>
                             </div>
                         </MDBCol>
-                        <a href='' className="mt-3">* Don't know your email address? Please call housing department</a>
+                        <a href='' className="mt-3">* Can't remember your memorable date or email address? Please call housing department</a>
 
                     </MDBRow>
                     <MDBRow className='d-flex input-group w-auto mt-3'>
@@ -225,7 +244,10 @@ export default function Login() {
                         <MDBCol className='size=md p-2'>
                             <div className=''>
                                 <p style={{ fontSize: '17px' }}>Enter your new password</p>
-                                <input style={inputStyle} className='form-control' type='password' placeholder='Password...'
+                                <input style={inputStyle} className='form-control'
+                                    type='password'
+                                    placeholder='Password...'
+                                    autoFocus={true}
                                     minLength={6} maxLength={10} value={password}
                                     onChange={(e) => { let newEdit = { ...password }; newEdit = e.target.value; setPassword(newEdit) }}></input>
                             </div>
@@ -299,7 +321,9 @@ export default function Login() {
 
                         <MDBTypography style={{ fontSize: '17px' }}>Your login reference*</MDBTypography>
 
-                        <input style={inputStyle} className='form-control' type='text' placeholder='login reference'
+                        <input style={inputStyle} className='form-control'
+                            type='text'
+                            placeholder='login reference'
                             onChange={(e) => { let newEdit = { ...loginReference }; newEdit = e.target.value; setLoginReference(newEdit); }} >
                         </input>
 
@@ -326,30 +350,31 @@ export default function Login() {
         try {
             if (loginReference.length == 7) {
 
-                console.log(clientRefUrl + loginReference)
-
                 const refDetail = {
                     client_reference: loginReference
                 }
 
                 const response = await axios.post(clientRefUrl, refDetail)
                 const tempData = response.data;
-                console.log(tempData.Status_Reply);
 
-                if (tempData.Status_Reply == "Success") {
+                if (tempData.Status_Reply === "Success") {
                     setShowGetLoginRefInfo(false);
                     setShowGetLoginInfo(true);
 
                 } else {
-                    refreshPage('Invalid login reference');
+                    setModalInfo("Invalid login reference")
+                    setShowInfoModal(true);
                 }
             } else {
-                refreshPage('Please enter a valid client reference');
+                setModalInfo("Please enter a valid login reference");
+                setShowInfoModal(true);
+
             }
         } catch (error) {
             let result = error.request;
-            console.log(result);
-            refreshPage('Please enter a valid client reference');
+
+            setModalInfo("Please enter a valid login reference");
+            setShowInfoModal(true);
         }
     }
 
@@ -366,14 +391,11 @@ export default function Login() {
                         client_password: password,
                         client_memorable_date: ConvertToTimeStamp(memYear + "-" + memMonth + "-" + memDate)
                     }
-                    console.table(primaryLoginInfo)
-                    console.log(clientRefUrl, primaryLoginInfo)
 
                     if ((password) && (dateValid)) {
                         const response = await axios.post(clientLoginUrl, primaryLoginInfo)
 
                         if (response.data.Status_Reply === 'Success') {
-                            console.log(response.data.Status_Reply)
 
                             let newFNameEdit = response.data.ClientFName;
                             let newSNameEdit = response.data.ClientSName;
@@ -388,20 +410,28 @@ export default function Login() {
                                 }
                             });
                         } else {
-                            alert("Password and date does not match")
+                            setModalInfo('Password and date does not match');
+                            setShowInfoModal(true);
+
                         }
                     } else {
-                        refreshPage('Password and date does not match')
+                        setModalInfo('Password and date does not match');
+                        setShowInfoModal(true);
+
                     }
                 } catch (error) {
-                    refreshPage('Please verity your details')
+                    setModalInfo('Please verity your details');
+                    setShowInfoModal(true);
+
                 }
             } else {
-                console.log('Password not in correct format');
-                refreshPage('Password not in correct format')
+                setModalInfo('Password not in correct format');
+                setShowInfoModal(true);
+
             }
         } else {
-            refreshPage('Invalid date')
+            setModalInfo('Invalid date')
+            setShowInfoModal(true);
         }
     }
 
@@ -409,36 +439,32 @@ export default function Login() {
 
         e.preventDefault();
 
-        console.log('I am in handleForgottenLoginRef');
-
         const birth_ = dobYear + "-" + dobMonth + "-" + dobDate;
-
-        // const email = validClient.client_email == clientEmail ? true : false;
-        // const dob = validClient.client_dateofbirth == clientDOB ? true : false;
 
         const emailValid = validEmail(email);
         const birthValid = validDate(birth_);
 
-        console.log(`birthValid ${birthValid}`); console.log(`emailValid ${emailValid}`)
-
         if (birthValid) {
             if (emailValid) {
                 timeStampedDOB = ConvertToTimeStamp(birth_);
-                console.log(birth_, timeStampedDOB)
                 setDateofbirth(timeStampedDOB);
 
                 sendLoginRefByEmail();
             } else {
-                !birthValid && alert(`Invalid Date of birth`);
-                !emailValid && alert(`Invalid Email address\n${email}`);
+                
+                if (!birthValid) setModalInfo('Invalid Date of birth'); setShowInfoModal(true);
+                if (!emailValid) setModalInfo('Invalid Email address'); setShowInfoModal(true);
+
                 setEmail(null); setDOBDate(null); setDOBMonth(null); setDOBYear(null);
                 setShowGetLoginRefInfo(true);
                 setShowGetLoginInfo(false);
                 setShowForgottenLoginRef(false);
             }
         } else {
-            !birthValid && alert(`Invalid Date of birth`);
-            !emailValid && alert(`Invalid Email address\n${email}`);
+            
+            if (!birthValid) setModalInfo('Invalid Date of birth'); setShowInfoModal(true);
+            if (!emailValid) setModalInfo('Invalid Email address'); setShowInfoModal(true);
+
             setEmail(null); setDOBDate(null); setDOBMonth(null); setDOBYear(null);
             setShowGetLoginRefInfo(true);
             setShowGetLoginInfo(false);
@@ -447,8 +473,6 @@ export default function Login() {
     }
 
     const sendLoginRefByEmail = async () => {
-
-        console.log('I am in sendLoginRefByEmail', timeStampedDOB, email);
 
         const primaryApplicantInfo = {
             client_dateofbirth: timeStampedDOB,
@@ -459,72 +483,83 @@ export default function Login() {
             const response = await axios.post(clientForgottenRefUrl, primaryApplicantInfo)
             if (response.data.Status_Reply == "Success") {
 
-                refreshPage(`${response.data.Status_Reply}\nLogin reference sent by email`)
+                setId_(response.data.ClientId)
 
+                const messageInfo = {
+                    clientId: response.data.ClientId,
+                    messageDate: date_,
+                    messageSubject: subject_,
+                    messageFrom: From_,
+                    message: message_,
+                    messageStatus: false
+                }
+
+                const result = sendMessage(messageInfo);
+
+                setModalInfo('Login reference sent by email and post')
+                setShowInfoModal(true);
+                setTimeout(() => {
+                    navigate('/nino');
+                }, 10000);
+                
             } else {
-                refreshPage(`Invalid information`)
+                setModalInfo('Invalid information')
+                setShowInfoModal(true);
             }
 
         } catch (error) {
-            // let result = error.request
-            // console.log(result)
-            refreshPage('Please verify your details');
-            // setShowGetLoginRefInfo(true);
-            // setShowGetLoginInfo(false);
-            // setShowForgottenLoginRef(false);
+            
+            setModalInfo('Please verify your details');
+            setShowInfoModal(true);
+            setShowGetLoginRefInfo(true);
+            setShowGetLoginInfo(false);
+            setShowForgottenLoginRef(false);
         }
+    }
+
+    const sendMessage = async (messageInfo) => {
+
+        try {
+
+            const response = await axios.post(msgForgottenLoginRefUrl, messageInfo)
+            if (response) {
+                return response.data.Status_Reply;
+            } else {
+                return response.data.Status_Reply;
+            }
+        } catch (error) {
+            setModalInfo(response.data.Status_Reply);
+            setShowInfoModal(true);
+        }
+
     }
 
     const handleForgottenPwd = async (e) => {
         e.preventDefault();
 
-        console.log('I am in handleForgottenPwd');
-
         const memoDate = memYear + "-" + memMonth + "-" + memDate;
-
-        console.log(`email ${email}`);
-        console.log(`memoValid ${memoDate}`)
 
         const emailValid = validEmail(email);
         const memoValid = validDate(memoDate);
 
-        console.log(`emailValid ${emailValid}`); console.log(`memoValid ${memoValid}`)
 
         if (emailValid) {
             if (memoValid) {
                 timeStampedMemo = ConvertToTimeStamp(memoDate);
-                console.log(memoDate, timeStampedMemo)
                 setMemorableDate(timeStampedMemo)
 
                 sendPwdByEmail();
 
             } else {
-                // !emailValid && alert(`Invalid email address`);
-                !memoValid && alert(`Invalid memorable date`);
-                refreshPage(`Invalid memorable date`);
-                // setEmail(null);
-                // setMemDate(null);setMemMonth(null);setMemYear(null);
-                // setShowForgottenPwd(true)
-                // setShowGetLoginRefInfo(false);
-                // setShowGetLoginInfo(false);
-                // setShowForgottenLoginRef(false);
+                if (!memoValid) setModalInfo('Invalid memorable date'); setShowInfoModal(true);
             }
         } else {
-            !emailValid && alert(`Invalid email address`);
-            // !memoValid && alert(`Invalid memorable date`);
-            refreshPage(`Invalid email address`);
-            // setEmail(null);
-            // setMemDate(null);setMemMonth(null);setMemYear(null);
-            // setShowForgottenPwd(true)
-            // setShowGetLoginRefInfo(false);
-            // setShowGetLoginInfo(false);
-            // setShowForgottenLoginRef(false);
+            if (!emailValid) setModalInfo('Invalid email address'); setShowInfoModal(true);
+
         }
     }
 
     const sendPwdByEmail = async () => {
-
-        console.log('I am in sendPwdByEmail', timeStampedMemo, email);
 
         const primaryApplicantInfo = {
             client_memorable_date: timeStampedMemo,
@@ -543,27 +578,21 @@ export default function Login() {
                     email: email,
                     fname: name
                 }
-
-                console.table(pwdDetails);
-
+                
                 const resultEmail = await SendMail(pwdDetails);
-                console.log(resultEmail)
-                refreshPage(`New password being sent by email`)
-
-                console.log(`${response.data.NewPwd} is the new password`)
-
+                setModalInfo("New password being sent by email and post");
+                setShowInfoModal(true);
+                
             } else {
-                refreshPage('Invalid information')
+                setModalInfo("Invalid information");
+                setShowInfoModal(true);
             }
 
         } catch (error) {
-            // let result = error.request
-            // console.log(result)
-            // alert(`Error:- Please verify your details`);
-            refreshPage(`Error:- Please verify your details`);
-            // setShowGetLoginRefInfo(true);
-            // setShowGetLoginInfo(false);
-            // setShowForgottenLoginRef(false);
+            
+            setModalInfo("Please verify your details");
+            setShowInfoModal(true);
+            
         }
     }
 
@@ -581,6 +610,10 @@ export default function Login() {
             {
                 showForgottenPwd && ForgotPassword
             }
+            {
+                showInfoModal && <PopUp modalInfo={modalInfo} setShowInfoModal={setShowInfoModal}></PopUp>
+            }
+
         </React.Fragment >
     );
 }

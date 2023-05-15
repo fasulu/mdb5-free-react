@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from "../userContext/UserContext"
 
 import {
   MDBIcons,
@@ -15,7 +16,11 @@ import {
   MDBCollapse,
 } from 'mdb-react-ui-kit';
 
+import logoCityCouncil from "../../src/resources/images/Logo-128DPI.png";
+
 export default function Navbar(props) {
+
+  const { clientId, setClientId } = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -35,6 +40,11 @@ export default function Navbar(props) {
     navigate('/login');
   }
 
+  const gotoLogout = () => {
+    window.localStorage.removeItem('cref')
+    navigate('/login');
+  }
+
   const element1 = (
     <form className='d-flex mr-auto mb-2 mb-lg-0'>
 
@@ -43,10 +53,12 @@ export default function Navbar(props) {
         <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
         My account</MDBBtn>
 
-      <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
+      <MDBBtn className='form-control' color='primary'
+        style={{ margin: '10px', width: '135px', textTransform: 'none' }}
+        onClick={(e) => { if (window.confirm("Logout Application?")) gotoLogout(e) }}>
         <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
-        Messages</MDBBtn>
-{/* 
+        Logout</MDBBtn>
+      {/* 
       <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
         <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
         Logout</MDBBtn>
@@ -55,7 +67,7 @@ export default function Navbar(props) {
   );
 
   const element2 = (
-    <>
+    <React.Fragment>
       <MDBNavbarNav className='mr-auto mb-2 mb-lg-0 '>
         <MDBNavbarItem>
           <MDBNavbarLink style={{ fontSize: '18px' }} active aria-current='page' href='#'>
@@ -85,8 +97,7 @@ export default function Navbar(props) {
           Login</MDBBtn>
 
       </form>
-    </>
-
+    </React.Fragment >
   )
 
   return (
@@ -94,17 +105,10 @@ export default function Navbar(props) {
       <MDBContainer fluid >
         <MDBNavbarBrand href='/home'>
           <img
-            // src="https://www.birminghamchoice.co.uk/Data/pub/PublicWebsite/SiteLogos/BCCLogo_Mobile.jpg" width="189" height="45" alt="Scheme logo"
             // src="https://drive.google.com/uc?export=view&id=1Qtctbw5JRzHJUYu_bdJ-wCL7C-sj50dD" width="189" height="45" alt="Logo"
             // className='img-fluid rounded hover-shadow'
-            // https://drive.google.com/file/d/1A87RhgLrjddXEOrSTJFvL-Zt--laTl_R/view?usp=sharing
-            //https://drive.google.com/file/d/19LGGcZjnB3DLJMfZ1GwxHpm07BPqfiuV/view?usp=share_link
-            // src="https://drive.google.com/uc?export=view&id=1A87RhgLrjddXEOrSTJFvL-Zt--laTl_R" width="189" height="45" alt="Logo"
-            // src="https://drive.google.com/uc?export=view&id=19LGGcZjnB3DLJMfZ1GwxHpm07BPqfiuV" width="189" height="45" alt="Logo"
-            // src="https://doc-0c-60-docs.googleusercontent.com/docs/securesc/ccugi9pngr52vmo8bko87pa77qk42p2h/v4quufljo81vgk89f9t29mmc33h7mlph/1680093900000/05816277852269274453/05816277852269274453/19LGGcZjnB3DLJMfZ1GwxHpm07BPqfiuV?e=view&ax=ALy03A7ODB-XuVQL5RoCm_N_dGGl393ZKoU2w0Vj97d4X4A_6abUIGmMKngRr2Yre_oeJZOjhIL-4behEfBJFeLnZuCo4HS_PP72MeSThEnRjYjsvW3xq5I4MBXLQyrziwRCAEyDZbSoaO9DhEbPatCur85Gr0fDqbfnulQTEfi7ZiwnAZ8WOdqbIfaUmw1aGtPlMvFRbLvozdWcb1-DIxe6Rt4ThqCBii8xx_5LXx0XsMspjfzJjrmCbWgjbpoo9vDBourk7Ub8MMy4jubvcnDcw2_n91gy4Smm-NBt2nSeOGFi8RsJ09gSLGdAz9b6f7DZ-8nAAFKLAg7XjcMaIUMw0id0rp1EDzcfu9Ls90muLa9tBtQjf8nZ6aAFBh_wZx4OEExIgLyD2JVSJFCe49x2zxGOCmZjU5tIaHLeFxevh8h-o8qtF8T_t34AtfKZ0m85txl1_JTIFvFlG35UTLfrkDU6uEMXkA6IfSdsivtKKZLVeBUIqBm7edFxPeRJhPtWsaysYnok9sejzLeeUYHQcygWraWvMjfeYZ9ORS5TslptWOZsiGDzYBD4uCuBC36cxdZXPl2RS1ufsbaV7Dup67ZxZscQdKJ9CVEt6E7EnfS8f-WJVMG7b4Cct5dsqASV7yj5uG2C9c9USNOdEwHhMyCLGIYDo8LXzI3hkNTUmrO-0bkLdUY3Rotoz294xsN5bebW_RnvDgPzJP_Xf3Pv_Tl2OvV0Z_zi-CEDc_A1dYDkCHdGWWqZ7IVrv3Y_0dRuBTYGbhZ638Ozj29Td_ngewX5DVRDpTDBGqO1Kp4DreiE2bVfohntod8xxmZT8kUJWBF0Zsd2H06AYBqxpE5ir-NVaRynZXDD9t2wyiR5rpQRRiLPG4H53jtG2lxOTSk&uuid=e7ba4d20-b9a1-427e-9603-677f4c14aee4&authuser=0&nonce=18kv6k6liua48&user=05816277852269274453&hash=5p0plcvm52911n2npo2s5qkpjnolnh5m" width="189" height="45" alt="Logo"
-            // src="https://drive.google.com/uc?export=view&id=19LGGcZjnB3DLJMfZ1GwxHpm07BPqfiuV" width="189" height="45" alt="Logo"
-            src="https://birminghamwatch.org/wp-content/uploads/2019/03/Birmingham-City-Council-new-logo-300x169.png" width="189" height="45" alt="Logo"
-            className='img-fluid rounded hover-shadow'
+            src={logoCityCouncil} width="189" height="45" alt="Logo"
+            className='img-fluid rounded'
           />
         </MDBNavbarBrand>
         <div className='d-flex input-group w-auto'>
@@ -122,7 +126,7 @@ export default function Navbar(props) {
             {
               loggedIn ? element1 : element2
             }
-            
+
           </MDBCollapse>
         </div>
       </MDBContainer>

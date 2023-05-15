@@ -4,17 +4,15 @@ import {
     MDBBtn
 } from 'mdb-react-ui-kit';
 
-const btnSytle = { fontSize: '16px', width: 'auto', textTransform: 'none', marginRight: '10px' };
-
-export default function BtnAccept({children, label, onClick}) {
-
-    const btnText=label;
+export default function BtnAccept({children, color, btnStyle, onClick}) {
 
     return (
         <React.Fragment>
             <MDBRow className='p-2'>
-                <div className='d-flex w-auto p-2'>
-                    <MDBBtn style={btnSytle}
+                <div className='d-flex w-auto'>
+                    <MDBBtn 
+                    style={btnStyle}
+                    color={color}
                     onClick={onClick} >
                         {children}
                     </MDBBtn>

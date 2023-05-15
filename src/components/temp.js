@@ -106,37 +106,37 @@
 // }
 
 
-_id:"641ad959b0fcb85f0216e3e8"
-clientId:"64182ff5c11918c62cd57a13"
-clientOtherHousehold_relationshipWithClient:"Son"
-clientOtherHousehold_assessment_purpose_only:"no"
-clientOtherHousehold_title:"Mr"
-clientOtherHousehold_firstname:"vulkit"
-clientOtherHousehold_middlename:"f"
-clientOtherHousehold_surname:"rhode"
-clientOtherHousehold_namechange:"none"
-clientOtherHousehold_NINO:"mm123456m"
-clientOtherHousehold_dateofbirth:"789609600"
-clientOtherHousehold_sex:"male"
-clientOtherHousehold_live_with_you:"yes"
-clientOtherHousehold_moved_to_current_address:"1163721600"
-clientOtherHousehold_current_address:"Living with primary applicant"
-clientOtherHousehold_is_she_pregnant:"no"
-clientOtherHousehold_spouse_another_member_name:"amey"
-clientOtherHousehold_placed_by_local_authority:"no"
-clientOtherHousehold_if_yes_local_authority:"none"
-clientOtherHousehold_telephone_home:"03261594873"
-clientOtherHousehold_telephone_mobile:"07896541236"
-clientOtherHousehold_telephone_work:"02152631245"
-clientOtherHousehold_email:"aksjdfhskdaf@msnc.com"
-clientOtherHousehold_nationality:"16"
-clientOtherHousehold_sex_orient:"16"
-clientOtherHousehold_ethnicity:"3"
-clientOtherHousehold_religion:"9"
-clientOtherHousehold_illness:"no"
-clientOtherHousehold_are_you_worker:"no"
-clientOtherHousehold_comments:"none"
-clientOtherHousehold_DeliveryDate:""
+_id: "641ad959b0fcb85f0216e3e8"
+clientId: "64182ff5c11918c62cd57a13"
+clientOtherHousehold_relationshipWithClient: "Son"
+clientOtherHousehold_assessment_purpose_only: "no"
+clientOtherHousehold_title: "Mr"
+clientOtherHousehold_firstname: "vulkit"
+clientOtherHousehold_middlename: "f"
+clientOtherHousehold_surname: "rhode"
+clientOtherHousehold_namechange: "none"
+clientOtherHousehold_NINO: "mm123456m"
+clientOtherHousehold_dateofbirth: "789609600"
+clientOtherHousehold_sex: "male"
+clientOtherHousehold_live_with_you: "yes"
+clientOtherHousehold_moved_to_current_address: "1163721600"
+clientOtherHousehold_current_address: "Living with primary applicant"
+clientOtherHousehold_is_she_pregnant: "no"
+clientOtherHousehold_spouse_another_member_name: "amey"
+clientOtherHousehold_placed_by_local_authority: "no"
+clientOtherHousehold_if_yes_local_authority: "none"
+clientOtherHousehold_telephone_home: "03261594873"
+clientOtherHousehold_telephone_mobile: "07896541236"
+clientOtherHousehold_telephone_work: "02152631245"
+clientOtherHousehold_email: "aksjdfhskdaf@msnc.com"
+clientOtherHousehold_nationality: "16"
+clientOtherHousehold_sex_orient: "16"
+clientOtherHousehold_ethnicity: "3"
+clientOtherHousehold_religion: "9"
+clientOtherHousehold_illness: "no"
+clientOtherHousehold_are_you_worker: "no"
+clientOtherHousehold_comments: "none"
+clientOtherHousehold_DeliveryDate: ""
 
 
 //********************
@@ -247,7 +247,7 @@ export default function MembersList() {
 
   const [showMemberToEdit, setShowMemberToEdit] = useState(false)
   const [showMemberToList, setShowMemberToList] = useState(false)
-  const [showMemberToAdd, setShowMemberToAdd] = useState(false);  
+  const [showMemberToAdd, setShowMemberToAdd] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -421,9 +421,9 @@ export default function MembersList() {
         setdateofbirth(birth_)
 
         setSex(response.data.memberExist.clientOtherHousehold_sex);
-        if(sex === 'female'){
+        if (sex === 'female') {
           setShowPregnantOption(true);
-        }else{
+        } else {
           setShowPregnantOption(false);
         }
 
@@ -618,7 +618,7 @@ export default function MembersList() {
                     <MDBCol className='col-3'>
                       <MDBRadio id='IsShePregnantYes' name='isShePregnantRadio'
                         inline htmlFor="isShePregnantYes" label='Yes' value='yes'
-                        onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit);}}></MDBRadio>
+                        onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); }}></MDBRadio>
                     </MDBCol>
 
                     <MDBCol className='col-3'>
@@ -806,26 +806,26 @@ export default function MembersList() {
 
     </React.Fragment >
   )
-  
+
 
   const showMemberList = (
     <React.Fragment>
       <MDBContainer className='' >
         {membersList.map((memberList) => {
           return (
-            <MDBCard className='m-2' 
-            key={memberList._id} item='true' 
-            style={{ backgroundColor: '#e0e0e0' }} >
+            <MDBCard className='m-2'
+              key={memberList._id} item='true'
+              style={{ backgroundColor: '#e0e0e0' }} >
               {<MDBRipple rippleColor='dark' rippleTag='div' className='hover-overlay'>
                 <MDBCardBody >
                   <MDBRow alignment='center'>
                     <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
-                      <MDBTypography className='text-decoration-underline' 
-                      style={{ cursor: 'pointer', fontSize: '16px', color: '#1a82db' }} >
+                      <MDBTypography className='text-decoration-underline'
+                        style={{ cursor: 'pointer', fontSize: '16px', color: '#1a82db' }} >
                         <strong onClick={(e) => openMember(e.target)}>{(memberList._id)}</strong>
                       </MDBTypography>
                       <MDBTypography style={inputStyle1}>Name: <strong>{(memberList.clientOtherHousehold_firstname)} {(memberList.clientOtherHousehold_surname)}</strong></MDBTypography>
-                      <MDBTypography style={inputStyle1}>Date of birth: <strong>{ConvertToLocalDate(memberList.clientOtherHousehold_dateofbirth) }</strong></MDBTypography>
+                      <MDBTypography style={inputStyle1}>Date of birth: <strong>{ConvertToLocalDate(memberList.clientOtherHousehold_dateofbirth)}</strong></MDBTypography>
                       <MDBTypography style={inputStyle1}>Relationship:  <strong>{(memberList.clientOtherHousehold_relationshipWithClient)}</strong></MDBTypography>
                     </MDBCol>
                     <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
@@ -903,27 +903,56 @@ export default function MembersList() {
   );
 }
 
-                const [_id, set_id]=useState("");
-                const [propertyId, setPropertyId]=useState("");
-                const [address, setAddress]=useState("");
-                const [type, setType]=useState("");
-                const [bedRoom, setBedRoom]=useState("");
-                const [bathRoom, setBathRoom]=useState("");
-                const [reception, setReception]=useState("");
-                const [cTaxBand, setCTaxBand]=useState("");
-                const [tenancyType, setTenancyType]=useState("");
-                const [availableFrom, setAvailableFrom]=useState("");
-                const [furnished, setFurnished]=useState("");
-                const [parking, setParking]=useState("");
-                const [garage, setGarage]=useState("");
-                const [garden, setGarden]=useState("");
-                const [patio, setPatio]=useState("");
-                const [floor, setFloor]=useState("");
-                const [kitchenFitted, setKitchenFitted]=useState("");
-                const [deposit, setDeposit]=useState("");
-                const [fees, setFees]=useState("");
-                const [rent, setRent]=useState("");
-                const [pets, setPets]=useState("");
-                const [imageUrl, setImageUrl]=useState("");
-                const [comments, setComments]=useState("");
-                const [dateRecorded, setDateRecorded]=useState("");
+const [_id, set_id] = useState("");
+const [propertyId, setPropertyId] = useState("");
+const [address, setAddress] = useState("");
+const [type, setType] = useState("");
+const [bedRoom, setBedRoom] = useState("");
+const [bathRoom, setBathRoom] = useState("");
+const [reception, setReception] = useState("");
+const [cTaxBand, setCTaxBand] = useState("");
+const [tenancyType, setTenancyType] = useState("");
+const [availableFrom, setAvailableFrom] = useState("");
+const [furnished, setFurnished] = useState("");
+const [parking, setParking] = useState("");
+const [garage, setGarage] = useState("");
+const [garden, setGarden] = useState("");
+const [patio, setPatio] = useState("");
+const [floor, setFloor] = useState("");
+const [kitchenFitted, setKitchenFitted] = useState("");
+const [deposit, setDeposit] = useState("");
+const [fees, setFees] = useState("");
+const [rent, setRent] = useState("");
+const [pets, setPets] = useState("");
+const [imageUrl, setImageUrl] = useState("");
+const [comments, setComments] = useState("");
+const [dateRecorded, setDateRecorded] = useState("");
+
+
+
+{ 
+  _id, 
+  selectedMember.clientOtherHousehold_title, 
+  selectedMember.clientOtherHousehold_firstname, 
+  selectedMember.clientOtherHousehold_middlename, 
+  selectedMember.clientOtherHousehold_surname, 
+  selectedMember.clientOtherHousehold_namechange, 
+  selectedMember.clientOtherHousehold_NINO, 
+  selectedMember.clientOtherHousehold_dateofbirth, 
+  selectedMember.clientOtherHousehold_sex, 
+  selectedMember.clientOtherHousehold_live_with_you, 
+  selectedMember.clientOtherHousehold_moved_to_current_address, 
+  selectedMember.clientOtherHousehold_current_address, 
+  selectedMember.clientOtherHousehold_is_she_pregnant, 
+  selectedMember.clientOtherHousehold_telephone_home, 
+  selectedMember.clientOtherHousehold_telephone_mobile, 
+  selectedMember.clientOtherHousehold_telephone_work, 
+  selectedMember.clientOtherHousehold_email, 
+  selectedMember.clientOtherHousehold_illness, 
+  selectedMember.clientOtherHousehold_comments, 
+  selectedMember.clientOtherHousehold_assessmentPurposeOnly, 
+  selectedMember.clientOtherHousehold_relationshipWithClient, 
+  selectedMember.clientOtherHousehold_DeliveryDate, 
+  selectedMember.clientOtherHousehold_Nameof_spouse, 
+  selectedMember.clientOtherHousehold_are_you_work 
+}

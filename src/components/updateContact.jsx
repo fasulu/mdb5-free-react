@@ -10,6 +10,8 @@ import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 import { decryptDetails } from '../utility/hashDetails';
 import { UserContext } from "../userContext/UserContext"
 
+import PopUp from './popUp';
+
 import {
     MDBCard, MDBCardBody,
     MDBRow, MDBCol,
@@ -17,7 +19,9 @@ import {
     MDBBtn,
     MDBRadio
 } from 'mdb-react-ui-kit';
+
 import { refreshPage } from '../utility/refreshPage';
+import BtnAccept from './btnAccept.jsx';
 
 export default function UpdateContact() {
 
@@ -29,8 +33,15 @@ export default function UpdateContact() {
 
     const primaryClientIdUrl = "http://localhost:9001/client/clientid/";
     const primaryClientUpdateUrl = "http://localhost:9001/client/update/";
+    const msgUpdateContactUrl = "http://localhost:9001/message/newmsg/";
 
-    const inputStyle = { marginLeft: '15px' };
+    // const date_ = new Date().toISOString().slice(0, 10);
+    const date_ = ConvertToTimeStamp(new Date().toISOString().slice(0, 10));
+    const subject_ = "Contact details updated"
+    const From_ = "Housing Department"
+    const message_ = "Your contact information successfully updated. This is an auto-generated message, do not reply or request any detail."
+
+    const inputStyle = { marginLeft: '15px', maxWidth: '500px' };
     const labelStyle = { paddingLeft: '0px', maxHeight: 'auto', fontSize: '17px', width: 'auto', color: '#3b71ca' };
     const btnSytle = { fontSize: '16px', width: 'auto', textTransform: 'none', marginRight: '10px' };
     const commentStyle = { marginLeft: '15px', minHeight: '150px', fontSize: '16px', minWidth: '250px', color: 'black' };
@@ -74,6 +85,9 @@ export default function UpdateContact() {
     const [comments, setComments] = useState("none");
 
     const [showCorrespondence, setShowCorrespondence] = useState(false);
+
+    const [showInfoModal, setShowInfoModal] = useState(false);
+    const [modalInfo, setModalInfo] = useState("");
 
     useEffect(() => {
 
@@ -142,18 +156,21 @@ export default function UpdateContact() {
         if (movedInValid) {
             movedDate = ConvertToTimeStamp(movedDate);
         } else {
-            alert('Invalid moved-in date')
+            setModalInfo("Invalid moved-in date")
+            setShowInfoModal(true);
         }
 
         const postcodeValid = validPostcode(postcode);
         if (!postcode) {
-            alert('Invalid postcode')
+            setModalInfo("Invalid postcode")
+            setShowInfoModal(true);
         }
 
         if (!corresPostcode == "") {
             const corresPostcodeValid = validPostcode(corresPostcode);
             if (!corresPostcodeValid) {
-                alert(' Correspondence postcode is invalid or not in UK standard')
+                setModalInfo("Correspondence postcode is invalid or not in UK standard")
+                setShowInfoModal(true);
             }
         }
 
@@ -168,12 +185,12 @@ export default function UpdateContact() {
         work telephone ${workphoneValid}, mobile ${mobileValid}, 
         emailmatchesValid ${EmailMatchesValid}`)
 
-        if (correspondenceType == "") {
+        if (correspondenceType === "") {
             setCorrespondenceType("5")
         }
 
         var radioBtn = window.document.getElementById('CommunicationAddressCurrent');
-        if (radioBtn.checked == true) {
+        if (radioBtn.checked === true) {
             setCommunicationAddress('current address')
 
         } else {
@@ -184,11 +201,16 @@ export default function UpdateContact() {
         if ((!emailValid) || (!telephoneValid) || (!movedInValid) || (!postcode) ||
             (!workphoneValid) || (!mobileValid) || (!EmailMatchesValid)) {
 
-            !telephoneValid && alert('Telephone number error');
-            !mobileValid && alert('Mobile number error');
-            !emailValid && alert('Email error');
-            !workphoneValid && alert('Work phone error');
-            !EmailMatchesValid && alert('Email does not match');
+            !telephoneValid && setModalInfo("Error: Telephone number")
+            setShowInfoModal(true);
+            !mobileValid && setModalInfo("Error: Mobile number")
+            setShowInfoModal(true);
+            !workphoneValid && setModalInfo("Error: Work phone")
+            setShowInfoModal(true);
+            !emailValid && setModalInfo("Error: Email")
+            setShowInfoModal(true);
+            !EmailMatchesValid && setModalInfo("Error: Email does not match")
+            setShowInfoModal(true);
         } else {
 
             console.log('FINAL Result passed', postcode, addLine1, addLine2, addLine3, addLine4,
@@ -199,7 +221,6 @@ export default function UpdateContact() {
 
             updateClient();
 
-            // refreshPage('Contact information saved successfully')
         }
     }
 
@@ -231,7 +252,68 @@ export default function UpdateContact() {
         const response = await axios.put(primaryClientUpdateUrl + clientId, clientInfo, {})
         console.log(`Output from backend ${response.data.message}`)
 
-        refreshPage(response.data.message);
+        if (response.data.Status_Reply === "Success") {
+
+            setModalInfo("Successfully updated")
+            setShowInfoModal(true);
+
+            console.log(clientId)
+
+            const messageInfo = {
+                clientId: clientId,
+                messageDate: date_,
+                messageSubject: subject_,
+                messageFrom: From_,
+                message: message_,
+                messageStatus: false
+            }
+
+            console.table(messageInfo)
+
+            const result = sendMessage(messageInfo);
+
+        } else {
+            setModalInfo("Invalid information")
+            setShowInfoModal(true);
+            setTimeout(() => {
+                refreshPage();
+            }, 5000);
+        }
+    }
+
+    const sendMessage = async (messageInfo) => {
+
+        // e.preventDefault()
+        console.log("Iam in send message")
+
+        console.table(messageInfo)
+
+        try {
+
+            const response = await axios.post(msgUpdateContactUrl, messageInfo)
+            if (response) {
+                console.log(response.data.Status_Reply);
+
+                return response.data.Status_Reply;
+            } else {
+                return response.data.Status_Reply;
+            }
+        } catch (error) {
+            console.log(error)
+            setModalInfo(response.data.Status_Reply)
+            setShowInfoModal(true);
+            setTimeout(() => {
+                refreshPage();
+            }, 5000);
+        }
+    }
+
+    const gotoAccountPage = (e) => {
+        setModalInfo('Update cancelled')
+        setShowInfoModal(true);
+        setTimeout(() => {
+            refreshPage();
+        }, 5000);
     }
 
     return (
@@ -241,7 +323,7 @@ export default function UpdateContact() {
                     style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
                     <strong>Edit Primary Applicant Details</strong>
                 </MDBTypography>
-                <MDBCardBody>
+                <MDBCardBody style={{ alignItems: 'center' }}>
 
                     {/**********  Permanent Address */}
                     <MDBRow>
@@ -344,7 +426,7 @@ export default function UpdateContact() {
                                 {/* Correspondence description */}
                                 {
                                     showCorrespondence &&
-                                    <>
+                                    <React.Fragment>
                                         < p className=' mt-3' ><strong>Correspondence description</strong>
                                             <select style={comboBoxStyle}
                                                 className="form-select rounded"
@@ -378,11 +460,10 @@ export default function UpdateContact() {
                                             <input style={inputStyle} className='form-control' type='test' placeholder='Correspondence postcode'
                                                 minLength={6} maxLength={9} value={corresPostcode && corresPostcode.toUpperCase()}
                                                 onChange={(e) => { let newEdit = { ...corresPostcode }; newEdit = e.target.value; setCorresPostcode(newEdit) }} /></p>
-                                    </>
+                                    </React.Fragment >
                                 }
 
                             </div>
-
 
                             {/********** Contact details */}
                             <div >
@@ -441,16 +522,27 @@ export default function UpdateContact() {
                             </div>
 
                             <form className='d-flex w-auto p-3'>
-                                <MDBBtn style={btnSytle}
-                                    onClick={handleSave}>
+                                <BtnAccept style={btnSytle}
+                                    onClick={(e) => { if (window.confirm("Update changes?")) handleSave(e) }}>
                                     Save
-                                </MDBBtn>
+                                </BtnAccept>
+                                <BtnAccept style={btnSytle} color='secondary'
+                                    onClick={(e) => { if (window.confirm("Cancel changes?")) gotoAccountPage(e) }}>
+                                    Cancel
+                                </BtnAccept>
 
                             </form>
                         </MDBCol>
                     </MDBRow>
                 </MDBCardBody>
             </MDBCard>
+            {
+                showInfoModal &&
+                <PopUp
+                    modalInfo={modalInfo}
+                    setShowInfoModal={setShowInfoModal}>
+                </PopUp>
+            }
         </React.Fragment >
     );
 }

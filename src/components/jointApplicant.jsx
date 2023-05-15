@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from "axios";
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import PopUp from './popUp';
+
 import { areyous } from '../resources/areyou';
 import { tenures } from '../resources/tenure';
 import { ethnicities } from '../resources/ethnicity';
@@ -67,9 +69,9 @@ export default function JointApplicant() {
     const [sName, setSName] = useState("");
     const [nameChange, setNameChange] = useState("none");
     const [nINO, setNINO] = useState("");
-    const [dateofbirth, setDateofbirth] = useState("");
     const [sex, setSex] = useState("");
 
+    const [dateofbirth, setDateofbirth] = useState("");
     const [dobDate, setDOBDate] = useState("");
     const [dobMonth, setDOBMonth] = useState("");
     const [dobYear, setDOBYear] = useState("");
@@ -79,8 +81,8 @@ export default function JointApplicant() {
     const [currentlyLiveWithYou, setCurrentlyLiveWithYou] = useState("no");
     const [livingInDiffAddress, setLivingInDiffAddress] = useState("yes");
 
-    const [movedInDate, setMovedInDate] = useState("");
 
+    const [movedInDate, setMovedInDate] = useState("");
     const [movedDate, setMovedDate] = useState("");
     const [movedMonth, setMovedMonth] = useState("");
     const [movedYear, setMovedYear] = useState("");
@@ -96,6 +98,7 @@ export default function JointApplicant() {
 
     const [isShePregnant, setIsShePregnant] = useState("no");
     const [showDeliveryDate, setShowDeliveryDate] = useState(false);
+
     const [deliveryDate, setDeliveryDate] = useState("");
     const [delDate, setDelDate] = useState("");
     const [delMonth, setDelMonth] = useState("");
@@ -125,6 +128,13 @@ export default function JointApplicant() {
 
     const [comments, setComments] = useState("none");
 
+    const [showInfoModal, setShowInfoModal] = useState(false);
+    const [modalInfo, setModalInfo] = useState("");
+
+    var birth_ = "";
+    var moved_ = "";
+    var delivry_ = "";
+
     const todayDate = new Date().toISOString().slice(0, 19); // produces 2023-02-25
 
     useEffect(() => {
@@ -151,18 +161,22 @@ export default function JointApplicant() {
             console.log(`Response from backend:- ${response.data.message}`)
 
         } catch (error) {
-
+            console.log(error)
         }
     }
 
-    var birth_ = "";
-    var moved_ = "";
-    let delivry_ = "";
-
     const findPostcodeAddress = (e) => {
         e.preventDefault();
+        setModalInfo('Sorry... Postcode auto-completion not available rightnow, please enter your address manually')
+        setShowInfoModal(true);
         setShowAddress(true);
-        alert('Sorry... \nPostcode search is not connected to UK Post Office API, \nplease enter the address manually')
+        // alert('Sorry... \nPostcode search is not connected to UK Post Office API, \nplease enter your address manually')
+    }
+
+    const formatDate = () => {
+        birth_ = dobYear + "-" + dobMonth + "-" + dobDate;
+        moved_ = movedYear + "-" + movedMonth + "-" + movedDate;
+        delivry_ = delYear + "-" + delMonth + "-" + delDate;
     }
 
     const handleSubmit = (e) => {
@@ -184,13 +198,6 @@ export default function JointApplicant() {
 
         }
 
-
-        const formatDate = () => {
-            birth_ = dobYear + "-" + dobMonth + "-" + dobDate;
-            moved_ = movedYear + "-" + movedMonth + "-" + movedDate;
-            delivry_ = delYear + "-" + delMonth + "-" + delDate;
-        }
-
         formatDate();
 
         handleConnectionCheckbox();
@@ -203,29 +210,38 @@ export default function JointApplicant() {
 
         const dobValid = validDate(birth_);
         if (dobValid) {
-            const timeStampedDOB = ConvertToTimeStamp(birth_);
-            console.log(birth_, timeStampedDOB)
-            setDateofbirth(timeStampedDOB);
+            // const timeStampedDOB = ConvertToTimeStamp(birth_);
+            birth_ = ConvertToTimeStamp(birth_);
+            console.log(`birth_ timestamp, ${birth_}`)
+            // setDateofbirth(timeStampedDOB);
         } else {
-            alert('Date of birth invalid date');
+            // alert('Date of birth invalid');
+            setModalInfo('Date of birth invalid')
+            setShowInfoModal(true);
         }
 
         const movedValid = validDate(moved_);
         if (movedValid) {
-            const timeStampedMovedInDate = ConvertToTimeStamp(moved_);
-            console.log(moved_, timeStampedMovedInDate)
-            setMovedInDate(timeStampedMovedInDate);
+            // const timeStampedMovedInDate = ConvertToTimeStamp(moved_);
+            moved_ = ConvertToTimeStamp(moved_);
+            console.log(`moved_ timestamp ${moved_}`)
+            // setMovedInDate(timeStampedMovedInDate);
         } else {
-            alert('Invalid Moved-In date');
+            // alert('Invalid Moved-In date');
+            setModalInfo('Invalid Moved-In date')
+            setShowInfoModal(true);
         }
 
         const delvyValid = validDate(delivry_);
         if (delvyValid) {
-            const timeStampedDelvyDate = ConvertToTimeStamp(delivry_);
-            console.log(delivry_, timeStampedDelvyDate)
-            setDeliveryDate(timeStampedDelvyDate);
+            // const timeStampedDelvyDate = ConvertToTimeStamp(delivry_);
+            delivry_ = ConvertToTimeStamp(delivry_);
+            console.log(`delivry_ timestamp ${delivry_}`)
+            // setDeliveryDate(timeStampedDelvyDate);
         } else {
-            alert('Invalid Moved-In date');
+            // alert('Invalid Moved-In date');
+            setModalInfo('Invalid Moved-In date')
+            setShowInfoModal(true);
         }
 
         const corresPostcodeValid = validPostcode(corresPostcode);
@@ -253,25 +269,43 @@ export default function JointApplicant() {
 
         if ((!fNameValid) || (!mNameValid) || (!sNameValid) || (!emailValid) || (!emailMatchesValid) ||
             (!ninoValid) || (!corresPostcodeValid) || (!telephoneValid) || (!workphoneValid) || (!mobileValid)) {
-            !fNameValid && alert('First Name error');
-            !mNameValid && alert('Middle Name error');
-            !sNameValid && alert('Surname error');
-            !ninoValid && alert('NINO error');
+            !fNameValid && setModalInfo('Error: First Name')
+            setShowInfoModal(true);
 
-            !telephoneValid && alert('Telephone number error');
-            !workphoneValid && alert('Work telephone number error');
-            !mobileValid && alert('Mobile number error');
-            !emailValid && alert('Email error');
-            !corresPostcodeValid && alert('Postcode error');
-            !emailMatchesValid && alert('Email match error');
+            !mNameValid && setModalInfo('Error: Middle Name')
+            setShowInfoModal(true);
+
+            !sNameValid && setModalInfo('Error: Surname')
+            setShowInfoModal(true);
+
+            !ninoValid && setModalInfo('Error: NINO')
+            setShowInfoModal(true);
+
+            !telephoneValid && setModalInfo('Error: Telephone number')
+            setShowInfoModal(true);
+
+            !workphoneValid && setModalInfo('Error: Work telephone number')
+            setShowInfoModal(true);
+
+            !mobileValid && setModalInfo('Error: Mobile number')
+            setShowInfoModal(true);
+
+            !emailValid && setModalInfo('Error: Email')
+            setShowInfoModal(true);
+
+            !corresPostcodeValid && setModalInfo('Error: Postcode')
+            setShowInfoModal(true);
+
+            !emailMatchesValid && setModalInfo('Error: Email does not match')
+            setShowInfoModal(true);
         } else {
             console.log(`Final Result passed :- ${relationship},
             ${title}, ${fName}, ${mName}, ${sName}, ${nameChange},
-            ${nINO}, ${dateofbirth}, ${sex},
+            ${nINO}, ${birth_}, ${sex},
             ${corresPostcode}, ${corresAddLine1}, ${corresAddLine2}, ${corresAddLine3}, ${corresAddLine4},
-            ${currentlyLiveWithYou}, ${movedInDate}, ${placedByLocalAuthrty}, ${localAuthrtyName},
+            ${currentlyLiveWithYou}, ${moved_}, ${placedByLocalAuthrty}, ${localAuthrtyName},
             ${telephone}, ${mobile}, ${workPhone}, ${email}, ${reEnterEmail},
-            ${ethnicity}, ${nationality}, ${sexOrient}, ${isShePregnant}, ${deliveryDate},
+            ${ethnicity}, ${nationality}, ${sexOrient}, ${isShePregnant}, ${delivry_},
             ${belief}, ${healthCondition}, ${preferedLanguage}, ${needInterpreter},
             ${tenure}, ${tenancyRefNo}, ${isYourPartner}, ${areYouWorker}, ${connection}, ${comments}, ${todayDate}`);
 
@@ -292,26 +326,26 @@ export default function JointApplicant() {
             clientJoint_surname: sName,
             clientJoint_namechange: nameChange,
             clientJoint_NINO: nINO,
-            clientJoint_dateofbirth: ConvertToTimeStamp(birth_),
+            clientJoint_dateofbirth: birth_,
             clientJoint_sex: sex,
 
             clientJoint_lived_abroad: livedAbroad,
-            clientJoint_moved_to_current_address: ConvertToTimeStamp(moved_),
+            clientJoint_moved_to_current_address: moved_,
 
             clientJoint_current_live_with_you: currentlyLiveWithYou,
             clientJoint_livingin_different_address: livingInDiffAddress,
 
-            clientJoint_correspondence_postcode: corresPostcode,
-            clientJoint_correspondence_address_line1: corresAddLine1,
-            clientJoint_correspondence_address_line2: corresAddLine2,
-            clientJoint_correspondence_address_line3: corresAddLine3,
-            clientJoint_correspondence_address_line4: corresAddLine4,
+            clientJoint_corres_postcode: corresPostcode,
+            clientJoint_corres_address_line1: corresAddLine1,
+            clientJoint_corres_address_line2: corresAddLine2,
+            clientJoint_corres_address_line3: corresAddLine3,
+            clientJoint_corres_address_line4: corresAddLine4,
 
             clientJoint_placed_by_local_authority: placedByLocalAuthrty,
             clientJoint_if_yes_local_authority: localAuthrtyName,
 
             clientJoint_is_she_pregnant: isShePregnant,
-            clientJoint_delivery_date: ConvertToTimeStamp(delivry_),
+            clientJoint_delivery_date: delivry_,
 
             clientJoint_telephone_home: telephone,
             clientJoint_telephone_mobile: mobile,
@@ -342,15 +376,27 @@ export default function JointApplicant() {
 
             const response = await axios.post(urL, JointApplicantInfo);
 
-            console.log(`Output from backend ${response.data.message}`)
+            console.log(`Output from backend ${response.data.Status_Reply}`)
 
             if (response.status === 200) {
-                console.log(`Status from backend ${response.status}`);
-                navigate('/account', { state: { jointName: fName } });
+                console.log(`Status from backend ${response.data.Status_Reply}`);
+                setModalInfo(response.data.Status_Reply)
+                setShowInfoModal(true);
+                setTimeout(() => {
+                    navigate('/account', { state: { jointName: fName } });
+                }, 5000);
+            } else {
+                // alert('Something went wrong, please try again...')
+                setModalInfo('Something went wrong, please try again...')
+                setShowInfoModal(true);
             }
+
+            navigate('/account', { state: { jointName: fName } });
 
         } catch (error) {
             console.log(error)
+            setModalInfo(response.data.Status_Reply)
+            setShowInfoModal(true);
         }
     }
 
@@ -643,8 +689,8 @@ export default function JointApplicant() {
                                             value='Living in different address'
                                             onChange={(e) => { let newEdit = { ...livingInDiffAddress }; newEdit = e.target.value; setLivingInDiffAddress(newEdit); setContinueApplication(false); setShowAddress(true) }}></MDBRadio>     {/* Spouse or partner living in different address */}
                                     </div>
+                                    <p className='m-2 mb-2' style={{ fontSize: '13px', color: '#dc3e3e' }}>You must select an option to conitue with your application</p>
                                 </div>
-                                <p className='mt-3 mb-2' style={{ fontSize: '13px' }}>You must select an option to conitue</p>
                             </div>
                         </div>
                     </MDBCardBody>
@@ -1230,15 +1276,19 @@ export default function JointApplicant() {
 
                         <form className='d-flex w-auto mt-3'>
                             <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
-                                disabled={continueApplication} onClick={handleSubmit}  >
+                                disabled={continueApplication} onClick={(e) => { handleSubmit(e) }}  >
                                 Save Joint Member</MDBBtn>
                             <MDBBtn className='me-1 btn btn-outline-secondary' style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='white'
-                                onClick={cancelEntry}>
+                                onClick={(e) => { cancelEntry(e) }}>
                                 Cancel</MDBBtn>
                         </form>
                     </MDBCardBody>
                 </MDBCard>
             </MDBContainer>
+
+            {
+                showInfoModal && <PopUp modalInfo={modalInfo} setShowInfoModal={setShowInfoModal}></PopUp>
+            }
         </React.Fragment >
     );
 }

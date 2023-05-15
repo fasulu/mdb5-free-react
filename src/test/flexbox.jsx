@@ -2,16 +2,11 @@ import React from 'react';
 
 import {
     MDBBtn,
-    MDBNavbar,
     MDBContainer,
     MDBDropdown,
-    MDBNavbarNav,
-    MDBNavbarItem,
-    MDBNavbarLink,
-    MDBDropdownMenu, MDBDropdownToggle, MDBDropdownItem,
-    MDBNavbarToggler,
-    MDBNavbarBrand,
-    MDBCollapse
+    MDBNavbarNav, MDBNavbarItem, MDBNavbarLink,
+    MDBDropdownMenu, MDBDropdownToggle, MDBDropdownItem
+
 } from 'mdb-react-ui-kit';
 
 export default function Flexbox() {

@@ -7,18 +7,22 @@ import { dates, months } from '../resources/datePicker';
 import { validDate, validPwd, pwdMatch, memDateMatch } from '../validations/Validator.jsx';
 import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 
+import PopUp from './popUp';
+
 import {
-    MDBContainer,
     MDBCard, MDBCardBody,
     MDBRow, MDBCol,
     MDBTypography,
-    MDBBtn,
-    MDBIcon
+    MDBRipple
 } from 'mdb-react-ui-kit';
 
-import BtnEdit from './btnEdit';
+import BtnEdit from './btnAccept';
 import BtnCancel from './btnCancel';
 import { refreshPage } from '../utility/refreshPage';
+
+import passwordIcon from "../../src/resources/images/password.png";
+import calenderIcon from "../../src/resources/images/calender.png";
+import BtnAccept from './btnAccept';
 
 export default function UpdateLogin() {
 
@@ -27,6 +31,14 @@ export default function UpdateLogin() {
     const findPrimaryIDInClientRefUrl = "http://localhost:9001/client/clientref/clientId/";
     const updatePwdUrl = "http://localhost:9001/client/chpwd/";
     const updateDateUrl = "http://localhost:9001/client/chmemdte/";
+    const msgLoginDetailUrl = "http://localhost:9001/message/newmsg/";
+
+    // const msgDate_ = new Date().toISOString().slice(0, 10);
+    const msgDate_ = ConvertToTimeStamp(new Date().toISOString().slice(0, 10));
+    const pwdSubject_ = "Password details updated"
+    const MemoDateSubject_ = "Memorable date details updated"
+    const From_ = "Housing Department"
+    const message_ = "Your login details successfully updated. This is an auto-generated message, do not reply or request any detail."
 
     const navigate = useNavigate();
 
@@ -36,13 +48,14 @@ export default function UpdateLogin() {
     const ageMax = new Date().getFullYear();        // year picker up to current year
     const ageMin = new Date().getFullYear() - 120;  // year picker 120 year back from current year
 
+
     const inputStyle = { maxHeight: '38px', maxWidth: '275px', marginLeft: '50px' };
     const iconStyle = { marginLeft: '5px', color: 'black', cursor: 'pointer' };
     const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const yearPickerStyle = { width: '80px', float: 'left', border: '5' };
     const btnSytle = { fontSize: '16px', width: 'auto', textTransform: 'none', marginLeft: '20px' };
-    const labelSubHeadStyle = { maxHeight: 'auto', fontSize: '18px', width: 'auto', color: '#464444', backgroundColor: '#e9f0f3' };
+    // const btnCancelSytle = { fontSize: '16px', color: 'blue', width: 'auto', textTransform: 'none', marginRight: '10px', backgroundColor:'#9cbaea'};
     const labelStyle = { maxHeight: 'auto', fontSize: '16px', width: 'auto', color: '#3b71ca' };
 
     const [refId, setRefId] = useState();
@@ -63,12 +76,19 @@ export default function UpdateLogin() {
     const [reEnterPwd, setReEnterPwd] = useState("");
     const [oldPwd, setOldPwd] = useState("")
 
+    const [showOption, setShowOption] = useState(true)
     const [showDateInput, setShowDateInput] = useState(false)
     const [showPwdInput, setShowPwdInput] = useState(false)
+
+    const [showInfoModal, setShowInfoModal] = useState(false);
+    const [modalInfo, setModalInfo] = useState("");
 
     useEffect(() => {
         fetchData();
 
+        setShowOption(true);
+        setShowDateInput(false);
+        setShowPwdInput(false);
     }, []);
 
     async function fetchData() {
@@ -107,28 +127,38 @@ export default function UpdateLogin() {
 
         // checking date
 
-        const date1 = (memYear + "-" + memMonth + "-" + memDate);
-        const date2 = (reEnterMemYear + "-" + reEnterMemMonth + "-" + reEnterMemDate);
-        setMemorableDate(date1);
-        setReenterMemorableDate(date2);
+        try {
 
-        console.log(memorableDate, reEntermemorableDate)
+            const date1 = (memYear + "-" + memMonth + "-" + memDate);
+            const date2 = (reEnterMemYear + "-" + reEnterMemMonth + "-" + reEnterMemDate);
+            setMemorableDate(date1);
+            setReenterMemorableDate(date2);
 
-        const date1Valid = validDate(date1);
-        const date2Valid = validDate(date2);
-        const memMatchsValid = memDateMatch(date1, date2);
+            console.log(memorableDate, reEntermemorableDate)
 
-        console.log(`Validation result is memorable date ${memMatchsValid}`);
+            const date1Valid = validDate(date1);
+            const date2Valid = validDate(date2);
+            const memMatchsValid = memDateMatch(date1, date2);
 
-        if ((!memMatchsValid) || (!date1Valid) || (!date2Valid)) {
+            console.log(`Validation result is memorable date ${memMatchsValid}`);
 
-            !date1Valid && alert('Not a valid date')
-            !date2Valid && alert('Re-entered date is not valid')
-            !memMatchsValid && alert('Memorable dates not match');
-        } else {
-            console.log(`FINAL memorable date result passed ${date1}, ${date2}`);
-            const timeStampedDate=ConvertToTimeStamp(date2)
-            saveDate(timeStampedDate)
+            if ((!memMatchsValid) || (!date1Valid) || (!date2Valid)) {
+
+                !date1Valid && setModalInfo("Error: Not a valid date")
+                setShowInfoModal(true);
+                !date2Valid && setModalInfo("Error: Re-entered date is not valid")
+                setShowInfoModal(true);
+                !memMatchsValid && setModalInfo("Error: Memorable dates not match")
+                setShowInfoModal(true);
+            } else {
+                console.log(`FINAL memorable date result passed ${date1}, ${date2}`);
+                const timeStampedDate = ConvertToTimeStamp(date2)
+                saveDate(timeStampedDate)
+            }
+        } catch (error) {
+            setModalInfo("Verify your data")
+            setShowInfoModal(true);
+            console.log(error)
         }
     }
 
@@ -137,20 +167,44 @@ export default function UpdateLogin() {
 
         try {
             const dateInfo = {
-            newDate: date_,
-            oldPwd: oldPwd,
-        };
-        
-        console.table(dateInfo)
-        
-        const response = await axios.put(updateDateUrl + refId, dateInfo, {})
-        console.log(`Output from backend ${response.data.message}`)
-        
-        refreshPage(response.data.message);
+                newDate: date_,
+                oldPwd: oldPwd,
+            };
+
+            console.table(dateInfo)
+
+            const response = await axios.put(updateDateUrl + refId, dateInfo, {})
+            console.log(`Output from backend ${response.data.message}`)
+
+            if (response.data.Status_Reply === "Success") {
+
+                console.log(clientId)
+
+                const messageInfo = {
+                    clientId: clientId,
+                    messageDate: msgDate_,
+                    messageSubject: MemoDateSubject_,
+                    messageFrom: From_,
+                    message: message_,
+                    messageStatus: false
+                }
+
+                console.table(messageInfo)
+
+                const result = sendMessage(messageInfo);
+
+                setModalInfo("Successfully updated")
+                setShowInfoModal(true);
+
+            } else {
+                setModalInfo("Invalid information")
+                setShowInfoModal(true);
+            }
+
         } catch (error) {
             console.log(error)
         }
-        
+
     }
 
     const handlePassword = (e) => {
@@ -158,64 +212,166 @@ export default function UpdateLogin() {
         e.preventDefault();
         console.log(`Im in save password`);
 
-        const pwd1Valid = validPwd(password);
-        const pwd2Valid = validPwd(reEnterPwd);
-        const oldPwdValid = validPwd(oldPwd);
-        const pwdMatchValid = pwdMatch(password, reEnterPwd);
+        try {
 
-        console.log(`Validation result is pwd ${pwdMatchValid}`);
+            const pwd1Valid = validPwd(password);
+            const pwd2Valid = validPwd(reEnterPwd);
+            const oldPwdValid = validPwd(oldPwd);
+            const pwdMatchValid = pwdMatch(password, reEnterPwd);
 
-        if ((!pwd1Valid) || (!pwd2Valid) || (!pwdMatchValid) || (!oldPwdValid)) {
+            console.log(`Validation result is pwd ${pwdMatchValid}`);
 
-            !pwd1Valid && alert('Invalid password');
-            !pwd2Valid && alert('Invalid password');
-            !oldPwdValid && alert('Old password invalid');
-            !pwdMatchValid && alert('Password match error');
-        } else {
-            console.log(`FINAL password result passed ${password}, ${reEnterPwd}, ${oldPwd}`);
-            savePassword();
+            if ((!pwd1Valid) || (!pwd2Valid) || (!pwdMatchValid) || (!oldPwdValid)) {
+
+                !pwd1Valid && setModalInfo("Error: Invalid password")
+                setShowInfoModal(true);
+                !pwd2Valid && setModalInfo("Error: Invalid password")
+                setShowInfoModal(true);
+                !oldPwdValid && setModalInfo("Error: Old password invalid")
+                setShowInfoModal(true);
+                !pwdMatchValid && setModalInfo("Error: Password match error")
+                setShowInfoModal(true);
+            } else {
+                console.log(`FINAL password result passed ${password}, ${reEnterPwd}, ${oldPwd}`);
+                savePassword();
+            }
+        } catch (error) {
+            setModalInfo("Verify your data")
+            setShowInfoModal(true);
+            console.log(error)
         }
+
     }
 
     const savePassword = async () => {
         console.log('Im in save password');
 
-        const passwordInfo = {
-            newPwd: password,
-            oldPwd: oldPwd,
-        };
+        try {
 
-        console.table(passwordInfo)
+            const passwordInfo = {
+                newPwd: password,
+                oldPwd: oldPwd,
+            };
 
-        const response = await axios.put(updatePwdUrl + refId, passwordInfo, {})
-        console.log(`Output from backend ${response.data.message}`)
+            console.table(passwordInfo)
 
-        refreshPage(response.data.message);
+            const response = await axios.put(updatePwdUrl + refId, passwordInfo, {})
+            console.log(`Output from backend ${response.data.message}`)
 
-    }
+            if (response.data.Status_Reply === "Success") {
 
-    const showDateFields = (e) => {
-        e.preventDefault();
-        if (showDateInput) {
-            setShowDateInput(false)
-        } else {
-            setShowDateInput(true);
+                console.log(clientId)
+
+                const messageInfo = {
+                    clientId: clientId,
+                    messageDate: msgDate_,
+                    messageSubject: pwdSubject_,
+                    messageFrom: From_,
+                    message: message_,
+                    messageStatus: false
+                }
+
+                console.table(messageInfo)
+
+                const result = sendMessage(messageInfo);
+
+                setModalInfo("Successfully updated")
+                setShowInfoModal(true);
+                setTimeout(() => {
+                    refreshPage();
+                }, 5000);
+
+            } else {
+                setModalInfo("Invalid information")
+                setShowInfoModal(true);
+            }
+        } catch (error) {
+            setModalInfo(response.data.message)
+            setShowInfoModal(true);
         }
     }
 
-    const showPwdFields = (e) => {
-        e.preventDefault();
-        if (showPwdInput) {
-            setShowPwdInput(false)
-        } else {
-            setShowPwdInput(true);
+    const sendMessage = async (messageInfo) => {
+
+        console.log("Iam in send message")
+
+        try {
+            console.table(messageInfo)
+
+            const response = await axios.post(msgLoginDetailUrl, messageInfo)
+            if (response) {
+                console.log(response.data.Status_Reply);
+                return response.data.Status_Reply;
+            } else {
+                return response.data.Status_Reply;
+            }
+        } catch (error) {
+            console.log(error)
+            setModalInfo(response.data.Status_Reply)
+            setShowInfoModal(true);
         }
+
     }
 
-    return (
+    const OptionSelector = (
         <React.Fragment>
-            {/* <MDBContainer className='ps-5 pt-3' alignment='center'  > */}
-            <MDBCard className='w-100 mx-auto ps-5' style={{ backgroundColor: '#f7f2f287' }} >
+            <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
+                <MDBTypography className='card-header'
+                    style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
+                    <strong>Edit Login Details</strong>
+                </MDBTypography>
+                <MDBCardBody className='d-flex justify-content-center'>
+                    <MDBRow>
+                        <MDBCol className='size-md mx-2'>
+                            <MDBRow>
+                                <MDBRipple
+                                    className='bg-image hover-overlay hover-shadow-0-strong rounded'
+                                    rippleTag='div'
+                                    rippleColor='light' >
+                                    <img src={passwordIcon} style={{ maxWidth: '100px' }} />
+                                    <a href='#!'>
+                                        <div className='mask' style={{ backgroundColor: 'rgba(254, 254, 254, 0.4)' }}
+                                            onClick={(e) => { setShowPwdInput(true); setShowOption(false); setShowDateInput(false); }}>
+                                        </div>
+                                    </a>
+                                </MDBRipple>
+                            </MDBRow>
+                            <MDBRow>
+                                <MDBTypography style={{ textAlign: 'center', paddingTop: '10px', fontSize: '16px', fontWeight: 'bold' }}>
+                                    Password
+                                </MDBTypography>
+                            </MDBRow>
+                        </MDBCol>
+
+                        <MDBCol className='size-md mx-2'>
+                            <MDBRow>
+                                <MDBRipple
+                                    className='bg-image hover-overlay hover-shadow-0-strong rounded'
+                                    rippleTag='div'
+                                    rippleColor='light' >
+                                    <img src={calenderIcon} style={{ maxWidth: '100px' }} />
+                                    <a href='#!'>
+                                        <div className='mask' style={{ backgroundColor: 'rgba(254, 254, 254, 0.4)' }}
+                                            onClick={(e) => { setShowDateInput(true); setShowPwdInput(false); setShowOption(false); }}>
+                                        </div>
+                                    </a>
+                                </MDBRipple>
+                            </MDBRow>
+                            <MDBRow>
+                                <MDBTypography style={{ textAlign: 'center', paddingTop: '10px', fontSize: '16px', fontWeight: 'bold' }}>
+                                    Memorable Date
+                                </MDBTypography>
+                            </MDBRow>
+                        </MDBCol>
+                    </MDBRow>
+                </MDBCardBody>
+            </MDBCard>
+        </React.Fragment >
+    )
+
+    const ShowDateFields = (
+        <React.Fragment>
+            <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
                 <MDBTypography className='card-header'
                     style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
                     <strong>Edit Login Details</strong>
@@ -227,149 +383,172 @@ export default function UpdateLogin() {
                         <MDBCol className='size=md'>
 
                             <MDBTypography className='card-header'
-                                style={labelSubHeadStyle} >
-                                <strong>Edit your password</strong>
-                                <MDBIcon style={iconStyle} fas icon='pencil-alt'
-                                    onClick={(e) => {  setShowPwdInput(true); setShowDateInput(false) }}  />
+                                style={labelStyle} >
+                                <strong>Enter your new memorable date</strong>
                             </MDBTypography>
+                            <div className='btn-group mx-5'>
+                                <select style={datePickerStyle}
+                                    className="form-select rounded"
+                                    value={memDate}
+                                    onChange={(e) => { let newEdit = { ...memDate }; newEdit = e.target.value; setMemDate(newEdit) }} >
+                                    {datesData.map((option) => (
+                                        <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
+                                    ))}
+                                </select>
 
-                            {showPwdInput &&
-                                <>
-                                    <MDBTypography className='card-header'
-                                        style={labelStyle} >
-                                        <strong>Enter your new password</strong>
-                                    </MDBTypography>
-                                    <input style={inputStyle} className='form-control' type='password'
-                                        minLength={6} maxLength={10} value={password} onChange={(e) => { let newEdit = { ...password }; newEdit = e.target.value; setPassword(newEdit) }}></input>
-                                    <MDBTypography className='card-header'
-                                        style={labelStyle} >
-                                        <strong>Enter your new password again*</strong>
-                                    </MDBTypography>
-                                    <input style={inputStyle} className='form-control' type='password'
-                                        minLength={6} maxLength={10} value={reEnterPwd} onChange={(e) => { let newEdit = { ...reEnterPwd }; newEdit = e.target.value; setReEnterPwd(newEdit) }}></input>
+                                <select style={monthPickerStyle}
+                                    className="form-select rounded"
+                                    value={memMonth}
+                                    onChange={(e) => { let newEdit = { ...memMonth }; newEdit = e.target.value; setMemMonth(newEdit) }} >
+                                    {monthsData.map((option) => (
+                                        <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
+                                    ))}
+                                </select>
 
-                                    <MDBTypography className='card-header'
-                                        style={labelStyle} >
-                                        <strong>Enter your old password*</strong>
-                                    </MDBTypography>
-                                    <input style={inputStyle} className='form-control' type='password'
-                                        minLength={6} maxLength={10} value={oldPwd} onChange={(e) => { let newEdit = { ...oldPwd }; newEdit = e.target.value; setOldPwd(newEdit) }}></input>
+                                <input className='form-control rounded'
+                                    style={yearPickerStyle}
+                                    type='number'
+                                    min={ageMin}
+                                    max={ageMax}
+                                    placeholder='year'
+                                    value={memYear}
+                                    onChange={(e) => { let newEdit = { ...memYear }; newEdit = e.target.value; setMemYear(newEdit) }} >
+                                </input>
+                            </div>
+                            <MDBTypography className='card-header'
+                                style={labelStyle} >
+                                <strong>Enter your new memorable date again*</strong>
+                            </MDBTypography>
+                            <div className='btn-group mx-5'>
+                                <select style={datePickerStyle}
+                                    className="form-select rounded"
+                                    value={reEnterMemDate}
+                                    onChange={(e) => { let newEdit = { ...reEnterMemDate }; newEdit = e.target.value; setReenterMemDate(newEdit) }} >
+                                    {datesData.map((option) => (
+                                        <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
+                                    ))}
+                                </select>
 
-                                    <MDBRow className='p-2'>
-                                        <form className='d-flex w-auto p-2'>
-                                            <MDBBtn style={btnSytle}
-                                                onClick={handlePassword}>
-                                                Save Password
-                                            </MDBBtn>
-                                        </form>
-                                    </MDBRow>
-                                </>
-                            }
+                                <select style={monthPickerStyle}
+                                    className="form-select rounded"
+                                    value={reEnterMemMonth}
+                                    onChange={(e) => { let newEdit = { ...reEnterMemMonth }; newEdit = e.target.value; setReenterMemMonth(newEdit) }} >
+                                    {monthsData.map((option) => (
+                                        <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
+                                    ))}
+                                </select>
+                                <input className='form-control rounded'
+                                    style={yearPickerStyle}
+                                    type='number'
+                                    min={ageMin}
+                                    max={ageMax}
+                                    placeholder='year'
+                                    value={reEnterMemYear}
+                                    onChange={(e) => { let newEdit = { ...reEnterMemYear }; newEdit = e.target.value; setReenterMemYear(newEdit) }} >
+                                </input>
+                            </div>
+
+                            <MDBTypography className='card-header'
+                                style={labelStyle} >
+                                <strong>Enter your password*</strong>
+                            </MDBTypography>
+                            <input style={inputStyle} className='form-control' type='password'
+                                minLength={6} maxLength={10} value={oldPwd} onChange={(e) => { let newEdit = { ...oldPwd }; newEdit = e.target.value; setOldPwd(newEdit) }}></input>
+
+                            <MDBRow className='p-2'>
+                                <form className='d-flex w-auto p-2'>
+                                    <BtnAccept btnStyle={btnSytle}
+                                        onClick={(e) => { if (window.confirm("Update Memorable date?")) handleDate(e) }}>
+                                        Save Memorable Date
+                                    </BtnAccept>
+                                    <BtnAccept btnStyle={btnSytle} color='secondary'
+                                        onClick={(e) => { gotoAccountPage(e) }}>
+                                        Cancel
+                                    </BtnAccept>
+                                </form>
+                            </MDBRow>
                         </MDBCol>
                     </MDBRow>
                 </MDBCardBody>
+            </MDBCard>
+        </React.Fragment >
+    )
+
+    const ShowPwdFields = (
+        <React.Fragment>
+            <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
+                <MDBTypography className='card-header'
+                    style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
+                    <strong>Edit Login Details</strong>
+                </MDBTypography>
 
                 <MDBCardBody >
-                    {/**********  Memorable date */}
-                    <MDBRow >
-                        <MDBCol className='size=md '>
-                            <MDBTypography className='card-header'
-                                style={labelSubHeadStyle} >
-                                <strong>Edit your memorable date</strong>
-                                <MDBIcon style={iconStyle} fas icon='pencil-alt'
-                                    onClick={(e) => { setShowDateInput(true); setShowPwdInput(false) }} />
-                            </MDBTypography>
-                            {showDateInput &&
-                                <>
-                                    <MDBTypography className='card-header'
-                                        style={labelStyle} >
-                                        <strong>Enter your new memorable date</strong>
-                                    </MDBTypography>
-                                    <div className='btn-group mx-5'>
-                                        <select style={datePickerStyle}
-                                            className="form-select rounded"
-                                            value={memDate}
-                                            onChange={(e) => { let newEdit = { ...memDate }; newEdit = e.target.value; setMemDate(newEdit) }} >
-                                            {datesData.map((option) => (
-                                                <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
-                                            ))}
-                                        </select>
+                    <MDBTypography className='card-header'
+                        style={labelStyle} >
+                        <strong>Enter your new password</strong>
+                    </MDBTypography>
+                    <input style={inputStyle} className='form-control' type='password'
+                        minLength={6} maxLength={10} value={password} onChange={(e) => { let newEdit = { ...password }; newEdit = e.target.value; setPassword(newEdit) }}></input>
+                    <MDBTypography className='card-header'
+                        style={labelStyle} >
+                        <strong>Enter your new password again*</strong>
+                    </MDBTypography>
+                    <input style={inputStyle} className='form-control' type='password'
+                        minLength={6} maxLength={10} value={reEnterPwd} onChange={(e) => { let newEdit = { ...reEnterPwd }; newEdit = e.target.value; setReEnterPwd(newEdit) }}></input>
 
-                                        <select style={monthPickerStyle}
-                                            className="form-select rounded"
-                                            value={memMonth}
-                                            onChange={(e) => { let newEdit = { ...memMonth }; newEdit = e.target.value; setMemMonth(newEdit) }} >
-                                            {monthsData.map((option) => (
-                                                <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
-                                            ))}
-                                        </select>
+                    <MDBTypography className='card-header'
+                        style={labelStyle} >
+                        <strong>Enter your old password*</strong>
+                    </MDBTypography>
+                    <input style={inputStyle} className='form-control' type='password'
+                        minLength={6} maxLength={10} value={oldPwd} onChange={(e) => { let newEdit = { ...oldPwd }; newEdit = e.target.value; setOldPwd(newEdit) }}></input>
 
-                                        <input className='form-control rounded'
-                                            style={yearPickerStyle}
-                                            type='number'
-                                            min={ageMin}
-                                            max={ageMax}
-                                            placeholder='year'
-                                            value={memYear}
-                                            onChange={(e) => { let newEdit = { ...memYear }; newEdit = e.target.value; setMemYear(newEdit) }} >
-                                        </input>
-                                    </div>
-                                    <MDBTypography className='card-header'
-                                        style={labelStyle} >
-                                        <strong>Enter your new memorable date again*</strong>
-                                    </MDBTypography>
-                                    <div className='btn-group mx-5'>
-                                        <select style={datePickerStyle}
-                                            className="form-select rounded"
-                                            value={reEnterMemDate}
-                                            onChange={(e) => { let newEdit = { ...reEnterMemDate }; newEdit = e.target.value; setReenterMemDate(newEdit) }} >
-                                            {datesData.map((option) => (
-                                                <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
-                                            ))}
-                                        </select>
-
-                                        <select style={monthPickerStyle}
-                                            className="form-select rounded"
-                                            value={reEnterMemMonth}
-                                            onChange={(e) => { let newEdit = { ...reEnterMemMonth }; newEdit = e.target.value; setReenterMemMonth(newEdit) }} >
-                                            {monthsData.map((option) => (
-                                                <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
-                                            ))}
-                                        </select>
-                                        <input className='form-control rounded'
-                                            style={yearPickerStyle}
-                                            type='number'
-                                            min={ageMin}
-                                            max={ageMax}
-                                            placeholder='year'
-                                            value={reEnterMemYear}
-                                            onChange={(e) => { let newEdit = { ...reEnterMemYear }; newEdit = e.target.value; setReenterMemYear(newEdit) }} >
-                                        </input>
-                                    </div>
-
-                                    <MDBTypography className='card-header'
-                                        style={labelStyle} >
-                                        <strong>Enter your old password*</strong>
-                                    </MDBTypography>
-                                    <input style={inputStyle} className='form-control' type='password'
-                                        minLength={6} maxLength={10} value={oldPwd} onChange={(e) => { let newEdit = { ...oldPwd }; newEdit = e.target.value; setOldPwd(newEdit) }}></input>
-
-                                    <MDBRow className='p-2'>
-                                        <form className='d-flex w-auto p-2'>
-                                            <MDBBtn style={btnSytle}
-                                                onClick={handleDate}>
-                                                Save Memorable Date
-                                            </MDBBtn>
-                                        </form>
-                                    </MDBRow>
-                                </>
-                            }
-                        </MDBCol>
+                    <MDBRow className='p-2'>
+                        <form className='d-flex w-auto p-2'>
+                            <BtnAccept btnStyle={btnSytle}
+                                onClick={(e) => { if (window.confirm("Update password?")) handlePassword(e) }}>
+                                Save Password
+                            </BtnAccept>
+                            <BtnAccept btnStyle={btnSytle} color='secondary'
+                                onClick={(e) => { gotoAccountPage(e) }}>
+                                Cancel
+                            </BtnAccept>
+                        </form>
                     </MDBRow>
                 </MDBCardBody>
 
             </MDBCard>
-            {/* </MDBContainer > */}
+        </React.Fragment >
+    )
+
+    const gotoAccountPage = (e) => {
+        setModalInfo("Update cancelled")
+        setShowInfoModal(true);
+        setTimeout(() => {
+            refreshPage();
+        }, 5000);
+    }
+
+    return (
+        <React.Fragment>
+            {
+                showOption && OptionSelector
+            }
+
+            {
+                showPwdInput && ShowPwdFields
+            }
+
+            {
+                showDateInput && ShowDateFields
+            }
+            {
+                showInfoModal &&
+                <PopUp
+                    modalInfo={modalInfo}
+                    setShowInfoModal={setShowInfoModal}>
+                </PopUp>
+            }
         </React.Fragment >
     );
 }

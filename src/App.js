@@ -5,14 +5,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { UserContext } from './userContext/UserContext';
 
+import SearchOptions from './components/searchOptions'
 // import Boxes from './test/Boxes';
-// import ContainerRowCol from './test/ContainerRowCol';
-// import Login from './components/login';
-// import Registerclient from './components/registerclient';
-// import HeaderTemp from './test/headerTemp';
-// import TestSecondNavbar from './test/testSecondNavbar';
-// import Flexbox from './test/flexbox';
-// import RegisterYourHousehold from './components/registerYourHousehold';
 
 import HomePage from './pages/homePage';
 import NINOCheckPage from './pages/nINOCheckPage';
@@ -56,16 +50,16 @@ function App() {
               <Route path="nino" element={<NINOCheckPage />} />
               <Route path="account" element={<AccountPage />} />
               <Route path="primary" element={<PrimaryApplicantPage />} />
-              <Route path="joint" element={<JointApplicantPage />} />
-              <Route path="member" element={<HouseholdMemberPage />} />
-              <Route path="updatecontact" element={<UpdateContactPage />} />
-              <Route path="jointdetail" element={<JointApplicantPage />} />
-              <Route path="jointapplicantedit" element={<JointApplicantEditPage />} />
-              <Route path="updatejointdetail" element={<HouseholdMemberPage />} />
-              <Route path="memberlist" element={<MemberListPage />} />
-              <Route path="memberedit" element={<MemberEditPage />} />
-              <Route path="updatememberdetail" element={<HouseholdMemberPage />} />
-              <Route path="updatelogin" element={<UpdateLoginPage />} />
+              {/* <Route path="joint" element={<JointApplicantPage />} /> */}
+              {/* <Route path="member" element={<HouseholdMemberPage />} /> */}
+              {/* <Route path="updatecontact" element={<UpdateContactPage />} /> */}
+              {/* <Route path="jointdetail" element={<JointApplicantPage />} /> */}
+              {/* <Route path="jointapplicantedit" element={<JointApplicantEditPage />} /> */}
+              {/* <Route path="updatejointdetail" element={<HouseholdMemberPage />} /> */}
+              {/* <Route path="memberlist" element={<MemberListPage />} /> */}
+              {/* <Route path="memberedit" element={<MemberEditPage />} /> */}
+              {/* <Route path="updatememberdetail" element={<HouseholdMemberPage />} /> */}
+              {/* <Route path="updatelogin" element={<UpdateLoginPage />} /> */}
               <Route path="accessibility" element={<AccessibilityPage />} />
               <Route path="help" element={<HelpPage />} />
               <Route path="whatisnext" element={<WhatIsNextPage />} />
@@ -76,6 +70,8 @@ function App() {
               <Route path="repair" element={<RepairPage />} />
               <Route path="guide" element={<GuidePage />} />
               <Route path="keyfacts" element={<KeyFactsPage />} />
+              
+              <Route path="search" element={<SearchOptions />} />
 
               <Route path="/" element={<HomePage />} />
               <Route path="*" element={<PageNotFound />} />

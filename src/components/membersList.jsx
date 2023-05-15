@@ -18,15 +18,17 @@ import {
 import { ToCamelCase } from '../validations/Validator'
 import HouseholdMember from './householdMember';
 import HouseholdMemberEdit from './householdMemberEdit';
+import addIcon from '../../src/resources/images/familyAdd.png'
 
 export default function MembersList() {
 
   const { clientId, setClientId } = useContext(UserContext);
 
-
   const primaryClientIdUrl = "http://localhost:9001/member/clientid/";
 
   const inputStyle1 = { fontSize: '16px', width: '250px', color: '#464646' };
+
+  const addIconTitle = "Add member";
 
   const [membersList, setMembersList] = useState([])
 
@@ -82,7 +84,7 @@ export default function MembersList() {
   }
 
   return (
-    <>
+    <React.Fragment>
       {
         showMemberToAdd && <HouseholdMember></HouseholdMember>
       }
@@ -95,12 +97,36 @@ export default function MembersList() {
         showMemberToList &&
 
         <React.Fragment>
-          <MDBContainer className='' >
+          <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
+            <MDBCol>
+              <MDBTypography className='card-header'
+                style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
+                <strong>Household Member List</strong>
+                <span style={{ float: 'right' }}>
+                  <MDBRipple
+                    className='bg-image hover-overlay bg-image hover-zoom'
+                    rippleTag='div'
+                    rippleColor='light' >
+                    <img src={addIcon} style={{ maxWidth: '37px' }}/>
+                    <a href='#!'>
+                      <div className='mask' style={{ backgroundColor: 'rgba(251, 251, 251, 0.2)' }}
+                        alt={addIconTitle} title={addIconTitle}
+                        onClick={(e) => { setShowMemberToAdd(true); setShowMemberToList(false) }}>
+                      </div>
+                    </a>
+                  </MDBRipple>
+                </span>
+              </MDBTypography>
+            </MDBCol>
+            <MDBCol>
+
+            </MDBCol>
+
             {membersList.map((memberList) => {
               return (
                 <MDBCard className='m-2'
                   key={memberList._id} item='true'
-                  style={{ backgroundColor: '#e0e0e0' }} >
+                  style={{ backgroundColor: '#f9f7f7' }} >
                   {<MDBRipple rippleColor='dark' rippleTag='div' className='hover-overlay'>
                     <MDBCardBody >
                       <MDBRow alignment='center'>
@@ -109,7 +135,7 @@ export default function MembersList() {
                             style={{ cursor: 'pointer', fontSize: '16px', color: '#1a82db' }} >
                             <strong onClick={(e) => openMember(e.target)}>{(memberList._id)}</strong>
                           </MDBTypography>
-                          <MDBTypography style={inputStyle1}>Name: <strong>{(memberList.clientOtherHousehold_firstname)} {(memberList.clientOtherHousehold_surname)}</strong></MDBTypography>
+                          <MDBTypography style={inputStyle1}>Name: <strong>{ToCamelCase(memberList.clientOtherHousehold_firstname)} {ToCamelCase(memberList.clientOtherHousehold_surname)}</strong></MDBTypography>
                           <MDBTypography style={inputStyle1}>Date of birth: <strong>{ConvertToLocalDate(memberList.clientOtherHousehold_dateofbirth)}</strong></MDBTypography>
                           <MDBTypography style={inputStyle1}>Relationship:  <strong>{(memberList.clientOtherHousehold_relationshipWithClient)}</strong></MDBTypography>
                         </MDBCol>
@@ -125,9 +151,9 @@ export default function MembersList() {
                 </MDBCard>
               );
             })}
-          </MDBContainer >
+          </MDBCard>
         </React.Fragment >
       }
-    </>
+    </React.Fragment >
   );
 }

@@ -18,7 +18,7 @@ export default function NavbarSecondary(props) {
     const [loggedIn, setLoggedIn] = useState(props.loginStatus);
 
     const element1 = (
-        <>
+        <React.Fragment>
             <MDBNavbarNav className='mr-auto mb-2 mb-lg-0'>
                 <MDBNavbarItem>
                     <MDBNavbarLink style={{ color: 'black', fontWeight: 'bold' }}
@@ -47,11 +47,11 @@ export default function NavbarSecondary(props) {
                     </MDBDropdown>
                 </MDBNavbarItem>
             </MDBNavbarNav>
-        </>
+        </React.Fragment >
     )
 
     const element2 = (
-        <>
+        <React.Fragment>
             <MDBNavbarNav className='mr-auto mb-2 mb-lg-0'>
                 <MDBNavbarItem>
                     <MDBNavbarLink style={{ color: 'black', fontWeight: 'bold' }}
@@ -80,15 +80,15 @@ export default function NavbarSecondary(props) {
                     </MDBDropdown>
                 </MDBNavbarItem>
             </MDBNavbarNav>
-            <form className='d-flex w-auto'>
+            {/* <form className='d-flex w-auto'>
                 <MDBBtn style={{ fontSize: '14px', width: 'auto', textTransform: 'none' }} color='primary me-1'>
                     <MDBIcon fas icon='search' className='me-2' />
                     Properties and recent lets search</MDBBtn>
 
                 <MDBBtn style={{ fontSize: '14px', width: 'auto', textTransform: 'none' }} color='primary' >
                     <MDBIcon fas icon='check' className='me-2' />My to do list</MDBBtn>
-            </form>
-        </>
+            </form> */}
+        </React.Fragment >
     )
 
     return (

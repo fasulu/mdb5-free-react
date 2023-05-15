@@ -340,7 +340,7 @@ export default function HouseholdMember() {
 
                                     {/* ********** Above person's First/Surname  */}
                                     {spouseAnotherMember &&
-                                        <>
+                                        <React.Fragment>
                                             <div className=" mt-2 p-2 help-content border border-grey rounded">
 
                                                 <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Above person's spouse first name and surname *</strong></p>
@@ -350,7 +350,7 @@ export default function HouseholdMember() {
                                                 </div>
 
                                             </div>
-                                        </>
+                                        </React.Fragment >
                                     }
 
                                 </div>

@@ -1,16 +1,19 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from "axios";
 import { UserContext } from "../userContext/UserContext"
+import { useNavigate } from "react-router-dom";
 
-import { areyous } from '../resources/areyou';
-import { tenures } from '../resources/tenure';
 import { ethnicities } from '../resources/ethnicity';
 import { nationalities } from '../resources/nationality';
 import { sexOrients } from '../resources/sexOrient';
 import { beliefs } from '../resources/belief';
 import { dates, months } from '../resources/datePicker';
 import { validEmail, validName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch, validNINO, validDate } from '../validations/Validator.jsx';
-import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
+import { ConvertToTimeStamp } from '../utility/dateConvertion';
+import BtnAccept from './btnAccept.jsx';
+
+import { refreshPage } from '../utility/refreshPage';
+import PopUp from './popUp';
 
 import {
     MDBContainer,
@@ -20,9 +23,10 @@ import {
     MDBBtn,
     MDBRadio
 } from 'mdb-react-ui-kit';
-import { refreshPage } from '../utility/refreshPage';
 
 export default function HouseholdMember() {
+
+    const navigate = useNavigate();
 
     const { clientId, setClientId } = useContext(UserContext);
 
@@ -34,7 +38,6 @@ export default function HouseholdMember() {
     const monthsData = months;
 
     const addMemberUrl = "http://localhost:9001/member/addclientmember";
-    
 
     const yearMax = new Date().getFullYear();        // year picker up to current year
     const yearMin = new Date().getFullYear() - 120;  // year picker 120 year back from current year
@@ -44,6 +47,8 @@ export default function HouseholdMember() {
     const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const yearPickerStyle = { width: '80px', float: 'left', border: '5' };
+
+    const btnSytle = { fontSize: '16px', width: 'auto', textTransform: 'capitalize', marginRight: '10px', backgroundColor: '#3b71ca' };
 
     const [showAddress, setShowAddress] = useState(false);
     const [showLocalAuthority, setShowLocalAuthority] = useState(false);
@@ -101,6 +106,9 @@ export default function HouseholdMember() {
     const [areYouWorker, setAreYouWorker] = useState("no");
     const [comments, setComments] = useState("none");
 
+    const [showInfoModal, setShowInfoModal] = useState(false);
+    const [modalInfo, setModalInfo] = useState("");
+
     const todayDate = new Date().toISOString().slice(0, 19); // produces 2023-02-25
 
     useEffect(() => {
@@ -123,8 +131,9 @@ export default function HouseholdMember() {
 
     const findPostcodeAddress = (e) => {
         e.preventDefault();
+        setModalInfo('Sorry... Postcode auto-completion not available rightnow, please enter your address manually')
+        setShowInfoModal(true);
         setShowAddress(true);
-        alert('Sorry... \nPostcode search is not connected to UK Post Office API, \nplease enter the address manually')
     }
 
     var birth_ = "";
@@ -143,38 +152,44 @@ export default function HouseholdMember() {
 
         const birthValid = validDate(birth_);
         if (birthValid) {
-            const timeStampedDOB = ConvertToTimeStamp(birth_);
-            console.log(birth_, timeStampedDOB)
-            setdateofbirth(timeStampedDOB);
+            // const timeStampedDOB = ConvertToTimeStamp(birth_);
+            birth_ = ConvertToTimeStamp(birth_);
+            console.log(birth_)
+            // setdateofbirth(timeStampedDOB);
         } else {
-            alert(`Date of birth invalid date`)
+            setModalInfo('Date of birth invalid')
+            setShowInfoModal(true);
         }
 
         const movedValid = validDate(moved_);
         if (movedValid) {
-            const timeStampedMovedInDate = ConvertToTimeStamp(moved_);
-            console.log(moved_, timeStampedMovedInDate)
-            setMovedInDate(timeStampedMovedInDate);
+            // const timeStampedMovedInDate = ConvertToTimeStamp(moved_);
+            moved_ = ConvertToTimeStamp(moved_);
+            console.log(moved_)
+            // setMovedInDate(timeStampedMovedInDate);
         } else {
-            alert(`Invalid moved in date`)
+            setModalInfo('Invalid Moved-In date')
+            setShowInfoModal(true);
         }
 
         if (isShePregnant == "yes") {
             const delValid = validDate(del_);
             if (delValid) {
                 const timeStampedDelDate = ConvertToTimeStamp(del_);
-                console.log(del_, timeStampedDelDate)
-                setDeliveryDate(timeStampedDelDate);
+                del_ = ConvertToTimeStamp(del_);
+                console.log(del_)
+                // setDeliveryDate(timeStampedDelDate);
             } else {
-                alert(`Invalid delivery date`)
+                // alert(`Invalid delivery date`)
+                setModalInfo('Invalid delivery date')
+                setShowInfoModal(true);
             }
         } else {
             setDeliveryDate("");
         }
-
     }
 
-    const handleJointMember = (e) => {
+    const handleMember = (e) => {
         e.preventDefault();
 
         formatDate();
@@ -194,7 +209,7 @@ export default function HouseholdMember() {
         ninoValid ${ninoValid}, spouse name ${spouseNameValid}, home telephone ${telephoneValid}, work telephone ${workphoneValid}, 
         mobile ${mobileValid},email ${emailValid}, email matches ${emailMatchesValid}`)
 
-        console.log('Im in handleJointMember', relationWithPrimaryApplicant,
+        console.log('Im in handleMember', relationWithPrimaryApplicant,
             assessmentPurposeOnly, title, fName, mName, sName, nameChange,
             currentlyLiveWithYou, isSpouseOfAnotherMember, spouseAnotherMemberName,
             nINO, dateofbirth, sex, placedByLocalAuthrty, localAuthrtyName,
@@ -206,22 +221,31 @@ export default function HouseholdMember() {
 
         if ((!fNameValid) || (!mNameValid) || (!sNameValid) || (!emailValid) || (!emailMatchesValid) ||
             (!ninoValid) || (!telephoneValid) || (!workphoneValid) || (!mobileValid)) {
-            !fNameValid && alert('First Name error');
-            !mNameValid && alert('Middle Name error');
-            !sNameValid && alert('Surname error');
-            !telephoneValid && alert('Telephone number error');
-            !workphoneValid && alert('Work telephone number error');
-            !mobileValid && alert('Mobile number error');
-            !emailValid && alert('Email error');
-            !ninoValid && alert('NINO error');
-            !emailMatchesValid && alert('Email match error');
+            !fNameValid && setModalInfo('Error: First Name')
+            setShowInfoModal(true);
+            !mNameValid && setModalInfo('Error: Middle Name')
+            setShowInfoModal(true);
+            !sNameValid && setModalInfo('Error: Surname')
+            setShowInfoModal(true);
+            !ninoValid && setModalInfo('Error: NINO')
+            setShowInfoModal(true);
+            !telephoneValid && setModalInfo('Error: Telephone number')
+            setShowInfoModal(true);
+            !workphoneValid && setModalInfo('Error: Work telephone number')
+            setShowInfoModal(true);
+            !mobileValid && setModalInfo('Error: Mobile number')
+            setShowInfoModal(true);
+            !emailValid && setModalInfo('Error: Email')
+            setShowInfoModal(true);
+            !emailMatchesValid && setModalInfo('Error: Email does not match')
+            setShowInfoModal(true);
 
         } else {
-            saveJointMember()
+            saveMember()
         }
     }
 
-    const saveJointMember = async () => {
+    const saveMember = async () => {
 
         const memberInfo = {
             clientId: primaryApplicantClientId,
@@ -233,14 +257,14 @@ export default function HouseholdMember() {
             clientOtherHousehold_surname: sName,
             clientOtherHousehold_namechange: nameChange,
             clientOtherHousehold_NINO: nINO,
-            clientOtherHousehold_dateofbirth: ConvertToTimeStamp(birth_),
+            clientOtherHousehold_dateofbirth: birth_,
             clientOtherHousehold_sex: sex,
             clientOtherHousehold_live_with_you: currentlyLiveWithYou,
-            clientOtherHousehold_moved_to_current_address: ConvertToTimeStamp(moved_),
+            clientOtherHousehold_moved_to_current_address: moved_,
             clientOtherHousehold_current_address: currentAddress,
             clientOtherHousehold_is_she_pregnant: isShePregnant,
             clientOtherHousehold_spouse_another_member_name: spouseAnotherMemberName,
-            clientOtherHousehold_DeliveryDate: deliveryDate,
+            clientOtherHousehold_DeliveryDate: del_,
             clientOtherHousehold_placed_by_local_authority: placedByLocalAuthrty,
             clientOtherHousehold_if_yes_local_authority: localAuthrtyName,
             clientOtherHousehold_telephone_home: telephone,
@@ -261,25 +285,20 @@ export default function HouseholdMember() {
 
             const response = await axios.post(addMemberUrl, memberInfo);
 
-            console.log(`Output from backend ${response.data.message}`)
-            console.log(`Output from backend ${response.data.MemberID}`)
-            console.log(`Output from backend ${response.data.Status_Info}`)
-            console.log(`Output from backend ${response.data.MemberInfo}`)
-            
-
             if (response.status === 200) {
-                console.log(`Status from backend ${response.status}`);                
-                // navigate('/account', { state: { jointName: fName } });
-                refreshPage('Household member information updated successfully')
+                console.log(`Status from backend ${response.data.Status_Reply}`);
+                setModalInfo(response.data.Status_Reply)
+                setShowInfoModal(true);
             } else {
-                alert('Something went wrong, please try again...')
+                setModalInfo('Something went wrong, please try again...')
+                setShowInfoModal(true);
             }
-
         } catch (error) {
             console.log(error)
+            setModalInfo(response.data.Status_Reply)
+            setShowInfoModal(true);
         }
     }
-
 
     const cancelEntry = (e) => {
         window.location.reload();
@@ -321,7 +340,7 @@ export default function HouseholdMember() {
 
                         {/* ********** Has this household member been added for assessment purpose only?  */}
                         <div >
-                            <p className='mt-3 mb-2' style={{ fontSize: '14px' }}><strong>Has this household member been added for assessment purpose only and therefor will not be moving with you? *</strong></p>
+                            <p className='mt-3 mb-2' style={{ fontSize: '14px' }}><strong>Has this household member been added for assessment purpose only and therefore will not be moving with you? *</strong></p>
                             <MDBRow>
                                 <MDBCol className='col-3'>
                                     <MDBRadio name='assessmentPurposeOnlyRadio' value='yes' label='Yes' inline id='assessmentPurposeOnlyYes' htmlFor="assessmentPurposeOnlyYes"
@@ -363,7 +382,7 @@ export default function HouseholdMember() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='First name...'
-                                    maxLength={20} value={fName} onChange={(e) => { let newEdit = { ...fName }; newEdit = e.target.value; setFName(newEdit) }}></input>
+                                    maxLength={20} value={fName || ''} onChange={(e) => { let newEdit = { ...fName }; newEdit = e.target.value; setFName(newEdit) }}></input>
                             </div>
                         </div>
 
@@ -379,7 +398,7 @@ export default function HouseholdMember() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='Middle name...'
-                                    maxLength={20} value={mName} onChange={(e) => { let newEdit = { ...mName }; newEdit = e.target.value; setMName(newEdit) }}></input>
+                                    maxLength={20} value={mName || ''} onChange={(e) => { let newEdit = { ...mName }; newEdit = e.target.value; setMName(newEdit) }}></input>
                             </div>
                         </div>
 
@@ -395,7 +414,7 @@ export default function HouseholdMember() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='Surname...'
-                                    maxLength={20} value={sName} onChange={(e) => { let newEdit = { ...sName }; newEdit = e.target.value; setSName(newEdit) }}></input>
+                                    maxLength={20} value={sName || ''} onChange={(e) => { let newEdit = { ...sName }; newEdit = e.target.value; setSName(newEdit) }}></input>
                             </div>
 
                         </div>
@@ -412,7 +431,7 @@ export default function HouseholdMember() {
                             </div>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text' placeholder='Have you ever used a different name, eg a maiden name or by deed poll? if so, please provide details'
-                                    maxLength={50} value={nameChange} onChange={(e) => { let newEdit = { ...nameChange }; newEdit = e.target.value; setNameChange(newEdit) }}></input>
+                                    maxLength={50} value={nameChange || ''} onChange={(e) => { let newEdit = { ...nameChange }; newEdit = e.target.value; setNameChange(newEdit) }}></input>
                             </div>
                         </div>
 
@@ -450,17 +469,17 @@ export default function HouseholdMember() {
 
                             {/* ********** Above person's First/Surname  */}
                             {spouseAnotherMember &&
-                                <>
+                                <React.Fragment>
                                     <div className=" mt-2 p-2 help-content border border-grey rounded">
 
                                         <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Above person's spouse first name and surname *</strong></p>
                                         <div className='mb-4' >
                                             <input className='form-control' type='text' placeholder='First name and Surname...'
-                                                maxLength={50} value={spouseAnotherMemberName} onChange={(e) => { let newEdit = { ...spouseAnotherMemberName }; newEdit = e.target.value; SetSpouseAnotherMemberName(newEdit) }}></input>
+                                                maxLength={50} value={spouseAnotherMemberName || ''} onChange={(e) => { let newEdit = { ...spouseAnotherMemberName }; newEdit = e.target.value; SetSpouseAnotherMemberName(newEdit) }}></input>
                                         </div>
 
                                     </div>
-                                </>
+                                </React.Fragment >
                             }
 
                         </div>
@@ -471,7 +490,7 @@ export default function HouseholdMember() {
                             <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Household Member's NINO *</strong></p>
                             <div className='mb-4' >
                                 <input style={inputStyle} className='form-control' type='text'
-                                    maxLength={9} value={nINO} onChange={(e) => { let newEdit = { ...nINO }; newEdit = e.target.value; setNINO(newEdit) }}></input>
+                                    maxLength={9} value={nINO || ''} onChange={(e) => { let newEdit = { ...nINO }; newEdit = e.target.value; setNINO(newEdit) }}></input>
                             </div>
                         </div>
 
@@ -608,7 +627,7 @@ export default function HouseholdMember() {
                                         </div>
                                         <div className='mt-3 mb-2' >
                                             <input style={inputStyle} className='form-control' type='text' placeholder='postcode...'
-                                                maxLength={8} value={postcode} onChange={(e) => { setPostcode(e.target.value) }} />
+                                                maxLength={8} value={postcode || ''} onChange={(e) => { setPostcode(e.target.value) }} />
                                         </div>
 
                                         <div style={{ width: 'auto' }} className="mb-2 mt-2 help-content border border-grey rounded">
@@ -638,7 +657,7 @@ export default function HouseholdMember() {
                                             </div>
                                             <div className='' >
                                                 <input style={inputStyle} className='form-control ' type='text' placeholder='house or flat number and street'
-                                                    maxLength={75} value={addLine1} onChange={(e) => { setAddLine1(e.target.value) }} />
+                                                    maxLength={75} value={addLine1 || ''} onChange={(e) => { setAddLine1(e.target.value) }} />
                                             </div>
                                         </div>
 
@@ -656,7 +675,7 @@ export default function HouseholdMember() {
                                             </div>
                                             <div className='' >
                                                 <input style={inputStyle} className='form-control' type='text' placeholder='Address line 2'
-                                                    maxLength={75} value={addLine2} onChange={(e) => { setAddLine2(e.target.value) }} />
+                                                    maxLength={75} value={addLine2 || ''} onChange={(e) => { setAddLine2(e.target.value) }} />
                                             </div>
                                         </div>
 
@@ -674,7 +693,7 @@ export default function HouseholdMember() {
                                             </div>
                                             <div className='' >
                                                 <input style={inputStyle} className='form-control' type='text' placeholder='Address line 3'
-                                                    maxLength={75} value={addLine3} onChange={(e) => { setAddLine3(e.target.value) }} />
+                                                    maxLength={75} value={addLine3 || ''} onChange={(e) => { setAddLine3(e.target.value) }} />
                                             </div>
                                         </div>
 
@@ -692,7 +711,7 @@ export default function HouseholdMember() {
                                             </div>
                                             <div className='' >
                                                 <input style={inputStyle} className='form-control' type='text' placeholder='Address line 4'
-                                                    maxLength={75} value={addLine4} onChange={(e) => { setAddLine4(e.target.value) }} />
+                                                    maxLength={75} value={addLine4 || ''} onChange={(e) => { setAddLine4(e.target.value) }} />
                                             </div>
                                         </div>
                                     </div>
@@ -1035,7 +1054,7 @@ export default function HouseholdMember() {
                         <div className='mt-4' >
                             <MDBRow>
                                 <MDBCol >
-                                    <textarea style={{ width: '250px', height: '350px' }} className='form-control' type='text'
+                                    <textarea style={{ maxWidth: '500px', height: '350px' }} className='form-control' type='text'
                                         maxLength={250} onChange={(e) => { let newEdit = { ...comments }; newEdit = e.target.value; setComments(newEdit) }} />
                                 </MDBCol>
                             </MDBRow>
@@ -1046,17 +1065,21 @@ export default function HouseholdMember() {
                 <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
                 </MDBCard>
                 <form className='d-flex w-auto mt-4'>
-                    <MDBBtn style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='primary me-1'
-                        onClick={handleJointMember} >
-                        Save Household Member</MDBBtn>
-                    {/* <MDBBtn className='me-1 btn btn-outline-secondary' style={{ fontSize: '16px', width: 'auto', textTransform: 'none' }} color='white'
+                    <BtnAccept style={btnSytle}
+                        onClick={handleMember} >
+                        Save Member</BtnAccept>
+
+                    <BtnAccept style={btnSytle} color='secondary'
                         onClick={cancelEntry}>
-                        Cancel</MDBBtn> */}
+                        Cancel</BtnAccept>
                 </form>
                 <MDBCardBody>
                 </MDBCardBody>
 
             </MDBContainer>
+            {
+                showInfoModal && <PopUp modalInfo={modalInfo} setShowInfoModal={setShowInfoModal}></PopUp>
+            }
         </React.Fragment >
     );
 }

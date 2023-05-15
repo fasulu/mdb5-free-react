@@ -19,7 +19,7 @@ export default function TestSecondNavbar() {
     const [showNavColorThird, setShowNavColorThird] = useState(false);
 
     return (
-        <>
+        <React.Fragment>
             <MDBNavbar expand='lg' light style={{ backgroundColor: '#e3f2fd' }}>
                 <MDBContainer >
                     <MDBNavbarNav className='me-auto mb-2 mb-lg-0'>
@@ -65,6 +65,6 @@ export default function TestSecondNavbar() {
                     </MDBNavbarNav>
                 </MDBContainer>
             </MDBNavbar>
-        </>
+        </React.Fragment >
     );
 }

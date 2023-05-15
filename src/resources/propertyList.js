@@ -3,7 +3,8 @@ export const propertyList = [
     {
         propertyId: "somr101",
         address: "15a malvin road, selly oak",
-        type: "attached",
+        advertType: "social housing",
+        type: "house",
         bedRoom: "3", 
         bathRoom: "1", 
         reception: "yes",
@@ -27,7 +28,8 @@ export const propertyList = [
     {
         propertyId: "wemr102",
         address: "310 world end road, bearwood",
-        type: "detached house",
+        advertType: "social housing",
+        type: "house",
         bedRoom: "3", 
         bathRoom: "2", 
         reception: "2",
@@ -51,7 +53,8 @@ export const propertyList = [
     {
         propertyId: "ssmr103",
         address: "510 sommerset road, handsworth",
-        type: "house",
+        advertType: "social housing",
+        type: "maisonette",
         bedRoom: "3", 
         bathRoom: "2", 
         reception: "2",
@@ -75,6 +78,7 @@ export const propertyList = [
     {
         propertyId: "gcst105",
         address: "199 great colmor street, birmingham city center",
+        advertType: "affordable rent",
         type: "flat",
         bedRoom: "1", 
         bathRoom: "1", 
@@ -99,6 +103,7 @@ export const propertyList = [
     {
         propertyId: "cbbt105",
         address: "cleverdale building, bristol street, birmingham city center",
+        advertType: "affordable rent",
         type: "flat",
         bedRoom: "1", 
         bathRoom: "1", 
@@ -123,7 +128,8 @@ export const propertyList = [
     {
         propertyId: "sr106",
         address: "4500 stratford road, solihul",
-        type: "house",
+        advertType: "social housing",
+        type: "bungalow",
         bedRoom: "4", 
         bathRoom: "2", 
         reception: "2",
@@ -147,7 +153,8 @@ export const propertyList = [
     {
         propertyId: "dr107",
         address: "1a dell road, solihul",
-        type: "house",
+        advertType: "social housing",
+        type: "bungalow",
         bedRoom: "2", 
         bathRoom: "2", 
         reception: "2",
@@ -171,7 +178,8 @@ export const propertyList = [
     {
         propertyId: "cs108",
         address: "carsile street, perry barr",
-        type: "house",
+        advertType: "social housing",
+        type: "maisonette",
         bedRoom: "2", 
         bathRoom: "2", 
         reception: "2",
@@ -195,6 +203,7 @@ export const propertyList = [
     {
         propertyId: "ms109",
         address: "1145 , shardend",
+        advertType: "affordable rent",
         type: "flat",
         bedRoom: "1", 
         bathRoom: "1", 
@@ -219,6 +228,7 @@ export const propertyList = [
     {
         propertyId: "as110",
         address: "155c albert street, sutton coldfield",
+        advertType: "social housing",
         type: "flat",
         bedRoom: "1", 
         bathRoom: "1", 
@@ -243,7 +253,8 @@ export const propertyList = [
     {
         propertyId: "ls111",
         address: "10 livery street, foxhollies",
-        type: "semi detached",
+        advertType: "affordable rent",
+        type: "other",
         bedRoom: "3", 
         bathRoom: "2", 
         reception: "2",

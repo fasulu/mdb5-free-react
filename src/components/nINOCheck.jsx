@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import PopUp from './popUp';
 
 import {
     MDBIcon,
@@ -20,41 +21,60 @@ export default function NINOCheck() {
     const inputStyle = { width: '250px' };
     const [ninoPrimary, setNINOPrimary] = useState("");
 
-    useEffect(() => {
+    const [showInfoModal, setShowInfoModal] = useState(false);
 
-    }, [])
+    const [modalInfo, setModalInfo] = useState("");
 
     const Continue_ = async (e) => {
 
         e.preventDefault();
-        try {
+        const validateNino = (validNINO(ninoPrimary));  // validate nino
 
-            const validateNino = (validNINO(ninoPrimary));  // validate nino
-            console.log(`Primary NINO is ${ninoPrimary} and validator return ${validateNino}`)
+        if (!validateNino) {
 
-            console.log(`${ninoCheckUrl + ninoPrimary} In fetch data`)
-            const ninoData = await axios.get(ninoCheckUrl + ninoPrimary, {})
-            console.log(ninoData.data.message)
-            const result = ninoData.data.message
+            setModalInfo("Invalid National Insurance Number")
+            setShowInfoModal(true);
+            setTimeout(() => {
+                navigate('/home');
+            }, 5000);
 
-            // check nino exist and valid nino number entered
-            if ((result === "NINO not registerd") && validateNino) {
+        } else {
 
-                navigate('/primary', { state: { nino: ninoPrimary } });
+            try {
 
-            } else if ((result === "NINO registerd") && validateNino) {
+                const ninoData = await axios.get(ninoCheckUrl + ninoPrimary.toLowerCase(), {})
+                const result = ninoData.data.message
 
-                alert(`National Insurance number already registered. \nPlease login to view your status`);
-                navigate('/login');
-                
-            } else {
+                // check nino exist and valid nino number entered
+                if ((result === "NINO not registerd") && validateNino) {
 
-                alert(`Please verify your National Insurance Number and try again. \n${ninoPrimary.toUpperCase()}`);
+                    navigate('/primary', { state: { nino: ninoPrimary } });
+
+                } else if ((result === "NINO registerd") && validateNino) {
+
+                    setModalInfo('National Insurance number already registered. Please login to view your status.')
+                    setShowInfoModal(true);
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 10000);
+
+                } else {
+                    setModalInfo(`Please verify your National Insurance Number and try again. \n${ninoPrimary.toUpperCase()}`)
+                    setShowInfoModal(true);
+                    setTimeout(() => {
+                        navigate('/nino');
+                    }, 5000);
+                }
+
+            } catch (error) {
+                console.log(error.message)
+
+                setModalInfo(`${error.message}, \n please try again later.`)
+                setShowInfoModal(true);
+                setTimeout(() => {
+                    navigate('/home');
+                }, 5000);
             }
-
-        } catch (error) {
-            alert("Unable to proceed on your request")
-            console.log(`Unable to proceed on your request:- ${error}`)
         }
     }
 
@@ -84,13 +104,17 @@ export default function NINOCheck() {
                         <form className='d-flex input-group w-auto mt-5'>
                             <MDBBtn className='mx-2'
                                 style={{ fontSize: '18px', width: 'auto', textTransform: 'none' }}
-                                color='primary' onClick={Continue_}>
+                                color='primary' onClick={Continue_} >
                                 Continue <MDBIcon fas icon='caret-right' />
                             </MDBBtn>
                         </form>
                     </MDBCardBody>
                 </MDBCard>
             </MDBRow>
+
+            {
+                showInfoModal && <PopUp modalInfo={modalInfo} setShowInfoModal={setShowInfoModal}></PopUp>
+            }
         </React.Fragment>
     );
 }
