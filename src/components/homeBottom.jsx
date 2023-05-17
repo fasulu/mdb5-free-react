@@ -27,7 +27,7 @@ export default function HomeBottom() {
                 <MDBRow >
                     <MDBCol>
                         <MDBCard>
-                            <MDBTypography className='card-header' style={{ fontSize: '15px', backgroundColor: '#dcdcdc' }} >
+                            <MDBTypography component={'div'} className='card-header' style={{ fontSize: '15px', backgroundColor: '#dcdcdc' }} >
                                 <strong><MDBIcon style={{ marginRight: '10px' }} fas icon="calendar-alt" />Advertising dates</strong>
                             </MDBTypography>
 
@@ -39,7 +39,7 @@ export default function HomeBottom() {
                     </MDBCol>
                     <MDBCol>
                         <MDBCard>
-                            <MDBTypography className='card-header' style={{ fontSize: '15px', backgroundColor: '#dcdcdc' }} >
+                            <MDBTypography component={'div'} className='card-header' style={{ fontSize: '15px', backgroundColor: '#dcdcdc' }} >
                                 <strong><MDBIcon style={{ marginRight: '10px' }} fas icon="comments" />Latest News  </strong>
                             </MDBTypography>
                             <MDBCardBody>
@@ -49,7 +49,7 @@ export default function HomeBottom() {
                     </MDBCol>
                     <MDBCol>
                         <MDBCard>
-                            <MDBTypography className='card-header' style={{ fontSize: '15px', backgroundColor: '#dcdcdc' }} >
+                            <MDBTypography component={'div'} className='card-header' style={{ fontSize: '15px', backgroundColor: '#dcdcdc' }} >
                                 <strong><MDBIcon style={{ marginRight: '10px' }} fas icon="address-card" />Register  </strong>
                             </MDBTypography>
                             <MDBCardBody style={{ textAlign: 'center', fontSize: '15px' }}>

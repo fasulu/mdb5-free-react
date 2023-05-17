@@ -31,9 +31,9 @@ export default function SearchOptions() {
     const labelStyle = { fontSize: '16px', width: '250px', color: '#464646' };
     const inputStyle = { fontSize: '14px', width: '250px' };
     const searchType = { fontSize: '16px' };
-    const tab1Style = { borderRadius: '10px', color: 'green', fontSize: '16px', textTransform: 'none', backgroundColor: '#cdd4f5' }
+    const tab1Style = { borderRadius: '10px', color: '#004080', fontSize: '16px', textTransform: 'none', backgroundColor: '#cdd4f5' }
     const tab2Style = { borderRadius: '10px', color: 'purple', fontSize: '16px', textTransform: 'none', backgroundColor: '#cef996' }
-    const tab3Style = { borderRadius: '10px', color: 'green', fontSize: '16px', textTransform: 'none', backgroundColor: '#cdd4f5' }
+    const tab3Style = { borderRadius: '10px', color: 'green', fontSize: '16px', textTransform: 'none', backgroundColor: '#e4a11b47' }
     const searchPageHeader = { color: 'black', fontSize: '20px', borderBottom: '2px solid #d7cdcd' }
 
     const [showPropertyList, setShowPropertyList] = useState(false);
@@ -143,7 +143,7 @@ export default function SearchOptions() {
                                 <MDBRow alignment='center'>
                                     <MDBCol className='col-lg-6 col-md-6'>
                                         <MDBRow>
-                                            <MDBTypography className='fs-5'
+                                            <MDBTypography component={'div'} className='fs-5'
                                                 style={{ fontSize: '16px', color: '#1a82db' }} ><strong>{(property.propertyId).toUpperCase()}</strong>
                                             </MDBTypography>
                                         </MDBRow>
@@ -152,51 +152,51 @@ export default function SearchOptions() {
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-4'>
-                                                <MDBTypography style={labelStyle}>Address:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Address:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-8'>
 
-                                                <MDBTypography ><strong>{ToCamelCase(property.address)}, {ToCamelCase(property.town)}, {(property.postcode).toUpperCase()} </strong></MDBTypography>
+                                                <MDBTypography component={'div'} ><strong>{ToCamelCase(property.address)}, {ToCamelCase(property.town)}, {(property.postcode).toUpperCase()} </strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-4'>
-                                                <MDBTypography style={labelStyle}>Council Tax:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Council Tax:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-8'>
-                                                <MDBTypography > <strong> Band {property.cTaxBand.toUpperCase()}</strong></MDBTypography>
+                                                <MDBTypography component={'div'} > <strong> Band {property.cTaxBand.toUpperCase()}</strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-4' >
-                                                <MDBTypography style={labelStyle}>Available on:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Available on:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-8'>
-                                                <MDBTypography > <strong>{property.availableFrom}</strong></MDBTypography>
+                                                <MDBTypography component={'div'} > <strong>{property.availableFrom}</strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-4'>
-                                                <MDBTypography style={labelStyle}>Rent(PCM):</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Rent(PCM):</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-8'>
-                                                <MDBTypography > <strong> £ {property.rent}.00</strong></MDBTypography>
+                                                <MDBTypography component={'div'} > <strong> £ {property.rent}.00</strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-4'>
-                                                <MDBTypography style={labelStyle}>Deposit:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Deposit:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-8'>
-                                                <MDBTypography > <strong>£ {property.deposit}.00</strong></MDBTypography>
+                                                <MDBTypography component={'div'} > <strong>£ {property.deposit}.00</strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-4'>
-                                                <MDBTypography style={labelStyle}>Admin fees:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Admin fees:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-8'>
-                                                <MDBTypography > <strong>£ {property.fees}.00</strong></MDBTypography>
+                                                <MDBTypography component={'div'} > <strong>£ {property.fees}.00</strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                     </MDBCol>
@@ -204,35 +204,35 @@ export default function SearchOptions() {
 
                                         <MDBRow className='mt-4'>
                                             <MDBCol className='col-lg-5'>
-                                                <MDBTypography style={labelStyle}>Advert Type:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Advert Type:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-7'>
-                                                <MDBTypography ><strong>{ToCamelCase(property.advertType)} </strong></MDBTypography>
+                                                <MDBTypography component={'div'} ><strong>{ToCamelCase(property.advertType)} </strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow >
                                             <MDBCol className='col-lg-5'>
-                                                <MDBTypography style={labelStyle}>Type:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Type:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-7'>
 
-                                                <MDBTypography ><strong>{ToCamelCase(property.type)} </strong></MDBTypography>
+                                                <MDBTypography component={'div'} ><strong>{ToCamelCase(property.type)} </strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-5'>
-                                                <MDBTypography style={labelStyle}>Floor: </MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Floor: </MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-7'>
-                                                <MDBTypography > <strong>{property.floor}</strong></MDBTypography>
+                                                <MDBTypography component={'div'} > <strong>{property.floor}</strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-5'>
-                                                <MDBTypography style={labelStyle}>Rooms:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Rooms:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-7'>
-                                                <MDBTypography >
+                                                <MDBTypography component={'div'} >
                                                     <MDBIcon style={styleIcon} fas icon='bed' /><strong>x {property.bedRoom} and </strong><span>
                                                         <MDBIcon style={styleIcon} fas icon='bath' /><strong>x {property.bathRoom}</strong>
                                                     </span></MDBTypography>
@@ -240,76 +240,76 @@ export default function SearchOptions() {
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-5'>
-                                                <MDBTypography style={labelStyle}>Reception:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Reception:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-7'>
-                                                <MDBTypography > <strong>{ToCamelCase(property.reception)}</strong></MDBTypography>
+                                                <MDBTypography component={'div'} > <strong>{ToCamelCase(property.reception)}</strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-5'>
-                                                <MDBTypography style={labelStyle}>Pets:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Pets:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-7'>
-                                                <MDBTypography > <strong>{ToCamelCase(property.pets)}</strong></MDBTypography>
+                                                <MDBTypography component={'div'} > <strong>{ToCamelCase(property.pets)}</strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-5'>
-                                                <MDBTypography style={labelStyle}>Tenancy:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Tenancy:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-7'>
-                                                <MDBTypography > <strong>{ToCamelCase(property.tenancyType)}</strong></MDBTypography>
+                                                <MDBTypography component={'div'} > <strong>{ToCamelCase(property.tenancyType)}</strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-5'>
-                                                <MDBTypography style={labelStyle}>Kitchen:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Kitchen:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-7'>
-                                                <MDBTypography > <strong>{ToCamelCase(property.kitchenFitted)}</strong></MDBTypography>
+                                                <MDBTypography component={'div'} > <strong>{ToCamelCase(property.kitchenFitted)}</strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-5'>
-                                                <MDBTypography style={labelStyle}>Furnished:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Furnished:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-7'>
-                                                <MDBTypography > <strong>{ToCamelCase(property.furnished)}</strong></MDBTypography>
+                                                <MDBTypography component={'div'} > <strong>{ToCamelCase(property.furnished)}</strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-5'>
-                                                <MDBTypography style={labelStyle}>Parking:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Parking:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-7'>
-                                                <MDBTypography > <strong>{ToCamelCase(property.parking)}</strong></MDBTypography>
+                                                <MDBTypography component={'div'} > <strong>{ToCamelCase(property.parking)}</strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-5'>
-                                                <MDBTypography style={labelStyle}>Garage:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Garage:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-7'>
-                                                <MDBTypography > <strong>{ToCamelCase(property.garage)}</strong></MDBTypography>
+                                                <MDBTypography component={'div'} > <strong>{ToCamelCase(property.garage)}</strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol className='col-lg-5'>
-                                                <MDBTypography style={labelStyle}>Garden / Patio:</MDBTypography>
+                                                <MDBTypography component={'div'} style={labelStyle}>Garden / Patio:</MDBTypography>
                                             </MDBCol>
                                             <MDBCol className='col-lg-7'>
-                                                <MDBTypography > <strong>{ToCamelCase(property.garden)} / {ToCamelCase(property.patio)}</strong></MDBTypography>
+                                                <MDBTypography component={'div'} > <strong>{ToCamelCase(property.garden)} / {ToCamelCase(property.patio)}</strong></MDBTypography>
                                             </MDBCol>
                                         </MDBRow>
                                     </MDBCol>
                                 </MDBRow>
                                 <MDBRow>
                                     <MDBCol className='col-lg-2 col-md-4 col-sm-4'>
-                                        <MDBTypography style={labelStyle}>Comments:</MDBTypography>
+                                        <MDBTypography component={'div'} style={labelStyle}>Comments:</MDBTypography>
                                     </MDBCol>
                                     <MDBCol className='col-lg-9 col-md-8 col-sm-8'>
-                                        <MDBTypography style={{ textAlign: 'left' }}>{property.comments}</MDBTypography>
+                                        <MDBTypography component={'div'} style={{ textAlign: 'left' }}>{property.comments}</MDBTypography>
                                     </MDBCol>
                                 </MDBRow>
                             </MDBCardBody>
@@ -351,11 +351,11 @@ export default function SearchOptions() {
 
     const AdvertisedProperties = (
         <React.Fragment>
-            <MDBTypography style={{ fontSize: '17px', color: 'blue' }} ><strong>Search properties</strong></MDBTypography>
-            <MDBTypography style={{ fontSize: '13px', color: '#4f4f4f' }} ><strong> <span style={{ color: 'red', fontSize: '17px', fontWeight: 'extraBold' }}>*</span></strong> Atleast one from Advert type, Property type, Bed room and/or Town name need to be selected</MDBTypography>
+            <MDBTypography component={'div'} style={{ fontSize: '17px', color: 'blue' }} ><strong>Search properties</strong></MDBTypography>
+            <MDBTypography component={'div'} style={{ fontSize: '13px', color: '#4f4f4f' }} ><strong> <span style={{ color: 'red', fontSize: '17px', fontWeight: 'extraBold' }}>*</span></strong> Atleast one from Advert type, Property type, Bed room and/or Town name need to be selected</MDBTypography>
             <MDBRow>
                 <MDBCol>
-                    <MDBTypography className='' style={searchType} ><strong>Advert type <span style={{ color: 'red' }}>*</span></strong></MDBTypography>
+                    <MDBTypography component={'div'} className='' style={searchType} ><strong>Advert type <span style={{ color: 'red' }}>*</span></strong></MDBTypography>
                     <div>
                         <MDBCheckbox value='social housing' id='flexCheck1' label='Social Housing' onClick={(e) => { let newChecked = { ...socialCheck }; newChecked = e.target.value; setSocialCheck(newChecked); }} />
                         <MDBCheckbox value='affordable rent' id='flexCheck2' label='Affordable Rent' onClick={(e) => { let newChecked = { ...affordableCheck }; newChecked = e.target.value; setAffordableCheck(newChecked); }} />
@@ -363,7 +363,7 @@ export default function SearchOptions() {
                 </MDBCol>
 
                 <MDBCol>
-                    <MDBTypography className='' style={searchType} ><strong>Property type <span style={{ color: 'red' }}>*</span></strong></MDBTypography>
+                    <MDBTypography component={'div'} className='' style={searchType} ><strong>Property type <span style={{ color: 'red' }}>*</span></strong></MDBTypography>
                     <div>
                         <MDBCheckbox value='bungalow' id='flexCheck3' label='Bungalow' onClick={(e) => { let newChecked = { ...bungalowCheck }; newChecked = e.target.value; setBungalowCheck(newChecked); }} />
                         <MDBCheckbox value='flat' id='flexCheck4' label='Flat' onClick={(e) => { let newChecked = { ...flatCheck }; newChecked = e.target.value; setFlatCheck(newChecked); }} />
@@ -374,7 +374,7 @@ export default function SearchOptions() {
                 </MDBCol>
 
                 <MDBCol>
-                    <MDBTypography className='' style={searchType} ><strong>Bed Rooms <span style={{ color: 'red' }}>*</span></strong></MDBTypography>
+                    <MDBTypography component={'div'} className='' style={searchType} ><strong>Bed Rooms <span style={{ color: 'red' }}>*</span></strong></MDBTypography>
                     <div>
                         <MDBCheckbox value='1' id='flexCheck8' label='1 Bed' onClick={(e) => { let newChecked = { ...oneBedCheck }; newChecked = e.target.value; setOneBedCheck(newChecked); }} />
                         <MDBCheckbox value='2' id='flexCheck9' label='2 Beds' onClick={(e) => { let newChecked = { ...twoBedCheck }; newChecked = e.target.value; setTwoBedCheck(newChecked); }} />
@@ -390,7 +390,7 @@ export default function SearchOptions() {
                 </MDBCol>
 
                 <MDBCol>
-                    <MDBTypography className='' style={{ fontSize: '17px' }} ><strong>Properties in <span style={{ color: 'red' }}>*</span></strong></MDBTypography>
+                    <MDBTypography component={'div'} className='' style={{ fontSize: '17px' }} ><strong>Properties in <span style={{ color: 'red' }}>*</span></strong></MDBTypography>
                     <div className='mb-4' >
 
                         <input style={inputStyle}
@@ -402,13 +402,13 @@ export default function SearchOptions() {
                         </input>
                         <BtnAccept
                             onClick={(e) => { handleSearchBtn(e) }}>
-                            Search <span style={{ color: '#ebe122', fontSize: '17px', fontWeight: 'extraBold' }}> *</span>
+                            Search <span style={{ color: '#ebe122', fontSize: '17px', fontWeight: 'extraBold' }}> ^</span>
                         </BtnAccept>
                     </div>
                 </MDBCol>
             </MDBRow>
             <MDBRow>
-                <MDBTypography style={{ fontSize: '13px', color: '#4f4f4f' }} ><strong> <span style={{ color: '#92a35f', fontSize: '17px', fontWeight: 'extraBold' }}>*</span></strong> Blank search will show properties in Birmingham</MDBTypography>
+                <MDBTypography component={'div'} style={{ fontSize: '13px', color: '#4f4f4f' }} ><strong> <span style={{ color: '#92a35f', fontSize: '17px', fontWeight: 'extraBold' }}>^</span></strong> Blank search will show properties in Birmingham</MDBTypography>
             </MDBRow>
         </React.Fragment>
     )
@@ -416,8 +416,8 @@ export default function SearchOptions() {
     const AverageWaitingTime = (
         <React.Fragment>
 
-            <MDBTypography style={{ fontSize: '17px', color: 'purple' }} ><strong>Average Waiting Time</strong></MDBTypography>
-            <MDBTypography style={{ fontSize: '13px', color: '#4f4f4f' }} ><strong> Information about average waiting time is not available</strong></MDBTypography>
+            <MDBTypography component={'div'} style={{ fontSize: '17px', color: 'purple' }} ><strong>Average Waiting Time</strong></MDBTypography>
+            <MDBTypography component={'div'} style={{ fontSize: '13px', color: '#4f4f4f' }} ><strong> Information about average waiting time is not available</strong></MDBTypography>
 
         </React.Fragment>
     )
@@ -425,8 +425,8 @@ export default function SearchOptions() {
     const RecentLets = (
         <React.Fragment>
 
-            <MDBTypography style={{ fontSize: '17px', color: 'green' }} ><strong>Recent Lets Information</strong></MDBTypography>
-            <MDBTypography style={{ fontSize: '13px', color: '#4f4f4f' }} ><strong> Information about recent let is not available</strong></MDBTypography>
+            <MDBTypography component={'div'} style={{ fontSize: '17px', color: 'green' }} ><strong>Recent Lets Information</strong></MDBTypography>
+            <MDBTypography component={'div'} style={{ fontSize: '13px', color: '#4f4f4f' }} ><strong> Information about recent let is not available</strong></MDBTypography>
 
         </React.Fragment>
     )
@@ -470,7 +470,7 @@ export default function SearchOptions() {
     return (
         <React.Fragment>
             <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
-                <MDBTypography className='card-header mb-2'
+                <MDBTypography component={'div'} className='card-header mb-2'
                     style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
                     <strong>Properties and recent lets search</strong>
                 </MDBTypography>

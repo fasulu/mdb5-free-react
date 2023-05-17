@@ -40,7 +40,7 @@ export default function JointApplicantEditPage() {
             <Navbar/>
             <NavbarSecondary/>
                 <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
-                {/* <MDBTypography className='card-header' style={{ fontSize: '18px' }} ><strong>Joint Applicant</strong></MDBTypography> */}
+                {/* <MDBTypography component={'div'} className='card-header' style={{ fontSize: '18px' }} ><strong>Joint Applicant</strong></MDBTypography> */}
                     <MDBCol className='col-lg-8 col-md-8 col-sm-8'>
                         <JointApplicantEdit/>
                     </MDBCol>

@@ -78,20 +78,20 @@ export default function MembersList() {
               <MDBCardBody key={membersList._id} item='true' >
                 <MDBRow alignment='center'>
                   <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
-                    <MDBTypography className='text-uppercase text-decoration-underline' style={{ cursor: 'pointer', fontSize: '16px', color: '#1a82db' }}
+                    <MDBTypography component={'div'} className='text-uppercase text-decoration-underline' style={{ cursor: 'pointer', fontSize: '16px', color: '#1a82db' }}
                       key={memberList._id}>
                       <strong onClick={(e) => openMember(e.target)}>{(memberList._id)}</strong>
                     {/* <MemberEdit memberID={memberList._id}></MemberEdit> */}
                     </MDBTypography>
-                    <MDBTypography style={inputStyle}>Name: <strong>{ToCamelCase(memberList.clientOtherHousehold_firstname)} {ToCamelCase(memberList.clientOtherHousehold_surname)}</strong></MDBTypography>
-                    <MDBTypography style={inputStyle}>Date of birth: <strong>{memberList.clientOtherHousehold_dateofbirth.slice(0, 10)}</strong></MDBTypography>
-                    <MDBTypography style={inputStyle}>Relationship:  <strong>{ToCamelCase(memberList.clientOtherHousehold_relationshipWithClient)}</strong></MDBTypography>
+                    <MDBTypography component={'div'} style={inputStyle}>Name: <strong>{ToCamelCase(memberList.clientOtherHousehold_firstname)} {ToCamelCase(memberList.clientOtherHousehold_surname)}</strong></MDBTypography>
+                    <MDBTypography component={'div'} style={inputStyle}>Date of birth: <strong>{memberList.clientOtherHousehold_dateofbirth.slice(0, 10)}</strong></MDBTypography>
+                    <MDBTypography component={'div'} style={inputStyle}>Relationship:  <strong>{ToCamelCase(memberList.clientOtherHousehold_relationshipWithClient)}</strong></MDBTypography>
                   </MDBCol>
                   <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
-                    <MDBTypography className='text-uppercase'  style={inputStyle}> NINO:  <strong >{memberList.clientOtherHousehold_NINO} </strong> </MDBTypography>
-                    <MDBTypography style={inputStyle}>Illness:  <strong>{ToCamelCase(memberList.clientOtherHousehold_illness)}</strong></MDBTypography>
-                    <MDBTypography style={inputStyle}>Moved In:  <strong>{ConvertToDate(memberList.clientOtherHousehold_moved_to_current_address)}</strong></MDBTypography>
-                    <MDBTypography style={inputStyle}>Sex:  <strong>{ToCamelCase(memberList.clientOtherHousehold_sex)}</strong></MDBTypography>
+                    <MDBTypography component={'div'} className='text-uppercase'  style={inputStyle}> NINO:  <strong >{memberList.clientOtherHousehold_NINO} </strong> </MDBTypography>
+                    <MDBTypography component={'div'} style={inputStyle}>Illness:  <strong>{ToCamelCase(memberList.clientOtherHousehold_illness)}</strong></MDBTypography>
+                    <MDBTypography component={'div'} style={inputStyle}>Moved In:  <strong>{ConvertToDate(memberList.clientOtherHousehold_moved_to_current_address)}</strong></MDBTypography>
+                    <MDBTypography component={'div'} style={inputStyle}>Sex:  <strong>{ToCamelCase(memberList.clientOtherHousehold_sex)}</strong></MDBTypography>
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>
@@ -106,16 +106,16 @@ export default function MembersList() {
               <MDBCardBody key={testData.dataKey} item='true' >
                 <MDBRow alignment='center'>
                   <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
-                    <MDBTypography style={{ cursor: 'pointer', fontSize: '16px', color: '#1a82db', textDecoration: 'blue' }}>
+                    <MDBTypography component={'div'} style={{ cursor: 'pointer', fontSize: '16px', color: '#1a82db', textDecoration: 'blue' }}>
                       Id: <strong onClick={(e) => openMember(e.target)}>{ToCamelCase(membersList.householdMemberID)}</strong>
                     </MDBTypography>
-                    <MDBTypography style={inputStyle}>Date of birth: <strong>{membersList.dob.toUpperCase()}</strong></MDBTypography>
-                    <MDBTypography style={inputStyle}>Relationship:  <strong>{membersList.relationship.toUpperCase()}</strong></MDBTypography>
+                    <MDBTypography component={'div'} style={inputStyle}>Date of birth: <strong>{membersList.dob.toUpperCase()}</strong></MDBTypography>
+                    <MDBTypography component={'div'} style={inputStyle}>Relationship:  <strong>{membersList.relationship.toUpperCase()}</strong></MDBTypography>
                     </MDBCol>
                     <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
-                    <MDBTypography style={inputStyle}> NINO:  <strong >{membersList.nino.toUpperCase()} </strong> </MDBTypography>
-                    <MDBTypography style={inputStyle}>Illness:  <strong>{membersList.illness.toUpperCase()}</strong></MDBTypography>
-                    <MDBTypography style={inputStyle}>Moved In:  <strong>{membersList.movedin.toUpperCase()}</strong></MDBTypography>
+                    <MDBTypography component={'div'} style={inputStyle}> NINO:  <strong >{membersList.nino.toUpperCase()} </strong> </MDBTypography>
+                    <MDBTypography component={'div'} style={inputStyle}>Illness:  <strong>{membersList.illness.toUpperCase()}</strong></MDBTypography>
+                    <MDBTypography component={'div'} style={inputStyle}>Moved In:  <strong>{membersList.movedin.toUpperCase()}</strong></MDBTypography>
                     </MDBCol>
                     </MDBRow>
                     </MDBCardBody>

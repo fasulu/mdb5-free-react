@@ -264,31 +264,31 @@ export default function MemberEdit() {
 
                 <MDBCardBody className='p-1' >
                     <MDBRow alignment='center'>
-                        <MDBTypography className='card-header mb-4' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
+                        <MDBTypography component={'div'} className='card-header mb-4' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
                             <strong>Edit Member Details {householdMemberID}</strong>
                         </MDBTypography>
                         <MDBRow>
                             <MDBCol className='col-lg-4 col-md-4 col-sm-6 col-xs-6'>
-                                <MDBTypography style={labelStyle}>Full Name: <strong style={memberStyle}>{fName.toUpperCase() + " " + mName.toUpperCase() + " " + sName.toUpperCase()}</strong></MDBTypography>
+                                <MDBTypography component={'div'} style={labelStyle}>Full Name: <strong style={memberStyle}>{fName.toUpperCase() + " " + mName.toUpperCase() + " " + sName.toUpperCase()}</strong></MDBTypography>
 
                             </MDBCol>
                             <MDBCol className='col-lg-3 col-md-4 col-sm-6 col-xs-6'>
-                                <MDBTypography style={labelStyle}>NINO:  <strong style={memberStyle}>{nINO.toUpperCase()}</strong></MDBTypography>
+                                <MDBTypography component={'div'} style={labelStyle}>NINO:  <strong style={memberStyle}>{nINO.toUpperCase()}</strong></MDBTypography>
 
                             </MDBCol>
                             <MDBCol className='col-lg-3 col-md-2 col-sm-6 col-xs-6'>
-                                <MDBTypography style={labelStyle}>DOB: <strong style={memberStyle}>{dateofbirth.toUpperCase()}</strong></MDBTypography>
+                                <MDBTypography component={'div'} style={labelStyle}>DOB: <strong style={memberStyle}>{dateofbirth.toUpperCase()}</strong></MDBTypography>
 
                             </MDBCol>
                             <MDBCol className='col-lg-2 col-md-2 col-sm-6 col-xs-6'>
-                                <MDBTypography style={labelStyle}>Relation:  <strong style={memberStyle}>{relationship.toUpperCase()}</strong></MDBTypography>
+                                <MDBTypography component={'div'} style={labelStyle}>Relation:  <strong style={memberStyle}>{relationship.toUpperCase()}</strong></MDBTypography>
                             </MDBCol>
                         </MDBRow>
                     </MDBRow>
 
                     <hr style={{ height: '4px' }}></hr>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Does this member have any physical or mental health conditions or illnesses lasting or expected to last for 12 months or more?</strong>
                     </MDBTypography>
@@ -302,7 +302,7 @@ export default function MemberEdit() {
                         </select>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Does this member currently live with you?</strong>
                     </MDBTypography>
@@ -328,7 +328,7 @@ export default function MemberEdit() {
                         </MDBRow>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Current address</strong>
                     </MDBTypography>
@@ -344,7 +344,7 @@ export default function MemberEdit() {
                         </MDBRow>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Date moved into this address?</strong>
                     </MDBTypography>
@@ -380,7 +380,7 @@ export default function MemberEdit() {
                         </div>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Does this member work?</strong>
                     </MDBTypography>
@@ -400,7 +400,7 @@ export default function MemberEdit() {
                         </MDBRow>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Spouse Name</strong>
                     </MDBTypography>
@@ -416,7 +416,7 @@ export default function MemberEdit() {
                         </MDBRow>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Home telephone</strong>
                     </MDBTypography>
@@ -432,7 +432,7 @@ export default function MemberEdit() {
                         </MDBRow>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Work telephone</strong>
                     </MDBTypography>
@@ -448,7 +448,7 @@ export default function MemberEdit() {
                         </MDBRow>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Mobile</strong>
                     </MDBTypography>
@@ -464,7 +464,7 @@ export default function MemberEdit() {
                         </MDBRow>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Email</strong>
                     </MDBTypography>
@@ -483,7 +483,7 @@ export default function MemberEdit() {
                     {showPregnantOption &&
 
                         <div id="" className=' mb-2' >
-                            <MDBTypography className='card-header mb-2'
+                            <MDBTypography component={'div'} className='card-header mb-2'
                                 style={headerStyle} >
                                 <strong>Is she pregnant?</strong>
                             </MDBTypography>
@@ -505,7 +505,7 @@ export default function MemberEdit() {
 
                     {showPregnantField &&
                         <div id='PregnantDate' className='px-4 mb-2' >
-                            <MDBTypography className='card-header mb-2'
+                            <MDBTypography component={'div'} className='card-header mb-2'
                                 style={headerStyle} >
                                 <strong>Delivery date</strong>
                             </MDBTypography>
@@ -542,7 +542,7 @@ export default function MemberEdit() {
                         </div>
                     }
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Comments</strong>
                     </MDBTypography>

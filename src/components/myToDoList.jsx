@@ -317,7 +317,7 @@ export default function MyToDoList() {
     const OptionSelectPage = (
         <React.Fragment>
             <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
-                <MDBTypography className='card-header'
+                <MDBTypography component={'div'} className='card-header'
                     style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
                     <strong>My To Do</strong>
                 </MDBTypography>
@@ -338,7 +338,7 @@ export default function MyToDoList() {
                                 </MDBRipple>
                             </MDBRow>
                             <MDBRow>
-                                <MDBTypography style={{ textAlign: 'center', paddingTop: '10px', fontSize: '18px', fontWeight: 'bold' }}>
+                                <MDBTypography component={'div'} style={{ textAlign: 'center', paddingTop: '10px', fontSize: '18px', fontWeight: 'bold' }}>
                                     Add to do
                                 </MDBTypography>
                             </MDBRow>
@@ -359,7 +359,7 @@ export default function MyToDoList() {
                                 </MDBRipple>
                             </MDBRow>
                             <MDBRow>
-                                <MDBTypography style={{ textAlign: 'center', paddingTop: '10px', fontSize: '18px', fontWeight: 'bold' }}>
+                                <MDBTypography component={'div'} style={{ textAlign: 'center', paddingTop: '10px', fontSize: '18px', fontWeight: 'bold' }}>
                                     List of to do
                                 </MDBTypography>
                             </MDBRow>
@@ -372,37 +372,7 @@ export default function MyToDoList() {
 
     const ToDoListPage = (
         < React.Fragment >
-            {/* <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }}>
-                <MDBTypography className='card-header'
-                    style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
-                    <strong>To do List Status</strong>
-                </MDBTypography>
-                <MDBCardBody>
-                    {toDoList.map((toDo, index) => (
-
-                        <div key={index} className='d-flex justify-content-between py-1 border border-rounded'>
-                            <MDBCol md='1'>
-                                {<span className='mx-1' >{index + 1}</span>}
-                            </MDBCol>
-                            <MDBCol md='3' alt={toDo.comments} title={toDo.comments}>
-                                <MDBBadge pill light style={{ cursor: 'pointer', fontSize: '16px' }}
-                                    onClick={(e) => { handleTodoUpdate(e, toDo) }}>
-                                    {toDo.toDoStatus ?
-                                        <span style={{ color: '#228f22' }}>Completed </span> :
-                                        <span style={{ color: '#e43b3b' }}>Not yet</span>}
-                                </MDBBadge>
-                            </MDBCol>
-                            <MDBCol md='3'>
-                                {(toDo.toDoDate).slice(0, 10)}
-                            </MDBCol>
-                            <MDBCol md='8'>
-                                {toDo.toDoTask}
-                            </MDBCol>
-                        </div>
-                    ))}
-                </MDBCardBody>
-            </MDBCard> */}
-
+            
             <MDBContainer className='ps-5 pt-3' >
                 <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
                     <p style={bidListHeader} ><strong>To do List Status </strong></p>
@@ -428,7 +398,7 @@ export default function MyToDoList() {
                                         <td style={{ cursor: 'pointer', fontSize: '16px', color: '#e43b3b', fontWeight: 'bold' }} >Incomplete</td>
                                     }
                                     <td >{(ConvertToLocalDate(toDo.toDoDate))}</td>
-                                    <td style={{ cursor: 'pointer' }} title={toDo.comments} alt={toDo.comments} >{toDo.toDoTask}</td>
+                                    <td style={{ cursor: 'progress' }} title={toDo.comments} alt={toDo.comments} >{toDo.toDoTask}</td>
                                 </tr>
                             )
                         })}
@@ -442,7 +412,7 @@ export default function MyToDoList() {
     const AddNewToDoPage = (
         <React.Fragment>
             <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }}>
-                <MDBTypography className='card-header'
+                <MDBTypography component={'div'} className='card-header'
                     style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
                     <strong>Add new to do</strong>
                 </MDBTypography>
@@ -515,7 +485,7 @@ export default function MyToDoList() {
                         <MDBRow alignment='center'>
                             <MDBCol className='col-lg-6'>
                                 <div>
-                                    <MDBTypography style={{ fontSize: '17px' }}><strong>Date:- </strong>{date_ = (date_ = new Date(toDoDate), date_ = date_.toLocaleString('en-GB').slice(0, 10))}</MDBTypography>
+                                    <MDBTypography component={'div'} style={{ fontSize: '17px' }}><strong>Date:- </strong>{date_ = (date_ = new Date(toDoDate), date_ = date_.toLocaleString('en-GB').slice(0, 10))}</MDBTypography>
                                     {/* <p style={{ fontSize: '17px' }}><strong>Date:-</strong></p> */}
                                     <input style={dateStyle} hidden={true} readOnly={true} type="text" value={toDoDate} />
                                 </div>
@@ -524,7 +494,7 @@ export default function MyToDoList() {
                         <MDBRow>
                             <MDBCol className='col-lg-6'>
                                 <div className='mt-0'>
-                                    <MDBTypography style={{ fontSize: '17px' }}><strong>To do:- </strong>{toDoTask}</MDBTypography>
+                                    <MDBTypography component={'div'} style={{ fontSize: '17px' }}><strong>To do:- </strong>{toDoTask}</MDBTypography>
                                     {/* <p style={{ fontSize: '17px' }}><strong>To do*</strong></p> */}
                                     <input style={inputStyle} className='form-control'
                                         value={toDoTask} hidden={true} readOnly={true} type='text' placeholder='To do information...' />
@@ -534,7 +504,7 @@ export default function MyToDoList() {
                         <MDBRow>
                             <MDBCol className='col-lg-6'>
                                 <div className='mt-0' >
-                                    <MDBTypography style={{ fontSize: '17px' }}><strong>Status</strong></MDBTypography>
+                                    <MDBTypography component={'div'} style={{ fontSize: '17px' }}><strong>Status</strong></MDBTypography>
                                     <MDBCheckbox id='statusUpdateCheck'
                                         name='taskCheckbox'
                                         label='Task Completed ?'
@@ -544,7 +514,7 @@ export default function MyToDoList() {
                         </MDBRow>
                         <MDBRow>
                             <div className='mt-2'>
-                                <MDBTypography style={{ fontSize: '17px' }}><strong>Comments</strong></MDBTypography>
+                                <MDBTypography component={'div'} style={{ fontSize: '17px' }}><strong>Comments</strong></MDBTypography>
 
                                 <textarea style={textAreaStyle} className='form-control'
                                     value={comments} type='text' placeholder='Comments...'

@@ -10,7 +10,7 @@ import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 import PopUp from './popUp';
 
 import {
-    MDBCard, MDBCardBody,
+    MDBCard, MDBCardBody, MDBContainer,
     MDBRow, MDBCol,
     MDBTypography,
     MDBRipple
@@ -47,7 +47,6 @@ export default function UpdateLogin() {
 
     const ageMax = new Date().getFullYear();        // year picker up to current year
     const ageMin = new Date().getFullYear() - 120;  // year picker 120 year back from current year
-
 
     const inputStyle = { maxHeight: '38px', maxWidth: '275px', marginLeft: '50px' };
     const iconStyle = { marginLeft: '5px', color: 'black', cursor: 'pointer' };
@@ -316,16 +315,16 @@ export default function UpdateLogin() {
     const OptionSelector = (
         <React.Fragment>
             <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
-                <MDBTypography className='card-header'
+                <MDBTypography component={'div'} className='card-header'
                     style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
-                    <strong>Edit Login Details</strong>
+                    <strong>Update Login Details</strong>
                 </MDBTypography>
                 <MDBCardBody className='d-flex justify-content-center'>
                     <MDBRow>
                         <MDBCol className='size-md mx-2'>
                             <MDBRow>
                                 <MDBRipple
-                                    className='bg-image hover-overlay hover-shadow-0-strong rounded'
+                                    className='bg-image hover-overlay hover-shadow-0-strong'
                                     rippleTag='div'
                                     rippleColor='light' >
                                     <img src={passwordIcon} style={{ maxWidth: '100px' }} />
@@ -337,7 +336,7 @@ export default function UpdateLogin() {
                                 </MDBRipple>
                             </MDBRow>
                             <MDBRow>
-                                <MDBTypography style={{ textAlign: 'center', paddingTop: '10px', fontSize: '16px', fontWeight: 'bold' }}>
+                                <MDBTypography component={'div'} style={{ textAlign: 'center', paddingTop: '10px', fontSize: '16px', fontWeight: 'bold' }}>
                                     Password
                                 </MDBTypography>
                             </MDBRow>
@@ -358,7 +357,7 @@ export default function UpdateLogin() {
                                 </MDBRipple>
                             </MDBRow>
                             <MDBRow>
-                                <MDBTypography style={{ textAlign: 'center', paddingTop: '10px', fontSize: '16px', fontWeight: 'bold' }}>
+                                <MDBTypography component={'div'} style={{ textAlign: 'center', paddingTop: '10px', fontSize: '16px', fontWeight: 'bold' }}>
                                     Memorable Date
                                 </MDBTypography>
                             </MDBRow>
@@ -372,7 +371,7 @@ export default function UpdateLogin() {
     const ShowDateFields = (
         <React.Fragment>
             <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
-                <MDBTypography className='card-header'
+                <MDBTypography component={'div'} className='card-header'
                     style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
                     <strong>Edit Login Details</strong>
                 </MDBTypography>
@@ -382,7 +381,7 @@ export default function UpdateLogin() {
                     <MDBRow>
                         <MDBCol className='size=md'>
 
-                            <MDBTypography className='card-header'
+                            <MDBTypography component={'div'} className='card-header'
                                 style={labelStyle} >
                                 <strong>Enter your new memorable date</strong>
                             </MDBTypography>
@@ -415,7 +414,7 @@ export default function UpdateLogin() {
                                     onChange={(e) => { let newEdit = { ...memYear }; newEdit = e.target.value; setMemYear(newEdit) }} >
                                 </input>
                             </div>
-                            <MDBTypography className='card-header'
+                            <MDBTypography component={'div'} className='card-header'
                                 style={labelStyle} >
                                 <strong>Enter your new memorable date again*</strong>
                             </MDBTypography>
@@ -448,7 +447,7 @@ export default function UpdateLogin() {
                                 </input>
                             </div>
 
-                            <MDBTypography className='card-header'
+                            <MDBTypography component={'div'} className='card-header'
                                 style={labelStyle} >
                                 <strong>Enter your password*</strong>
                             </MDBTypography>
@@ -477,26 +476,26 @@ export default function UpdateLogin() {
     const ShowPwdFields = (
         <React.Fragment>
             <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
-                <MDBTypography className='card-header'
+                <MDBTypography component={'div'} className='card-header'
                     style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
                     <strong>Edit Login Details</strong>
                 </MDBTypography>
 
                 <MDBCardBody >
-                    <MDBTypography className='card-header'
+                    <MDBTypography component={'div'} className='card-header'
                         style={labelStyle} >
                         <strong>Enter your new password</strong>
                     </MDBTypography>
                     <input style={inputStyle} className='form-control' type='password'
                         minLength={6} maxLength={10} value={password} onChange={(e) => { let newEdit = { ...password }; newEdit = e.target.value; setPassword(newEdit) }}></input>
-                    <MDBTypography className='card-header'
+                    <MDBTypography component={'div'} className='card-header'
                         style={labelStyle} >
                         <strong>Enter your new password again*</strong>
                     </MDBTypography>
                     <input style={inputStyle} className='form-control' type='password'
                         minLength={6} maxLength={10} value={reEnterPwd} onChange={(e) => { let newEdit = { ...reEnterPwd }; newEdit = e.target.value; setReEnterPwd(newEdit) }}></input>
 
-                    <MDBTypography className='card-header'
+                    <MDBTypography component={'div'} className='card-header'
                         style={labelStyle} >
                         <strong>Enter your old password*</strong>
                     </MDBTypography>

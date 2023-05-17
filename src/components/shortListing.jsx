@@ -17,13 +17,13 @@ export default function ShortListing() {
         <React.Fragment>
             <MDBCard className='w-100 mx-auto'  >
                 <MDBCardBody>
-                    <MDBTypography className='border border-0 border-bottom border-secondary text-left'
+                    <MDBTypography component={'div'} className='border border-0 border-bottom border-secondary text-left'
                         style={headStyle}>
                         <strong>Shortlisting and offers</strong>
                     </MDBTypography>
 
                     <div>
-                        <MDBTypography className='border border rounded  p-1 text-left'
+                        <MDBTypography component={'div'} className='border border rounded  p-1 text-left'
                             style={headStyle1}>
                             Shortlisting property adverts
                         </MDBTypography>
@@ -34,7 +34,7 @@ export default function ShortListing() {
                     </div>
                     <p>&nbsp;</p>
                     <div>
-                        <MDBTypography className='border border rounded  p-1 text-left'
+                        <MDBTypography component={'div'} className='border border rounded  p-1 text-left'
                             style={headStyle1}>
                             Documentation
                         </MDBTypography>
@@ -54,7 +54,7 @@ export default function ShortListing() {
                         <p className='mt-3 mb-2'>These must be the original documents, photocopies will not be accepted. </p>
                     </div>
                     <p>&nbsp;</p>
-                        <MDBTypography className='border border rounded  p-1 text-left'
+                        <MDBTypography component={'div'} className='border border rounded  p-1 text-left'
                             style={headStyle2}>
                             Without this information the appointment will be cancelled and you may lose this offer of accommodation.
                         </MDBTypography>

@@ -46,7 +46,7 @@ export default function MemberListPage() {
             <Navbar />
             <NavbarSecondary />
             <MDBRow className='my-3 justify-content-center' alignment='center' bgcolor='#f7f2f287'>
-                {/* <MDBTypography className='card-header' style={{ fontSize: '16px' }} ><strong>My Household Members</strong></MDBTypography> */}
+                {/* <MDBTypography component={'div'} className='card-header' style={{ fontSize: '16px' }} ><strong>My Household Members</strong></MDBTypography> */}
                 <MDBCol md='8'>
                     <MembersList></MembersList>
                 </MDBCol>

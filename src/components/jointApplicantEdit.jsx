@@ -40,7 +40,7 @@ export default function JointApplicantEdit() {
     const yearMax = new Date().getFullYear();        // year picker up to current year
     const yearMin = new Date().getFullYear() - 120;  // year picker 120 year back from current year
 
-    const labelStyle = { maxHeight: 'auto', fontSize: '15px', width: 'auto', color: '#4f4f4f', padding: '0px', marginLeft: '0px' };
+    const labelStyle = { maxHeight: 'auto', fontSize: '15px', width: 'auto', color: '#4f4f4f' };
     const inputStyle = { maxHeight: 'auto', fontSize: '16px', minwidth: '250px', color: 'black' };
     const commentStyle = { minHeight: '150px', fontSize: '16px', minWidth: '250px', color: 'black' };
     const memberStyle = { paddingLeft: '10px', color: 'black', };
@@ -136,12 +136,12 @@ export default function JointApplicantEdit() {
                     setCurrentlyLiveWithYou(responseJoint.data.jointApplicantDetails.clientJoint_current_live_with_you)
                     if (responseJoint.data.jointApplicantDetails.clientJoint_current_live_with_you === 'yes') {
                         window.document.getElementById('CurrentlyLiveWithYouYes').checked = true;
-                        window.document.getElementById('LivingInDiffAddressYes').checked = false;
+                        window.document.getElementById('LivingInDiffAddressNo').checked = true;
                         setShowCorrespondenceAddress(false);
 
                     } else {
                         window.document.getElementById('CurrentlyLiveWithYouNo').checked = true;
-                        window.document.getElementById('LivingInDiffAddressNo').checked = true;
+                        window.document.getElementById('LivingInDiffAddressYes').checked = true;
 
                         setShowCorrespondenceAddress(true);
                     }
@@ -387,35 +387,35 @@ export default function JointApplicantEdit() {
     return (
         <React.Fragment>
             <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
-                <MDBTypography className='card-header' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
-                    <strong>Edit Partner/Joint Applicant Details</strong>
+                <MDBTypography component={'div'} className='card-header' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
+                    <strong>Joint Applicant / Partner Details</strong>
                 </MDBTypography>
                 <MDBCardBody className='p-1' >
-                    {/* ********** Applicant relationship  */}
-                    <MDBRow className='center'>
+                    {/* ********** Applicant Details  */}
+                    <MDBRow className='mt-3'>
+                        <MDBCol className='col-lg-3 col-md-4 col-sm-6 col-xs-6 '>
+                            <MDBTypography component={'div'} style={labelStyle}>Full Name:<strong style={memberStyle}>{ToCamelCase(fName) + " " + ToCamelCase(sName)}</strong></MDBTypography>
+                        </MDBCol>
+
                         <MDBCol className='col-lg-3 col-md-4 col-sm-6 col-xs-6'>
-                            <MDBTypography style={labelStyle}>Full Name:<strong style={memberStyle}>{ToCamelCase(fName) + " " + ToCamelCase(sName)}</strong></MDBTypography>
-
+                            <MDBTypography component={'div'} style={labelStyle}>NINO:<strong style={memberStyle}>{nINO.toUpperCase()}</strong></MDBTypography>
                         </MDBCol>
-                        <MDBCol className='col-lg-3 col-md-4 col-sm-6 col-xs-6'>
-                            <MDBTypography style={labelStyle}>NINO:<strong style={memberStyle}>{nINO.toUpperCase()}</strong></MDBTypography>
 
-                        </MDBCol>
                         <MDBCol className='col-lg-3 col-md-2 col-sm-6 col-xs-6'>
-                            <MDBTypography style={labelStyle}>DOB:<strong style={memberStyle}>{ToCamelCase(dateofbirth)}</strong></MDBTypography>
-
+                            <MDBTypography component={'div'} style={labelStyle}>DOB:<strong style={memberStyle}>{ToCamelCase(dateofbirth)}</strong></MDBTypography>
                         </MDBCol>
+
                         <MDBCol className='col-lg-3 col-md-2 col-sm-6 col-xs-6'>
-                            <MDBTypography style={labelStyle}>Relation:<strong style={memberStyle}>{ToCamelCase(relationWithPrimaryApplicant)}</strong></MDBTypography>
+                            <MDBTypography component={'div'} style={labelStyle}>Relation:<strong style={memberStyle}>{ToCamelCase(relationWithPrimaryApplicant)}</strong></MDBTypography>
                         </MDBCol>
                     </MDBRow>
-                    <hr style={{ height: '4px' }}></hr>
 
                     {/* health conditions */}
-                    <MDBTypography className='card-header  mb-2'
+                    <MDBTypography component={'div'} className='card-header  mb-2'
                         style={headerStyle} >
                         <strong>Does this person have any physical or mental health conditions or illnesses lasting or expected to last for 12 months or more?</strong>
                     </MDBTypography>
+
                     <div className='px-4 mb-2' >
                         <select style={{ overflow: 'scroll', maxWidth: '155px' }} className="form-select rounded"
                             onChange={(e) => { let newEdit = { ...healthCondition }; newEdit = e.target.value; setHealthCondition(newEdit) }} >
@@ -427,10 +427,11 @@ export default function JointApplicantEdit() {
                     </div>
 
                     {/* currently live with you */}
-                    <MDBTypography className='card-header mt-4 mb-2'
+                    <MDBTypography component={'div'} className='card-header mt-4 mb-2'
                         style={headerStyle} >
                         <strong>Does this person currently live with you?</strong>
                     </MDBTypography>
+                    
                     <div className='px-4 mb-2' >
                         <MDBRow>
                             <MDBCol className='col-3'>
@@ -450,7 +451,7 @@ export default function JointApplicantEdit() {
                     </div>
 
                     {/* Date moved into this address? */}
-                    <MDBTypography className='card-header mt-4 mb-3'
+                    <MDBTypography component={'div'} className='card-header mt-4 mb-3'
                         style={headerStyle} >
                         <strong>Date moved into this address?</strong>
                     </MDBTypography>
@@ -490,22 +491,22 @@ export default function JointApplicantEdit() {
                     {/* What is their current address */}
                     <div className='mt-4 mb-2' >
                         <div style={{ fontSize: '13px', height: 'auto', width: 'auto', background: '#e4f5fb' }} className=" help-content border border-grey rounded">
-                            <MDBTypography className='card-header'
+                            <MDBTypography component={'div'} className='card-header'
                                 style={headerStyle} >
                                 <strong>What is their current address</strong>
                             </MDBTypography>
                         </div>
                         <MDBRow className='mt-2 mb-2'>
                             <MDBRadio className='mx-3' name='livingInDiffAddressRadio'
-                                id='LivingInDiffAddressYes' value='Living with primary applicant'
-                                htmlFor='livingInDiffAddressYes' label='Living with primary applicant'
+                                id='LivingInDiffAddressNo' value='Living with primary applicant'
+                                htmlFor='livingInDiffAddressNo' label='Living with primary applicant'
                                 onChange={(e) => { let newEdit = { ...livingInDiffAddress }; newEdit = e.target.value; setLivingInDiffAddress(newEdit); setShowCorrespondenceAddress(false); }}></MDBRadio>     {/* Get and show primary applicant address in this place */}
 
                         </MDBRow>
                         <MDBRow>
                             <MDBRadio className='mx-3' name='livingInDiffAddressRadio'
-                                id='LivingInDiffAddressNo' value='Living in different address'
-                                label='This person is living at a different address' htmlFor='livingInDiffAddressNo'
+                                id='LivingInDiffAddressYes' value='Living in different address'
+                                label='This person is living at a different address' htmlFor='livingInDiffAddressYes'
                                 onChange={(e) => { let newEdit = { ...livingInDiffAddress }; newEdit = e.target.value; setLivingInDiffAddress(newEdit); setShowCorrespondenceAddress(true); }}></MDBRadio>     {/* Spouse or partner living in different address */}
                         </MDBRow>
 
@@ -522,7 +523,7 @@ export default function JointApplicantEdit() {
 
                                         <div className='mt-3 mb-2' >
                                             <input style={inputStyle} className='form-control' type='text' placeholder='postcode...'
-                                                maxLength={8} defaultValue={corresPostcode || ''}
+                                                maxLength={8} defaultValue={corresPostcode.toUpperCase() || ''}
                                                 onChange={(e) => { let newEdit = { ...corresPostcode }; newEdit = e.target.value; setCorresPostcode(newEdit) }} />
                                         </div>
                                         <form className='d-flex w-auto mb-3'>
@@ -540,7 +541,7 @@ export default function JointApplicantEdit() {
 
                                             <div className='' >
                                                 <input style={inputStyle} className='form-control ' type='text' placeholder='house or flat number and street'
-                                                    maxLength={75} defaultValue={corresLine1 || ''}
+                                                    maxLength={75} defaultValue={ToCamelCase(corresLine1) || ''}
                                                     onChange={(e) => { let newEdit = { ...corresLine1 }; newEdit = e.target.value; setCorresLine1(newEdit) }} />
                                             </div>
                                         </div>
@@ -551,7 +552,7 @@ export default function JointApplicantEdit() {
                                             </div>
                                             <div className='' >
                                                 <input style={inputStyle} className='form-control' type='text' placeholder='Address line 2'
-                                                    maxLength={75} defaultValue={corresLine2 || ''}
+                                                    maxLength={75} defaultValue={ToCamelCase(corresLine2) || ''}
                                                     onChange={(e) => { let newEdit = { ...corresLine2 }; newEdit = e.target.value; setCorresLine2(newEdit) }} />
                                             </div>
                                         </div>
@@ -563,7 +564,7 @@ export default function JointApplicantEdit() {
                                             </div>
                                             <div className='' >
                                                 <input style={inputStyle} className='form-control' type='text' placeholder='Address line 3'
-                                                    maxLength={75} defaultValue={corresLine3 || ''}
+                                                    maxLength={75} defaultValue={ToCamelCase(corresLine3) || ''}
                                                     onChange={(e) => { let newEdit = { ...corresLine3 }; newEdit = e.target.value; setCorresLine3(newEdit) }} />
                                             </div>
                                         </div>
@@ -575,7 +576,7 @@ export default function JointApplicantEdit() {
                                             </div>
                                             <div className='' >
                                                 <input style={inputStyle} className='form-control' type='text' placeholder='Address line 4'
-                                                    maxLength={75} defaultValue={corresLine4 || ''}
+                                                    maxLength={75} defaultValue={ToCamelCase(corresLine4) || ''}
                                                     onChange={(e) => { let newEdit = { ...corresLine4 }; newEdit = e.target.value; setCorresLine4(newEdit) }} />
                                             </div>
                                         </div>
@@ -585,7 +586,7 @@ export default function JointApplicantEdit() {
                         </div>
                     }
                     {/* Home telephone */}
-                    <MDBTypography className='card-header mt-4 mb-2'
+                    <MDBTypography component={'div'} className='card-header mt-4 mb-2'
                         style={headerStyle} >
                         <strong>Home telephone</strong>
                     </MDBTypography>
@@ -602,7 +603,7 @@ export default function JointApplicantEdit() {
                     </div>
 
                     {/* Work telephone */}
-                    <MDBTypography className='card-header mt-4 mb-2'
+                    <MDBTypography component={'div'} className='card-header mt-4 mb-2'
                         style={headerStyle} >
                         <strong>Work telephone</strong>
                     </MDBTypography>
@@ -619,7 +620,7 @@ export default function JointApplicantEdit() {
                     </div>
 
                     {/* Mobile */}
-                    <MDBTypography className='card-header mt-4 mb-2'
+                    <MDBTypography component={'div'} className='card-header mt-4 mb-2'
                         style={headerStyle} >
                         <strong>Mobile</strong>
                     </MDBTypography>
@@ -636,7 +637,7 @@ export default function JointApplicantEdit() {
                     </div>
 
                     {/* Email */}
-                    <MDBTypography className='card-header mt-4 mb-2'
+                    <MDBTypography component={'div'} className='card-header mt-4 mb-2'
                         style={headerStyle} >
                         <strong>Email</strong>
                     </MDBTypography>
@@ -654,7 +655,7 @@ export default function JointApplicantEdit() {
 
                     {showPregnantField &&
                         <React.Fragment>
-                            <MDBTypography className='card-header mt-4 mb-2'
+                            <MDBTypography component={'div'} className='card-header mt-4 mb-2'
                                 style={headerStyle} >
                                 <strong>Is she pregnant?</strong>
                             </MDBTypography>
@@ -677,7 +678,7 @@ export default function JointApplicantEdit() {
                             {showDeliveryDate &&
                                 <div id='showDeliveryDate'>
 
-                                    <MDBTypography className='card-header mt-4 mb-2'
+                                    <MDBTypography component={'div'} className='card-header mt-4 mb-2'
                                         style={headerStyle} >
                                         <strong>Delivery date</strong>
                                     </MDBTypography>
@@ -731,7 +732,7 @@ export default function JointApplicantEdit() {
                     }
 
                     {/* Does this person work */}
-                    <MDBTypography className='card-header mt-4 mb-2'
+                    <MDBTypography component={'div'} className='card-header mt-4 mb-2'
                         style={headerStyle} >
                         <strong>Does this person work, self-employed or a student?*</strong>
                     </MDBTypography>
@@ -752,7 +753,7 @@ export default function JointApplicantEdit() {
                     </div>
 
                     {/* Comments */}
-                    <MDBTypography className='card-header mt-4 mb-2'
+                    <MDBTypography component={'div'} className='card-header mt-4 mb-2'
                         style={headerStyle} >
                         <strong>Comments</strong>
                     </MDBTypography>

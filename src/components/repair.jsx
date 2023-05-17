@@ -17,13 +17,13 @@ export default function Repair() {
         <React.Fragment>
             <MDBCard className='w-100 mx-auto'  >
                 <MDBCardBody>
-                    <MDBTypography className='border border-0 border-bottom border-secondary text-left'
+                    <MDBTypography component={'div'} className='border border-0 border-bottom border-secondary text-left'
                         style={headStyle}>
                         <strong>Empty Property Repair Standard</strong>
                     </MDBTypography>
 
                     <div>
-                        <MDBTypography className='border border rounded  p-1 text-left'
+                        <MDBTypography component={'div'} className='border border rounded  p-1 text-left'
                             style={headStyle1}>
                             Empty Property Repair Standard
                         </MDBTypography>

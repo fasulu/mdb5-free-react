@@ -15,7 +15,7 @@ export default function Help() {
         <React.Fragment>
             <MDBCard className='w-100 mx-auto' style={{ backgroundColor: '#f7f2f287' }} >
                 <MDBCardBody>
-                    <MDBTypography className='border border rounded p-1 text-center'
+                    <MDBTypography component={'div'} className='border border rounded p-1 text-center'
                         style={headStyle}>
                         How to complete an application form
                     </MDBTypography>

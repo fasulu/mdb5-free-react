@@ -98,7 +98,7 @@ export default function UpdateLogin() {
         <React.Fragment>
             <MDBContainer className='ps-5 pt-3' alignment='center'  >
                 <MDBCard className='w-100 mx-auto' style={{ backgroundColor: '#f7f2f287' }} >
-                    <MDBTypography className='card-header'
+                    <MDBTypography component={'div'} className='card-header'
                         style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
                         <strong>Edit Login Details</strong>
                     </MDBTypography>
@@ -108,13 +108,13 @@ export default function UpdateLogin() {
                             {/**********  Password */}
                             <MDBCol className='size=md'>
                                 <div className='p-2'>
-                                    <MDBTypography className='card-header'
+                                    <MDBTypography component={'div'} className='card-header'
                                         style={labelStyle} >
                                         <strong>Enter your new password</strong>
                                     </MDBTypography>
                                     <input style={inputStyle} className='form-control' type='password' placeholder='Password...'
                                         minLength={6} maxLength={10} value={password} onChange={(e) => { setPassword(e.target.value) }}></input>
-                                    <MDBTypography className='card-header'
+                                    <MDBTypography component={'div'} className='card-header'
                                         style={labelStyle} >
                                         <strong>Enter your new password again</strong>
                                     </MDBTypography>

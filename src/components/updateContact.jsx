@@ -318,224 +318,225 @@ export default function UpdateContact() {
 
     return (
         <React.Fragment>
-            <MDBCard className='w-100 mx-auto ps-4 pt-3' style={{ backgroundColor: '#f7f2f287' }} >
-                <MDBTypography className='card-header'
+
+            <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
+                <MDBTypography component={'div'} className='card-header'
                     style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
                     <strong>Edit Primary Applicant Details</strong>
                 </MDBTypography>
-                <MDBCardBody style={{ alignItems: 'center' }}>
-
-                    {/**********  Permanent Address */}
-                    <MDBRow>
-                        <MDBCol className='size=md'>
-
-                            <MDBTypography className='card-header'
-                                style={labelStyle} >
-                                <strong>Date moved into this address?</strong>
-                            </MDBTypography>
-                            <div className='mx-3 mb-2' >
-                                <div className='btn-group' >
-                                    <select style={datePickerStyle}
-                                        className="form-select rounded"
-                                        value={movedInDate}
-                                        onChange={(e) => { let newEdit = { ...movedInDate }; newEdit = e.target.value; setMovedInDate(newEdit) }} >
-                                        {datesData.map((option) => (
-                                            <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
-                                        ))}
-                                    </select>
-
-                                    <select style={monthPickerStyle}
-                                        className="form-select rounded"
-                                        value={movedInMonth}
-                                        onChange={(e) => { let newEdit = { ...movedInMonth }; newEdit = e.target.value; setMovedInMonth(newEdit) }} >
-                                        {monthsData.map((option) => (
-                                            <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
-                                        ))}
-                                    </select>
-
-                                    <input className='form-control rounded'
-                                        style={yearPickerStyle}
-                                        type='number'
-                                        min={yearMin + 70}
-                                        max={yearMax}
-                                        placeholder='year'
-                                        value={movedInYear}
-                                        onChange={(e) => { let newEdit = { ...movedInYear }; newEdit = e.target.value; setMovedInYear(newEdit) }} >
-                                    </input>
-                                </div>
-                            </div>
-
-                            {/* Permanent Address */}
-                            <div className=''>
-                                <MDBTypography className='card-header'
-                                    style={labelStyle} >
-                                    <strong>Permanent Address</strong>
-                                </MDBTypography>
-
-                                <p className='mt-3' ><strong>1st line of address</strong>
-                                    <input style={inputStyle} className='form-control' type='test' placeholder='1st line of your address'
-                                        minLength={9} maxLength={20} value={addLine1 && ToCamelCase(addLine1)}
-                                        onChange={(e) => { let newEdit = { ...addLine1 }; newEdit = e.target.value; setAddLine1(newEdit) }} /></p>
-
-                                <p className=' mt-3'><strong>2nd line of address</strong>
-                                    <input style={inputStyle} className='form-control' type='test' placeholder='2nd line of your address'
-                                        minLength={9} maxLength={20} value={addLine2 && ToCamelCase(addLine2)}
-                                        onChange={(e) => { let newEdit = { ...addLine2 }; newEdit = e.target.value; setAddLine2(newEdit) }} /></p>
-
-                                <p className=' mt-3'><strong>3rd line of address</strong>
-                                    <input style={inputStyle} className='form-control' type='test' placeholder='3rd line of your address'
-                                        minLength={9} maxLength={20} value={addLine3 && ToCamelCase(addLine3)}
-                                        onChange={(e) => { let newEdit = { ...addLine3 }; newEdit = e.target.value; setAddLine3(newEdit) }} /></p>
-
-                                <p className=' mt-3' ><strong>4th line of address</strong>
-                                    <input style={inputStyle} className='form-control' type='test' placeholder='4th line of your address'
-                                        minLength={9} maxLength={20} value={addLine4 && ToCamelCase(addLine4)}
-                                        onChange={(e) => { let newEdit = { ...addLine4 }; newEdit = e.target.value; setAddLine4(newEdit) }} /></p>
-
-                                <p className=' mt-3' ><strong>Postcode</strong>
-                                    <input style={inputStyle} className='form-control' type='test' placeholder='Postcode'
-                                        minLength={6} maxLength={9} value={postcode && postcode.toUpperCase()}
-                                        onChange={(e) => { let newEdit = { ...postcode }; newEdit = e.target.value; setPostcode(newEdit) }} /></p>
-
-                            </div>
-
-                            {/**********  Correspondence Address */}
-                            <div >
-                                <MDBTypography className='card-header'
-                                    style={labelStyle} >
-                                    <strong>Correspondence Address</strong>
-                                </MDBTypography>
-
-                                <div className=''>
-                                    <MDBRow >
-                                        <div className='mt-2'>
-                                            <MDBRadio className='mx-2' name='communicationAddressRadio' id='CommunicationAddressCurrent'
-                                                label='To my permanent address' inline
-                                                value='current address'
-                                                onChange={(e) => { let newEdit = { ...communicationAddress }; newEdit = e.target.value; setCommunicationAddress(newEdit); setShowCorrespondence(false) }}></MDBRadio>    {/* setShowCorrespondence will  show or hide according to the selection */}
-                                        </div>
-                                        <div className='mt-2'>
-                                            <MDBRadio className='mx-2' name='communicationAddressRadio' id='CommunicationAddressCorrespondence'
-                                                label='To my correspondence address' inline value='correspondence address'
-                                                onChange={(e) => { let newEdit = { ...communicationAddress }; newEdit = e.target.value; setCommunicationAddress(newEdit); setShowCorrespondence(true) }}></MDBRadio>
-                                        </div>
-
-                                    </MDBRow>
-                                </div>
-
-                                {/* Correspondence description */}
-                                {
-                                    showCorrespondence &&
-                                    <React.Fragment>
-                                        < p className=' mt-3' ><strong>Correspondence description</strong>
-                                            <select style={comboBoxStyle}
-                                                className="form-select rounded"
-                                                onChange={(e) => { let newEdit = { ...correspondenceType }; newEdit = e.target.value; setCorrespondenceType(newEdit); }}>    {/* showCorrespondence will show or hide according to the selection */}
-                                                {correspondenceData.map((option) => (
-                                                    <option key={option.correspondenceKey} value={option.correspondence}>{option.correspondence}</option>
-                                                ))}
-                                            </select>
-                                        </p>
-                                        < p className=' mt-3' ><strong>1st line of address</strong>
-                                            <input style={inputStyle} className='form-control' type='test' placeholder='1st line of correspondence address'
-                                                minLength={9} maxLength={20} value={corresAddLine1 && ToCamelCase(corresAddLine1)}
-                                                onChange={(e) => { let newEdit = { ...corresAddLine1 }; newEdit = e.target.value; setCorresAddLine1(newEdit) }} /></p>
-
-                                        <p className=' mt-3' ><strong>2nd line of address</strong>
-                                            <input style={inputStyle} className='form-control' type='test' placeholder='2nd line of correspondence address'
-                                                minLength={9} maxLength={20} value={corresAddLine2 && ToCamelCase(corresAddLine2)}
-                                                onChange={(e) => { let newEdit = { ...corresAddLine2 }; newEdit = e.target.value; setCorresAddLine2(newEdit) }} /></p>
-
-                                        <p className=' mt-3' ><strong>3rd line of address</strong>
-                                            <input style={inputStyle} className='form-control' type='test' placeholder='3rd line of correspondence address'
-                                                minLength={9} maxLength={20} value={corresAddLine3 && ToCamelCase(corresAddLine3)}
-                                                onChange={(e) => { let newEdit = { ...corresAddLine3 }; newEdit = e.target.value; setCorresAddLine3(newEdit) }} /></p>
-
-                                        <p className=' mt-3' ><strong>4th line of address</strong>
-                                            <input style={inputStyle} className='form-control' type='test' placeholder='4th line of correspondence address'
-                                                minLength={9} maxLength={20} value={corresAddLine4 && ToCamelCase(corresAddLine4)}
-                                                onChange={(e) => { let newEdit = { ...corresAddLine4 }; newEdit = e.target.value; setCorresAddLine4(newEdit) }} /></p>
-
-                                        <p className=' mt-3' ><strong>Postcode</strong>
-                                            <input style={inputStyle} className='form-control' type='test' placeholder='Correspondence postcode'
-                                                minLength={6} maxLength={9} value={corresPostcode && corresPostcode.toUpperCase()}
-                                                onChange={(e) => { let newEdit = { ...corresPostcode }; newEdit = e.target.value; setCorresPostcode(newEdit) }} /></p>
-                                    </React.Fragment >
-                                }
-
-                            </div>
-
-                            {/********** Contact details */}
-                            <div >
-                                <MDBTypography className='card-header'
-                                    style={labelStyle} >
-                                    <strong>Contact Details</strong>
-                                </MDBTypography>
-                                <p  ><strong>Home Telephone</strong>
-                                    <input style={inputStyle} className='form-control' type='test' placeholder='Home telephone'
-                                        minLength={9} maxLength={20} value={telephone}
-                                        onChange={(e) => { let newEdit = { ...telephone }; newEdit = e.target.value; setTelephone(newEdit) }} />
-                                </p>
-                                <p  ><strong>Work Telephone</strong>
-                                    <input style={inputStyle} className='form-control' type='test' placeholder='Work telephone'
-                                        minLength={9} maxLength={20} value={workPhone}
-                                        onChange={(e) => { let newEdit = { ...workPhone }; newEdit = e.target.value; setWorkPhone(newEdit) }} />
-                                </p>
-                                <p  ><strong>Mobile</strong>
-                                    <input style={inputStyle} className='form-control' type='test' placeholder='Mobile'
-                                        minLength={9} maxLength={20} value={mobile}
-                                        onChange={(e) => { let newEdit = { ...mobile }; newEdit = e.target.value; setMobile(newEdit) }} />
-                                </p>
-                            </div>
-
-                            {/* Email Detail */}
-                            <div >
-                                <MDBTypography className='card-header'
-                                    style={labelStyle} >
-                                    <strong>Email Details</strong>
-                                </MDBTypography>
-                                <p  ><strong>New Email</strong>
-                                    <input style={inputStyle} className='form-control' type='test' placeholder='New email'
-                                        minLength={6} maxLength={40} value={email}
-                                        onChange={(e) => { let newEdit = { ...email }; newEdit = e.target.value; setEmail(newEdit) }} />
-                                </p>
-                                <p  ><strong>Enter your new email again</strong>
-                                    <input style={inputStyle} className='form-control' type='test' placeholder='Enter your new email again'
-                                        minLength={6} maxLength={40} value={reEnterEmail}
-                                        onChange={(e) => { let newEdit = { ...reEnterEmail }; newEdit = e.target.value; setReEnterEmail(newEdit) }} />
-                                </p>
-                            </div>
-
-                            {/* Comments */}
-                            <div>
-                                <MDBTypography className='card-header'
-                                    style={labelStyle} >
-                                    <strong>Comments</strong>
-                                </MDBTypography>
-
-                                <div  >
-                                    <textarea style={commentStyle} className='form-control' type='text' placeholder='Comments...'
-                                        maxLength={20} value={comments}
-                                        onChange={(e) => { let newEdit = { ...comments }; newEdit = e.target.value; setComments(newEdit) }}></textarea>
-                                </div>
-
-                            </div>
-
-                            <form className='d-flex w-auto p-3'>
-                                <BtnAccept style={btnSytle}
-                                    onClick={(e) => { if (window.confirm("Update changes?")) handleSave(e) }}>
-                                    Save
-                                </BtnAccept>
-                                <BtnAccept style={btnSytle} color='secondary'
-                                    onClick={(e) => { if (window.confirm("Cancel changes?")) gotoAccountPage(e) }}>
-                                    Cancel
-                                </BtnAccept>
-
-                            </form>
-                        </MDBCol>
-                    </MDBRow>
-                </MDBCardBody>
             </MDBCard>
+            <MDBCardBody className='m-2' style={{ alignItems: 'center' }}>
+
+                {/**********  Permanent Address */}
+                <MDBRow>
+                    <MDBCol className='size=md'>
+
+                        <MDBTypography component={'div'} className='card-header'
+                            style={labelStyle} >
+                            <strong>Date moved into this address?</strong>
+                        </MDBTypography>
+                        <div className='mx-3 mb-2' >
+                            <div className='btn-group' >
+                                <select style={datePickerStyle}
+                                    className="form-select rounded"
+                                    value={movedInDate}
+                                    onChange={(e) => { let newEdit = { ...movedInDate }; newEdit = e.target.value; setMovedInDate(newEdit) }} >
+                                    {datesData.map((option) => (
+                                        <option key={option.dKey} value={option.dKey}>{option.dValue}</option>
+                                    ))}
+                                </select>
+
+                                <select style={monthPickerStyle}
+                                    className="form-select rounded"
+                                    value={movedInMonth}
+                                    onChange={(e) => { let newEdit = { ...movedInMonth }; newEdit = e.target.value; setMovedInMonth(newEdit) }} >
+                                    {monthsData.map((option) => (
+                                        <option key={option.mKey} value={option.mKey}>{option.mValue}</option>
+                                    ))}
+                                </select>
+
+                                <input className='form-control rounded'
+                                    style={yearPickerStyle}
+                                    type='number'
+                                    min={yearMin + 70}
+                                    max={yearMax}
+                                    placeholder='year'
+                                    value={movedInYear}
+                                    onChange={(e) => { let newEdit = { ...movedInYear }; newEdit = e.target.value; setMovedInYear(newEdit) }} >
+                                </input>
+                            </div>
+                        </div>
+
+                        {/* Permanent Address */}
+                        <div className=''>
+                            <MDBTypography component={'div'} className='card-header'
+                                style={labelStyle} >
+                                <strong>Permanent Address</strong>
+                            </MDBTypography>
+
+                            <p className='mt-3' ><strong>1st line of address</strong>
+                                <input style={inputStyle} className='form-control' type='test' placeholder='1st line of your address'
+                                    minLength={9} maxLength={20} value={addLine1 && ToCamelCase(addLine1)}
+                                    onChange={(e) => { let newEdit = { ...addLine1 }; newEdit = e.target.value; setAddLine1(newEdit) }} /></p>
+
+                            <p className=' mt-3'><strong>2nd line of address</strong>
+                                <input style={inputStyle} className='form-control' type='test' placeholder='2nd line of your address'
+                                    minLength={9} maxLength={20} value={addLine2 && ToCamelCase(addLine2)}
+                                    onChange={(e) => { let newEdit = { ...addLine2 }; newEdit = e.target.value; setAddLine2(newEdit) }} /></p>
+
+                            <p className=' mt-3'><strong>3rd line of address</strong>
+                                <input style={inputStyle} className='form-control' type='test' placeholder='3rd line of your address'
+                                    minLength={9} maxLength={20} value={addLine3 && ToCamelCase(addLine3)}
+                                    onChange={(e) => { let newEdit = { ...addLine3 }; newEdit = e.target.value; setAddLine3(newEdit) }} /></p>
+
+                            <p className=' mt-3' ><strong>4th line of address</strong>
+                                <input style={inputStyle} className='form-control' type='test' placeholder='4th line of your address'
+                                    minLength={9} maxLength={20} value={addLine4 && ToCamelCase(addLine4)}
+                                    onChange={(e) => { let newEdit = { ...addLine4 }; newEdit = e.target.value; setAddLine4(newEdit) }} /></p>
+
+                            <p className=' mt-3' ><strong>Postcode</strong>
+                                <input style={inputStyle} className='form-control' type='test' placeholder='Postcode'
+                                    minLength={6} maxLength={9} value={postcode && postcode.toUpperCase()}
+                                    onChange={(e) => { let newEdit = { ...postcode }; newEdit = e.target.value; setPostcode(newEdit) }} /></p>
+
+                        </div>
+
+                        {/**********  Correspondence Address */}
+                        <div >
+                            <MDBTypography component={'div'} className='card-header'
+                                style={labelStyle} >
+                                <strong>Correspondence Address</strong>
+                            </MDBTypography>
+
+                            <div className=''>
+                                <MDBRow >
+                                    <div className='mt-2'>
+                                        <MDBRadio className='mx-2' name='communicationAddressRadio' id='CommunicationAddressCurrent'
+                                            label='To my permanent address' inline
+                                            value='current address'
+                                            onChange={(e) => { let newEdit = { ...communicationAddress }; newEdit = e.target.value; setCommunicationAddress(newEdit); setShowCorrespondence(false) }}></MDBRadio>    {/* setShowCorrespondence will  show or hide according to the selection */}
+                                    </div>
+                                    <div className='mt-2'>
+                                        <MDBRadio className='mx-2' name='communicationAddressRadio' id='CommunicationAddressCorrespondence'
+                                            label='To my correspondence address' inline value='correspondence address'
+                                            onChange={(e) => { let newEdit = { ...communicationAddress }; newEdit = e.target.value; setCommunicationAddress(newEdit); setShowCorrespondence(true) }}></MDBRadio>
+                                    </div>
+
+                                </MDBRow>
+                            </div>
+
+                            {/* Correspondence description */}
+                            {
+                                showCorrespondence &&
+                                <React.Fragment>
+                                    < p className=' mt-3' ><strong>Correspondence description</strong>
+                                        <select style={comboBoxStyle}
+                                            className="form-select rounded"
+                                            onChange={(e) => { let newEdit = { ...correspondenceType }; newEdit = e.target.value; setCorrespondenceType(newEdit); }}>    {/* showCorrespondence will show or hide according to the selection */}
+                                            {correspondenceData.map((option) => (
+                                                <option key={option.correspondenceKey} value={option.correspondence}>{option.correspondence}</option>
+                                            ))}
+                                        </select>
+                                    </p>
+                                    < p className=' mt-3' ><strong>1st line of address</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='1st line of correspondence address'
+                                            minLength={9} maxLength={20} value={corresAddLine1 && ToCamelCase(corresAddLine1)}
+                                            onChange={(e) => { let newEdit = { ...corresAddLine1 }; newEdit = e.target.value; setCorresAddLine1(newEdit) }} /></p>
+
+                                    <p className=' mt-3' ><strong>2nd line of address</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='2nd line of correspondence address'
+                                            minLength={9} maxLength={20} value={corresAddLine2 && ToCamelCase(corresAddLine2)}
+                                            onChange={(e) => { let newEdit = { ...corresAddLine2 }; newEdit = e.target.value; setCorresAddLine2(newEdit) }} /></p>
+
+                                    <p className=' mt-3' ><strong>3rd line of address</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='3rd line of correspondence address'
+                                            minLength={9} maxLength={20} value={corresAddLine3 && ToCamelCase(corresAddLine3)}
+                                            onChange={(e) => { let newEdit = { ...corresAddLine3 }; newEdit = e.target.value; setCorresAddLine3(newEdit) }} /></p>
+
+                                    <p className=' mt-3' ><strong>4th line of address</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='4th line of correspondence address'
+                                            minLength={9} maxLength={20} value={corresAddLine4 && ToCamelCase(corresAddLine4)}
+                                            onChange={(e) => { let newEdit = { ...corresAddLine4 }; newEdit = e.target.value; setCorresAddLine4(newEdit) }} /></p>
+
+                                    <p className=' mt-3' ><strong>Postcode</strong>
+                                        <input style={inputStyle} className='form-control' type='test' placeholder='Correspondence postcode'
+                                            minLength={6} maxLength={9} value={corresPostcode && corresPostcode.toUpperCase()}
+                                            onChange={(e) => { let newEdit = { ...corresPostcode }; newEdit = e.target.value; setCorresPostcode(newEdit) }} /></p>
+                                </React.Fragment >
+                            }
+
+                        </div>
+
+                        {/********** Contact details */}
+                        <div >
+                            <MDBTypography component={'div'} className='card-header'
+                                style={labelStyle} >
+                                <strong>Contact Details</strong>
+                            </MDBTypography>
+                            <p  ><strong>Home Telephone</strong>
+                                <input style={inputStyle} className='form-control' type='test' placeholder='Home telephone'
+                                    minLength={9} maxLength={20} value={telephone}
+                                    onChange={(e) => { let newEdit = { ...telephone }; newEdit = e.target.value; setTelephone(newEdit) }} />
+                            </p>
+                            <p  ><strong>Work Telephone</strong>
+                                <input style={inputStyle} className='form-control' type='test' placeholder='Work telephone'
+                                    minLength={9} maxLength={20} value={workPhone}
+                                    onChange={(e) => { let newEdit = { ...workPhone }; newEdit = e.target.value; setWorkPhone(newEdit) }} />
+                            </p>
+                            <p  ><strong>Mobile</strong>
+                                <input style={inputStyle} className='form-control' type='test' placeholder='Mobile'
+                                    minLength={9} maxLength={20} value={mobile}
+                                    onChange={(e) => { let newEdit = { ...mobile }; newEdit = e.target.value; setMobile(newEdit) }} />
+                            </p>
+                        </div>
+
+                        {/* Email Detail */}
+                        <div >
+                            <MDBTypography component={'div'} className='card-header'
+                                style={labelStyle} >
+                                <strong>Email Details</strong>
+                            </MDBTypography>
+                            <p  ><strong>New Email</strong>
+                                <input style={inputStyle} className='form-control' type='test' placeholder='New email'
+                                    minLength={6} maxLength={40} value={email}
+                                    onChange={(e) => { let newEdit = { ...email }; newEdit = e.target.value; setEmail(newEdit) }} />
+                            </p>
+                            <p  ><strong>Enter your new email again</strong>
+                                <input style={inputStyle} className='form-control' type='test' placeholder='Enter your new email again'
+                                    minLength={6} maxLength={40} value={reEnterEmail}
+                                    onChange={(e) => { let newEdit = { ...reEnterEmail }; newEdit = e.target.value; setReEnterEmail(newEdit) }} />
+                            </p>
+                        </div>
+
+                        {/* Comments */}
+                        <div>
+                            <MDBTypography component={'div'} className='card-header'
+                                style={labelStyle} >
+                                <strong>Comments</strong>
+                            </MDBTypography>
+
+                            <div  >
+                                <textarea style={commentStyle} className='form-control' type='text' placeholder='Comments...'
+                                    maxLength={20} value={comments}
+                                    onChange={(e) => { let newEdit = { ...comments }; newEdit = e.target.value; setComments(newEdit) }}></textarea>
+                            </div>
+
+                        </div>
+
+                        <form className='d-flex w-auto p-3'>
+                            <BtnAccept style={btnSytle}
+                                onClick={(e) => { if (window.confirm("Update changes?")) handleSave(e) }}>
+                                Save
+                            </BtnAccept>
+                            <BtnAccept style={btnSytle} color='secondary'
+                                onClick={(e) => { if (window.confirm("Cancel changes?")) gotoAccountPage(e) }}>
+                                Cancel
+                            </BtnAccept>
+
+                        </form>
+                    </MDBCol>
+                </MDBRow>
+            </MDBCardBody>
             {
                 showInfoModal &&
                 <PopUp

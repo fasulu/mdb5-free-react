@@ -16,7 +16,7 @@ export default function KeyFacts() {
         <React.Fragment>
             <MDBCard className='w-100 mx-auto'  >
                 <MDBCardBody>
-                    <MDBTypography className='border border-0 border-bottom border-secondary text-left'
+                    <MDBTypography component={'div'} className='border border-0 border-bottom border-secondary text-left'
                         style={headStyle}>
                         <strong>Key Facts</strong>
                     </MDBTypography>

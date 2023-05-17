@@ -101,18 +101,18 @@ export default function forgotLoginRef() {
 
                 <MDBCardBody>
                     <MDBRow>
-                        <MDBTypography style={{ fontSize: '18px' }}><strong>Recover your login reference</strong></MDBTypography>
+                        <MDBTypography component={'div'} style={{ fontSize: '18px' }}><strong>Recover your login reference</strong></MDBTypography>
 
                         <div>
                             {/* *********** Email  */}
-                            <MDBTypography style={{ fontSize: '17px' }}>Please enter your email address*</MDBTypography>
+                            <MDBTypography component={'div'} style={{ fontSize: '17px' }}>Please enter your email address*</MDBTypography>
 
                             <input style={inputStyle} className='form-control' type='text' placeholder='login reference'
                                 onChange={(e) => { let newEdit = { ...email }; newEdit = e.target.value; setEmail(newEdit) }} >
                             </input>
 
                             {/* *********** Date of Birth  */}
-                            <MDBTypography style={{ fontSize: '17px' }}>Please enter your date of birth*</MDBTypography>
+                            <MDBTypography component={'div'} style={{ fontSize: '17px' }}>Please enter your date of birth*</MDBTypography>
 
                             <div className='mt-2'>
                                 <div className='btn-group'>

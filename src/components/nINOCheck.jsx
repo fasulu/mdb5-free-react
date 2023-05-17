@@ -81,9 +81,9 @@ export default function NINOCheck() {
     return (
         <React.Fragment>
             <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
-                <MDBTypography style={{ fontSize: '17px' }}><strong>Register your household</strong></MDBTypography>
+                <MDBTypography component={'div'} style={{ fontSize: '17px' }}><strong>Register your household</strong></MDBTypography>
 
-                <MDBTypography style={{ fontSize: '16px', lineHeight: '1.5px' }}>National insurance number check</MDBTypography>
+                <MDBTypography component={'div'} style={{ fontSize: '16px', lineHeight: '1.5px' }}>National insurance number check</MDBTypography>
                 <MDBCard style={{ backgroundColor: '#f7f2f287' }} className='' >
                     <MDBCardBody>
                         <p className='lh-2' ><strong>National Insurance Check</strong></p>

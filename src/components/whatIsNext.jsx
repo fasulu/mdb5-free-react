@@ -19,7 +19,7 @@ export default function WhatIsNext() {
         <React.Fragment>
             <MDBCard className='w-100 mx-auto' style={{ backgroundColor: '#f7f2f287' }} >
                 <MDBCardBody>
-                    <MDBTypography className='border border-0 border-bottom border-secondary text-left'
+                    <MDBTypography component={'div'} className='border border-0 border-bottom border-secondary text-left'
                         style={headStyle}>
                         <strong>What happens next</strong>
                     </MDBTypography>

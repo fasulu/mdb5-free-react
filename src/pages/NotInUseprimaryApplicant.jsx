@@ -221,7 +221,7 @@ export default function PrimaryApplicant() {
                             {/* ********** Primary Applicant Details  */}
                             <MDBCardBody >
                                 <div className='mb-2'>
-                                    <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} tag='h6'><strong>Primary Applicant Details</strong></MDBTypography>
+                                    <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} tag='h6'><strong>Primary Applicant Details</strong></MDBTypography>
                                     <p style={{ fontSize: '16px' }}><strong>Title *</strong></p>
                                     <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded" aria-label="Default select example"
                                         value={title} onChange={(e) => { setTitle(e.target.value) }}>
@@ -382,7 +382,7 @@ export default function PrimaryApplicant() {
                                 <div>
 
                                     <div>
-                                        <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }}><strong>Lived Abroad</strong></MDBTypography>
+                                        <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }}><strong>Lived Abroad</strong></MDBTypography>
                                     </div>
 
                                     <p style={{ fontSize: '16px' }}><strong>Have you or any member of your household lived abroad in the last 5 years? *</strong></p>
@@ -411,7 +411,7 @@ export default function PrimaryApplicant() {
                                 <div>
 
                                     <div>
-                                        <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Current Address</strong></MDBTypography>
+                                        <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Current Address</strong></MDBTypography>
                                         <p style={{ fontSize: '16px' }}><strong>1. Address details</strong></p>
 
                                     </div>
@@ -849,7 +849,7 @@ export default function PrimaryApplicant() {
 
                             <MDBCardBody>
                                 <div>
-                                    <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} tag='h6'><strong>Contact Details</strong></MDBTypography>
+                                    <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} tag='h6'><strong>Contact Details</strong></MDBTypography>
 
                                 </div>
 
@@ -934,7 +934,7 @@ export default function PrimaryApplicant() {
 
                             <MDBCardBody>
                                 <div>
-                                    <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Equality and Diversity Monitoring</strong></MDBTypography>
+                                    <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Equality and Diversity Monitoring</strong></MDBTypography>
                                 </div>
 
                                 {/**********  Ethnic group  */}
@@ -1077,7 +1077,7 @@ export default function PrimaryApplicant() {
                             <MDBCardBody>
 
                                 <div>
-                                    <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} tag='h6'><strong>Eligibility</strong></MDBTypography>
+                                    <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} tag='h6'><strong>Eligibility</strong></MDBTypography>
                                 </div>
 
                                 {/**********  Current tenure */}
@@ -1161,7 +1161,7 @@ export default function PrimaryApplicant() {
                         <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
 
                             <MDBCardBody>
-                                <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Connection to Birmingham</strong></MDBTypography>
+                                <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Connection to Birmingham</strong></MDBTypography>
 
                                 <div>
 

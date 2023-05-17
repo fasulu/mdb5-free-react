@@ -12,7 +12,7 @@ import {
   MDBCardBody,
   MDBRipple,
   MDBTypography,
-  MDBRow, MDBCol
+  MDBRow, MDBCol, MDBFooter
 } from 'mdb-react-ui-kit';
 
 import { ToCamelCase } from '../validations/Validator'
@@ -35,6 +35,8 @@ export default function MembersList() {
   const [selectedMember, setSelectedMember] = useState("")
 
   const inputStyle = { maxHeight: 'auto', fontSize: '16px', minwidth: '250px', color: 'black' };
+
+  const nINOInfo = "To add/rectify please call housing department or delete and add as new member";
 
   const [showMemberToEdit, setShowMemberToEdit] = useState(false)
   const [showMemberToList, setShowMemberToList] = useState(false)
@@ -99,27 +101,20 @@ export default function MembersList() {
         <React.Fragment>
           <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
             <MDBCol>
-              <MDBTypography className='card-header'
+              <MDBTypography component={'div'} className='card-header'
                 style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
                 <strong>Household Member List</strong>
                 <span style={{ float: 'right' }}>
                   <MDBRipple
-                    className='bg-image hover-overlay bg-image hover-zoom'
-                    rippleTag='div'
-                    rippleColor='light' >
-                    <img src={addIcon} style={{ maxWidth: '37px' }}/>
-                    <a href='#!'>
-                      <div className='mask' style={{ backgroundColor: 'rgba(251, 251, 251, 0.2)' }}
-                        alt={addIconTitle} title={addIconTitle}
-                        onClick={(e) => { setShowMemberToAdd(true); setShowMemberToList(false) }}>
-                      </div>
+                    className='bg-image hover-overlay bg-image hover-zoom' >
+                    <img src={addIcon} style={{ maxWidth: '37px' }} />
+                    <a href='#!' className='mask' style={{ backgroundColor: 'rgba(251, 251, 251, 0.2)' }}
+                      alt={addIconTitle} title={addIconTitle}
+                      onClick={(e) => { setShowMemberToAdd(true); setShowMemberToList(false) }}>
                     </a>
                   </MDBRipple>
                 </span>
               </MDBTypography>
-            </MDBCol>
-            <MDBCol>
-
             </MDBCol>
 
             {membersList.map((memberList) => {
@@ -127,23 +122,29 @@ export default function MembersList() {
                 <MDBCard className='m-2'
                   key={memberList._id} item='true'
                   style={{ backgroundColor: '#f9f7f7' }} >
-                  {<MDBRipple rippleColor='dark' rippleTag='div' className='hover-overlay'>
+                  {<MDBRipple className='hover-overlay'>
                     <MDBCardBody >
                       <MDBRow alignment='center'>
                         <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
-                          <MDBTypography className='text-decoration-underline'
+                          <MDBTypography component={'div'} className='text-decoration-underline'
                             style={{ cursor: 'pointer', fontSize: '16px', color: '#1a82db' }} >
                             <strong onClick={(e) => openMember(e.target)}>{(memberList._id)}</strong>
                           </MDBTypography>
-                          <MDBTypography style={inputStyle1}>Name: <strong>{ToCamelCase(memberList.clientOtherHousehold_firstname)} {ToCamelCase(memberList.clientOtherHousehold_surname)}</strong></MDBTypography>
-                          <MDBTypography style={inputStyle1}>Date of birth: <strong>{ConvertToLocalDate(memberList.clientOtherHousehold_dateofbirth)}</strong></MDBTypography>
-                          <MDBTypography style={inputStyle1}>Relationship:  <strong>{(memberList.clientOtherHousehold_relationshipWithClient)}</strong></MDBTypography>
+                          <MDBTypography component={'div'} style={inputStyle1}>Name: <strong>{ToCamelCase(memberList.clientOtherHousehold_firstname)} {ToCamelCase(memberList.clientOtherHousehold_surname)}</strong></MDBTypography>
+                          <MDBTypography component={'div'} style={inputStyle1}>Date of birth: <strong>{ConvertToLocalDate(memberList.clientOtherHousehold_dateofbirth)}</strong></MDBTypography>
+                          <MDBTypography component={'div'} style={inputStyle1}>Relationship:  <strong>{(memberList.clientOtherHousehold_relationshipWithClient)}</strong></MDBTypography>
                         </MDBCol>
                         <MDBCol className='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
-                          <MDBTypography className='text-uppercase' style={inputStyle}> NINO:  <strong >{memberList.clientOtherHousehold_NINO} </strong> </MDBTypography>
-                          <MDBTypography style={inputStyle1}>Illness:  <strong>{ToCamelCase(memberList.clientOtherHousehold_illness)}</strong></MDBTypography>
-                          <MDBTypography style={inputStyle1}>Moved In:  <strong>{ConvertToLocalDate(memberList.clientOtherHousehold_moved_to_current_address)}</strong></MDBTypography>
-                          <MDBTypography style={inputStyle1}>Sex:  <strong>{ToCamelCase(memberList.clientOtherHousehold_sex)}</strong></MDBTypography>
+                          <MDBTypography component={'div'} className='text-uppercase' style={inputStyle} title={nINOInfo}>
+                            NINO<span style={{ cursor: 'progress', color: 'red', fontSize: '15px', fontWeight: 'bold' }}>
+                              * </span>:
+                            <strong >
+                              {memberList.clientOtherHousehold_NINO ? memberList.clientOtherHousehold_NINO.toUpperCase() : "Unknown"}
+                            </strong>
+                          </MDBTypography>
+                          <MDBTypography component={'div'} style={inputStyle1}>Illness:  <strong>{ToCamelCase(memberList.clientOtherHousehold_illness)}</strong></MDBTypography>
+                          <MDBTypography component={'div'} style={inputStyle1}>Moved In:  <strong>{ConvertToLocalDate(memberList.clientOtherHousehold_moved_to_current_address)}</strong></MDBTypography>
+                          <MDBTypography component={'div'} style={inputStyle1}>Sex:  <strong>{ToCamelCase(memberList.clientOtherHousehold_sex)}</strong></MDBTypography>
                         </MDBCol>
                       </MDBRow>
                     </MDBCardBody>
@@ -151,6 +152,10 @@ export default function MembersList() {
                 </MDBCard>
               );
             })}
+            <MDBFooter className='w-100 mx-auto ps-4 pt-2'>
+            <span style={{ color: 'red', fontSize: '18px', fontWeight: 'bold' }}> * </span>
+            <span style={{ color: '#474747', fontSize: '12px' }}>{nINOInfo}</span> 
+            </MDBFooter>
           </MDBCard>
         </React.Fragment >
       }

@@ -41,7 +41,7 @@ export default function MemberEditPage() {
             <Navbar />
             <NavbarSecondary />
             <MDBRow className='my-3 justify-content-center' alignment='center' bgcolor='#f7f2f287'>
-                {/* <MDBTypography className='card-header' style={{ fontSize: '18px' }} ><strong>Member</strong></MDBTypography> */}
+                {/* <MDBTypography component={'div'} className='card-header' style={{ fontSize: '18px' }} ><strong>Member</strong></MDBTypography> */}
                 <MDBCol md='8'>
                     {/* <MemberEdit></MemberEdit> */}
                 </MDBCol>

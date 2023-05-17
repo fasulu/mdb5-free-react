@@ -101,10 +101,10 @@ export default function Login() {
                 <MDBCardBody>
                     <MDBRow>
                         <MDBCol className='size=md'>
-                            <MDBTypography style={{ fontSize: '18px' }}><strong>Recover your password</strong></MDBTypography>
+                            <MDBTypography component={'div'} style={{ fontSize: '18px' }}><strong>Recover your password</strong></MDBTypography>
 
                             {/* *********** Email  */}
-                            <MDBTypography className='mt-2 ' style={{ fontSize: '17px' }}>Please enter your email address * </MDBTypography>
+                            <MDBTypography component={'div'} className='mt-2 ' style={{ fontSize: '17px' }}>Please enter your email address * </MDBTypography>
 
                             <input style={inputStyle} className='form-control'
                                 type='text'
@@ -173,10 +173,10 @@ export default function Login() {
                 <MDBCardBody>
                     <MDBRow>
                         <MDBCol className='size=md'>
-                            <MDBTypography style={{ fontSize: '18px' }}><strong>Recover your login reference</strong></MDBTypography>
+                            <MDBTypography component={'div'} style={{ fontSize: '18px' }}><strong>Recover your login reference</strong></MDBTypography>
 
                             {/* *********** Email  */}
-                            <MDBTypography className='mt-2 ' style={{ fontSize: '17px' }}>Please enter your email address * </MDBTypography>
+                            <MDBTypography component={'div'} className='mt-2 ' style={{ fontSize: '17px' }}>Please enter your email address * </MDBTypography>
 
                             <input style={inputStyle} className='form-control'
                                 type='text'
@@ -186,7 +186,7 @@ export default function Login() {
                             </input>
 
                             {/* *********** Date of Birth  */}
-                            <MDBTypography className='mt-3' style={{ fontSize: '17px' }}>Please enter your date of birth *</MDBTypography>
+                            <MDBTypography component={'div'} className='mt-3' style={{ fontSize: '17px' }}>Please enter your date of birth *</MDBTypography>
 
                             <div className='mx-2'>
                                 <div className='btn-group'>
@@ -237,7 +237,7 @@ export default function Login() {
         <React.Fragment>
             <MDBCard style={{ backgroundColor: '#f7f2f287' }} className='w-100 mx-auto' >
                 <MDBCardBody>
-                    <MDBTypography style={{ fontSize: '18px' }}><strong>Client Reference:- {loginReference.toUpperCase()}</strong></MDBTypography>
+                    <MDBTypography component={'div'} style={{ fontSize: '18px' }}><strong>Client Reference:- {loginReference.toUpperCase()}</strong></MDBTypography>
 
                     {/**********  Password */}
                     <MDBRow>
@@ -317,9 +317,9 @@ export default function Login() {
 
                 <MDBCardBody>
                     <MDBRow>
-                        <MDBTypography style={{ fontSize: '18px' }}><strong>Login</strong></MDBTypography>
+                        <MDBTypography component={'div'} style={{ fontSize: '18px' }}><strong>Login</strong></MDBTypography>
 
-                        <MDBTypography style={{ fontSize: '17px' }}>Your login reference*</MDBTypography>
+                        <MDBTypography component={'div'} style={{ fontSize: '17px' }}>Your login reference*</MDBTypography>
 
                         <input style={inputStyle} className='form-control'
                             type='text'

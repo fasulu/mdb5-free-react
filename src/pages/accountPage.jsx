@@ -74,10 +74,10 @@ export default function AccountPage() {
     const [addressLine3, setAddressLine3] = useState("");
     const [addressLine4, setAddressLine4] = useState();
 
-    const styleBtn = { fontSize: '14px', color: '#4f83c3', textTransform: 'none' };
+    const styleBtn = { margin: '0px', fontSize: '14px', color: '#4f83c3', textTransform: 'none' };
 
     const styleBorder = { color: '#4f83c3', borderTop: '1px solid #d7cdcd', borderBottom: '1px solid #d7cdcd' };
-    const addressStyle = { paddingLeft:'20px', margin: '0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' };
+    const addressStyle = { margin: '0', fontSize: '14px', fontWeight: 'bold', textTransform: 'none' };
 
     const iconRight = "fa-solid fa-caret-right";
 
@@ -428,79 +428,80 @@ export default function AccountPage() {
                                 <MDBRow className='justify-content-center' bgcolor='#f7f2f287'>
                                     <ul style={{ backgroundColor: '#b0cce3' }}
                                         className="list-group border border-primary">
-                                        <li className="list-group-item" style={{ fontSize: '19px', color: '#000000de', backgroundColor:'#f7f2f287' }} >
-                                            <strong> {clientName} </strong></li>      
+                                        <li className="list-group-item" style={{ fontSize: '19px', color: '#000000de', backgroundColor: '#f7f2f287' }} >
+                                            <p style={{ margin: '0px', fontSize: '14px', color: 'blue' }}>Primary Applicant</p>
+                                            <strong> {clientName} </strong> <br></br></li>
                                     </ul >
                                 </MDBRow>
-                                <MDBRow >
-                                    <MDBCol>
-                                        <MDBBtn className='btn btn-lg' style={styleBtn} color='tertiary'
+                                <MDBRow className='mx-1 mt-2'>
+                                    <MDBCol >
+                                        <MDBBtn className='btn btn-sm' style={styleBtn} color='tertiary'
                                             onClick={gotoAccount}> My Account </MDBBtn>
                                     </MDBCol>
                                 </MDBRow>
-                                <MDBRow >
+                                <MDBRow className='mx-1'>
                                     <MDBCol>
-                                        <MDBBtn className='btn btn-lg' style={styleBtn} color='tertiary'
+                                        <MDBBtn className='btn btn-sm' style={styleBtn} color='tertiary'
                                             onClick={gotoMessages}> My Messages </MDBBtn>
                                     </MDBCol>
                                 </MDBRow>
-                                <MDBRow >
+                                <MDBRow className='mx-1'>
                                     <MDBCol>
-                                        <MDBBtn style={styleBtn} color='tertiary'
+                                        <MDBBtn className='btn btn-sm' style={styleBtn} color='tertiary'
                                             onClick={gotoBid} > My bids </MDBBtn>
                                     </MDBCol>
                                 </MDBRow>
-                                <MDBRow >
+                                <MDBRow className='mx-1'>
                                     <MDBCol>
-                                        <MDBBtn style={styleBtn} color='tertiary'
+                                        <MDBBtn className='btn btn-sm' style={styleBtn} color='tertiary'
                                             onClick={gotoJointApplicant} > My Partner </MDBBtn>
                                     </MDBCol>
                                 </MDBRow>
-                                <MDBRow >
+                                <MDBRow className='mx-1'>
                                     <MDBCol>
-                                        <MDBBtn style={styleBtn} color='tertiary'
+                                        <MDBBtn className='btn btn-sm' style={styleBtn} color='tertiary'
                                             onClick={gotoMembersList} > My Members </MDBBtn>
                                     </MDBCol>
                                 </MDBRow>
-                                <MDBRow >
+                                <MDBRow className='mx-1'>
                                     <MDBCol>
-                                        <MDBBtn style={styleBtn} color='tertiary'
+                                        <MDBBtn className='btn btn-sm' style={styleBtn} color='tertiary'
                                             onClick={goToDo} > My To Do </MDBBtn>
                                     </MDBCol>
                                 </MDBRow>
-                                <MDBRow >
+                                <MDBRow className='mx-1'>
                                     <MDBCol>
-                                        <MDBBtn className='btn btn-lg' style={styleBtn} color='tertiary'
+                                        <MDBBtn className='btn btn-sm' style={styleBtn} color='tertiary'
                                             onClick={gotoPropertySearch}> Property Search </MDBBtn>
                                     </MDBCol>
                                 </MDBRow>
-                                <MDBRow >
+                                <MDBRow className='mx-1'>
                                     <MDBCol style={styleBorder}>
                                         <MDBBtn style={styleBtn} color='tertiary'
                                             onClick={(e) => { if (window.confirm("Log Out?")) logout(e) }}  >
                                             <MDBIcon style={styleBtn} fas icon={iconRight} /> Logout </MDBBtn>
                                     </MDBCol>
                                 </MDBRow>
-                                <MDBRow >
-                                    {/* <p><strong>My contact details</strong> Id:- {clientId}</p> */}
-                                    <p className='mt-2'><strong>My contact details :-</strong></p>
-                                    <p style={addressStyle} >{addressLine1}</p>
-                                    <p style={addressStyle} >{addressLine2}</p>
-                                    <p style={addressStyle} >{addressLine3}</p>
-                                    <p style={addressStyle} >{addressLine4}</p>
-                                    <p style={addressStyle} >{postcode}</p>
+                                <MDBRow>
+                                    {/* <p style={{visibility:'hidden'}}>Id:- {clientId}</p> */}
+                                    <p className='mt-2 mb-1 text-decoration-underline'><strong>My contact details</strong> </p>
+                                    <p  className='mx-3' style={addressStyle} >{addressLine1}</p>
+                                    <p  className='mx-3' style={addressStyle} >{addressLine2}</p>
+                                    <p  className='mx-3' style={addressStyle} >{addressLine3}</p>
+                                    <p  className='mx-3' style={addressStyle} >{addressLine4}</p>
+                                    <p  className='mx-3' style={addressStyle} >{postcode}</p>
                                 </MDBRow>
                                 <MDBRow >
-                                    <MDBCol>
+                                    <MDBCol className='col-lg-6 col-md-6 col-sm-6'>
                                         <MDBBtn style={styleBtn} color='tertiary'
                                             onClick={gotoUpdateContactPage}>
-                                            Update contact details
+                                            Update contact detail
                                         </MDBBtn>
                                     </MDBCol>
-                                    <MDBCol>
+                                    <MDBCol className='col-lg-6 col-md-6 col-sm-6'>
                                         <MDBBtn style={styleBtn} color='tertiary'
                                             onClick={gotoUpdateLoginPage}>
-                                            Update your login details
+                                            Update login detail
                                         </MDBBtn>
                                     </MDBCol>
                                 </MDBRow>

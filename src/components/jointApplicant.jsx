@@ -412,14 +412,14 @@ export default function JointApplicant() {
 
                     <p style={{ fontSize: '17px' }}><strong>Register your household - Joint Applicant</strong></p>
 
-                    <MDBTypography className='card-header' style={{ fontSize: '13px', backgroundColor: '#dcdcdc' }} ><strong>Household Members - If you wish to share the tenancy equally and sign for it jointlty, please add you spouse or partner by selectiong "add joint applicant"</strong></MDBTypography>
+                    <MDBTypography component={'div'} className='card-header' style={{ fontSize: '13px', backgroundColor: '#dcdcdc' }} ><strong>Household Members - If you wish to share the tenancy equally and sign for it jointlty, please add you spouse or partner by selectiong "add joint applicant"</strong></MDBTypography>
 
                     {/* ********** Primary Applicant Details  */}
                     <MDBCardBody >
 
                         {/* ********** Applicant relationship  */}
                         <div >
-                            <MDBTypography className='card-header' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} ><strong>Main Details</strong></MDBTypography>
+                            <MDBTypography component={'div'} className='card-header' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} ><strong>Main Details</strong></MDBTypography>
 
                             <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Relationship to main applicant *</strong></p>
                             <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded mb-2"
@@ -620,7 +620,7 @@ export default function JointApplicant() {
                     <MDBCardBody>
                         <div>
                             <div>
-                                <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }}><strong>Lived Abroad</strong></MDBTypography>
+                                <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }}><strong>Lived Abroad</strong></MDBTypography>
                             </div>
                             <p style={{ fontSize: '16px' }}><strong>Have this member  lived abroad in the last 5 years? *</strong></p>
 
@@ -647,7 +647,7 @@ export default function JointApplicant() {
                     <MDBCardBody>
 
                         <div className='mb-2'>
-                            <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Current Address</strong></MDBTypography>
+                            <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Current Address</strong></MDBTypography>
 
                             <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Was your partner place at this address in Birmingham by another local Authority?*</strong></p>
                             <MDBRow>
@@ -805,7 +805,7 @@ export default function JointApplicant() {
 
                     <MDBCardBody>
                         <div className='mb-2'>
-                            <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Contact Details</strong></MDBTypography>
+                            <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Contact Details</strong></MDBTypography>
                         </div>
                         {/* ***********  home telephone  */}
                         <div>
@@ -884,7 +884,7 @@ export default function JointApplicant() {
 
                     <MDBCardBody>
                         <div>
-                            <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Equality and Diversity Monitoring</strong></MDBTypography>
+                            <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Equality and Diversity Monitoring</strong></MDBTypography>
                         </div>
 
                         {/**********  Ethnic group  */}
@@ -1086,7 +1086,7 @@ export default function JointApplicant() {
                 <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
                     <MDBCardBody>
                         <div>
-                            <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} tag='h6'><strong>Eligibility</strong></MDBTypography>
+                            <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} tag='h6'><strong>Eligibility</strong></MDBTypography>
                         </div>
 
                         {/**********  Current tenure */}
@@ -1230,7 +1230,7 @@ export default function JointApplicant() {
                 <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
 
                     <MDBCardBody>
-                        <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Connection to Birmingham</strong></MDBTypography>
+                        <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Connection to Birmingham</strong></MDBTypography>
                         <div>
                             <div>
                                 <div className='mt-4'>

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { dates, months } from '../resources/datePicker';
 import { validEmail, validName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch, validNINO, validDate } from '../validations/Validator.jsx';
 import { ConvertToLocalDate, ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
-import { decryptDetails } from '../utility/hashDetails';
+import { ToCamelCase } from "../validations/Validator"
 import BtnAccept from './btnAccept.jsx';
 
 import PopUp from './popUp';
@@ -39,7 +39,7 @@ export default function HouseholdMemberEdit(props) {
     const yearMax = new Date().getFullYear();        // year picker up to current year
     const yearMin = new Date().getFullYear() - 120;  // year picker 120 year back from current year
 
-    const labelStyle = { maxHeight: 'auto', fontSize: '16px', width: 'auto', color: '#4f4f4f' };
+    const labelStyle = { maxHeight: 'auto', fontSize: '15px', width: 'auto', color: '#4f4f4f' };
     const inputStyle = { maxHeight: 'auto', fontSize: '16px', minwidth: '250px', color: 'black' };
     const commentStyle = { minHeight: '150px', fontSize: '16px', minWidth: '250px', color: 'black' };
     const memberStyle = { paddingLeft: '10px', color: 'black', };
@@ -49,6 +49,8 @@ export default function HouseholdMemberEdit(props) {
     const datePickerStyle = { maxWidth: '70px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const monthPickerStyle = { maxWidth: '130px', overflow: 'scroll', maxHeight: '38px', fontSize: '16px', textAlign: 'left' }
     const yearPickerStyle = { width: '80px', float: 'left', border: '5' };
+
+    const nINOInfo = "To add or rectify please call housing department or delete and add as new member";
 
     const [householdMemberID, setHouseholdMemberID] = useState(selectedMember);
     console.log(`props from selected member is ${householdMemberID}`)
@@ -110,7 +112,7 @@ export default function HouseholdMemberEdit(props) {
                 setdateofbirth(birth_)
 
                 setSex(response.data.memberExist.clientOtherHousehold_sex);
-                if (sex === 'female') {
+                if (response.data.memberExist.clientOtherHousehold_sex === 'female') {
                     setShowPregnantOption(true);
                 } else {
                     setShowPregnantOption(false);
@@ -248,6 +250,9 @@ export default function HouseholdMemberEdit(props) {
                 console.log(response.data.Status_Reply)
                 setModalInfo(response.data.Status_Reply)
                 setShowInfoModal(true);
+                setTimeout(() => {
+                    refreshPage();
+                }, 3000);
             } else {
                 console.log(response.data.message)
                 setModalInfo(response.data.Status_Reply)
@@ -269,31 +274,33 @@ export default function HouseholdMemberEdit(props) {
     return (
         <React.Fragment>
             <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
-                <MDBTypography className='card-header' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
-                    <strong>Edit Member Details {selectedMember}</strong>
+                <MDBTypography component={'div'} className='card-header' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
+                    <strong>Edit Member Details</strong> <span style={{ visibility: 'hidden' }}>{selectedMember}</span>
                 </MDBTypography>
                 <MDBCardBody className='p-1' >
-                    <MDBRow alignment='center'>
+                    <MDBRow className='mt-3'>
                         <MDBCol className='col-lg-4 col-md-4 col-sm-6 col-xs-6'>
-                            <MDBTypography style={labelStyle}>Full Name: <strong style={memberStyle}>{fName + " " + mName + " " + sName}</strong></MDBTypography>
+                            <MDBTypography component={'div'} style={labelStyle}>Full Name: <strong style={memberStyle}>{ToCamelCase(fName) + " " + ToCamelCase(mName) + " " + ToCamelCase(sName)}</strong></MDBTypography>
 
                         </MDBCol>
                         <MDBCol className='col-lg-3 col-md-4 col-sm-6 col-xs-6'>
-                            <MDBTypography style={labelStyle}>NINO:  <strong style={memberStyle}>{nINO}</strong></MDBTypography>
+                            <MDBTypography component={'div'} style={labelStyle}>
+                                NINO<span style={{ cursor: 'pointer', color: 'red', fontSize: '15px', fontWeight: 'bold' }}
+                                    title={nINOInfo}>* </span>:
+                                <strong style={memberStyle}>{nINO ? nINO.toUpperCase() : "Unknown"}</strong>
+                            </MDBTypography>
 
                         </MDBCol>
                         <MDBCol className='col-lg-3 col-md-2 col-sm-6 col-xs-6'>
-                            <MDBTypography style={labelStyle}>DOB: <strong style={memberStyle}>{dateofbirth}</strong></MDBTypography>
+                            <MDBTypography component={'div'} style={labelStyle}>DOB: <strong style={memberStyle}>{dateofbirth}</strong></MDBTypography>
 
                         </MDBCol>
                         <MDBCol className='col-lg-2 col-md-2 col-sm-6 col-xs-6'>
-                            <MDBTypography style={labelStyle}>Relation:  <strong style={memberStyle}>{relationship}</strong></MDBTypography>
+                            <MDBTypography component={'div'} style={labelStyle}>Relation:  <strong style={memberStyle}>{relationship}</strong></MDBTypography>
                         </MDBCol>
                     </MDBRow>
 
-                    <hr style={{ height: '4px' }}></hr>
-
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Does this member have any physical or mental health conditions or illnesses lasting or expected to last for 12 months or more?</strong>
                     </MDBTypography>
@@ -307,7 +314,7 @@ export default function HouseholdMemberEdit(props) {
                         </select>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Does this member currently live with you?</strong>
                     </MDBTypography>
@@ -333,7 +340,7 @@ export default function HouseholdMemberEdit(props) {
                         </MDBRow>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Current address</strong>
                     </MDBTypography>
@@ -344,13 +351,13 @@ export default function HouseholdMemberEdit(props) {
                                     <input className='form-control' type='text' placeholder='Spouse name...'
                                         maxLength={20} value={currentAddress || ''} disabled
                                         onChange={(e) => { let newEdit = { ...currentAddress }; newEdit = e.target.value; setCurrentAddress(newEdit) }} ></input>
-                                    {/* <MDBTypography style={inputStyle}>{currentAddress}</MDBTypography> */}
+                                    {/* <MDBTypography component={'div'} style={inputStyle}>{currentAddress}</MDBTypography> */}
                                 </div>
                             </MDBCol>
                         </MDBRow>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Date moved into this address?</strong>
                     </MDBTypography>
@@ -386,7 +393,7 @@ export default function HouseholdMemberEdit(props) {
                         </div>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Does this member work?</strong>
                     </MDBTypography>
@@ -408,7 +415,7 @@ export default function HouseholdMemberEdit(props) {
 
                     {showPregnantOption &&
                         <React.Fragment>
-                            <MDBTypography className='card-header mt-4 mb-2'
+                            <MDBTypography component={'div'} className='card-header mt-4 mb-2'
                                 style={headerStyle} >
                                 <strong>Is she pregnant?</strong>
                             </MDBTypography>
@@ -422,7 +429,7 @@ export default function HouseholdMemberEdit(props) {
 
                                     <MDBCol className='col-3'>
                                         <MDBRadio id='IsShePregnantNo' name='isShePregnantRadio'
-                                            inline htmlFor='isShePregnantNo' label='No' value='no'
+                                            inline htmlFor='isShePregnantNo' label='No' value='no' defaultChecked={true}
                                             onClick={(e) => { let newEdit = { ...isShePregnant }; newEdit = e.target.value; setIsShePregnant(newEdit); }}></MDBRadio>
                                     </MDBCol>
                                 </MDBRow>
@@ -430,7 +437,7 @@ export default function HouseholdMemberEdit(props) {
                         </React.Fragment >
                     }
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Spouse Name</strong>
                     </MDBTypography>
@@ -446,7 +453,7 @@ export default function HouseholdMemberEdit(props) {
                         </MDBRow>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Home telephone</strong>
                     </MDBTypography>
@@ -462,7 +469,7 @@ export default function HouseholdMemberEdit(props) {
                         </MDBRow>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Work telephone</strong>
                     </MDBTypography>
@@ -478,7 +485,7 @@ export default function HouseholdMemberEdit(props) {
                         </MDBRow>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Mobile</strong>
                     </MDBTypography>
@@ -494,7 +501,7 @@ export default function HouseholdMemberEdit(props) {
                         </MDBRow>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Email</strong>
                     </MDBTypography>
@@ -510,7 +517,7 @@ export default function HouseholdMemberEdit(props) {
                         </MDBRow>
                     </div>
 
-                    <MDBTypography className='card-header mb-2'
+                    <MDBTypography component={'div'} className='card-header mb-2'
                         style={headerStyle} >
                         <strong>Comments</strong>
                     </MDBTypography>

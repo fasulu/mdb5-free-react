@@ -22,7 +22,7 @@ export default function HomeLeft() {
             {
                 <MDBContainer >
                     <MDBCard>
-                        <MDBTypography className='card-header' style={{ color: 'black', fontSize: '25px', borderBottom: '3px solid #d7cdcd' }} ><strong>Welcome to Bham Choice</strong></MDBTypography>
+                        <MDBTypography component={'div'} className='card-header' style={{ color: 'black', fontSize: '25px', borderBottom: '3px solid #d7cdcd' }} ><strong>Welcome to Bham Choice</strong></MDBTypography>
                         <MDBCardBody>
                             <MDBRow className='my-3 justify-content-center border border-rounded border-warning' bgcolor='#f7f2f287'>
                                 <p style={{color:'black'}}> <em>This website is for education purpose only,</em> <span style={{color:'red', fontSize: '20px'}}><strong>DO NOT</strong></span> <em>fill the forms with youself or anyone else personal information.</em> </p>
@@ -69,7 +69,7 @@ export default function HomeLeft() {
                     {/* <MDBRow >
                         <MDBCol>
                             <MDBCard>
-                                <MDBTypography className='card-header' style={{ fontSize: '13px', backgroundColor: '#dcdcdc' }} ><strong>Advertising dates</strong></MDBTypography>
+                                <MDBTypography component={'div'} className='card-header' style={{ fontSize: '13px', backgroundColor: '#dcdcdc' }} ><strong>Advertising dates</strong></MDBTypography>
                                 <MDBCardBody>
                                     <p>Social housing</p>
                                 </MDBCardBody>
@@ -77,7 +77,7 @@ export default function HomeLeft() {
                         </MDBCol>
                         <MDBCol>
                             <MDBCard>
-                                <MDBTypography className='card-header' style={{ fontSize: '13px', backgroundColor: '#dcdcdc' }} ><strong>Latest News</strong></MDBTypography>
+                                <MDBTypography component={'div'} className='card-header' style={{ fontSize: '13px', backgroundColor: '#dcdcdc' }} ><strong>Latest News</strong></MDBTypography>
                                 <MDBCardBody>
                                     <a href="https://www.birminghamchoice.co.uk/LatestNews/Page#Article_43_Bookmark">Birmingham Choice - new functions</a>
                                 </MDBCardBody>
@@ -85,7 +85,7 @@ export default function HomeLeft() {
                         </MDBCol>
                         <MDBCol>
                             <MDBCard>
-                                <MDBTypography className='card-header' style={{ fontSize: '13px', backgroundColor: '#dcdcdc' }} ><strong>Register</strong></MDBTypography>
+                                <MDBTypography component={'div'} className='card-header' style={{ fontSize: '13px', backgroundColor: '#dcdcdc' }} ><strong>Register</strong></MDBTypography>
                                 <MDBCardBody>
                                     <p>Apply to join the housing register</p>
                                     <a onClick={gotoRegisterPage}>Click here to register</a>

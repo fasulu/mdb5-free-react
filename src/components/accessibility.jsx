@@ -16,7 +16,7 @@ export default function Accessibility() {
         <React.Fragment>
             <MDBCard className='w-100 mx-auto' style={{ backgroundColor: '#f7f2f287' }} >
                 <MDBCardBody>
-                    <MDBTypography className='border border-0 border-bottom border-secondary'
+                    <MDBTypography component={'div'} className='border border-0 border-bottom border-secondary'
                         style={headStyle}>
                         <strong>Accessibility Statement</strong>
                     </MDBTypography>
@@ -37,7 +37,7 @@ export default function Accessibility() {
                     </div>
                     <p className='mt-3 mb-2' style={textStyle}><a href="https://mcmw.abilitynet.org.uk/" className="link-info">AbilityNet </a> has advice on making your device easier to use if you have a disability.</p>
 
-                    <MDBTypography className='border border-0 border-bottom border-secondary'
+                    <MDBTypography component={'div'} className='border border-0 border-bottom border-secondary'
                         style={headStyle}>
                         <strong>How accessible this website is</strong>
                     </MDBTypography>
@@ -59,14 +59,14 @@ export default function Accessibility() {
                         </ul>
                     </div>
 
-                    <MDBTypography className='border border-0 border-bottom border-secondary'
+                    <MDBTypography component={'div'} className='border border-0 border-bottom border-secondary'
                         style={headStyle}>
                         <strong>Reporting accessibility problems with this website</strong>
                     </MDBTypography>
 
                     <p className='mt-3 mb-2' style={textStyle}>We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, contact us</p>
 
-                    <MDBTypography className='border border-0 border-bottom border-secondary'
+                    <MDBTypography component={'div'} className='border border-0 border-bottom border-secondary'
                         style={headStyle}>
                         <strong>Enforcement procedure</strong>
                     </MDBTypography>

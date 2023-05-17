@@ -122,7 +122,7 @@ export default function MyMessages() {
             const response = await axios.put(messageUpdateUrl + _id, messageInfo)
             if (response) {
                 console.log(response.data.message);
-                
+
                 refreshPage();
             } else {
                 setModalInfo(response.data.Status_Reply);
@@ -157,10 +157,10 @@ export default function MyMessages() {
                     <MDBCardFooter>
                         <MDBRow>
                             <MDBCol>
-                                <strong> {From_} </strong>
+                                <strong> {Date_} </strong>
                             </MDBCol>
                             <MDBCol>
-                                <strong> {Date_} </strong>
+                                <strong> {From_} </strong>
                             </MDBCol>
                         </MDBRow>
                     </MDBCardFooter>
@@ -171,74 +171,71 @@ export default function MyMessages() {
 
     const ShowListMessages = (
         <React.Fragment>
-            <MDBCard>
-                <MDBCardBody >
-                    <MDBRow className='mx-1'>
-                        <MDBCol style={tableHead} className='col-lg-1 col-md-1 col-sm-1 d-none d-sm-block' md='1'>S/N </MDBCol>
-                        <MDBCol style={tableHead} className='col-lg-2 col-md-2 col-sm-2 d-none d-sm-block' md='1'>Status </MDBCol>
-                        <MDBCol style={tableHead} className='col-lg-2 col-md-2 col-sm-2 d-none d-sm-block' md='2'>Date </MDBCol>
-                        <MDBCol style={tableHead} className='col-lg-3 col-md-3 col-sm-3 d-none d-sm-block' md='3'>From </MDBCol>
-                        <MDBCol style={tableHead} className='col-lg-4 col-md-4 col-sm-4 d-none d-sm-block' md='4'>Subject </MDBCol>
-                    </MDBRow>
-                    {myMessages.map((myMessage, index) => (
+            <MDBCardBody >
+                <MDBRow className='mx-1'>
+                    <MDBCol style={tableHead} className='col-lg-1 col-md-1 col-sm-1 d-none d-sm-block' md='1'>S/N </MDBCol>
+                    <MDBCol style={tableHead} className='col-lg-2 col-md-2 col-sm-2 d-none d-sm-block' md='1'>Status </MDBCol>
+                    <MDBCol style={tableHead} className='col-lg-2 col-md-2 col-sm-2 d-none d-sm-block' md='2'>Date </MDBCol>
+                    <MDBCol style={tableHead} className='col-lg-3 col-md-3 col-sm-3 d-none d-sm-block' md='3'>From </MDBCol>
+                    <MDBCol style={tableHead} className='col-lg-4 col-md-4 col-sm-4 d-none d-sm-block' md='4'>Subject </MDBCol>
+                </MDBRow>
+                {myMessages.map((myMessage, index) => (
 
-                        <div key={index}
-                            className='d-flex justify-content-between py-1 border-bottom border-rounded' title={myMessage.message}>
-                            <MDBCol className='col-lg-1 col-md-1 col-sm-1 text-center' >
-                                {<span className='mx-2' >{index + 1}</span>}
-                            </MDBCol>
-                            <MDBCol className='col-lg-2 col-md-2 col-sm-2 text-center' >
-                                <MDBBadge light style={{ backgroundColor: '#ffffff', cursor: 'pointer', fontSize: '16px' }}
-                                    onClick={(e) => { handleSelectedMessage(e, myMessage) }}>
-                                    {
-                                        myMessage.messageStatus
-                                            ?
-                                            <img src={mailOpen} style={{ cursor: 'pointer', maxWidth: '25px', float: 'right' }}
-                                                alt={openMailTitle} title={openMailTitle} />
-                                            :
-                                            <img src={mailClose} style={{ cursor: 'pointer', maxWidth: '25px', float: 'right' }}
-                                                alt={closeMailTitle} title={closeMailTitle} />
-                                    }
-                                </MDBBadge>
-                            </MDBCol>
-                            <MDBCol className='col-lg-2 col-md-2 col-sm-2'>
-                                {ConvertToLocalDate(myMessage.messageDate)}
-                            </MDBCol>
-                            <MDBCol className='col-lg-3 col-md-3 col-sm-3'>
-                                {ToCamelCase(myMessage.messageFrom)}
-                            </MDBCol>
-                            <MDBCol className='col-lg-4 col-md-4 col-sm-4'>
-                                {ToCamelCase(myMessage.messageSubject)}
-                            </MDBCol>
-                        </div>
-                    ))}
-                </MDBCardBody>
-            </MDBCard>
+                    <div key={index}
+                        className='d-flex justify-content-between py-1 border-bottom border-rounded' 
+                        style={{cursor:'progress'}} title={myMessage.message}>
+                        <MDBCol className='col-lg-1 col-md-1 col-sm-1 text-center' >
+                            {<span className='mx-2' >{index + 1}</span>}
+                        </MDBCol>
+                        <MDBCol className='col-lg-2 col-md-2 col-sm-2 text-center' >
+                            <MDBBadge light style={{ backgroundColor: '#ffffff', cursor: 'pointer', fontSize: '16px' }}
+                                onClick={(e) => { handleSelectedMessage(e, myMessage) }}>
+                                {
+                                    myMessage.messageStatus
+                                        ?
+                                        <img src={mailOpen} style={{ cursor: 'pointer', maxWidth: '19px', float: 'right' }}
+                                            alt={openMailTitle} title={openMailTitle} />
+                                        :
+                                        <img src={mailClose} style={{ cursor: 'pointer', maxWidth: '19px', float: 'right' }}
+                                            alt={closeMailTitle} title={closeMailTitle} />
+                                }
+                            </MDBBadge>
+                        </MDBCol>
+                        <MDBCol className='col-lg-2 col-md-2 col-sm-2'>
+                            {ConvertToLocalDate(myMessage.messageDate)}
+                        </MDBCol>
+                        <MDBCol className='col-lg-3 col-md-3 col-sm-3'>
+                            {ToCamelCase(myMessage.messageFrom)}
+                        </MDBCol>
+                        <MDBCol className='col-lg-4 col-md-4 col-sm-4'>
+                            {ToCamelCase(myMessage.messageSubject)}
+                        </MDBCol>
+                    </div>
+                ))}
+            </MDBCardBody>
         </React.Fragment>
     )
 
     return (
         < React.Fragment >
-            <MDBContainer className='ps-5 pt-3' >
-                <MDBTypography className='card-header'
+            <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
+                <MDBTypography component={'div'} className='card-header'
                     style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
                     <strong>My Messages</strong>
                 </MDBTypography>
-               
-                {
-                    showMessageDetails && ShowMsgDetails
-                }
+            </MDBCard>
+            {
+                showMessageDetails && ShowMsgDetails
+            }
 
-                {
-                    showListMessageDetails && ShowListMessages
-                }
+            {
+                showListMessageDetails && ShowListMessages
+            }
 
-                {/* the below popup code has been deactivated due to malfunction, will fix later */}
-                {
-                    showInfoModal && <PopUp modalInfo={modalInfo} setShowInfoModal={setShowInfoModal}></PopUp>
-                }
-
-            </MDBContainer >
+            {/* the below popup code has been deactivated due to malfunction, will fix later */}
+            {
+                showInfoModal && <PopUp modalInfo={modalInfo} setShowInfoModal={setShowInfoModal}></PopUp>
+            }
         </React.Fragment >
     );
 }

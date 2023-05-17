@@ -182,14 +182,14 @@ export default function HouseholdMember() {
                         <p style={{ fontSize: '16px', lineHeight: '3px' }}>Your Household Details</p>
 
                         <MDBCard className='mt-4 mb-2' style={{ backgroundColor: '#f7f2f287' }} >
-                            <MDBTypography className='card-header' style={{ fontSize: '13px', backgroundColor: '#dcdcdc' }} ><strong>Household Members - If you wish to share the tenancy equally and sign for it jointlty, please add you spouse or partner by selectiong "add joint applicant"</strong></MDBTypography>
+                            <MDBTypography component={'div'} className='card-header' style={{ fontSize: '13px', backgroundColor: '#dcdcdc' }} ><strong>Household Members - If you wish to share the tenancy equally and sign for it jointlty, please add you spouse or partner by selectiong "add joint applicant"</strong></MDBTypography>
 
                             {/* ********** Primary Applicant Details  */}
                             <MDBCardBody >
 
                                 {/* ********** Applicant relationship  */}
                                 <div >
-                                    <MDBTypography className='card-header' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} ><strong>Main Details</strong></MDBTypography>
+                                    <MDBTypography component={'div'} className='card-header' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} ><strong>Main Details</strong></MDBTypography>
 
                                     <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Relationship to main applicant *</strong></p>
                                     <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded mb-2"
@@ -434,7 +434,7 @@ export default function HouseholdMember() {
                             <MDBCardBody>
 
                                 <div className='mb-2'>
-                                    <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Current Address</strong></MDBTypography>
+                                    <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Current Address</strong></MDBTypography>
 
                                     <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Was this household member place at this address in Birmingham by another local Authority?*</strong></p>
                                     <MDBRow>
@@ -593,7 +593,7 @@ export default function HouseholdMember() {
 
                             <MDBCardBody>
                                 <div className='mb-2'>
-                                    <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Contact Details</strong></MDBTypography>
+                                    <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Contact Details</strong></MDBTypography>
                                 </div>
 
                                 <div>
@@ -710,7 +710,7 @@ export default function HouseholdMember() {
 
                             <MDBCardBody>
                                 <div>
-                                    <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Equality and Diversity Monitoring</strong></MDBTypography>
+                                    <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Equality and Diversity Monitoring</strong></MDBTypography>
                                 </div>
 
                                 {/**********  Ethnic group  */}
@@ -881,7 +881,7 @@ export default function HouseholdMember() {
                         <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
                             <MDBCardBody>
                                 <div>
-                                    <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} tag='h6'><strong>Employment details</strong></MDBTypography>
+                                    <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} tag='h6'><strong>Employment details</strong></MDBTypography>
                                 </div>
 
                                 {/**********  Employment details*/}

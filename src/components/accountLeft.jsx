@@ -54,7 +54,7 @@ const AccountLeft = (props) => {
                         <MDBCol>
                             <p style={{ color: '#4f83c3', fontSize: '20px', borderBottom: '4px solid #4f83c3a3' }} ><strong>My Application</strong></p>
                             <MDBCard>
-                                <MDBTypography className='card-header' style={{ fontSize: '15px', backgroundColor: '#dcdcdc', color: 'black' }} ><strong>Social housing</strong></MDBTypography>
+                                <MDBTypography component={'div'} className='card-header' style={{ fontSize: '15px', backgroundColor: '#dcdcdc', color: 'black' }} ><strong>Social housing</strong></MDBTypography>
 
                                 <MDBRow>
                                     <p>Applicaiton reference: </p>

@@ -109,6 +109,17 @@ export default function HouseholdMember() {
     const [showInfoModal, setShowInfoModal] = useState(false);
     const [modalInfo, setModalInfo] = useState("");
 
+    var fNameValid = "false"
+    var mNameValid = "false"
+    var sNameValid = "false"
+    var spouseNameValid = "false"
+    var ninoValid = "false";
+    var telephoneValid = "false";
+    var workphoneValid = "false";
+    var mobileValid = "false";
+    var emailValid = "false";
+    var emailMatchesValid = "false";
+
     const todayDate = new Date().toISOString().slice(0, 19); // produces 2023-02-25
 
     useEffect(() => {
@@ -194,16 +205,31 @@ export default function HouseholdMember() {
 
         formatDate();
 
-        const fNameValid = validName(fName);
-        const mNameValid = validName(sName);
-        const sNameValid = validName(sName);
-        const spouseNameValid = validName(spouseAnotherMemberName);
-        const ninoValid = validNINO(nINO);
-        const emailValid = validEmail(email);
-        const telephoneValid = validNumber(telephone);
-        const workphoneValid = validNumber(workPhone);
-        const mobileValid = validNumber(mobile);
-        const emailMatchesValid = emailMatch(email, reEnterEmail);
+        fNameValid = validName(fName);
+        mNameValid = validName(sName);
+        sNameValid = validName(sName);
+        spouseNameValid = validName(spouseAnotherMemberName);
+
+        if (nINO.trim() !== "") {
+            ninoValid = validNINO(nINO);
+        } else { ninoValid = true }
+
+        if (telephone.trim() !== "") {
+            telephoneValid = validNumber(telephone);
+        } else { telephoneValid = true }
+
+        if (workPhone.trim() !== "") {
+            workphoneValid = validNumber(workPhone);
+        } else { workphoneValid = true }
+
+        if (mobile.trim() !== "") {
+            mobileValid = validNumber(mobile);
+        } else { mobileValid = true }
+
+        if ((email.trim() !== "") && (reEnterEmail.trim() !== "")) {
+            emailValid = validEmail(email);
+            emailMatchesValid = emailMatch(email, reEnterEmail);
+        } else { emailValid = true; emailMatchesValid = true }
 
         console.log(`Validation result is fname/mname/sname ${fNameValid} ${mNameValid} ${sNameValid}, 
         ninoValid ${ninoValid}, spouse name ${spouseNameValid}, home telephone ${telephoneValid}, work telephone ${workphoneValid}, 
@@ -289,6 +315,9 @@ export default function HouseholdMember() {
                 console.log(`Status from backend ${response.data.Status_Reply}`);
                 setModalInfo(response.data.Status_Reply)
                 setShowInfoModal(true);
+                setTimeout(() => {
+                    refreshPage();
+                }, 3000);
             } else {
                 setModalInfo('Something went wrong, please try again...')
                 setShowInfoModal(true);
@@ -311,14 +340,14 @@ export default function HouseholdMember() {
                 <p style={{ fontSize: '17px' }}><strong>Register your household - Member </strong></p>
 
                 <MDBCard className='mb-2' style={{ backgroundColor: '#f7f2f287' }} >
-                    <MDBTypography className='card-header' style={{ fontSize: '13px', backgroundColor: '#dcdcdc' }} ><strong>Household Members - If you wish to share the tenancy equally and sign for it jointlty, please add you spouse or partner by selectiong "add joint applicant"</strong></MDBTypography>
+                    <MDBTypography component={'div'} className='card-header' style={{ fontSize: '13px', backgroundColor: '#dcdcdc' }} ><strong>Household Members - If you wish to share the tenancy equally and sign for it jointlty, please add you spouse or partner by selectiong "add joint applicant"</strong></MDBTypography>
 
                     {/* ********** Primary Applicant Details  */}
                     <MDBCardBody >
 
                         {/* ********** Applicant relationship  */}
                         <div >
-                            <MDBTypography className='card-header' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} ><strong>Main Details</strong></MDBTypography>
+                            <MDBTypography component={'div'} className='card-header' style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} ><strong>Main Details</strong></MDBTypography>
 
                             <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Relationship to main applicant *</strong></p>
                             <select style={{ overflow: 'scroll', width: 'auto' }} className="form-select border-rounded mb-2"
@@ -563,7 +592,7 @@ export default function HouseholdMember() {
                     <MDBCardBody>
 
                         <div className='mb-2'>
-                            <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
+                            <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} >
                                 <strong>Current Address</strong></MDBTypography>
 
                             <p className='mt-3 mb-2' style={{ fontSize: '16px' }}><strong>Was this household member place at this address in Birmingham by another local Authority?*</strong></p>
@@ -728,7 +757,7 @@ export default function HouseholdMember() {
 
                     <MDBCardBody>
                         <div className='mb-2'>
-                            <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Contact Details</strong></MDBTypography>
+                            <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Contact Details</strong></MDBTypography>
                         </div>
 
                         <div>
@@ -845,7 +874,7 @@ export default function HouseholdMember() {
 
                     <MDBCardBody>
                         <div>
-                            <MDBTypography className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Equality and Diversity Monitoring</strong></MDBTypography>
+                            <MDBTypography component={'div'} className='card-header' style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} ><strong>Equality and Diversity Monitoring</strong></MDBTypography>
                         </div>
 
                         {/**********  Ethnic group  */}
@@ -1016,7 +1045,7 @@ export default function HouseholdMember() {
                 <MDBCard className='mt-4' style={{ backgroundColor: '#f7f2f287' }}>
                     <MDBCardBody>
                         <div>
-                            <MDBTypography className='card-header'
+                            <MDBTypography component={'div'} className='card-header'
                                 style={{ fontSize: '17px', backgroundColor: '#dcdcdc' }} tag='h6'>
                                 <strong>Employment details</strong>
                             </MDBTypography>
