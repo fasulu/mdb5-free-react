@@ -269,6 +269,9 @@ export default function HouseholdMemberEdit(props) {
     const gotoAccountPage = (e) => {
         setModalInfo('Update cancelled')
         setShowInfoModal(true);
+        setTimeout(() => {
+            refreshPage();
+        }, 3000);
     }
 
     return (

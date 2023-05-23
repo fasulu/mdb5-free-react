@@ -1,7 +1,7 @@
 {
-  "name": "mdb-react-template",
+  "name": "bhamchoice",
   "version": "5.1.0",
-  "description": "template for mdb-react-ui-kit",
+  "description": "birmingham choice housing application",
   "private": true,
   "dependencies": {
     "@emailjs/browser": "^3.10.0",

@@ -22,7 +22,7 @@ import UpdateLogin from '../components/updateLogin';
 import JointApplicant from '../components/jointApplicant';
 import JointApplicantEdit from '../components/jointApplicantEdit';
 import HouseholdMember from '../components/householdMember';
-import PropertyCard from '../components/PropertyCard';
+import ClientPropertySearch from '../components/clientPropertySearch';
 
 import { ToCamelCase } from '../validations/Validator';
 import { decryptDetails } from '../utility/hashDetails';
@@ -402,7 +402,7 @@ export default function AccountPage() {
                         showUpdateLoginPage && <UpdateLogin />
                     }
                     {
-                        showBidPage && <PropertyCard />
+                        showBidPage && <ClientPropertySearch />
                     }
                     {
                         showSearchPage && <SearchOptions />

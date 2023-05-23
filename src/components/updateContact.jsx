@@ -277,7 +277,7 @@ export default function UpdateContact() {
             setShowInfoModal(true);
             setTimeout(() => {
                 refreshPage();
-            }, 5000);
+            }, 3000);
         }
     }
 
@@ -313,7 +313,7 @@ export default function UpdateContact() {
         setShowInfoModal(true);
         setTimeout(() => {
             refreshPage();
-        }, 5000);
+        }, 3000);
     }
 
     return (

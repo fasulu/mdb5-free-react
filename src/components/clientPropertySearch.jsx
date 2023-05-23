@@ -9,7 +9,7 @@ import {
     MDBContainer,
     MDBCard,
     MDBCardBody,
-    MDBRipple, MDBIcon,
+    MDBRipple, MDBBtn, MDBIcon,
     MDBTypography,
     MDBRow, MDBCol,
     MDBCardImage,
@@ -17,13 +17,14 @@ import {
 } from 'mdb-react-ui-kit';
 
 import { ToCamelCase } from '../validations/Validator.jsx'
-import { ConvertToTimeStamp } from '../utility/dateConvertion';
-import PopUp from './popUp';
+import { ConvertToTimeStamp } from '../utility/dateConvertion.jsx';
+import PopUp from './popUp.js';
+import { refreshPage } from '../utility/refreshPage.js';
 
 import bidIcon from '../../src/resources/images/bid.png'
 import houseIcon from '../../src/resources/images/house.png'
 
-export default function PropertyCard() {
+export default function ClientPropertySearch() {
 
     const { clientId, setClientId } = useContext(UserContext);
 
@@ -41,10 +42,12 @@ export default function PropertyCard() {
     const msgDate_ = ConvertToTimeStamp(new Date().toISOString().slice(0, 10));
     const msgSubject_ = "Bid information"
     const From_ = "Housing Department"
-    const message_ = "Your bid has been placed successfully. This is an auto-generated message, do not reply or request any detail."
+    const bidMessage_ = "Your bid has been placed successfully. This is an auto-generated message, do not reply or request any detail."
+    const withdrawBidMessage_ = "Your bid has been withdrawn successfully. This is an auto-generated message, do not reply or request any detail."
 
     const labelStyle = { fontSize: '16px', width: '250px', color: '#464646' };
     const styleIcon = { fontSize: '20px', color: '#6e1583', textTransform: 'none', marginRight: '5px' };
+    const inputStyle = { fontSize: '18px', width: 'auto', float: 'left' };
 
     const bidListHeader = { color: 'black', fontSize: '22px', borderBottom: '2px solid #d7cdcd' };
     const bidTableHead = { border: '1px solid #e3ebf7', backgroundColor: '#d2e1e9', fontSize: '16px', textAlign: 'center', color: 'black' };
@@ -64,6 +67,7 @@ export default function PropertyCard() {
     const [showPropertyList, setShowPropertyList] = useState(false);
     const [showBidList, setShowBidList] = useState(false);
     const [showProperty, setShowProperty] = useState(false);
+    const [bidOnThisProperty, setBidOnThisProperty] = useState(false);
 
     const [_id, set_id] = useState("");
     const [propertyId, setPropertyId] = useState("");
@@ -92,17 +96,10 @@ export default function PropertyCard() {
     const [imageUrl, setImageUrl] = useState("src\resources\images\house.png");
     const [comments, setComments] = useState("");
 
+    const [searchProperty, setSearchProperty] = useState("");
+
     const [showInfoModal, setShowInfoModal] = useState(false);
     const [modalInfo, setModalInfo] = useState("");
-
-    useEffect(() => {
-        fetchData();
-
-    }, [])
-
-    async function fetchData() {
-
-    }
 
     const propertyForBidList = async (e) => {
 
@@ -119,6 +116,10 @@ export default function PropertyCard() {
             } else {
                 setModalInfo('No new properties');
                 setShowInfoModal(true);
+                setTimeout(() => {
+                    refreshPage()
+                }, 2000);
+
                 setShowOption(true);
                 setShowPropertyList(false);
                 setShowBidList(false);
@@ -130,7 +131,7 @@ export default function PropertyCard() {
     }
 
     const handleBid = async (property) => {
-        // create a collection in backend for bids with clientId, propertyId, date & time of bid and position
+
         console.log("Iam in handle bid", property)
 
         try {
@@ -149,13 +150,16 @@ export default function PropertyCard() {
                 console.log(response.data.BidInfo);
                 setModalInfo(response.data.Status_Reply);
                 setShowInfoModal(true);
+                setTimeout(() => {
+                    refreshPage()
+                }, 2000);
 
                 const messageInfo = {
                     clientId: clientId,
                     messageDate: msgDate_,
                     messageSubject: msgSubject_,
                     messageFrom: From_,
-                    message: message_,
+                    message: bidMessage_,
                     messageStatus: false
                 }
                 const result = sendMessage(messageInfo);
@@ -163,6 +167,9 @@ export default function PropertyCard() {
             } else {
                 setModalInfo(response.data.Status_Reply);
                 setShowInfoModal(true);
+                setTimeout(() => {
+                    refreshPage();
+                }, 2000);
             }
         } catch (error) {
             console.log(error)
@@ -209,10 +216,27 @@ export default function PropertyCard() {
                 console.log(response.data.Status_Reply)
                 setModalInfo(response.data.Status_Reply);
                 setShowInfoModal(true);
+                setTimeout(() => {
+                    refreshPage()
+                }, 2000);
+
+                const messageInfo = {
+                    clientId: clientId,
+                    messageDate: msgDate_,
+                    messageSubject: msgSubject_,
+                    messageFrom: From_,
+                    message: withdrawBidMessage_,
+                    messageStatus: false
+                }
+                const result = sendMessage(messageInfo);
+
             } else {
                 console.log(response.data.message)
                 setModalInfo(response.data.Status_Reply);
                 setShowInfoModal(true);
+                setTimeout(() => {
+                    refreshPage()
+                }, 2000);
             }
 
         } catch (error) {
@@ -223,16 +247,15 @@ export default function PropertyCard() {
     }
 
     const reviewThisProperty = async (propertyId) => {
-        console.log(propertyId)
-
+        console.log(propertyId);
+        setBidOnThisProperty(true);
         try {
             console.log(propertyIdUrl + propertyId)
 
             const response = await axios.get(propertyIdUrl + propertyId)
             console.log(`Response from backend:- ${response.data.message}`)
 
-            // if (response.data.PropertyInfo.length > 0) {
-            if (response.data) {
+            if (response.data.Status_Reply === "Success") {
 
                 console.log(`Response from backend:- ${response.data.message}`)
 
@@ -269,6 +292,12 @@ export default function PropertyCard() {
                 setShowOption(false);
 
             } else {
+                setModalInfo(response.data.message);
+                setShowInfoModal(true);
+                setTimeout(() => {
+                    refreshPage()
+                }, 2000);
+
                 setShowProperty(false);
                 setShowPropertyList(false);
                 setShowBidList(false);
@@ -278,6 +307,36 @@ export default function PropertyCard() {
         } catch (error) {
             console.log(error)
         }
+    }
+
+    const sendMessage = async (messageInfo) => {
+
+        console.log("Iam in send message")
+
+        try {
+            console.table(messageInfo)
+
+            const response = await axios.post(msgLoginDetailUrl, messageInfo)
+            if (response) {
+                console.log(response.data.Status_Reply);
+                return response.data.Status_Reply;
+            } else {
+                return response.data.Status_Reply;
+            }
+        } catch (error) {
+            console.log(error)
+            setModalInfo(response.data.Status_Reply)
+            setShowInfoModal(true);
+        }
+
+    }
+
+    const gotoAccountPage = (e) => {
+        setModalInfo('Cancelled')
+        setShowInfoModal(true);
+        setTimeout(() => {
+            refreshPage();
+        }, 2000);
     }
 
     const OptionSelect = (
@@ -371,8 +430,26 @@ export default function PropertyCard() {
         <React.Fragment>
             <MDBContainer className='ps-5 pt-3' >
                 <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
-                    <p style={{ color: 'black', fontSize: '22px', borderBottom: '2px solid #d7cdcd' }} ><strong>New Property List </strong></p>
+                    <MDBCol className='md' >
+                        <p style={{ width: 'auto', color: 'black', fontSize: '22px', borderBottom: '2px solid #d7cdcd' }} ><strong>New Property List </strong></p>
+                    </MDBCol>
+                    <MDBCol className='md'>
+                        <input style={inputStyle}
+                            className='form-control'
+                            type='text'
+                            placeholder='Property Reference'
+                            value={searchProperty.toLowerCase().trim()}
+                            onChange={(e) => { let newEdit = { ...searchProperty }; newEdit = e.target.value; setSearchProperty(newEdit) }}>
+                        </input>
+                        <MDBBtn className='border border-info'
+                            style={{ fontSize: '12px', width: 'auto', float: 'left' }} color='info'
+                            onClick={(e) => { reviewThisProperty(searchProperty) }} >
+                            <MDBIcon fas icon='search'
+                                onClick={(e) => { reviewThisProperty(searchProperty) }} />
+                        </MDBBtn>
+                    </MDBCol>
                 </MDBRow>
+
                 {propertyList.map((property) => {
                     return (
                         <MDBCard className='m-2'
@@ -751,8 +828,26 @@ export default function PropertyCard() {
                                 </MDBCol>
                             </MDBRow>
                             <MDBRow>
-                                <BtnAccept
-                                    onClick={(e) => { if (window.confirm('Withdraw from this bid?')) handleWithdrawBid(e) }}>Withdraw from bid</BtnAccept>
+                                <MDBCol className='col-4'>
+
+                                    {
+                                        bidOnThisProperty ?
+                                            <BtnAccept
+                                                onClick={(e) => { if (window.confirm('Bid on this property?')) handleBid(propertyId) }}>Bid on this property
+                                            </BtnAccept>
+                                            :
+                                            <BtnAccept
+                                                onClick={(e) => { if (window.confirm('Withdraw from this bid?')) handleWithdrawBid(e) }}>Withdraw from bid
+                                            </BtnAccept>
+                                    }
+
+                                </MDBCol>
+                                <MDBCol>
+                                    <BtnAccept
+                                        color='secondary' onClick={(e) => { if (window.confirm("Cancel update?")) gotoAccountPage(e) }}>
+                                        Cancel
+                                    </BtnAccept>
+                                </MDBCol>
                             </MDBRow>
                         </MDBCardBody>
                     </MDBRipple>}
@@ -760,28 +855,6 @@ export default function PropertyCard() {
             </MDBContainer >
         </React.Fragment >
     )
-
-    const sendMessage = async (messageInfo) => {
-
-        console.log("Iam in send message")
-
-        try {
-            console.table(messageInfo)
-
-            const response = await axios.post(msgLoginDetailUrl, messageInfo)
-            if (response) {
-                console.log(response.data.Status_Reply);
-                return response.data.Status_Reply;
-            } else {
-                return response.data.Status_Reply;
-            }
-        } catch (error) {
-            console.log(error)
-            setModalInfo(response.data.Status_Reply)
-            setShowInfoModal(true);
-        }
-
-    }
 
     return (
         <React.Fragment>

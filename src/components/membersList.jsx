@@ -7,7 +7,6 @@ import { decryptDetails } from '../utility/hashDetails';
 import { UserContext } from "../userContext/UserContext"
 
 import {
-  MDBContainer,
   MDBCard,
   MDBCardBody,
   MDBRipple,
@@ -153,8 +152,8 @@ export default function MembersList() {
               );
             })}
             <MDBFooter className='w-100 mx-auto ps-4 pt-2'>
-            <span style={{ color: 'red', fontSize: '18px', fontWeight: 'bold' }}> * </span>
-            <span style={{ color: '#474747', fontSize: '12px' }}>{nINOInfo}</span> 
+              <span style={{ color: 'red', fontSize: '18px', fontWeight: 'bold' }}> * </span>
+              <span style={{ color: '#474747', fontSize: '12px' }}>{nINOInfo}</span>
             </MDBFooter>
           </MDBCard>
         </React.Fragment >

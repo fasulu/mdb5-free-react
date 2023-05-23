@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { UserContext } from './userContext/UserContext';
 
-import SearchOptions from './components/searchOptions'
+import SearchOptions from './components/clientPropertySearch'
 // import Boxes from './test/Boxes';
 
 import HomePage from './pages/homePage';
@@ -31,6 +31,7 @@ import ShortListPage from './pages/shortListingPage';
 import RepairPage from './pages/repairPage';
 import GuidePage from './pages/guidePage';
 import KeyFactsPage from './pages/keyFactsPage';
+import PropertySearchPage from './pages/propertySearchPage';
 
 function App() {
 
@@ -72,6 +73,8 @@ function App() {
               <Route path="keyfacts" element={<KeyFactsPage />} />
               
               <Route path="search" element={<SearchOptions />} />
+
+              <Route path="propertysearch" element={<PropertySearchPage/> } />
 
               <Route path="/" element={<HomePage />} />
               <Route path="*" element={<PageNotFound />} />

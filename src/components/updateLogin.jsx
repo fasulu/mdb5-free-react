@@ -1,5 +1,4 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { UserContext } from "../userContext/UserContext"
 
@@ -39,8 +38,6 @@ export default function UpdateLogin() {
     const MemoDateSubject_ = "Memorable date details updated"
     const From_ = "Housing Department"
     const message_ = "Your login details successfully updated. This is an auto-generated message, do not reply or request any detail."
-
-    const navigate = useNavigate();
 
     const datesData = dates;
     const monthsData = months;
@@ -203,7 +200,6 @@ export default function UpdateLogin() {
         } catch (error) {
             console.log(error)
         }
-
     }
 
     const handlePassword = (e) => {
@@ -239,12 +235,10 @@ export default function UpdateLogin() {
             setShowInfoModal(true);
             console.log(error)
         }
-
     }
 
     const savePassword = async () => {
         console.log('Im in save password');
-
         try {
 
             const passwordInfo = {
@@ -278,7 +272,7 @@ export default function UpdateLogin() {
                 setShowInfoModal(true);
                 setTimeout(() => {
                     refreshPage();
-                }, 5000);
+                }, 3000);
 
             } else {
                 setModalInfo("Invalid information")
@@ -525,7 +519,7 @@ export default function UpdateLogin() {
         setShowInfoModal(true);
         setTimeout(() => {
             refreshPage();
-        }, 5000);
+        }, 3000);
     }
 
     return (
