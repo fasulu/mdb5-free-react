@@ -13,7 +13,7 @@ import { ToCamelCase } from '../validations/Validator.jsx'
 import { refreshPage } from '../utility/refreshPage.js';
 import BtnAccept from './btnAccept';
 import PopUp from './popUp';
-
+import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
 export default function PropertySearch() {
 
@@ -92,7 +92,16 @@ export default function PropertySearch() {
                 }, 5000);
             }
         } catch (error) {
-            console.log(error)
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Prpty101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("Prpty101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -117,7 +126,16 @@ export default function PropertySearch() {
                 }, 5000);
             }
         } catch (error) {
-            console.log(error)
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Prpty102',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("Prpty102: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 

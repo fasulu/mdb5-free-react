@@ -14,6 +14,7 @@ import { languages } from '../resources/language';
 import { dates, months } from '../resources/datePicker';
 import { validEmail, validName, validPostcode, validNumber, emailMatch, validNINO, validDate, validMName } from '../validations/Validator.jsx';
 import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
+import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
 import { UserContext } from "../userContext/UserContext"
 
@@ -80,7 +81,6 @@ export default function JointApplicant() {
 
     const [currentlyLiveWithYou, setCurrentlyLiveWithYou] = useState("no");
     const [livingInDiffAddress, setLivingInDiffAddress] = useState("yes");
-
 
     const [movedInDate, setMovedInDate] = useState("");
     const [movedDate, setMovedDate] = useState("");
@@ -161,7 +161,17 @@ export default function JointApplicant() {
             console.log(`Response from backend:- ${response.data.message}`)
 
         } catch (error) {
-            console.log(error)
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'JntApt101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("JntApt101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -184,122 +194,137 @@ export default function JointApplicant() {
 
         const handleConnectionCheckbox = () => {
 
-            var check_ed = "";
-            var markedCheckbox = document.getElementsByName('connectionCheckbox');
-            for (var checkbox of markedCheckbox) {
-                if (checkbox.checked)
-                    check_ed += (checkbox.value + ',');
-            }
-            // if nothing checked, automatically saves checkbox value 17(None of the above)
-            if (check_ed == "") {
-                check_ed = "17";
-            }
-            let newChecked = { ...connection }; newChecked = check_ed; setConnection(newChecked)
+            try {
+                var check_ed = "";
+                var markedCheckbox = document.getElementsByName('connectionCheckbox');
+                for (var checkbox of markedCheckbox) {
+                    if (checkbox.checked)
+                        check_ed += (checkbox.value + ',');
+                }
+                // if nothing checked, automatically saves checkbox value 17(None of the above)
+                if (check_ed == "") {
+                    check_ed = "17";
+                }
+                let newChecked = { ...connection }; newChecked = check_ed; setConnection(newChecked)
 
+            } catch (error) {
+
+                let result = error.message;
+                const errDetails = {
+                    error_Location: 'JntApt102',
+                    error_Detail: result + "\nOops! Something went wrong, please try again later."
+                }
+                const response = SaveErrDetail(errDetails)
+                console.log(response)
+
+                setModalInfo("JntApt102: Oops! Something went wrong, please try again later.");
+                setShowInfoModal(true);
+            }
         }
 
         formatDate();
 
         handleConnectionCheckbox();
 
-        const fNameValid = validName(fName);
-        const mNameValid = validMName(mName);
-        const sNameValid = validName(sName);
-        const ninoValid = validNINO(nINO)
-        const emailValid = validEmail(email);
+        try {
+            const fNameValid = validName(fName);
+            const mNameValid = validMName(mName);
+            const sNameValid = validName(sName);
+            const ninoValid = validNINO(nINO)
+            const emailValid = validEmail(email);
 
-        const dobValid = validDate(birth_);
-        if (dobValid) {
-            // const timeStampedDOB = ConvertToTimeStamp(birth_);
-            birth_ = ConvertToTimeStamp(birth_);
-            console.log(`birth_ timestamp, ${birth_}`)
-            // setDateofbirth(timeStampedDOB);
-        } else {
-            // alert('Date of birth invalid');
-            setModalInfo('Date of birth invalid')
-            setShowInfoModal(true);
-        }
+            const dobValid = validDate(birth_);
+            if (dobValid) {
+                // const timeStampedDOB = ConvertToTimeStamp(birth_);
+                birth_ = ConvertToTimeStamp(birth_);
+                console.log(`birth_ timestamp, ${birth_}`)
+                // setDateofbirth(timeStampedDOB);
+            } else {
+                // alert('Date of birth invalid');
+                setModalInfo('Date of birth invalid')
+                setShowInfoModal(true);
+            }
 
-        const movedValid = validDate(moved_);
-        if (movedValid) {
-            // const timeStampedMovedInDate = ConvertToTimeStamp(moved_);
-            moved_ = ConvertToTimeStamp(moved_);
-            console.log(`moved_ timestamp ${moved_}`)
-            // setMovedInDate(timeStampedMovedInDate);
-        } else {
-            // alert('Invalid Moved-In date');
-            setModalInfo('Invalid Moved-In date')
-            setShowInfoModal(true);
-        }
+            const movedValid = validDate(moved_);
+            if (movedValid) {
+                // const timeStampedMovedInDate = ConvertToTimeStamp(moved_);
+                moved_ = ConvertToTimeStamp(moved_);
+                console.log(`moved_ timestamp ${moved_}`)
+                // setMovedInDate(timeStampedMovedInDate);
+            } else {
+                // alert('Invalid Moved-In date');
+                setModalInfo('Invalid Moved-In date')
+                setShowInfoModal(true);
+            }
 
-        const delvyValid = validDate(delivry_);
-        if (delvyValid) {
-            // const timeStampedDelvyDate = ConvertToTimeStamp(delivry_);
-            delivry_ = ConvertToTimeStamp(delivry_);
-            console.log(`delivry_ timestamp ${delivry_}`)
-            // setDeliveryDate(timeStampedDelvyDate);
-        } else {
-            // alert('Invalid Moved-In date');
-            setModalInfo('Invalid Moved-In date')
-            setShowInfoModal(true);
-        }
+            const delvyValid = validDate(delivry_);
+            if (delvyValid) {
+                // const timeStampedDelvyDate = ConvertToTimeStamp(delivry_);
+                delivry_ = ConvertToTimeStamp(delivry_);
+                console.log(`delivry_ timestamp ${delivry_}`)
+                // setDeliveryDate(timeStampedDelvyDate);
+            } else {
+                // alert('Invalid Moved-In date');
+                setModalInfo('Invalid Moved-In date')
+                setShowInfoModal(true);
+            }
 
-        const corresPostcodeValid = validPostcode(corresPostcode);
-        const telephoneValid = validNumber(telephone);
-        const workphoneValid = validNumber(workPhone);
-        const mobileValid = validNumber(mobile);
-        const emailMatchesValid = emailMatch(email, reEnterEmail)
+            const corresPostcodeValid = validPostcode(corresPostcode);
+            const telephoneValid = validNumber(telephone);
+            const workphoneValid = validNumber(workPhone);
+            const mobileValid = validNumber(mobile);
+            const emailMatchesValid = emailMatch(email, reEnterEmail)
 
-        console.log(`Validation result is fname/sname ${fNameValid} ${mNameValid}, ${sNameValid}, 
+            console.log(`Validation result is fname/sname ${fNameValid} ${mNameValid}, ${sNameValid}, 
         nino ${ninoValid}, email ${emailValid}, email matches ${emailMatchesValid}, correspondence postcode ${corresPostcodeValid}, 
         dob ${dobValid}, moved ${movedValid}, delvy ${delvyValid},
         telephone ${telephoneValid}, workphone ${workphoneValid}, mobile ${mobileValid},
         home telephone ${telephone}, work telephone ${workPhone}, mobile ${mobile}`)
 
-        console.log('Im in saveJointApplicant', relationship,
-            title, fName, mName, sName, nameChange,
-            nINO, dateofbirth, sex,
-            corresPostcode, corresAddLine1, corresAddLine2, corresAddLine3, corresAddLine4,
-            currentlyLiveWithYou, movedInDate, placedByLocalAuthrty, localAuthrtyName,
-            telephone, mobile, workPhone, email, reEnterEmail,
-            ethnicity, nationality, sexOrient, isShePregnant, deliveryDate,
-            belief, healthCondition, preferedLanguage, needInterpreter,
-            tenure, tenancyRefNo, isYourPartner, areYouWorker, connection, comments, todayDate
-        )
+            console.log('Im in saveJointApplicant', relationship,
+                title, fName, mName, sName, nameChange,
+                nINO, dateofbirth, sex,
+                corresPostcode, corresAddLine1, corresAddLine2, corresAddLine3, corresAddLine4,
+                currentlyLiveWithYou, movedInDate, placedByLocalAuthrty, localAuthrtyName,
+                telephone, mobile, workPhone, email, reEnterEmail,
+                ethnicity, nationality, sexOrient, isShePregnant, deliveryDate,
+                belief, healthCondition, preferedLanguage, needInterpreter,
+                tenure, tenancyRefNo, isYourPartner, areYouWorker, connection, comments, todayDate
+            )
 
-        if ((!fNameValid) || (!mNameValid) || (!sNameValid) || (!emailValid) || (!emailMatchesValid) ||
-            (!ninoValid) || (!corresPostcodeValid) || (!telephoneValid) || (!workphoneValid) || (!mobileValid)) {
-            !fNameValid && setModalInfo('Error: First Name')
-            setShowInfoModal(true);
+            if ((!fNameValid) || (!mNameValid) || (!sNameValid) || (!emailValid) || (!emailMatchesValid) ||
+                (!ninoValid) || (!corresPostcodeValid) || (!telephoneValid) || (!workphoneValid) || (!mobileValid)) {
+                !fNameValid && setModalInfo('Error: First Name')
+                setShowInfoModal(true);
 
-            !mNameValid && setModalInfo('Error: Middle Name')
-            setShowInfoModal(true);
+                !mNameValid && setModalInfo('Error: Middle Name')
+                setShowInfoModal(true);
 
-            !sNameValid && setModalInfo('Error: Surname')
-            setShowInfoModal(true);
+                !sNameValid && setModalInfo('Error: Surname')
+                setShowInfoModal(true);
 
-            !ninoValid && setModalInfo('Error: NINO')
-            setShowInfoModal(true);
+                !ninoValid && setModalInfo('Error: NINO')
+                setShowInfoModal(true);
 
-            !telephoneValid && setModalInfo('Error: Telephone number')
-            setShowInfoModal(true);
+                !telephoneValid && setModalInfo('Error: Telephone number')
+                setShowInfoModal(true);
 
-            !workphoneValid && setModalInfo('Error: Work telephone number')
-            setShowInfoModal(true);
+                !workphoneValid && setModalInfo('Error: Work telephone number')
+                setShowInfoModal(true);
 
-            !mobileValid && setModalInfo('Error: Mobile number')
-            setShowInfoModal(true);
+                !mobileValid && setModalInfo('Error: Mobile number')
+                setShowInfoModal(true);
 
-            !emailValid && setModalInfo('Error: Email')
-            setShowInfoModal(true);
+                !emailValid && setModalInfo('Error: Email')
+                setShowInfoModal(true);
 
-            !corresPostcodeValid && setModalInfo('Error: Postcode')
-            setShowInfoModal(true);
+                !corresPostcodeValid && setModalInfo('Error: Postcode')
+                setShowInfoModal(true);
 
-            !emailMatchesValid && setModalInfo('Error: Email does not match')
-            setShowInfoModal(true);
-        } else {
-            console.log(`Final Result passed :- ${relationship},
+                !emailMatchesValid && setModalInfo('Error: Email does not match')
+                setShowInfoModal(true);
+            } else {
+                console.log(`Final Result passed :- ${relationship},
             ${title}, ${fName}, ${mName}, ${sName}, ${nameChange},
             ${nINO}, ${birth_}, ${sex},
             ${corresPostcode}, ${corresAddLine1}, ${corresAddLine2}, ${corresAddLine3}, ${corresAddLine4},
@@ -309,8 +334,22 @@ export default function JointApplicant() {
             ${belief}, ${healthCondition}, ${preferedLanguage}, ${needInterpreter},
             ${tenure}, ${tenancyRefNo}, ${isYourPartner}, ${areYouWorker}, ${connection}, ${comments}, ${todayDate}`);
 
-            saveJointApplicant();
+                saveJointApplicant();
+            }
+        } catch (error) {
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'JntApt103',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("JntApt103: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
+
     }
 
     const saveJointApplicant = async () => {
@@ -394,8 +433,16 @@ export default function JointApplicant() {
             navigate('/account', { state: { jointName: fName } });
 
         } catch (error) {
-            console.log(error)
-            setModalInfo(response.data.Status_Reply)
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'JntApt104',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("JntApt104: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
     }

@@ -11,6 +11,7 @@ import { dates, months } from '../resources/datePicker';
 import { validEmail, validName, validPostcode, validNumber, emailMatch, pwdMatch, memDateMatch, validNINO, validDate } from '../validations/Validator.jsx';
 import { ConvertToTimeStamp } from '../utility/dateConvertion';
 import BtnAccept from './btnAccept.jsx';
+import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
 import { refreshPage } from '../utility/refreshPage';
 import PopUp from './popUp';
@@ -160,43 +161,56 @@ export default function HouseholdMember() {
         // setdateofbirth(dobYear + "-" + dobMonth + "-" + dobDate);
         // setMovedInDate(movedYear + "-" + movedMonth + "-" + movedDate);
         // setDeliveryDate(delYear + "-" + delMonth + "-" + delDate);
-
-        const birthValid = validDate(birth_);
-        if (birthValid) {
-            // const timeStampedDOB = ConvertToTimeStamp(birth_);
-            birth_ = ConvertToTimeStamp(birth_);
-            console.log(birth_)
-            // setdateofbirth(timeStampedDOB);
-        } else {
-            setModalInfo('Date of birth invalid')
-            setShowInfoModal(true);
-        }
-
-        const movedValid = validDate(moved_);
-        if (movedValid) {
-            // const timeStampedMovedInDate = ConvertToTimeStamp(moved_);
-            moved_ = ConvertToTimeStamp(moved_);
-            console.log(moved_)
-            // setMovedInDate(timeStampedMovedInDate);
-        } else {
-            setModalInfo('Invalid Moved-In date')
-            setShowInfoModal(true);
-        }
-
-        if (isShePregnant == "yes") {
-            const delValid = validDate(del_);
-            if (delValid) {
-                const timeStampedDelDate = ConvertToTimeStamp(del_);
-                del_ = ConvertToTimeStamp(del_);
-                console.log(del_)
-                // setDeliveryDate(timeStampedDelDate);
+        try {
+            const birthValid = validDate(birth_);
+            if (birthValid) {
+                // const timeStampedDOB = ConvertToTimeStamp(birth_);
+                birth_ = ConvertToTimeStamp(birth_);
+                console.log(birth_)
+                // setdateofbirth(timeStampedDOB);
             } else {
-                // alert(`Invalid delivery date`)
-                setModalInfo('Invalid delivery date')
+                setModalInfo('Date of birth invalid')
                 setShowInfoModal(true);
             }
-        } else {
-            setDeliveryDate("");
+
+            const movedValid = validDate(moved_);
+            if (movedValid) {
+                // const timeStampedMovedInDate = ConvertToTimeStamp(moved_);
+                moved_ = ConvertToTimeStamp(moved_);
+                console.log(moved_)
+                // setMovedInDate(timeStampedMovedInDate);
+            } else {
+                setModalInfo('Invalid Moved-In date')
+                setShowInfoModal(true);
+            }
+
+            if (isShePregnant == "yes") {
+                const delValid = validDate(del_);
+                if (delValid) {
+                    const timeStampedDelDate = ConvertToTimeStamp(del_);
+                    del_ = ConvertToTimeStamp(del_);
+                    console.log(del_)
+                    // setDeliveryDate(timeStampedDelDate);
+                } else {
+                    // alert(`Invalid delivery date`)
+                    setModalInfo('Invalid delivery date')
+                    setShowInfoModal(true);
+                }
+            } else {
+                setDeliveryDate("");
+            }
+        } catch (error) {
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'HsMem101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("HsMem101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -205,70 +219,86 @@ export default function HouseholdMember() {
 
         formatDate();
 
-        fNameValid = validName(fName);
-        mNameValid = validName(sName);
-        sNameValid = validName(sName);
-        spouseNameValid = validName(spouseAnotherMemberName);
+        try {
 
-        if (nINO.trim() !== "") {
-            ninoValid = validNINO(nINO);
-        } else { ninoValid = true }
+            fNameValid = validName(fName);
+            mNameValid = validName(sName);
+            sNameValid = validName(sName);
+            spouseNameValid = validName(spouseAnotherMemberName);
 
-        if (telephone.trim() !== "") {
-            telephoneValid = validNumber(telephone);
-        } else { telephoneValid = true }
+            if (nINO.trim() !== "") {
+                ninoValid = validNINO(nINO);
+            } else { ninoValid = true }
 
-        if (workPhone.trim() !== "") {
-            workphoneValid = validNumber(workPhone);
-        } else { workphoneValid = true }
+            if (telephone.trim() !== "") {
+                telephoneValid = validNumber(telephone);
+            } else { telephoneValid = true }
 
-        if (mobile.trim() !== "") {
-            mobileValid = validNumber(mobile);
-        } else { mobileValid = true }
+            if (workPhone.trim() !== "") {
+                workphoneValid = validNumber(workPhone);
+            } else { workphoneValid = true }
 
-        if ((email.trim() !== "") && (reEnterEmail.trim() !== "")) {
-            emailValid = validEmail(email);
-            emailMatchesValid = emailMatch(email, reEnterEmail);
-        } else { emailValid = true; emailMatchesValid = true }
+            if (mobile.trim() !== "") {
+                mobileValid = validNumber(mobile);
+            } else { mobileValid = true }
 
-        console.log(`Validation result is fname/mname/sname ${fNameValid} ${mNameValid} ${sNameValid}, 
+            if ((email.trim() !== "") && (reEnterEmail.trim() !== "")) {
+                emailValid = validEmail(email);
+                emailMatchesValid = emailMatch(email, reEnterEmail);
+            } else { emailValid = true; emailMatchesValid = true }
+
+            console.log(`Validation result is fname/mname/sname ${fNameValid} ${mNameValid} ${sNameValid}, 
         ninoValid ${ninoValid}, spouse name ${spouseNameValid}, home telephone ${telephoneValid}, work telephone ${workphoneValid}, 
         mobile ${mobileValid},email ${emailValid}, email matches ${emailMatchesValid}`)
 
-        console.log('Im in handleMember', relationWithPrimaryApplicant,
-            assessmentPurposeOnly, title, fName, mName, sName, nameChange,
-            currentlyLiveWithYou, isSpouseOfAnotherMember, spouseAnotherMemberName,
-            nINO, dateofbirth, sex, placedByLocalAuthrty, localAuthrtyName,
-            currentAddress, telephone, mobile, workPhone, email, reEnterEmail, movedInDate,
-            ethnicity, nationality, belief, sexOrient,
-            isShePregnant, deliveryDate,
-            healthCondition, areYouWorker
-        )
+            console.log('Im in handleMember', relationWithPrimaryApplicant,
+                assessmentPurposeOnly, title, fName, mName, sName, nameChange,
+                currentlyLiveWithYou, isSpouseOfAnotherMember, spouseAnotherMemberName,
+                nINO, dateofbirth, sex, placedByLocalAuthrty, localAuthrtyName,
+                currentAddress, telephone, mobile, workPhone, email, reEnterEmail, movedInDate,
+                ethnicity, nationality, belief, sexOrient,
+                isShePregnant, deliveryDate,
+                healthCondition, areYouWorker
+            )
 
-        if ((!fNameValid) || (!mNameValid) || (!sNameValid) || (!emailValid) || (!emailMatchesValid) ||
-            (!ninoValid) || (!telephoneValid) || (!workphoneValid) || (!mobileValid)) {
-            !fNameValid && setModalInfo('Error: First Name')
-            setShowInfoModal(true);
-            !mNameValid && setModalInfo('Error: Middle Name')
-            setShowInfoModal(true);
-            !sNameValid && setModalInfo('Error: Surname')
-            setShowInfoModal(true);
-            !ninoValid && setModalInfo('Error: NINO')
-            setShowInfoModal(true);
-            !telephoneValid && setModalInfo('Error: Telephone number')
-            setShowInfoModal(true);
-            !workphoneValid && setModalInfo('Error: Work telephone number')
-            setShowInfoModal(true);
-            !mobileValid && setModalInfo('Error: Mobile number')
-            setShowInfoModal(true);
-            !emailValid && setModalInfo('Error: Email')
-            setShowInfoModal(true);
-            !emailMatchesValid && setModalInfo('Error: Email does not match')
-            setShowInfoModal(true);
+            if ((!fNameValid) || (!mNameValid) || (!sNameValid) || (!emailValid) || (!emailMatchesValid) ||
+                (!ninoValid) || (!telephoneValid) || (!workphoneValid) || (!mobileValid)) {
+                !fNameValid && setModalInfo('Error: First Name')
+                setShowInfoModal(true);
+                !mNameValid && setModalInfo('Error: Middle Name')
+                setShowInfoModal(true);
+                !sNameValid && setModalInfo('Error: Surname')
+                setShowInfoModal(true);
+                !ninoValid && setModalInfo('Error: NINO')
+                setShowInfoModal(true);
+                !telephoneValid && setModalInfo('Error: Telephone number')
+                setShowInfoModal(true);
+                !workphoneValid && setModalInfo('Error: Work telephone number')
+                setShowInfoModal(true);
+                !mobileValid && setModalInfo('Error: Mobile number')
+                setShowInfoModal(true);
+                !emailValid && setModalInfo('Error: Email')
+                setShowInfoModal(true);
+                !emailMatchesValid && setModalInfo('Error: Email does not match')
+                setShowInfoModal(true);
 
-        } else {
-            saveMember()
+            } else {
+                saveMember()
+            }
+        } catch (error) {
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'HsMem102',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("HsMem102: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
+
     }
 
     const saveMember = async () => {
@@ -323,8 +353,16 @@ export default function HouseholdMember() {
                 setShowInfoModal(true);
             }
         } catch (error) {
-            console.log(error)
-            setModalInfo(response.data.Status_Reply)
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'HsMem103',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("HsMem103: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
     }

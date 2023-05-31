@@ -22,6 +22,7 @@ import {
 
 import { refreshPage } from '../utility/refreshPage';
 import BtnAccept from './btnAccept.jsx';
+import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
 export default function UpdateContact() {
 
@@ -35,7 +36,8 @@ export default function UpdateContact() {
     const primaryClientUpdateUrl = "http://localhost:9001/client/update/";
     const msgUpdateContactUrl = "http://localhost:9001/message/newmsg/";
 
-    // const date_ = new Date().toISOString().slice(0, 10);
+    const todayDate = new Date().toISOString().slice(0, 19);
+
     const date_ = ConvertToTimeStamp(new Date().toISOString().slice(0, 10));
     const subject_ = "Contact details updated"
     const From_ = "Housing Department"
@@ -118,6 +120,7 @@ export default function UpdateContact() {
                 setAddLine3(response.data.clientExist.client_address_line3)
                 setAddLine4(response.data.clientExist.client_address_line4)
                 setCommunicationAddress(response.data.clientExist.client_communication_address)
+                
                 if (response.data.clientExist.client_communication_address == 'current address') {
                     window.document.getElementById('CommunicationAddressCurrent').checked = true;
                     setShowCorrespondence(false)
@@ -125,6 +128,7 @@ export default function UpdateContact() {
                     window.document.getElementById('CommunicationAddressCorrespondence').checked = true;
                     setShowCorrespondence(true);
                 }
+
                 setCorrespondenceType(response.data.clientExist.client_correspondence_type)
                 setCorresPostcode(response.data.clientExist.client_correspondence_postcode)
                 setCorresAddLine1(response.data.clientExist.client_correspondence_address_line1)
@@ -140,10 +144,19 @@ export default function UpdateContact() {
             } else {
 
                 console.log(`Response from backend:- ${response.data.message}`)
-
             }
         } catch (error) {
-            console.log(error)
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'UpdCnt101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("UpdCnt101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -152,75 +165,91 @@ export default function UpdateContact() {
         e.preventDefault();
 
         movedDate = movedInYear + "-" + movedInMonth + "-" + movedInDate;
-        const movedInValid = validDate(movedDate)
-        if (movedInValid) {
-            movedDate = ConvertToTimeStamp(movedDate);
-        } else {
-            setModalInfo("Invalid moved-in date")
-            setShowInfoModal(true);
-        }
 
-        const postcodeValid = validPostcode(postcode);
-        if (!postcode) {
-            setModalInfo("Invalid postcode")
-            setShowInfoModal(true);
-        }
 
-        if (!corresPostcode == "") {
-            const corresPostcodeValid = validPostcode(corresPostcode);
-            if (!corresPostcodeValid) {
-                setModalInfo("Correspondence postcode is invalid or not in UK standard")
+        try {
+
+            const movedInValid = validDate(movedDate)
+            if (movedInValid) {
+                movedDate = ConvertToTimeStamp(movedDate);
+            } else {
+                setModalInfo("Invalid moved-in date")
                 setShowInfoModal(true);
             }
-        }
 
-        const emailValid = validEmail(email);
-        const telephoneValid = validNumber(telephone);
-        const workphoneValid = validNumber(workPhone);
-        const mobileValid = validNumber(mobile);
-        const EmailMatchesValid = emailMatch(email, reEnterEmail);
+            const postcodeValid = validPostcode(postcode);
+            if (!postcode) {
+                setModalInfo("Invalid postcode")
+                setShowInfoModal(true);
+            }
 
-        console.log(`Validation result is  email ${emailValid}, 
+            if (!corresPostcode == "") {
+                const corresPostcodeValid = validPostcode(corresPostcode);
+                if (!corresPostcodeValid) {
+                    setModalInfo("Correspondence postcode is invalid or not in UK standard")
+                    setShowInfoModal(true);
+                }
+            }
+
+            const emailValid = validEmail(email);
+            const telephoneValid = validNumber(telephone);
+            const workphoneValid = validNumber(workPhone);
+            const mobileValid = validNumber(mobile);
+            const EmailMatchesValid = emailMatch(email, reEnterEmail);
+
+            console.log(`Validation result is  email ${emailValid}, 
         postcode ${postcodeValid}, home telephone ${telephoneValid}, 
         work telephone ${workphoneValid}, mobile ${mobileValid}, 
         emailmatchesValid ${EmailMatchesValid}`)
 
-        if (correspondenceType === "") {
-            setCorrespondenceType("5")
-        }
+            if (correspondenceType === "") {
+                setCorrespondenceType("5")
+            }
 
-        var radioBtn = window.document.getElementById('CommunicationAddressCurrent');
-        if (radioBtn.checked === true) {
-            setCommunicationAddress('current address')
+            var radioBtn = window.document.getElementById('CommunicationAddressCurrent');
+            if (radioBtn.checked === true) {
+                setCommunicationAddress('current address')
 
-        } else {
-            window.document.getElementById('CommunicationAddressCorrespondence').checked = true
-            setCommunicationAddress('correspondence address')
-        }
+            } else {
+                window.document.getElementById('CommunicationAddressCorrespondence').checked = true
+                setCommunicationAddress('correspondence address')
+            }
 
-        if ((!emailValid) || (!telephoneValid) || (!movedInValid) || (!postcode) ||
-            (!workphoneValid) || (!mobileValid) || (!EmailMatchesValid)) {
+            if ((!emailValid) || (!telephoneValid) || (!movedInValid) || (!postcode) ||
+                (!workphoneValid) || (!mobileValid) || (!EmailMatchesValid)) {
 
-            !telephoneValid && setModalInfo("Error: Telephone number")
+                !telephoneValid && setModalInfo("Error: Telephone number")
+                setShowInfoModal(true);
+                !mobileValid && setModalInfo("Error: Mobile number")
+                setShowInfoModal(true);
+                !workphoneValid && setModalInfo("Error: Work phone")
+                setShowInfoModal(true);
+                !emailValid && setModalInfo("Error: Email")
+                setShowInfoModal(true);
+                !EmailMatchesValid && setModalInfo("Error: Email does not match")
+                setShowInfoModal(true);
+            } else {
+
+                console.log('FINAL Result passed', postcode, addLine1, addLine2, addLine3, addLine4,
+                    correspondenceType, communicationAddress, corresPostcode, corresAddLine1,
+                    corresAddLine2, corresAddLine3, corresAddLine4, telephone, mobile, workPhone,
+                    email, reEnterEmail, movedDate, comments
+                );
+
+                updateClient();
+            }
+        } catch (error) {
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'UpdCnt101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("UpdCnt101: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
-            !mobileValid && setModalInfo("Error: Mobile number")
-            setShowInfoModal(true);
-            !workphoneValid && setModalInfo("Error: Work phone")
-            setShowInfoModal(true);
-            !emailValid && setModalInfo("Error: Email")
-            setShowInfoModal(true);
-            !EmailMatchesValid && setModalInfo("Error: Email does not match")
-            setShowInfoModal(true);
-        } else {
-
-            console.log('FINAL Result passed', postcode, addLine1, addLine2, addLine3, addLine4,
-                correspondenceType, communicationAddress, corresPostcode, corresAddLine1,
-                corresAddLine2, corresAddLine3, corresAddLine4, telephone, mobile, workPhone,
-                email, reEnterEmail, movedDate, comments
-            );
-
-            updateClient();
-
         }
     }
 
@@ -248,37 +277,51 @@ export default function UpdateContact() {
             client_comments: comments
         }
         console.table(clientInfo)
+        try {
+            const response = await axios.put(primaryClientUpdateUrl + clientId, clientInfo, {})
+            console.log(`Output from backend ${response.data.message}`)
 
-        const response = await axios.put(primaryClientUpdateUrl + clientId, clientInfo, {})
-        console.log(`Output from backend ${response.data.message}`)
+            if (response.data.Status_Reply === "Success") {
 
-        if (response.data.Status_Reply === "Success") {
+                setModalInfo("Successfully updated")
+                setShowInfoModal(true);
 
-            setModalInfo("Successfully updated")
-            setShowInfoModal(true);
+                console.log(clientId)
 
-            console.log(clientId)
+                const messageInfo = {
+                    clientId: clientId,
+                    messageDate: date_,
+                    messageSubject: subject_,
+                    messageFrom: From_,
+                    message: message_,
+                    messageStatus: false
+                }
 
-            const messageInfo = {
-                clientId: clientId,
-                messageDate: date_,
-                messageSubject: subject_,
-                messageFrom: From_,
-                message: message_,
-                messageStatus: false
+                console.table(messageInfo)
+
+                const result = sendMessage(messageInfo);
+
+            } else {
+                setModalInfo("Invalid information")
+                setShowInfoModal(true);
+                setTimeout(() => {
+                    refreshPage();
+                }, 3000);
             }
+        } catch (error) {
 
-            console.table(messageInfo)
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'UpdCnt102',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
 
-            const result = sendMessage(messageInfo);
-
-        } else {
-            setModalInfo("Invalid information")
+            setModalInfo("UpdCnt102: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
-            setTimeout(() => {
-                refreshPage();
-            }, 3000);
         }
+
     }
 
     const sendMessage = async (messageInfo) => {
@@ -299,12 +342,21 @@ export default function UpdateContact() {
                 return response.data.Status_Reply;
             }
         } catch (error) {
-            console.log(error)
-            setModalInfo(response.data.Status_Reply)
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'UpdCnt103',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("UpdCnt103: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
+
             setTimeout(() => {
                 refreshPage();
-            }, 5000);
+            }, 3000);
         }
     }
 

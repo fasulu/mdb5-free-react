@@ -16,8 +16,8 @@ import {
 } from 'mdb-react-ui-kit';
 
 import BtnAccept from './btnAccept.jsx';
-
 import PopUp from './popUp';
+import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
 import { refreshPage } from '../utility/refreshPage.js';
 import { decryptDetails } from '../utility/hashDetails';
@@ -102,34 +102,59 @@ export default function MyToDoList() {
                 }
             }
         } catch (error) {
-            console.log(error)
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Todo101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("Todo101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
-    const handleTodoAdd = (e) => {
+    const handleTodoAdd = async (e) => {
 
-        setToDoDate((e.target.value));
-        let status_;
+        try {
+            setToDoDate((e.target.value));
+            let status_;
 
-        let checkBox = window.document.getElementById('statusAddCheck');
-        console.log(`checkbox checked ${checkBox}`)
+            let checkBox = window.document.getElementById('statusAddCheck');
+            console.log(`checkbox checked ${checkBox}`)
 
-        if (checkBox.checked) {
-            status_ = true;
-        } else {
-            status_ = false;
+            if (checkBox.checked) {
+                status_ = true;
+            } else {
+                status_ = false;
+            }
+
+            const toDoInfo = {
+                clientId: clientId,
+                toDoDate: ConvertToTimeStamp(toDoDate),
+                toDoTask: toDoTask,
+                toDoStatus: status_,
+                comments: comments
+            }
+
+            console.table(toDoInfo)
+            addNewToDo(toDoInfo);
+
+        } catch (error) {
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Todo102',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("Todo102: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
 
-        const toDoInfo = {
-            clientId: clientId,
-            toDoDate: ConvertToTimeStamp(toDoDate),
-            toDoTask: toDoTask,
-            toDoStatus: status_,
-            comments: comments
-        }
-
-        console.table(toDoInfo)
-        addNewToDo(toDoInfo);
     }
 
     const myToDoList = async (e) => {
@@ -160,7 +185,16 @@ export default function MyToDoList() {
                 setShowAddToDo(false)
             }
         } catch (error) {
-            console.log(error)
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Todo103',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("Todo103: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -192,10 +226,17 @@ export default function MyToDoList() {
                 }, 3000);
             }
         } catch (error) {
-            console.log(error)
-            // refreshPage(response.data.Status_Reply)
-            setModalInfo(response.data.Status_Reply);
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Todo104',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("Todo104: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
+
             setTimeout(() => {
                 refreshPage();
             }, 3000);
@@ -223,54 +264,60 @@ export default function MyToDoList() {
 
     const updateToDo = async (e) => {
         e.preventDefault()
+
         console.log("Iam in update todo")
         let status_;
 
         let checkBox = window.document.getElementById('statusUpdateCheck');
         console.log(`checkbox checked ${checkBox}`)
 
-        if (checkBox.checked) {
-            status_ = true;
-        } else {
-            status_ = false;
-        }
-
-        console.log(_id, toDoDate, toDoTask, status_, comments);
-
-        const toDoInfo = {
-            clientId: clientId,
-            toDoDate: ConvertToTimeStamp(toDoDate),
-            toDoTask: toDoTask,
-            toDoStatus: status_,
-            comments: comments
-        }
-
         try {
+
+            if (checkBox.checked) {
+                status_ = true;
+            } else {
+                status_ = false;
+            }
+
+            console.log(_id, toDoDate, toDoTask, status_, comments);
+
+            const toDoInfo = {
+                clientId: clientId,
+                toDoDate: ConvertToTimeStamp(toDoDate),
+                toDoTask: toDoTask,
+                toDoStatus: status_,
+                comments: comments
+            }
 
             const response = await axios.put(todoUpdateUrl + _id, toDoInfo)
             if (response.data) {
-                console.log(response.data.message);
-                console.log(response.data.Status_Reply);
-                console.log(response.data.ToDoInfo);
-                // refreshPage(response.data.Status_Reply)
+
                 setModalInfo(response.data.Status_Reply);
+
                 setShowInfoModal(true);
                 setTimeout(() => {
                     refreshPage();
                 }, 3000);
             } else {
-                // refreshPage(response.data.Status_Reply)
                 setModalInfo(response.data.Status_Reply);
+
                 setShowInfoModal(true);
                 setTimeout(() => {
                     refreshPage();
                 }, 5000);
             }
         } catch (error) {
-            console.log(error)
-            // refreshPage(response.data.Status_Reply)
-            setModalInfo(response.data.Status_Reply);
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Todo105',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("Todo105: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
+
             setTimeout(() => {
                 refreshPage();
             }, 5000);
@@ -286,28 +333,33 @@ export default function MyToDoList() {
             const response = await axios.delete(withdrawnBidUrl + propertyId);
 
             if (response.data) {
-                console.log(response.data.Status_Reply)
-                // refreshPage(response.data.Status_Reply)
+
                 setModalInfo(response.data.Status_Reply);
                 setShowInfoModal(true);
                 setTimeout(() => {
                     refreshPage();
                 }, 3000);
             } else {
-                console.log(response.data.message)
-                // refreshPage(response.data.Status_Reply)
                 setModalInfo(response.data.Status_Reply);
                 setShowInfoModal(true);
+
                 setTimeout(() => {
                     refreshPage();
                 }, 5000);
             }
 
         } catch (error) {
-            console.log(response.data.message)
-            // refreshPage(response.data.Status_Reply)
-            setModalInfo(response.data.Status_Reply);
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Todo106',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("Todo106: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
+
             setTimeout(() => {
                 refreshPage();
             }, 5000);
@@ -372,7 +424,7 @@ export default function MyToDoList() {
 
     const ToDoListPage = (
         < React.Fragment >
-            
+
             <MDBContainer className='ps-5 pt-3' >
                 <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
                     <p style={bidListHeader} ><strong>To do List Status </strong></p>

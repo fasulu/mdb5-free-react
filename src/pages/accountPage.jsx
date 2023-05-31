@@ -22,7 +22,7 @@ import UpdateLogin from '../components/updateLogin';
 import JointApplicant from '../components/jointApplicant';
 import JointApplicantEdit from '../components/jointApplicantEdit';
 import HouseholdMember from '../components/householdMember';
-import ClientPropertySearch from '../components/clientPropertySearch';
+import BidAndPropety from '../components/bidAndProperty';
 
 import { ToCamelCase } from '../validations/Validator';
 import { decryptDetails } from '../utility/hashDetails';
@@ -61,8 +61,6 @@ export default function AccountPage() {
     const jointApplicantNameUrl = "http://localhost:9001/joint/clientid/";
     const memmberExistUrl = "http://localhost:9001/member/clientid/" + clientId;
     const jointExistUrl = "http://localhost:9001/joint/clientid/" + clientId;
-
-
 
     const [loginReference, setLoginReference] = useState();
     // const [clientName, setClientName] = useState(location.state.clientName);
@@ -402,7 +400,7 @@ export default function AccountPage() {
                         showUpdateLoginPage && <UpdateLogin />
                     }
                     {
-                        showBidPage && <ClientPropertySearch />
+                        showBidPage && <BidAndPropety />
                     }
                     {
                         showSearchPage && <SearchOptions />

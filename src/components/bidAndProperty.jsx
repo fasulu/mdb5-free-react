@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import BtnAccept from './btnAccept.jsx'
@@ -23,10 +24,13 @@ import { refreshPage } from '../utility/refreshPage.js';
 
 import bidIcon from '../../src/resources/images/bid.png'
 import houseIcon from '../../src/resources/images/house.png'
+import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
-export default function ClientPropertySearch() {
+export default function BidAndProperty() {
 
     const { clientId, setClientId } = useContext(UserContext);
+
+    const navigate = useNavigate();
 
     var date_ = "";
     const propertyListUrl = "http://localhost:9001/property/list/";
@@ -45,6 +49,7 @@ export default function ClientPropertySearch() {
     const bidMessage_ = "Your bid has been placed successfully. This is an auto-generated message, do not reply or request any detail."
     const withdrawBidMessage_ = "Your bid has been withdrawn successfully. This is an auto-generated message, do not reply or request any detail."
 
+    const headStyle = { fontSize: 'clamp(17px, 2.5vw, 20px)', backgroundColor: '#dcdcdc' };
     const labelStyle = { fontSize: '16px', width: '250px', color: '#464646' };
     const styleIcon = { fontSize: '20px', color: '#6e1583', textTransform: 'none', marginRight: '5px' };
     const inputStyle = { fontSize: '18px', width: 'auto', float: 'left' };
@@ -67,7 +72,8 @@ export default function ClientPropertySearch() {
     const [showPropertyList, setShowPropertyList] = useState(false);
     const [showBidList, setShowBidList] = useState(false);
     const [showProperty, setShowProperty] = useState(false);
-    const [bidOnThisProperty, setBidOnThisProperty] = useState(false);
+    // const [bidOnThisProperty, setBidOnThisProperty] = useState(false);
+    const [selectedPropertyBidStatus, setSelectedPropertyBidStatus] = useState(false)
 
     const [_id, set_id] = useState("");
     const [propertyId, setPropertyId] = useState("");
@@ -101,6 +107,40 @@ export default function ClientPropertySearch() {
     const [showInfoModal, setShowInfoModal] = useState(false);
     const [modalInfo, setModalInfo] = useState("");
 
+    useEffect(() => {
+        fetchData();
+    }, [])
+
+    async function fetchData() {
+        try {
+
+            if (!clientId) {
+
+                setModalInfo('Bid101: Unable to identify client');
+                setShowInfoModal(true);
+                setTimeout(() => {
+                    navigate('/home');
+                }, 5000);
+            }
+        } catch (error) {
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Bid101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("Bid101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
+
+            setTimeout(() => {
+                navigate('/home');
+            }, 3000);
+        }
+    }
+
     const propertyForBidList = async (e) => {
 
         try {
@@ -126,7 +166,16 @@ export default function ClientPropertySearch() {
                 setShowProperty(false);
             }
         } catch (error) {
-            console.log(error)
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Bid103',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails);
+            console.log(response)
+
+            setModalInfo("Bid103: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -172,8 +221,15 @@ export default function ClientPropertySearch() {
                 }, 2000);
             }
         } catch (error) {
-            console.log(error)
-            setModalInfo(response.data.Status_Reply);
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Bid104',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails);
+            console.log(response)
+
+            setModalInfo("Bid104: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
     }
@@ -200,7 +256,16 @@ export default function ClientPropertySearch() {
 
             }
         } catch (error) {
-            console.log(error)
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Bid105',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails);
+            console.log(response)
+
+            setModalInfo("Bid105: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -231,7 +296,7 @@ export default function ClientPropertySearch() {
                 const result = sendMessage(messageInfo);
 
             } else {
-                console.log(response.data.message)
+                // console.log(response.data.message)
                 setModalInfo(response.data.Status_Reply);
                 setShowInfoModal(true);
                 setTimeout(() => {
@@ -240,15 +305,22 @@ export default function ClientPropertySearch() {
             }
 
         } catch (error) {
-            console.log(response.data.message)
-            setModalInfo(response.data.Status_Reply);
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Bid106',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails);
+            console.log(response)
+
+            setModalInfo("Bid106: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
     }
 
     const reviewThisProperty = async (propertyId) => {
         console.log(propertyId);
-        setBidOnThisProperty(true);
+        // setBidOnThisProperty(true);
         try {
             console.log(propertyIdUrl + propertyId)
 
@@ -305,7 +377,16 @@ export default function ClientPropertySearch() {
 
             }
         } catch (error) {
-            console.log(error)
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Bid107',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails);
+            console.log(response)
+
+            setModalInfo("Bid107: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -324,11 +405,17 @@ export default function ClientPropertySearch() {
                 return response.data.Status_Reply;
             }
         } catch (error) {
-            console.log(error)
-            setModalInfo(response.data.Status_Reply)
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Bid108',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails);
+            console.log(response)
+
+            setModalInfo("Bid108: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
-
     }
 
     const gotoAccountPage = (e) => {
@@ -343,7 +430,7 @@ export default function ClientPropertySearch() {
         <React.Fragment>
             <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
                 <MDBTypography component={'div'} className='card-header'
-                    style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
+                    style={headStyle} >
                     <strong>Bid and Property</strong>
                 </MDBTypography>
                 <MDBCardBody className='d-flex justify-content-center'>
@@ -413,7 +500,7 @@ export default function ClientPropertySearch() {
                         {bidList.map((bid) => {
                             return (
                                 <tr style={bidRow} key={bid._id}
-                                    onClick={(e) => { reviewThisProperty(bid.propertyId) }}>
+                                    onClick={(e) => { setSelectedPropertyBidStatus(true), reviewThisProperty(bid.propertyId) }}>
                                     <td style={bidDataRow} >{(bid.propertyId).toUpperCase()}</td>
                                     <td >{bid.bidPosition}</td>
                                     <td >{date_ = (date_ = new Date(bid.bidDate), date_ = date_.toLocaleString('en-GB', { timeZone: 'UTC' }))}</td>
@@ -431,7 +518,8 @@ export default function ClientPropertySearch() {
             <MDBContainer className='ps-5 pt-3' >
                 <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
                     <MDBCol className='md' >
-                        <p style={{ width: 'auto', color: 'black', fontSize: '22px', borderBottom: '2px solid #d7cdcd' }} ><strong>New Property List </strong></p>
+                        {/* <p style={{ width: 'auto', color: 'black', fontSize: '22px', borderBottom: '2px solid #d7cdcd' }} ><strong>New Property List </strong></p> */}
+                        <p style={{ width: 'auto', color: 'black', fontSize: 'clamp(13px, 2.5vw, 22px)', borderBottom: '2px solid #d7cdcd' }} ><strong>New Property List </strong></p>
                     </MDBCol>
                     <MDBCol className='md'>
                         <input style={inputStyle}
@@ -830,7 +918,7 @@ export default function ClientPropertySearch() {
                             <MDBRow>
                                 <MDBCol className='col-4'>
 
-                                    {
+                                    {/* {
                                         bidOnThisProperty ?
                                             <BtnAccept
                                                 onClick={(e) => { if (window.confirm('Bid on this property?')) handleBid(propertyId) }}>Bid on this property
@@ -839,6 +927,18 @@ export default function ClientPropertySearch() {
                                             <BtnAccept
                                                 onClick={(e) => { if (window.confirm('Withdraw from this bid?')) handleWithdrawBid(e) }}>Withdraw from bid
                                             </BtnAccept>
+                                    } */}
+                                    {/* {
+                                        bidOnThisProperty &&
+                                        <BtnAccept
+                                            onClick={(e) => { if (window.confirm('Bid on this property?')) handleBid(propertyId) }}>Bid on this property
+                                        </BtnAccept>
+                                    } */}
+                                    {
+                                        selectedPropertyBidStatus &&
+                                        <BtnAccept
+                                            onClick={(e) => { if (window.confirm('Withdraw from this bid?')) handleWithdrawBid(e) }}>Withdraw from bid
+                                        </BtnAccept>
                                     }
 
                                 </MDBCol>

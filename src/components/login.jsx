@@ -11,6 +11,7 @@ import { ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 import { refreshPage } from '../utility/refreshPage';
 
 import PopUp from './popUp';
+import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
 import { SendMail } from '../utility/sendMail';
 
@@ -32,6 +33,8 @@ export default function Login() {
     const clientForgottenRefUrl = "http://localhost:9001/client/forgotref/";
     const clientForgottenPwdUrl = "http://localhost:9001/client/forgotpwd/";
     const msgForgottenLoginRefUrl = "http://localhost:9001/message/newmsg/";
+
+    const errorDetailUrl = "http://localhost:9001/client/err/";
 
     const datesData = dates;
     const monthsData = months;
@@ -66,9 +69,9 @@ export default function Login() {
     var timeStampedDOB = ""
     var timeStampedMemo = ""
 
-    // const todayDate = ()=>{let date_ = new Date(); date_ = date_.toLocaleString('en-GB', { timeZone: 'UTC' })}
-    // const date_ = new Date().toISOString().slice(0, 10);
-    
+    // const todayDate = () => { let date_ = new Date(); date_ = date_.toLocaleString('en-GB', { timeZone: 'UTC' }) }
+    const todayDate = new Date().toISOString().slice(0, 19);
+
     const date_ = ConvertToTimeStamp(new Date().toISOString().slice(0, 10));
     const subject_ = "Login Reference sent to you email/post"
     const From_ = "Housing Department"
@@ -83,12 +86,36 @@ export default function Login() {
     const [modalInfo, setModalInfo] = useState("");
 
     useEffect(() => {
-        if (window.localStorage.getItem('cref')) {
-            window.localStorage.removeItem('cref');
-        }
-        const input = document.querySelector("input");
-        input.focus();
+
+        fetchDetail();
+
     }, [])
+
+    async function fetchDetail() {
+        try {
+
+            if (window.localStorage.getItem('cref')) {
+                window.localStorage.removeItem('cref');
+            }
+            const input = document.querySelector("input");
+            input.focus();
+
+        } catch (error) {
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Log101',
+                error_Date: todayDate,
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            // const response = await axios.post(errorDetailUrl, errDetails);
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+            
+            setModalInfo("Log101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
+        }
+    }
 
     const cancelEntry = (e) => {
         refreshPage()
@@ -364,16 +391,23 @@ export default function Login() {
                 } else {
                     setModalInfo("Invalid login reference")
                     setShowInfoModal(true);
+
                 }
             } else {
                 setModalInfo("Please enter a valid login reference");
                 setShowInfoModal(true);
-
             }
         } catch (error) {
-            let result = error.request;
+            let result = error.message;
+            const errDetails = {
+                clientId: 'Unknown',
+                error_Location: 'Log102',
+                error_Date: todayDate,
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = await axios.post(errorDetailUrl, errDetails);
 
-            setModalInfo("Please enter a valid login reference");
+            setModalInfo("Log102: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
     }
@@ -381,11 +415,12 @@ export default function Login() {
     const handleLogin = async (e) => {
 
         e.preventDefault();
-        const dateValid = validDate(memYear + "-" + memMonth + "-" + memDate)
+        try {
+            const dateValid = validDate(memYear + "-" + memMonth + "-" + memDate)
 
-        if (dateValid) {
-            if ((password.length >= 6) || (password.length <= 8)) {
-                try {
+            if (dateValid) {
+                if ((password.length >= 6) || (password.length <= 8)) {
+
                     const primaryLoginInfo = {
                         client_reference: loginReference,
                         client_password: password,
@@ -419,39 +454,60 @@ export default function Login() {
                         setShowInfoModal(true);
 
                     }
-                } catch (error) {
-                    setModalInfo('Please verity your details');
+
+                } else {
+                    setModalInfo('Password not in correct format');
                     setShowInfoModal(true);
 
                 }
             } else {
-                setModalInfo('Password not in correct format');
+                setModalInfo('Invalid date')
                 setShowInfoModal(true);
-
             }
-        } else {
-            setModalInfo('Invalid date')
+        } catch (error) {
+            let result = error.message;
+            const errDetails = {
+                clientId: 'Unknown',
+                error_Location: 'Log103',
+                error_Date: todayDate,
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = await axios.post(errorDetailUrl, errDetails);
+
+            setModalInfo("Log103: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
+
         }
     }
 
-    const handleForgottenLoginRef = (e) => {
+    const handleForgottenLoginRef = async (e) => {
 
         e.preventDefault();
 
         const birth_ = dobYear + "-" + dobMonth + "-" + dobDate;
 
-        const emailValid = validEmail(email);
-        const birthValid = validDate(birth_);
+        try {
+            const emailValid = validEmail(email);
+            const birthValid = validDate(birth_);
 
-        if (birthValid) {
-            if (emailValid) {
-                timeStampedDOB = ConvertToTimeStamp(birth_);
-                setDateofbirth(timeStampedDOB);
+            if (birthValid) {
+                if (emailValid) {
+                    timeStampedDOB = ConvertToTimeStamp(birth_);
+                    setDateofbirth(timeStampedDOB);
 
-                sendLoginRefByEmail();
+                    sendLoginRefByEmail();
+                } else {
+
+                    if (!birthValid) setModalInfo('Invalid Date of birth'); setShowInfoModal(true);
+                    if (!emailValid) setModalInfo('Invalid Email address'); setShowInfoModal(true);
+
+                    setEmail(null); setDOBDate(null); setDOBMonth(null); setDOBYear(null);
+                    setShowGetLoginRefInfo(true);
+                    setShowGetLoginInfo(false);
+                    setShowForgottenLoginRef(false);
+                }
             } else {
-                
+
                 if (!birthValid) setModalInfo('Invalid Date of birth'); setShowInfoModal(true);
                 if (!emailValid) setModalInfo('Invalid Email address'); setShowInfoModal(true);
 
@@ -460,16 +516,20 @@ export default function Login() {
                 setShowGetLoginInfo(false);
                 setShowForgottenLoginRef(false);
             }
-        } else {
-            
-            if (!birthValid) setModalInfo('Invalid Date of birth'); setShowInfoModal(true);
-            if (!emailValid) setModalInfo('Invalid Email address'); setShowInfoModal(true);
+        } catch (error) {
+            let result = error.message;
+            const errDetails = {
+                clientId: 'Unknown',
+                error_Location: 'Log104',
+                error_Date: todayDate,
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = await axios.post(errorDetailUrl, errDetails);
 
-            setEmail(null); setDOBDate(null); setDOBMonth(null); setDOBYear(null);
-            setShowGetLoginRefInfo(true);
-            setShowGetLoginInfo(false);
-            setShowForgottenLoginRef(false);
+            setModalInfo("Log104: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
+
     }
 
     const sendLoginRefByEmail = async () => {
@@ -501,15 +561,23 @@ export default function Login() {
                 setTimeout(() => {
                     navigate('/nino');
                 }, 10000);
-                
+
             } else {
                 setModalInfo('Invalid information')
                 setShowInfoModal(true);
             }
 
         } catch (error) {
-            
-            setModalInfo('Please verify your details');
+            let result = error.message;
+            const errDetails = {
+                clientId: 'Unknown',
+                error_Location: 'Log105',
+                error_Date: todayDate,
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = await axios.post(errorDetailUrl, errDetails);
+
+            setModalInfo("Log105: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
             setShowGetLoginRefInfo(true);
             setShowGetLoginInfo(false);
@@ -527,11 +595,21 @@ export default function Login() {
             } else {
                 return response.data.Status_Reply;
             }
+
         } catch (error) {
-            setModalInfo(response.data.Status_Reply);
+
+            let result = error.message;
+            const errDetails = {
+                clientId: 'Unknown',
+                error_Location: 'Log106',
+                error_Date: todayDate,
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = await axios.post(errorDetailUrl, errDetails);
+
+            setModalInfo("Log106: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
-
     }
 
     const handleForgottenPwd = async (e) => {
@@ -539,23 +617,38 @@ export default function Login() {
 
         const memoDate = memYear + "-" + memMonth + "-" + memDate;
 
-        const emailValid = validEmail(email);
-        const memoValid = validDate(memoDate);
+        try {
+            const emailValid = validEmail(email);
+            const memoValid = validDate(memoDate);
 
+            if (emailValid) {
+                if (memoValid) {
+                    timeStampedMemo = ConvertToTimeStamp(memoDate);
+                    setMemorableDate(timeStampedMemo)
 
-        if (emailValid) {
-            if (memoValid) {
-                timeStampedMemo = ConvertToTimeStamp(memoDate);
-                setMemorableDate(timeStampedMemo)
+                    sendPwdByEmail();
 
-                sendPwdByEmail();
-
+                } else {
+                    if (!memoValid) setModalInfo('Invalid memorable date'); setShowInfoModal(true);
+                }
             } else {
-                if (!memoValid) setModalInfo('Invalid memorable date'); setShowInfoModal(true);
-            }
-        } else {
-            if (!emailValid) setModalInfo('Invalid email address'); setShowInfoModal(true);
+                if (!emailValid) setModalInfo('Invalid email address'); setShowInfoModal(true);
 
+            }
+
+        } catch (error) {
+
+            let result = error.message;
+            const errDetails = {
+                clientId: 'Unknown',
+                error_Location: 'Log107',
+                error_Date: todayDate,
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = await axios.post(errorDetailUrl, errDetails);
+
+            setModalInfo("Log107: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -578,21 +671,29 @@ export default function Login() {
                     email: email,
                     fname: name
                 }
-                
+
                 const resultEmail = await SendMail(pwdDetails);
                 setModalInfo("New password being sent by email and post");
                 setShowInfoModal(true);
-                
+
             } else {
                 setModalInfo("Invalid information");
                 setShowInfoModal(true);
             }
 
         } catch (error) {
-            
-            setModalInfo("Please verify your details");
+
+            let result = error.message;
+            const errDetails = {
+                clientId: 'Unknown',
+                error_Location: 'Log108',
+                error_Date: todayDate,
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = await axios.post(errorDetailUrl, errDetails);
+
+            setModalInfo("Log108: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
-            
         }
     }
 

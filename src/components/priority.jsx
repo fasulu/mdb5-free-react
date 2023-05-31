@@ -8,8 +8,8 @@ import {
 
 export default function Priority() {
 
-    const headStyle = { fontSize: '18px', backgroundColor: '#d1ecf1' };
-    const headStyle1 = { fontSize: '25px' };
+    const headStyle = { fontSize: 'clamp(18px, 2.5vw, 20px)', backgroundColor: '#d1ecf1' };
+    const headStyle1 = { fontSize: 'clamp(20px, 2.5vw, 25px)' };
     const textStyle = { fontSize: '16px' };
 
     return (

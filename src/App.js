@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { UserContext } from './userContext/UserContext';
 
-import SearchOptions from './components/clientPropertySearch'
+import BidProperty from './components/bidAndProperty'
 // import Boxes from './test/Boxes';
 
 import HomePage from './pages/homePage';
@@ -72,7 +72,7 @@ function App() {
               <Route path="guide" element={<GuidePage />} />
               <Route path="keyfacts" element={<KeyFactsPage />} />
               
-              <Route path="search" element={<SearchOptions />} />
+              {/* <Route path="bid" element={<BidProperty />} /> */}
 
               <Route path="propertysearch" element={<PropertySearchPage/> } />
 

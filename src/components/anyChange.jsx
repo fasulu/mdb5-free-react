@@ -9,7 +9,7 @@ import {
 
 export default function AnyChange() {
 
-    const headStyle = { fontSize: '25px', textStyle: 'bolder' };
+    const headStyle = { fontSize: 'clamp(17px, 2.5vw, 22px)', borderBottom: '2px solid #d7cdcd' };
     const textStyle = { fontSize: '16px' };
     const pTagStyle = {margin:0, padding:0};
     return (

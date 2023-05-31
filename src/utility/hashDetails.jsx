@@ -1,7 +1,5 @@
-// import * as CryptoJS from 'crypto-js'
 import { AES } from "crypto-js";;
 import Utf8 from 'crypto-js/enc-utf8';
-// import {secretKey} from '../utility';
 
 function encryptDetails(id_, loginReference) {
     try {

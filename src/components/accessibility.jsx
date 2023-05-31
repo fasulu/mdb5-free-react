@@ -8,9 +8,9 @@ import {
 
 export default function Accessibility() {
 
-    const headStyle = { fontSize: '25px' };
-    const subHeadStyle = { fontSize: '20px' };
-    const textStyle = { fontSize: '18px' };
+    const headStyle = { fontSize: 'clamp(20px, 2.5vw, 25px)' };
+    const subHeadStyle = { fontSize: 'clamp(16px, 2.5vw, 20px)' };
+    const textStyle = { fontSize: 'clamp(15px, 2.5vw, 18px)' };
 
     return (
         <React.Fragment>
@@ -38,7 +38,7 @@ export default function Accessibility() {
                     <p className='mt-3 mb-2' style={textStyle}><a href="https://mcmw.abilitynet.org.uk/" className="link-info">AbilityNet </a> has advice on making your device easier to use if you have a disability.</p>
 
                     <MDBTypography component={'div'} className='border border-0 border-bottom border-secondary'
-                        style={headStyle}>
+                        style={subHeadStyle}>
                         <strong>How accessible this website is</strong>
                     </MDBTypography>
 
@@ -60,14 +60,14 @@ export default function Accessibility() {
                     </div>
 
                     <MDBTypography component={'div'} className='border border-0 border-bottom border-secondary'
-                        style={headStyle}>
+                        style={subHeadStyle}>
                         <strong>Reporting accessibility problems with this website</strong>
                     </MDBTypography>
 
                     <p className='mt-3 mb-2' style={textStyle}>We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, contact us</p>
 
                     <MDBTypography component={'div'} className='border border-0 border-bottom border-secondary'
-                        style={headStyle}>
+                        style={subHeadStyle}>
                         <strong>Enforcement procedure</strong>
                     </MDBTypography>
 

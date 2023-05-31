@@ -17,10 +17,11 @@ import {
 import { ToCamelCase } from '../validations/Validator.jsx'
 import { refreshPage } from '../utility/refreshPage.js';
 import BtnAccept from './btnEdit';
+import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
 export default function GuestSearchOptions() {
 
-    const { clientId, setClientId } = useContext(UserContext);
+    // const { clientId, setClientId } = useContext(UserContext);
 
     const propertyListUrl = "http://localhost:9001/property/list/";
     const propertySearch = "http://localhost:9001/guest/property/list/";
@@ -88,7 +89,17 @@ export default function GuestSearchOptions() {
                 refreshPage("No new properties");
             }
         } catch (error) {
-            console.log(error)
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Guest101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("Guest101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -108,8 +119,19 @@ export default function GuestSearchOptions() {
             } else {
                 refreshPage("No new properties");
             }
+
         } catch (error) {
-            console.log(error)
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Guest102',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("Guest102: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 

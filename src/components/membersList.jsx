@@ -18,6 +18,7 @@ import { ToCamelCase } from '../validations/Validator'
 import HouseholdMember from './householdMember';
 import HouseholdMemberEdit from './householdMemberEdit';
 import addIcon from '../../src/resources/images/familyAdd.png'
+import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
 export default function MembersList() {
 
@@ -70,7 +71,16 @@ export default function MembersList() {
 
       }
     } catch (error) {
-      console.log(error)
+      let result = error.message;
+      const errDetails = {
+        error_Location: 'MemLst101',
+        error_Detail: result + "\nOops! Something went wrong, please try again later."
+      }
+      const response = SaveErrDetail(errDetails)
+      console.log(response)
+
+      setModalInfo("MemLst101: Oops! Something went wrong, please try again later.");
+      setShowInfoModal(true);
     }
   }
 

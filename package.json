@@ -8,6 +8,7 @@
     "axios": "^1.2.6",
     "bcryptjs": "^2.4.3",
     "crypto-js": "^4.1.1",
+    "file-saver": "^2.0.5",
     "jquery": "^3.6.3",
     "mdb-react-ui-kit": "5.1.0",
     "moment": "^2.29.4",

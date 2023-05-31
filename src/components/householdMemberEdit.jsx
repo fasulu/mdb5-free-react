@@ -11,6 +11,7 @@ import BtnAccept from './btnAccept.jsx';
 
 import PopUp from './popUp';
 import { refreshPage } from '../utility/refreshPage';
+import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
 import {
     MDBCard,
@@ -147,7 +148,17 @@ export default function HouseholdMemberEdit(props) {
                 console.log(`Response from backend:- ${response.data.message}`)
             }
         } catch (error) {
-            console.log(error)
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'HsEdt101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("HsEdt101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -156,46 +167,62 @@ export default function HouseholdMemberEdit(props) {
 
         const moved = movedInYear + '-' + movedInMonth + '-' + movedInDate;
 
-        const moveDateValid = validDate(moved);
-        console.log(moved);
-        if (moveDateValid) {
-            tempMovedDate = ConvertToTimeStamp(moved)
-            let newEdit = { ...movedDate }; newEdit = tempMovedDate; setMovedDate(newEdit)
-            console.log(tempMovedDate)
-            console.log(movedDate)
-        } else {
-            setModalInfo('Invalid Moved-In date')
-            setShowInfoModal(true);
-        }
+        try {
 
-        const emailValid = validEmail(email);
-        const telephoneValid = validNumber(telephone);
-        const workphoneValid = validNumber(workPhone);
-        const mobileValid = validNumber(mobile);
 
-        console.log(`Validation result is  email ${emailValid}, 
+            const moveDateValid = validDate(moved);
+            console.log(moved);
+            if (moveDateValid) {
+                tempMovedDate = ConvertToTimeStamp(moved)
+                let newEdit = { ...movedDate }; newEdit = tempMovedDate; setMovedDate(newEdit)
+                console.log(tempMovedDate)
+                console.log(movedDate)
+            } else {
+                setModalInfo('Invalid Moved-In date')
+                setShowInfoModal(true);
+            }
+
+            const emailValid = validEmail(email);
+            const telephoneValid = validNumber(telephone);
+            const workphoneValid = validNumber(workPhone);
+            const mobileValid = validNumber(mobile);
+
+            console.log(`Validation result is  email ${emailValid}, 
     home telephone ${telephoneValid}, work telephone ${workphoneValid}, 
     mobile ${mobileValid},  moveDate ${moveDateValid}`)
 
-        if ((!moveDateValid) || (!emailValid) || (!telephoneValid) || (!workphoneValid) || (!mobileValid)) {
+            if ((!moveDateValid) || (!emailValid) || (!telephoneValid) || (!workphoneValid) || (!mobileValid)) {
 
-            !moveDateValid && setModalInfo('Error: Moved In date')
-            setShowInfoModal(true);
-            !emailValid && setModalInfo('Error: Email')
-            setShowInfoModal(true);
-            !telephoneValid && setModalInfo('Error: Telephone number')
-            setShowInfoModal(true);
-            !workphoneValid && setModalInfo('Error: Work telephone number')
-            setShowInfoModal(true);
-            !mobileValid && setModalInfo('Error: Mobile number')
-            setShowInfoModal(true);
+                !moveDateValid && setModalInfo('Error: Moved In date')
+                setShowInfoModal(true);
+                !emailValid && setModalInfo('Error: Email')
+                setShowInfoModal(true);
+                !telephoneValid && setModalInfo('Error: Telephone number')
+                setShowInfoModal(true);
+                !workphoneValid && setModalInfo('Error: Work telephone number')
+                setShowInfoModal(true);
+                !mobileValid && setModalInfo('Error: Mobile number')
+                setShowInfoModal(true);
 
-        } else {
-            console.log('FINAL Result passed', healthCondition, currentlyLiveWithYou, currentAddress,
-                movedDate, areYouWorker, isShePregnant, nameofSpouse, telephone,
-                mobile, workPhone, email, comments);
+            } else {
+                console.log('FINAL Result passed', healthCondition, currentlyLiveWithYou, currentAddress,
+                    movedDate, areYouWorker, isShePregnant, nameofSpouse, telephone,
+                    mobile, workPhone, email, comments);
 
-            saveMember();
+                saveMember();
+            }
+        } catch (error) {
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'HsEdt102',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("HsEdt102: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -233,8 +260,16 @@ export default function HouseholdMemberEdit(props) {
                 setShowInfoModal(true);
             }
         } catch (error) {
-            console.log(error)
-            setModalInfo(response.data.Status_Reply)
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'HsEdt103',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("HsEdt103: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
     }
@@ -260,8 +295,16 @@ export default function HouseholdMemberEdit(props) {
             }
 
         } catch (error) {
-            console.log(response.data.message)
-            setModalInfo(response.data.Status_Reply)
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'HsEdt104',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("HsEdt104: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
     }

@@ -10,8 +10,8 @@ export default function WhatIsNext() {
 
     const location = useLocation()
 
-    const headStyle = { fontSize: '25px' };
-    const textStyle = { fontSize: '16px' };
+    const headStyle = { fontSize: 'clamp(20px, 2.5vw, 25px)' };
+    const textStyle = { fontSize: 'clamp(15px, 2.5vw, 16px)' };
 
     // console.log(currentPage)
 

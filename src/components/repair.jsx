@@ -7,8 +7,8 @@ import {
 
 export default function Repair() {
 
-    const headStyle = { fontSize: '25px', textStyle: 'bolder' };
-    const headStyle1 = { fontSize: '18px', backgroundColor: '#d1ecf1' };
+    const headStyle = { fontSize: 'clamp(20px, 2.5vw, 25px)', textStyle: 'bolder' };
+    const headStyle1 = { fontSize: 'clamp(16px, 2.5vw, 18px)', backgroundColor: '#d1ecf1' };
     const headStyle2 = { fontSize: '16px', fontWeight: 'bold', color: '#970339', backgroundColor: '#ffc1c7' };
 
     const textStyle = { fontSize: '16px' };
@@ -72,8 +72,6 @@ export default function Repair() {
                         <li>All external and internal doors will be fitted, secure and in good working order;</li>
                         <li>All door handles, locks and fittings will be securely fixed and in good working order.</li>
                     </ul>
-
-                    <p>&nbsp;&nbsp;</p>
 
                     <p><strong>Glazing</strong></p>
 

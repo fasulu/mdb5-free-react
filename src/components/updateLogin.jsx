@@ -22,6 +22,7 @@ import { refreshPage } from '../utility/refreshPage';
 import passwordIcon from "../../src/resources/images/password.png";
 import calenderIcon from "../../src/resources/images/calender.png";
 import BtnAccept from './btnAccept';
+import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
 export default function UpdateLogin() {
 
@@ -32,7 +33,7 @@ export default function UpdateLogin() {
     const updateDateUrl = "http://localhost:9001/client/chmemdte/";
     const msgLoginDetailUrl = "http://localhost:9001/message/newmsg/";
 
-    // const msgDate_ = new Date().toISOString().slice(0, 10);
+    const todayDate = new Date().toISOString().slice(0, 19);
     const msgDate_ = ConvertToTimeStamp(new Date().toISOString().slice(0, 10));
     const pwdSubject_ = "Password details updated"
     const MemoDateSubject_ = "Memorable date details updated"
@@ -111,7 +112,17 @@ export default function UpdateLogin() {
             }
 
         } catch (error) {
-            console.log(error)
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'UpdLgn101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("UpdLgn101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -152,9 +163,17 @@ export default function UpdateLogin() {
                 saveDate(timeStampedDate)
             }
         } catch (error) {
-            setModalInfo("Verify your data")
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'UpdLgn102',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("UpdLgn102: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
-            console.log(error)
         }
     }
 
@@ -198,7 +217,17 @@ export default function UpdateLogin() {
             }
 
         } catch (error) {
-            console.log(error)
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'UpdLgn103',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("UpdLgn103: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -231,9 +260,17 @@ export default function UpdateLogin() {
                 savePassword();
             }
         } catch (error) {
-            setModalInfo("Verify your data")
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'UpdLgn104',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("UpdLgn104: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
-            console.log(error)
         }
     }
 
@@ -279,7 +316,16 @@ export default function UpdateLogin() {
                 setShowInfoModal(true);
             }
         } catch (error) {
-            setModalInfo(response.data.message)
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'UpdLgn105',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("UpdLgn105: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
     }
@@ -299,8 +345,16 @@ export default function UpdateLogin() {
                 return response.data.Status_Reply;
             }
         } catch (error) {
-            console.log(error)
-            setModalInfo(response.data.Status_Reply)
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'UpdLgn106',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("UpdLgn106: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
 

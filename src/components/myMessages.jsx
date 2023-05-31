@@ -21,6 +21,7 @@ import { ToCamelCase } from '../validations/Validator.jsx'
 import { refreshPage } from '../utility/refreshPage.js';
 import { decryptDetails } from '../utility/hashDetails';
 import { ConvertToLocalDate } from '../utility/dateConvertion.jsx';
+import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
 import closeIcon from "../../src/resources/images/close.png";
 import markAsReadIcon from "../../src/resources/images/tick.png";
@@ -35,13 +36,17 @@ export default function MyMessages() {
     const messageListUrl = "http://localhost:9001/message/listmsg/";
     const messageUpdateUrl = "http://localhost:9001/message/updatemsg/";
 
+    const errorDetailUrl = "http://localhost:9001/client/err/";
+    const todayDate = new Date().toISOString().slice(0, 19);
+
     // const todayDate = ()=>{let date_ = new Date(); date_ = date_.toLocaleString('en-GB', { timeZone: 'UTC' })}
 
     const closeInfoTitle = "Close";
     const markAsReadTitle = "Mark as read";
     const closeMailTitle = "New message";
     const openMailTitle = "Read";
-    const msgHeader = { color: 'black', fontSize: '22px', borderBottom: '2px solid #d7cdcd' };
+
+    const headStyle = { fontSize: 'clamp(17px, 2.5vw, 20px)', backgroundColor: '#dcdcdc' };
     const tableHead = { padding: '5px', border: '1px solid #e3ebf7', backgroundColor: '#d2e1e9', fontSize: '16px', textAlign: 'center', color: 'black' };
 
     const [myMessages, setMyMessages] = useState([]);
@@ -89,24 +94,47 @@ export default function MyMessages() {
                 }
             }
         } catch (error) {
-            console.log(error)
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Msg101',
+                error_Date: todayDate,
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails);
+            console.log(response);
+
+            setModalInfo("Msg101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
-    const handleSelectedMessage = (e, selectedMsg) => {
-        set_id(selectedMsg._id)
-        setDate_(ConvertToLocalDate(selectedMsg.messageDate))
-        setSubject_(selectedMsg.messageSubject)
-        setFrom_(selectedMsg.messageFrom)
-        setMessage_(selectedMsg.message)
-        setStatus_(selectedMsg.messageStatus);
+    const handleSelectedMessage = async (e, selectedMsg) => {
+        try {
+            set_id(selectedMsg._id)
+            setDate_(ConvertToLocalDate(selectedMsg.messageDate))
+            setSubject_(selectedMsg.messageSubject)
+            setFrom_(selectedMsg.messageFrom)
+            setMessage_(selectedMsg.message)
+            setStatus_(selectedMsg.messageStatus);
 
-        setShowMessageDetails(true);
+            setShowMessageDetails(true);
 
-        // Below is to show message information in popUp component, need few tinkering to work 
-        // setModalInfo(`Message:- ${selectedMsg.message}`);
-        // setShowInfoModal(true);
+        } catch (error) {
 
+            let result = error.message;
+            const errDetails = {
+                clientId: clientId,
+                error_Location: 'Msg102',
+                error_Date: todayDate,
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails);
+            console.log(response);
+
+            setModalInfo("Msg102: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
+        }
     }
 
     const markAsRead = async (e) => {
@@ -129,8 +157,17 @@ export default function MyMessages() {
                 setShowInfoModal(true);
             }
         } catch (error) {
-            console.log(error)
-            setModalInfo(response.data.Status_Reply);
+            let result = error.message;
+            const errDetails = {
+                clientId: clientId,
+                error_Location: 'Msg103',
+                error_Date: todayDate,
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails);
+            console.log(response);
+
+            setModalInfo("Msg103: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
     }
@@ -182,8 +219,8 @@ export default function MyMessages() {
                 {myMessages.map((myMessage, index) => (
 
                     <div key={index}
-                        className='d-flex justify-content-between py-1 border-bottom border-rounded' 
-                        style={{cursor:'progress'}} title={myMessage.message}>
+                        className='d-flex justify-content-between py-1 border-bottom border-rounded'
+                        style={{ cursor: 'progress' }} title={myMessage.message}>
                         <MDBCol className='col-lg-1 col-md-1 col-sm-1 text-center' >
                             {<span className='mx-2' >{index + 1}</span>}
                         </MDBCol>
@@ -220,7 +257,7 @@ export default function MyMessages() {
         < React.Fragment >
             <MDBCard className='w-100 mx-auto ps-4 pt-4' style={{ backgroundColor: '#f7f2f287' }} >
                 <MDBTypography component={'div'} className='card-header'
-                    style={{ fontSize: '16px', backgroundColor: '#dcdcdc' }} >
+                    style={headStyle} >
                     <strong>My Messages</strong>
                 </MDBTypography>
             </MDBCard>
@@ -232,7 +269,6 @@ export default function MyMessages() {
                 showListMessageDetails && ShowListMessages
             }
 
-            {/* the below popup code has been deactivated due to malfunction, will fix later */}
             {
                 showInfoModal && <PopUp modalInfo={modalInfo} setShowInfoModal={setShowInfoModal}></PopUp>
             }

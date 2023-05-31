@@ -7,7 +7,7 @@ import {
 
 export default function ShortListing() {
 
-    const headStyle = { fontSize: '25px', textStyle: 'bolder' };
+    const headStyle = { fontSize: 'clamp(20px, 2.5vw, 25px)', textStyle: 'bolder' };
     const headStyle1 = { fontSize: '18px', backgroundColor: '#d1ecf1' };
     const headStyle2 = { fontSize: '16px', fontWeight:'bold', color:'#970339', backgroundColor: '#ffc1c7' };
 

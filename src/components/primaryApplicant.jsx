@@ -16,6 +16,7 @@ import { dates, months } from '../resources/datePicker';
 import { validEmail, validName, validPostcode, validNumber, validDate, emailMatch, validMName, pwdMatch, memDateMatch, validPwd } from '../validations/Validator';
 import { ConvertToTimeStamp } from '../utility/dateConvertion';
 import closeIcon from "../../src/resources/images/close.png";
+import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
 import {
     MDBContainer,
@@ -182,16 +183,30 @@ export default function PrimaryApplicant() {
     const handleConnectionCheckbox = () => {
 
         var check_ed = "";
-        var markedCheckbox = document.getElementsByName('connectionCheckbox');
-        for (var checkbox of markedCheckbox) {
-            if (checkbox.checked)
-                check_ed += (checkbox.value + ', ');
+        try {
+            var markedCheckbox = document.getElementsByName('connectionCheckbox');
+            for (var checkbox of markedCheckbox) {
+                if (checkbox.checked)
+                    check_ed += (checkbox.value + ', ');
+            }
+            // if nothing checked, automatically saves checkbox value 17(None of the above)
+            if (check_ed == "") {
+                check_ed = "17";
+            }
+            let newEdit = { ...connection }; newEdit = check_ed; setConnection(newEdit)
+        } catch (error) {
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'PrmyApt101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("PrmyApt101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
-        // if nothing checked, automatically saves checkbox value 17(None of the above)
-        if (check_ed == "") {
-            check_ed = "17";
-        }
-        let newEdit = { ...connection }; newEdit = check_ed; setConnection(newEdit)
     }
 
     const handleSubmit = (e) => {
@@ -202,149 +217,80 @@ export default function PrimaryApplicant() {
 
         formatDate();
 
-        const fNameValid = validName(fName);
-        const mNameValid = validMName(mName);
-        const sNameValid = validName(sName);
-        const passwordValid = validPwd(password);
+        try {
 
-        const birthValid = validDate(birth_);
-        if (birthValid) {
-            timeStampedDOB = ConvertToTimeStamp(birth_);
-            // console.log(birth_, timeStampedDOB)
-            // setDateofbirth(timeStampedDOB);
-        } else {
-            setModalInfo("Date of birth invalid")
-            setShowInfoModal(true);
-        }
+            const fNameValid = validName(fName);
+            const mNameValid = validMName(mName);
+            const sNameValid = validName(sName);
+            const passwordValid = validPwd(password);
 
-        const movedValid = validDate(moved_);
-        if (movedValid) {
-            timeStampedMovedInDate = ConvertToTimeStamp(moved_);
-            // console.log(moved_, timeStampedMovedInDate)
-            // setMovedInDate(timeStampedMovedInDate);
-        } else {
-            setModalInfo("Invalid Moved-In date")
-            setShowInfoModal(true);
-        }
-
-        const dateMemorableValid = validDate(dateMemorable);
-        if (dateMemorableValid) {
-            timeStampedMemorableDate = ConvertToTimeStamp(dateMemorable);
-            // console.log(dateMemorable, timeStampedMemorableDate)
-            // setMemorableDate(timeStampedMemorableDate);
-            // memorableDateTimestamp = timeStampedMemorableDate;
-        }
-
-        const reEnteredDateMemorableValid = validDate(reEnteredDateMemorable);
-        var timeStampedReEnteredMemorableDate;
-
-        if (reEnteredDateMemorableValid) {
-            timeStampedReEnteredMemorableDate = ConvertToTimeStamp(reEnteredDateMemorable);
-            // console.log(reEnteredDateMemorable, timeStampedReEnteredMemorableDate)
-            setReEnterMemorableDate(timeStampedReEnteredMemorableDate);
-        }
-
-        const emailValid = validEmail(email);
-        const reenteredEmailValid = validEmail(reEnterEmail);
-        const postcodeValid = validPostcode(postcode);
-
-        if (!correspondencePostcode.trim() == "") {
-            corresPostcodeValid = validPostcode(correspondencePostcode);
-            !corresPostcodeValid && setModalInfo("Correspondence postcode error")
-            setShowInfoModal(true);
-        }
-        const telephoneValid = validNumber(telephone);
-        const workphoneValid = validNumber(workPhone);
-        const mobileValid = validNumber(mobile);
-
-        const emailMatchesValid = emailMatch(email, reEnterEmail)
-        const pwdMatchesValid = pwdMatch(password, reEnterPwd)
-        const memMatchesValid = memDateMatch(dateMemorable, reEnteredDateMemorable)
-
-        // console.log(todayDate)
-
-        // console.log(`Validation result is fname/sname ${fName} ${mName} ${sName}, 
-        // email ${email}, email matches ${reEnterEmail}, postcode ${postcode}, 
-        // correspondence postcode ${correspondencePostcode}, 
-        // home telephone ${telephone}, work telephone ${workPhone}, mobile ${mobile},
-        // pwd ${password}, pwd matches ${reEnterPwd}, 
-        // memorable date ${memorableDate}, ${timeStampedMemorableDate}, memorable date matches ${reEnteredDateMemorable}`)
-
-        // console.log('FINAL Result passed', title, fName, mName, sName, nameChange,
-        //     nINO, birth_, dateofbirth, sex, livedAbroad,
-        //     postcode, addLine1, addLine2, addLine3, addLine4,
-        //     moved_, movedInDate,
-        //     rented, landlordName, landlordAddress, currentTenancyType, infoAboutCurrentAddress,
-        //     communicationAddress, correspondenceType, placedByLocalAuthrty, localAuthrtyName,
-        //     correspondencePostcode, correspondenceAddLine1, correspondenceAddLine2, correspondenceAddLine3, correspondenceAddLine4,
-        //     telephone, mobile, workPhone, email, reEnterEmail,
-        //     ethnicity, nationality, sexOrient, belief,
-        //     healthCondition, preferedLanguage, needInterpreter,
-        //     tenure, tenancyRefNo, areyou, connection,
-        //     memorableDate, timeStampedMemorableDate, reEnteredDateMemorable,
-        //     password, reEnterPwd, comments, todayDate, status_
-        // );
-
-        if ((!pwdMatchesValid) || (!memMatchesValid) || (!emailMatchesValid) || (sex == "Please Choose") ||
-            (!fNameValid) || (!mNameValid) || (!sNameValid) || (!emailValid) || (!reenteredEmailValid) ||
-            (!postcodeValid) || (!telephoneValid) || (!workphoneValid) || (!mobileValid) ||
-            (!birthValid) || (!movedValid) || (!dateMemorableValid) || (!reEnteredDateMemorableValid)) {
-
-            !fNameValid && setModalInfo("First Name error")
-            setShowInfoModal(true);
-
-            !mNameValid && setModalInfo("Middle Name error")
-            setShowInfoModal(true);
-
-            !sNameValid && setModalInfo("Surname error")
-            setShowInfoModal(true);
-
-            !emailValid && setModalInfo("Email error")
-            setShowInfoModal(true);
-
-            !movedValid && setModalInfo("Please check moved in date")
-            setShowInfoModal(true);
-
-            !dateMemorableValid && setModalInfo("Please check memorable date")
-            setShowInfoModal(true);
-
-            !reEnteredDateMemorableValid && setModalInfo("Please check memorable date")
-            setShowInfoModal(true);
-
-            !postcodeValid && setModalInfo("Postcode error")
-            setShowInfoModal(true);
-
-            !telephoneValid && setModalInfo("Telephone number error")
-            setShowInfoModal(true);
-
-            !workphoneValid && setModalInfo("Work telephone number error")
-            setShowInfoModal(true);
-
-            !mobileValid && setModalInfo("Mobile number error")
-            setShowInfoModal(true);
-
-            !passwordValid && setModalInfo("Password error")
-            setShowInfoModal(true);
-
-            !emailMatchesValid && setModalInfo("Email does not match")
-            setShowInfoModal(true);
-
-            !pwdMatchesValid && setModalInfo("Password does not match")
-            setShowInfoModal(true);
-
-            !memMatchesValid && setModalInfo("Memorable date does not match")
-            setShowInfoModal(true);
-
-            if (sex == "Please Choose") {
-                setModalInfo("Sex is not selected")
+            const birthValid = validDate(birth_);
+            if (birthValid) {
+                timeStampedDOB = ConvertToTimeStamp(birth_);
+                // console.log(birth_, timeStampedDOB)
+                // setDateofbirth(timeStampedDOB);
+            } else {
+                setModalInfo("Date of birth invalid")
                 setShowInfoModal(true);
             }
-            console.log(`Unable to save`)
-        } else {
+
+            const movedValid = validDate(moved_);
+            if (movedValid) {
+                timeStampedMovedInDate = ConvertToTimeStamp(moved_);
+                // console.log(moved_, timeStampedMovedInDate)
+                // setMovedInDate(timeStampedMovedInDate);
+            } else {
+                setModalInfo("Invalid Moved-In date")
+                setShowInfoModal(true);
+            }
+
+            const dateMemorableValid = validDate(dateMemorable);
+            if (dateMemorableValid) {
+                timeStampedMemorableDate = ConvertToTimeStamp(dateMemorable);
+                // console.log(dateMemorable, timeStampedMemorableDate)
+                // setMemorableDate(timeStampedMemorableDate);
+                // memorableDateTimestamp = timeStampedMemorableDate;
+            }
+
+            const reEnteredDateMemorableValid = validDate(reEnteredDateMemorable);
+            var timeStampedReEnteredMemorableDate;
+
+            if (reEnteredDateMemorableValid) {
+                timeStampedReEnteredMemorableDate = ConvertToTimeStamp(reEnteredDateMemorable);
+                // console.log(reEnteredDateMemorable, timeStampedReEnteredMemorableDate)
+                setReEnterMemorableDate(timeStampedReEnteredMemorableDate);
+            }
+
+            const emailValid = validEmail(email);
+            const reenteredEmailValid = validEmail(reEnterEmail);
+            const postcodeValid = validPostcode(postcode);
+
+            if (!correspondencePostcode.trim() == "") {
+                corresPostcodeValid = validPostcode(correspondencePostcode);
+                !corresPostcodeValid && setModalInfo("Correspondence postcode error")
+                setShowInfoModal(true);
+            }
+            const telephoneValid = validNumber(telephone);
+            const workphoneValid = validNumber(workPhone);
+            const mobileValid = validNumber(mobile);
+
+            const emailMatchesValid = emailMatch(email, reEnterEmail)
+            const pwdMatchesValid = pwdMatch(password, reEnterPwd)
+            const memMatchesValid = memDateMatch(dateMemorable, reEnteredDateMemorable)
+
+            // console.log(todayDate)
+
+            // console.log(`Validation result is fname/sname ${fName} ${mName} ${sName}, 
+            // email ${email}, email matches ${reEnterEmail}, postcode ${postcode}, 
+            // correspondence postcode ${correspondencePostcode}, 
+            // home telephone ${telephone}, work telephone ${workPhone}, mobile ${mobile},
+            // pwd ${password}, pwd matches ${reEnterPwd}, 
+            // memorable date ${memorableDate}, ${timeStampedMemorableDate}, memorable date matches ${reEnteredDateMemorable}`)
+
             // console.log('FINAL Result passed', title, fName, mName, sName, nameChange,
             //     nINO, birth_, dateofbirth, sex, livedAbroad,
             //     postcode, addLine1, addLine2, addLine3, addLine4,
-            //     movedInDate,
+            //     moved_, movedInDate,
             //     rented, landlordName, landlordAddress, currentTenancyType, infoAboutCurrentAddress,
             //     communicationAddress, correspondenceType, placedByLocalAuthrty, localAuthrtyName,
             //     correspondencePostcode, correspondenceAddLine1, correspondenceAddLine2, correspondenceAddLine3, correspondenceAddLine4,
@@ -356,8 +302,92 @@ export default function PrimaryApplicant() {
             //     password, reEnterPwd, comments, todayDate, status_
             // );
 
-            savePrimaryApplicant();
+            if ((!pwdMatchesValid) || (!memMatchesValid) || (!emailMatchesValid) || (sex == "Please Choose") ||
+                (!fNameValid) || (!mNameValid) || (!sNameValid) || (!emailValid) || (!reenteredEmailValid) ||
+                (!postcodeValid) || (!telephoneValid) || (!workphoneValid) || (!mobileValid) ||
+                (!birthValid) || (!movedValid) || (!dateMemorableValid) || (!reEnteredDateMemorableValid)) {
 
+                !fNameValid && setModalInfo("First Name error")
+                setShowInfoModal(true);
+
+                !mNameValid && setModalInfo("Middle Name error")
+                setShowInfoModal(true);
+
+                !sNameValid && setModalInfo("Surname error")
+                setShowInfoModal(true);
+
+                !emailValid && setModalInfo("Email error")
+                setShowInfoModal(true);
+
+                !movedValid && setModalInfo("Please check moved in date")
+                setShowInfoModal(true);
+
+                !dateMemorableValid && setModalInfo("Please check memorable date")
+                setShowInfoModal(true);
+
+                !reEnteredDateMemorableValid && setModalInfo("Please check memorable date")
+                setShowInfoModal(true);
+
+                !postcodeValid && setModalInfo("Postcode error")
+                setShowInfoModal(true);
+
+                !telephoneValid && setModalInfo("Telephone number error")
+                setShowInfoModal(true);
+
+                !workphoneValid && setModalInfo("Work telephone number error")
+                setShowInfoModal(true);
+
+                !mobileValid && setModalInfo("Mobile number error")
+                setShowInfoModal(true);
+
+                !passwordValid && setModalInfo("Password error")
+                setShowInfoModal(true);
+
+                !emailMatchesValid && setModalInfo("Email does not match")
+                setShowInfoModal(true);
+
+                !pwdMatchesValid && setModalInfo("Password does not match")
+                setShowInfoModal(true);
+
+                !memMatchesValid && setModalInfo("Memorable date does not match")
+                setShowInfoModal(true);
+
+                if (sex == "Please Choose") {
+                    setModalInfo("Sex is not selected")
+                    setShowInfoModal(true);
+                }
+                console.log(`Unable to save`)
+            } else {
+                // console.log('FINAL Result passed', title, fName, mName, sName, nameChange,
+                //     nINO, birth_, dateofbirth, sex, livedAbroad,
+                //     postcode, addLine1, addLine2, addLine3, addLine4,
+                //     movedInDate,
+                //     rented, landlordName, landlordAddress, currentTenancyType, infoAboutCurrentAddress,
+                //     communicationAddress, correspondenceType, placedByLocalAuthrty, localAuthrtyName,
+                //     correspondencePostcode, correspondenceAddLine1, correspondenceAddLine2, correspondenceAddLine3, correspondenceAddLine4,
+                //     telephone, mobile, workPhone, email, reEnterEmail,
+                //     ethnicity, nationality, sexOrient, belief,
+                //     healthCondition, preferedLanguage, needInterpreter,
+                //     tenure, tenancyRefNo, areyou, connection,
+                //     memorableDate, timeStampedMemorableDate, reEnteredDateMemorable,
+                //     password, reEnterPwd, comments, todayDate, status_
+                // );
+
+                savePrimaryApplicant();
+
+            }
+        } catch (error) {
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'PrmyApt102',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("PrmyApt102: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -379,9 +409,17 @@ export default function PrimaryApplicant() {
             navigate('/nino')
 
         } catch (error) {
-            setModalInfo("Unable to proceed on your request")
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'PrmyApt103',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("PrmyApt103: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
-            console.log(`Goto previous page error:- ${error}`)
         }
     }
 
@@ -391,9 +429,16 @@ export default function PrimaryApplicant() {
             navigate('/login')
 
         } catch (error) {
-            setModalInfo("Unable to proceed on your request")
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'PrmyApt104',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("PrmyApt104: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
-            console.log(`Goto previous page error:- ${error}`)
         }
     }
 
@@ -445,8 +490,6 @@ export default function PrimaryApplicant() {
             client_current_tenure_bhamCouncilTenancyNum: tenancyRefNo,
             client_from_which_country: areyou,
             client_connection_to_birmingham: connection,
-            // client_password: password,
-            // client_memorable_date: timeStampedMemorableDate,
             client_registration_date: todayDate,
             client_status: status_,
             client_comments: comments,
@@ -467,7 +510,17 @@ export default function PrimaryApplicant() {
                 console.log("Error while creating Login Reference")
             }
         } catch (error) {
-            console.log(error)
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'PrmyApt105',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("PrmyApt105: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -485,7 +538,17 @@ export default function PrimaryApplicant() {
                 createLoginReference();
             }
         } catch (error) {
-            console.log(error)
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'PrmyApt106',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("PrmyApt106: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -517,7 +580,17 @@ export default function PrimaryApplicant() {
             }
 
         } catch (error) {
-            console.log(error)
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'PrmyApt107',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("PrmyApt107: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 

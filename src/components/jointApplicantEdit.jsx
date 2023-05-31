@@ -11,6 +11,7 @@ import { ToCamelCase } from '../validations/Validator.jsx';
 import { ConvertToLocalDate, ConvertToDate, ConvertToTimeStamp } from '../utility/dateConvertion';
 import { refreshPage } from '../utility/refreshPage';
 import BtnAccept from './btnAccept.jsx';
+import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
 import {
     MDBCard, MDBCardBody,
@@ -185,7 +186,17 @@ export default function JointApplicantEdit() {
             }
 
         } catch (error) {
-            console.log(error)
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'JntEdit101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("JntApt101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -292,7 +303,17 @@ export default function JointApplicantEdit() {
                 saveJointApplicant()
             }
         } catch (error) {
-            console.log(error)
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'JntApt102',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("JntApt102: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
         }
     }
 
@@ -348,8 +369,16 @@ export default function JointApplicantEdit() {
             }
 
         } catch (error) {
-            console.log('Something went wrong, please try again...', error)
-            setModalInfo('Something went wrong, please try again...')
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'JntApt103',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("JntApt103: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
     }
@@ -373,8 +402,16 @@ export default function JointApplicantEdit() {
             }
 
         } catch (error) {
-            console.log(response.data.message)
-            setModalInfo(response.data.Status_Reply)
+            
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'JntApt104',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            console.log(response)
+
+            setModalInfo("JntApt104: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
     }

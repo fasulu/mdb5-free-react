@@ -11,12 +11,16 @@ import {
 } from 'mdb-react-ui-kit';
 
 import { validNINO } from '../validations/Validator';
+import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
 export default function NINOCheck() {
 
     const ninoCheckUrl = "http://localhost:9001/client/clientnino/"
 
     const navigate = useNavigate();
+
+    const headStyle = { fontSize: 'clamp(20px, 2.5vw, 25px)' };
+    const subHeadStyle = { fontSize: 'clamp(17px, 2.5vw, 20px)' };
 
     const inputStyle = { width: '250px' };
     const [ninoPrimary, setNINOPrimary] = useState("");
@@ -67,13 +71,21 @@ export default function NINOCheck() {
                 }
 
             } catch (error) {
-                console.log(error.message)
 
-                setModalInfo(`${error.message}, \n please try again later.`)
+                let result = error.message;
+                const errDetails = {
+                    error_Location: 'NINO101',
+                    error_Detail: result + "\nOops! Something went wrong, please try again later."
+                }
+                const response = SaveErrDetail(errDetails)
+                console.log(response)
+
+                setModalInfo("NINO101: Oops! Something went wrong, please try again later.");
                 setShowInfoModal(true);
+
                 setTimeout(() => {
                     navigate('/home');
-                }, 5000);
+                }, 3000);
             }
         }
     }
@@ -81,12 +93,11 @@ export default function NINOCheck() {
     return (
         <React.Fragment>
             <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
-                <MDBTypography component={'div'} style={{ fontSize: '17px' }}><strong>Register your household</strong></MDBTypography>
+                <MDBTypography component={'div'} className='border border-0 border-bottom border-secondary' style={headStyle}><strong>Register your household</strong></MDBTypography>
 
-                <MDBTypography component={'div'} style={{ fontSize: '16px', lineHeight: '1.5px' }}>National insurance number check</MDBTypography>
                 <MDBCard style={{ backgroundColor: '#f7f2f287' }} className='' >
                     <MDBCardBody>
-                        <p className='lh-2' ><strong>National Insurance Check</strong></p>
+                        <p className='lh-3' style={subHeadStyle} ><strong>National Insurance Number Check</strong></p>
                         <p className='lh-2' >To begin, please enter the National Insurance number of the primary applicant, and if applicable, the joint applicant.</p>
                         <p className='1h-2' >A National Insurance Number is made up of two letters, six numbers and a final letter, which is always A, B, C, or D. You can find it on any official papers you may have at home. Look on any of the following; an end of year statement of tax and NICs paid (P60), payslip (recent or old), official correspondence, annual tax return, sub-contractor's tax certificate (CIS6) or employer's wage records</p>
 
