@@ -1,9 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from "../userContext/UserContext"
 
 import {
-  MDBIcons,
   MDBContainer,
   MDBNavbar,
   MDBNavbarBrand,
@@ -20,8 +18,6 @@ import logoCityCouncil from "../../src/resources/images/Logo-128DPI.png";
 
 export default function Navbar(props) {
 
-  const { clientId, setClientId } = useContext(UserContext);
-
   const navigate = useNavigate();
 
   const [showBasic, setShowBasic] = useState(false);
@@ -29,10 +25,6 @@ export default function Navbar(props) {
 
   const gotoRegisterPage = () => {
     navigate('/nino');
-  }
-
-  const gotoAccountPage = () => {
-    navigate('/account');
   }
 
   const gotoLoginPage = () => {
@@ -48,21 +40,12 @@ export default function Navbar(props) {
   const element1 = (
     <form className='d-flex mr-auto mb-2 mb-lg-0'>
 
-      <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }}
-        className='form-control' color='primary' onClick={gotoAccountPage}>
-        <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
-        My account</MDBBtn>
-
       <MDBBtn className='form-control' color='primary'
         style={{ margin: '10px', width: '135px', textTransform: 'none' }}
         onClick={(e) => { if (window.confirm("Logout Application?")) gotoLogout(e) }}>
         <MDBIcon style={{ marginRight: '5px' }} fas icon='user-alt' />
         Logout</MDBBtn>
-      {/* 
-      <MDBBtn style={{ margin: '10px', width: '135px', textTransform: 'none' }} className='form-control' color='primary'>
-        <MDBIcon style={{ marginRight: '5px' }} fas icon='pencil-alt' />
-        Logout</MDBBtn>
- */}
+      
     </form>
   );
 

@@ -436,6 +436,7 @@ export default function Login() {
                             let newSNameEdit = response.data.ClientSName;
                             const name = newFNameEdit + " " + newSNameEdit;
 
+                            setClientId(response.data.ClientId);
                             encryptDetails(response.data.ClientId, response.data.ClientRef);
 
                             navigate('/account', {

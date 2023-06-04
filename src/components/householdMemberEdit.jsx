@@ -151,13 +151,13 @@ export default function HouseholdMemberEdit(props) {
 
             let result = error.message;
             const errDetails = {
-                error_Location: 'HsEdt101',
+                error_Location: 'HsEdit101',
                 error_Detail: result + "\nOops! Something went wrong, please try again later."
             }
             const response = SaveErrDetail(errDetails)
             console.log(response)
 
-            setModalInfo("HsEdt101: Oops! Something went wrong, please try again later.");
+            setModalInfo("HsEdit101: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
     }
@@ -215,13 +215,13 @@ export default function HouseholdMemberEdit(props) {
 
             let result = error.message;
             const errDetails = {
-                error_Location: 'HsEdt102',
+                error_Location: 'HsEdit102',
                 error_Detail: result + "\nOops! Something went wrong, please try again later."
             }
             const response = SaveErrDetail(errDetails)
             console.log(response)
 
-            setModalInfo("HsEdt102: Oops! Something went wrong, please try again later.");
+            setModalInfo("HsEdit102: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
     }
@@ -254,7 +254,9 @@ export default function HouseholdMemberEdit(props) {
                 console.log(`Status from backend ${response.data.Status_Reply}`)
                 setModalInfo(response.data.Status_Reply)
                 setShowInfoModal(true);
-
+                setTimeout(() => {
+                    refreshPage();
+                }, 3000);
             } else {
                 setModalInfo('Something went wrong, please try again...')
                 setShowInfoModal(true);
@@ -263,13 +265,13 @@ export default function HouseholdMemberEdit(props) {
             
             let result = error.message;
             const errDetails = {
-                error_Location: 'HsEdt103',
+                error_Location: 'HsEdit103',
                 error_Detail: result + "\nOops! Something went wrong, please try again later."
             }
             const response = SaveErrDetail(errDetails)
             console.log(response)
 
-            setModalInfo("HsEdt103: Oops! Something went wrong, please try again later.");
+            setModalInfo("HsEdit103: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
     }
@@ -298,13 +300,13 @@ export default function HouseholdMemberEdit(props) {
             
             let result = error.message;
             const errDetails = {
-                error_Location: 'HsEdt104',
+                error_Location: 'HsEdit104',
                 error_Detail: result + "\nOops! Something went wrong, please try again later."
             }
             const response = SaveErrDetail(errDetails)
             console.log(response)
 
-            setModalInfo("HsEdt104: Oops! Something went wrong, please try again later.");
+            setModalInfo("HsEdit104: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
         }
     }
@@ -572,7 +574,7 @@ export default function HouseholdMemberEdit(props) {
                             <MDBCol className='col-8'>
                                 <div  >
                                     <textarea style={commentStyle} className='form-control' type='text' placeholder='Comments...'
-                                        maxLength={20} value={comments}
+                                        maxLength={250} value={comments}
                                         onChange={(e) => { let newEdit = { ...comments }; newEdit = e.target.value; setComments(newEdit) }}></textarea>
                                 </div>
                             </MDBCol>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from "axios";
-import { UserContext } from "../userContext/UserContext"
 
 import Navbar from './Navbar';
 import NavbarSecondary from './NavbarSecondary';
@@ -21,8 +20,6 @@ import SaveErrDetail from '../utility/saveErrDetail.jsx';
 
 export default function GuestSearchOptions() {
 
-    // const { clientId, setClientId } = useContext(UserContext);
-
     const propertyListUrl = "http://localhost:9001/property/list/";
     const propertySearch = "http://localhost:9001/guest/property/list/";
 
@@ -30,7 +27,7 @@ export default function GuestSearchOptions() {
     const labelStyle = { fontSize: '16px', width: '250px', color: '#464646' };
     const inputStyle = { fontSize: '14px', width: '250px' };
 
-    const [showPropertyList, setShowPropertyList] = useState(false);
+    // const [showPropertyList, setShowPropertyList] = useState(false);
 
     const [propertyList, setPropertyList] = useState([]);
 
@@ -114,7 +111,7 @@ export default function GuestSearchOptions() {
                 console.log(`Selected property list from backend:- ${response.data.message}`)
                 setPropertyList(response.data.PropertyList)
                 console.log(`Selected property list from backend ${response.data}`)
-                setShowPropertyList(true);
+                // setShowPropertyList(true);
 
             } else {
                 refreshPage("No new properties");

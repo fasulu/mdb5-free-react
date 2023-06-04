@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { decryptDetails } from '../utility/hashDetails';
 import axios from 'axios';
 import PopUp from './popUp';
+import { UserContext } from "../userContext/UserContext"
 
 import {
     MDBTypography,
@@ -10,6 +11,8 @@ import {
 } from 'mdb-react-ui-kit';
 
 const AccountLeft = (props) => {
+
+    const { clientId, setClientId } = useContext(UserContext);
 
     // const styleBtn = { fontSize: '13px', color: '#4f83c3', textTransform: 'none' };
 
@@ -45,7 +48,7 @@ const AccountLeft = (props) => {
 
             const loginRef = decryptDetails();
 
-            console.log(`${loginRef.loginRef}`)
+            // console.log(`${loginRef.loginRef}`)
             setLoginReference((loginRef.loginRef).toUpperCase())
 
         } catch (error) {

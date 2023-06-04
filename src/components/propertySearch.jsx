@@ -59,6 +59,8 @@ export default function PropertySearch() {
 
     const [basicActive, setBasicActive] = useState('tab1');
 
+    // const [showPropertyList, setShowPropertyList] = useState(false);
+
     const [showInfoModal, setShowInfoModal] = useState(false);
     const [modalInfo, setModalInfo] = useState("");
 
@@ -116,7 +118,7 @@ export default function PropertySearch() {
                 console.log(`Selected property list from backend:- ${response.data.message}`)
                 setPropertyList(response.data.PropertyList)
                 console.log(`Selected property list from backend ${response.data}`)
-                setShowPropertyList(true);
+                // setShowPropertyList(true);
 
             } else {
                 setModalInfo("No new properties");

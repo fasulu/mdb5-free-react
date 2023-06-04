@@ -30,10 +30,9 @@ import SearchOptions from '../components/searchOptions';
 import MyToDoList from '../components/myToDoList';
 import MyMessages from '../components/myMessages';
 
-import applicant1 from "../../src/resources/images/1st.png";
-import applicant2 from "../../src/resources/images/2nd.png";
-
 import PopUp from '../components/popUp';
+import SaveErrDetail from '../utility/saveErrDetail';
+import { refreshPage } from '../utility/refreshPage';
 
 export default function AccountPage() {
 
@@ -87,37 +86,49 @@ export default function AccountPage() {
         try {
             console.log(`Im in accountPage useEffect`)
             const idRef = decryptDetails();     // get id and reference from local storage using dcrypDetails() module.
-
-            setClientId(idRef.decryptedID);     // get id and reference from local storage using dcrypDetails() module.
+            setClientId(idRef.decryptedID);
             console.log(clientId);
 
             if (clientId) {
                 fetchDataPrimary(primaryApplicantNameUrl + clientId)
 
-                // fetchDataJoint(jointApplicantNameUrl + clientId)
+                fetchDataJoint(jointApplicantNameUrl + clientId)
+
+            } else {
+
+                // console.log(`${idRef.decryptedID}`)
+                fetchDataPrimary(primaryApplicantNameUrl + idRef.decryptedID)
+
+                fetchDataJoint(jointApplicantNameUrl + idRef.decryptedID)
             }
 
-            console.log(`${idRef.decryptedID}`)
-            fetchDataPrimary(primaryApplicantNameUrl + idRef.decryptedID)
-
-            // fetchDataJoint(jointApplicantNameUrl + idRef.decryptedID)
         } catch (error) {
-            console.log(error)
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'AcPge102',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            // console.log(response)
+
+            setModalInfo("AcPge102: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
+
+            setTimeout(() => {
+                navigate('/home');
+            }, 3000);
         }
 
     }, [])
 
     async function fetchDataPrimary(getName) {
 
-        // Whenever account page loaded check for make sure same 
-        // applicant logged in by his/her id exist in primary client collection.
-        // Verify the primary applicant is exist
-
-        console.log(`Get name is ${getName}`)
+        // console.log(`Get name is ${getName}`)
         try {
             const response = await axios.get(getName)
             if (response) {
-                console.log(response.data)
+                // console.log(response.data)
                 setClientName(ToCamelCase(response.data.clientExist.client_firstname) + " " + ToCamelCase(response.data.clientExist.client_surname));
 
                 setAddressLine1(() => { let newVal = addressLine1; newVal = response.data.clientExist.client_address_line1; setAddressLine1(ToCamelCase(newVal)) });
@@ -127,13 +138,36 @@ export default function AccountPage() {
                 setPostcode(() => { let newVal = postcode; newVal = response.data.clientExist.client_postcode; setPostcode(newVal.toUpperCase()) });
 
             } else {
-                console.log(`Unable to identify primary applicant`);
-                navigate('/login');
+                const errDetails = {
+                    error_Location: 'AcPge103: Unable to locate primary applicant name',
+                    error_Detail: "\nOops! Unable to locate primary applicant name."
+                }
+                const response = SaveErrDetail(errDetails)
+                // console.log(response)
+
+                setModalInfo("AcPge103: \nOops! Something went wrong, please try again later.");
+                setShowInfoModal(true);
+                setTimeout(() => {
+                    navigate('/login');
+                }, 3000);
+
             }
         } catch (error) {
-            console.log(`Unable to identify primary applicant`);
-            console.log(error)
-            navigate('/login');
+
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'AcPge101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            // console.log(response)
+
+            setModalInfo("AcPge101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
+
+            setTimeout(() => {
+                navigate('/login');
+            }, 3000);
         }
     }
 
@@ -146,22 +180,31 @@ export default function AccountPage() {
         console.log(`Get name is ${getName}`)
         try {
             const response = await axios.get(getName)
-            if (response) {
-                console.log(response.data)
+            if (response.data.jointApplicantDetails) {
+                console.log(response.data.jointApplicantDetails)
                 setJointName(ToCamelCase(response.data.jointApplicantDetails.clientJoint_firstname) + " " + ToCamelCase(response.data.jointApplicantDetails.clientJoint_surname));
 
-                console.log(jointName,);
+                console.log(jointName);
             } else {
-                console.log(`Unable to identify joint applicant`);
-                navigate('/login');
+                setJointName("")
             }
         } catch (error) {
-            console.log(`Unable to identify joint applicant`);
-            console.log(error)
-            navigate('/login');
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'AcPge101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            // console.log(response)
+
+            setModalInfo("AcPge101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
+
+            setTimeout(() => {
+                navigate('/login');
+            }, 3000);
         }
     }
-
 
     const gotoUpdateContactPage = () => {
         setShowAccountPage(false);
@@ -194,6 +237,7 @@ export default function AccountPage() {
         setShowToDoPage(false);
         setShowMyMessagePage(false);
     }
+
     const gotoBid = () => {
         // navigate('/updatelogin');
         setShowBidPage(true)
@@ -254,7 +298,20 @@ export default function AccountPage() {
 
             }
         } catch (error) {
-            console.log(error)
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'AcPge101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            // console.log(response)
+
+            setModalInfo("AcPge101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
+
+            setTimeout(() => {
+                refreshPage();
+            }, 3000);
         }
     }
 
@@ -273,6 +330,7 @@ export default function AccountPage() {
         setShowMyMessagePage(false);
 
     }
+
     const gotoMessages = () => {
         setShowMyMessagePage(true);
         setShowAccountPage(false);
@@ -358,9 +416,21 @@ export default function AccountPage() {
             }
 
         } catch (error) {
-            console.log(error)
-        }
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'AcPge101',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails)
+            // console.log(response)
 
+            setModalInfo("AcPge101: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
+
+            setTimeout(() => {
+                refreshPage();
+            }, 3000);
+        }
     }
 
     const logout = () => {
@@ -427,8 +497,10 @@ export default function AccountPage() {
                                     <ul style={{ backgroundColor: '#b0cce3' }}
                                         className="list-group border border-primary">
                                         <li className="list-group-item" style={{ fontSize: '19px', color: '#000000de', backgroundColor: '#f7f2f287' }} >
-                                            <p style={{ margin: '0px', fontSize: '14px', color: 'blue' }}>Primary Applicant</p>
-                                            <strong> {clientName} </strong> <br></br></li>
+                                            <p style={{ margin: '0px', fontSize: '14px', color: 'blue' }}>Applicant(s)</p>
+                                            <strong> {clientName} </strong> <br></br>
+                                            {jointName && <strong> {jointName} </strong>}
+                                        </li>
                                     </ul >
                                 </MDBRow>
                                 <MDBRow className='mx-1 mt-2'>
@@ -483,11 +555,11 @@ export default function AccountPage() {
                                 <MDBRow>
                                     {/* <p style={{visibility:'hidden'}}>Id:- {clientId}</p> */}
                                     <p className='mt-2 mb-1 text-decoration-underline'><strong>My contact details</strong> </p>
-                                    <p  className='mx-3' style={addressStyle} >{addressLine1}</p>
-                                    <p  className='mx-3' style={addressStyle} >{addressLine2}</p>
-                                    <p  className='mx-3' style={addressStyle} >{addressLine3}</p>
-                                    <p  className='mx-3' style={addressStyle} >{addressLine4}</p>
-                                    <p  className='mx-3' style={addressStyle} >{postcode}</p>
+                                    <p className='mx-3' style={addressStyle} >{addressLine1}</p>
+                                    <p className='mx-3' style={addressStyle} >{addressLine2}</p>
+                                    <p className='mx-3' style={addressStyle} >{addressLine3}</p>
+                                    <p className='mx-3' style={addressStyle} >{addressLine4}</p>
+                                    <p className='mx-3' style={addressStyle} >{postcode}</p>
                                 </MDBRow>
                                 <MDBRow >
                                     <MDBCol className='col-lg-6 col-md-6 col-sm-6'>

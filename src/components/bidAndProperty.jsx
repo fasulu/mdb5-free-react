@@ -36,12 +36,13 @@ export default function BidAndProperty() {
     const propertyListUrl = "http://localhost:9001/property/list/";
     const clientBidListUrl = "http://localhost:9001/bid/clientid/";
     const propertyBidUrl = "http://localhost:9001/client/bid/";
+    const getBidUrl = "http://localhost:9001/bid/property/position/";
     const propertyIdUrl = "http://localhost:9001/property/propertyid/";
     const withdrawnBidUrl = "http://localhost:9001/property/bid/withdraw/";
     const msgLoginDetailUrl = "http://localhost:9001/message/newmsg/";
 
-    const todayDate = new Date().toISOString().slice(0, 19); // produces 2023-02-25
-    // const todayDate = ()=>{let date_ = new Date(); date_ = date_.toLocaleString('en-GB', { timeZone: 'UTC' })}
+    const todayDate = new Date().toJSON(); // produces 2023-05-17T11:06:51.369Z
+    // const todayDate = new Date().toISOString().slice(0, 10); // produces 2023-02-25
 
     const msgDate_ = ConvertToTimeStamp(new Date().toISOString().slice(0, 10));
     const msgSubject_ = "Bid information"
@@ -49,10 +50,10 @@ export default function BidAndProperty() {
     const bidMessage_ = "Your bid has been placed successfully. This is an auto-generated message, do not reply or request any detail."
     const withdrawBidMessage_ = "Your bid has been withdrawn successfully. This is an auto-generated message, do not reply or request any detail."
 
-    const headStyle = { fontSize: 'clamp(17px, 2.5vw, 20px)', backgroundColor: '#dcdcdc' };
+    const headStyle = { fontSize: 'clamp(18px, 2.5vw, 20px)', backgroundColor: '#dcdcdc' };
     const labelStyle = { fontSize: '16px', width: '250px', color: '#464646' };
     const styleIcon = { fontSize: '20px', color: '#6e1583', textTransform: 'none', marginRight: '5px' };
-    const inputStyle = { fontSize: '18px', width: 'auto', float: 'left' };
+    const inputStyle = { fontSize: '17px', width: 'auto', float: 'left' };
 
     const bidListHeader = { color: 'black', fontSize: '22px', borderBottom: '2px solid #d7cdcd' };
     const bidTableHead = { border: '1px solid #e3ebf7', backgroundColor: '#d2e1e9', fontSize: '16px', textAlign: 'center', color: 'black' };
@@ -72,7 +73,7 @@ export default function BidAndProperty() {
     const [showPropertyList, setShowPropertyList] = useState(false);
     const [showBidList, setShowBidList] = useState(false);
     const [showProperty, setShowProperty] = useState(false);
-    // const [bidOnThisProperty, setBidOnThisProperty] = useState(false);
+    const [bidOnThisProperty, setBidOnThisProperty] = useState(false);
     const [selectedPropertyBidStatus, setSelectedPropertyBidStatus] = useState(false)
 
     const [_id, set_id] = useState("");
@@ -112,6 +113,9 @@ export default function BidAndProperty() {
     }, [])
 
     async function fetchData() {
+
+        console.log("Iam in useEffect fetchData")
+
         try {
 
             if (!clientId) {
@@ -130,7 +134,7 @@ export default function BidAndProperty() {
                 error_Detail: result + "\nOops! Something went wrong, please try again later."
             }
             const response = SaveErrDetail(errDetails)
-            console.log(response)
+            // console.log(response)
 
             setModalInfo("Bid101: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
@@ -143,15 +147,17 @@ export default function BidAndProperty() {
 
     const propertyForBidList = async (e) => {
 
+        console.log("Iam in propertyForBidList")
+
         try {
 
             const response = await axios.get(propertyListUrl)
 
             if (response.data.PropertyList.length > 0) {
 
-                console.log(`Response from backend:- ${response.data.message}`)
+                // console.log(`Response from backend:- ${response.data.message}`)
                 setPropertyList(response.data.PropertyList)
-                console.log(`list of property ${response.data}`)
+                // console.log(`list of property ${response.data}`)
                 setShowPropertyList(true)
             } else {
                 setModalInfo('No new properties');
@@ -172,7 +178,7 @@ export default function BidAndProperty() {
                 error_Detail: result + "\nOops! Something went wrong, please try again later."
             }
             const response = SaveErrDetail(errDetails);
-            console.log(response)
+            // console.log(response)
 
             setModalInfo("Bid103: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
@@ -181,7 +187,7 @@ export default function BidAndProperty() {
 
     const handleBid = async (property) => {
 
-        console.log("Iam in handle bid", property)
+        console.log("Iam in handleBid", property)
 
         try {
             const bidInfo = {
@@ -190,13 +196,13 @@ export default function BidAndProperty() {
                 bidDate: todayDate,
                 bidPosition: 1
             }
-            console.log(bidInfo);
+            // console.log(bidInfo);
 
             const response = await axios.post(propertyBidUrl, bidInfo)
             if (response.data) {
-                console.log(response.data.message);
-                console.log(response.data.Status_Reply);
-                console.log(response.data.BidInfo);
+                // console.log(response.data.message);
+                // console.log(response.data.Status_Reply);
+                // console.log(response.data.BidInfo);
                 setModalInfo(response.data.Status_Reply);
                 setShowInfoModal(true);
                 setTimeout(() => {
@@ -227,7 +233,7 @@ export default function BidAndProperty() {
                 error_Detail: result + "\nOops! Something went wrong, please try again later."
             }
             const response = SaveErrDetail(errDetails);
-            console.log(response)
+            // console.log(response)
 
             setModalInfo("Bid104: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
@@ -235,15 +241,18 @@ export default function BidAndProperty() {
     }
 
     const myBids = async () => {
+
+        console.log('Im in myBids')
+
         try {
 
             const response = await axios.get(clientBidListUrl + clientId)
 
             if (response.data.BidList.length > 0) {
 
-                console.log(`Response from backend:- ${response.data.message}`)
+                // console.log(`Response from backend:- ${response.data.message}`)
                 setBidList(response.data.BidList)
-                console.table(`list of bids ${response.data.BidList}`)
+                // console.table(`list of bids ${response.data.BidList}`)
                 setShowPropertyList(false);
                 setShowBidList(true);
                 setShowOption(false);
@@ -262,7 +271,7 @@ export default function BidAndProperty() {
                 error_Detail: result + "\nOops! Something went wrong, please try again later."
             }
             const response = SaveErrDetail(errDetails);
-            console.log(response)
+            // console.log(response)
 
             setModalInfo("Bid105: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
@@ -271,14 +280,15 @@ export default function BidAndProperty() {
 
     const handleWithdrawBid = async (e) => {
         e.preventDefault();
-        console.log(propertyId);
+
+        console.log('Im in handleWithdrawBid');
 
         try {
-            console.log(withdrawnBidUrl + propertyId)
+            // console.log(withdrawnBidUrl + propertyId)
             const response = await axios.delete(withdrawnBidUrl + propertyId);
 
             if (response.data) {
-                console.log(response.data.Status_Reply)
+                // console.log(response.data.Status_Reply)
                 setModalInfo(response.data.Status_Reply);
                 setShowInfoModal(true);
                 setTimeout(() => {
@@ -311,7 +321,7 @@ export default function BidAndProperty() {
                 error_Detail: result + "\nOops! Something went wrong, please try again later."
             }
             const response = SaveErrDetail(errDetails);
-            console.log(response)
+            // console.log(response)
 
             setModalInfo("Bid106: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
@@ -319,17 +329,40 @@ export default function BidAndProperty() {
     }
 
     const reviewThisProperty = async (propertyId) => {
-        console.log(propertyId);
-        // setBidOnThisProperty(true);
+
+        console.log('Im in reviewThisProperty', propertyId);
+
         try {
-            console.log(propertyIdUrl + propertyId)
+            const response = await axios.get(getBidUrl + propertyId)
+            // console.table(response.data.BidInfo)
+            if (response.data.BidInfo) {
+                setSelectedPropertyBidStatus(true);
+                setBidOnThisProperty(false);
+            } else {
+                setBidOnThisProperty(true);
+                setSelectedPropertyBidStatus(false);
+            }
+        } catch (error) {
+            let result = error.message;
+            const errDetails = {
+                error_Location: 'Bid107',
+                error_Detail: result + "\nOops! Something went wrong, please try again later."
+            }
+            const response = SaveErrDetail(errDetails);
+
+            setModalInfo("Bid107: Oops! Something went wrong, please try again later.");
+            setShowInfoModal(true);
+
+        }
+        try {
+            // console.log(propertyIdUrl + propertyId)
 
             const response = await axios.get(propertyIdUrl + propertyId)
-            console.log(`Response from backend:- ${response.data.message}`)
+            // console.log(`Response from backend:- ${response.data.message}`)
 
             if (response.data.Status_Reply === "Success") {
 
-                console.log(`Response from backend:- ${response.data.message}`)
+                // console.log(`Response from backend:- ${response.data.message}`)
 
                 set_id(response.data.PropertyInfo._id);
                 setPropertyId(response.data.PropertyInfo.propertyId);
@@ -383,7 +416,7 @@ export default function BidAndProperty() {
                 error_Detail: result + "\nOops! Something went wrong, please try again later."
             }
             const response = SaveErrDetail(errDetails);
-            console.log(response)
+            // console.log(response)
 
             setModalInfo("Bid107: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
@@ -392,14 +425,14 @@ export default function BidAndProperty() {
 
     const sendMessage = async (messageInfo) => {
 
-        console.log("Iam in send message")
+        console.table("Iam in send message")
 
         try {
-            console.table(messageInfo)
+            // console.table(messageInfo)
 
             const response = await axios.post(msgLoginDetailUrl, messageInfo)
             if (response) {
-                console.log(response.data.Status_Reply);
+                // console.log(response.data.Status_Reply);
                 return response.data.Status_Reply;
             } else {
                 return response.data.Status_Reply;
@@ -411,7 +444,7 @@ export default function BidAndProperty() {
                 error_Detail: result + "\nOops! Something went wrong, please try again later."
             }
             const response = SaveErrDetail(errDetails);
-            console.log(response)
+            // console.log(response)
 
             setModalInfo("Bid108: Oops! Something went wrong, please try again later.");
             setShowInfoModal(true);
@@ -518,19 +551,21 @@ export default function BidAndProperty() {
             <MDBContainer className='ps-5 pt-3' >
                 <MDBRow className='my-3 justify-content-center' bgcolor='#f7f2f287'>
                     <MDBCol className='md' >
-                        {/* <p style={{ width: 'auto', color: 'black', fontSize: '22px', borderBottom: '2px solid #d7cdcd' }} ><strong>New Property List </strong></p> */}
                         <p style={{ width: 'auto', color: 'black', fontSize: 'clamp(13px, 2.5vw, 22px)', borderBottom: '2px solid #d7cdcd' }} ><strong>New Property List </strong></p>
                     </MDBCol>
+                </MDBRow>
+                <MDBRow>
+
                     <MDBCol className='md'>
                         <input style={inputStyle}
                             className='form-control'
                             type='text'
                             placeholder='Property Reference'
-                            value={searchProperty.toLowerCase().trim()}
+                            value={searchProperty.toLowerCase()}
                             onChange={(e) => { let newEdit = { ...searchProperty }; newEdit = e.target.value; setSearchProperty(newEdit) }}>
                         </input>
-                        <MDBBtn className='border border-info'
-                            style={{ fontSize: '12px', width: 'auto', float: 'left' }} color='info'
+                        <MDBBtn className='border border-info mx-2'
+                            style={{ fontSize: '11px', width: 'auto', float: 'left' }} color='info'
                             onClick={(e) => { reviewThisProperty(searchProperty) }} >
                             <MDBIcon fas icon='search'
                                 onClick={(e) => { reviewThisProperty(searchProperty) }} />
@@ -548,11 +583,11 @@ export default function BidAndProperty() {
                                         <MDBCol className='col-lg-6 col-md-6'>
                                             <MDBRow>
                                                 <MDBTypography component={'div'} className='fs-5'
-                                                    style={{ fontSize: '16px', color: '#1a82db' }} ><strong>{(property.propertyId).toUpperCase()}</strong>
+                                                    style={{ fontSize: '16px', color: '#1a82db' }} ><strong>{property.propertyId ? (property.propertyId).toUpperCase() : null}</strong>
                                                 </MDBTypography>
                                             </MDBRow>
                                             <MDBRow>
-                                                <MDBCardImage style={{ marginBottom: '15px' }} src={property.imageUrl} position='top' alt={ToCamelCase(property.address)} title={ToCamelCase(property.address)} />
+                                                <MDBCardImage style={{ marginBottom: '15px' }} src={property.imageUrl} position='top' alt={property.address ? ToCamelCase(property.address) : null} title={property.address ? ToCamelCase(property.address) : null} />
                                             </MDBRow>
                                             <MDBRow>
                                                 <MDBCol className='col-lg-4'>
@@ -560,7 +595,7 @@ export default function BidAndProperty() {
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-8'>
 
-                                                    <MDBTypography component={'div'} ><strong>{ToCamelCase(property.address)}, {ToCamelCase(property.town)}, {(property.postcode).toUpperCase()} </strong></MDBTypography>
+                                                    <MDBTypography component={'div'} ><strong>{property.address ? ToCamelCase(property.address) : null}, {property.town ? ToCamelCase(property.town) : null}, {property.postcode ? (property.postcode).toUpperCase() : null} </strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                             <MDBRow>
@@ -568,7 +603,7 @@ export default function BidAndProperty() {
                                                     <MDBTypography component={'div'} style={labelStyle}>Council Tax:</MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-8'>
-                                                    <MDBTypography component={'div'} > <strong> Band {property.cTaxBand.toUpperCase()}</strong></MDBTypography>
+                                                    <MDBTypography component={'div'} > <strong> Band {property.cTaxBand ? property.cTaxBand.toUpperCase() : null}</strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
 
@@ -577,7 +612,7 @@ export default function BidAndProperty() {
                                                     <MDBTypography component={'div'} style={labelStyle}>Available on:</MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-8'>
-                                                    <MDBTypography component={'div'} > <strong>{property.availableFrom}</strong></MDBTypography>
+                                                    <MDBTypography component={'div'} > <strong>{property.availableFrom ? property.availableFrom : null}</strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                             <MDBRow>
@@ -585,7 +620,7 @@ export default function BidAndProperty() {
                                                     <MDBTypography component={'div'} style={labelStyle}>Rent(PCM):</MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-8'>
-                                                    <MDBTypography component={'div'} > <strong> £ {property.rent}.00</strong></MDBTypography>
+                                                    <MDBTypography component={'div'} > <strong> £ {property.rent ? property.rent : null}.00</strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                             <MDBRow>
@@ -593,7 +628,7 @@ export default function BidAndProperty() {
                                                     <MDBTypography component={'div'} style={labelStyle}>Deposit:</MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-8'>
-                                                    <MDBTypography component={'div'} > <strong>£ {property.deposit}.00</strong></MDBTypography>
+                                                    <MDBTypography component={'div'} > <strong>£ {property.deposit ? property.deposit : null}.00</strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                             <MDBRow>
@@ -601,7 +636,7 @@ export default function BidAndProperty() {
                                                     <MDBTypography component={'div'} style={labelStyle}>Admin fees:</MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-8'>
-                                                    <MDBTypography component={'div'} > <strong>£ {property.fees}.00</strong></MDBTypography>
+                                                    <MDBTypography component={'div'} > <strong>£ {property.fees ? property.fees : null}.00</strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                         </MDBCol>
@@ -613,7 +648,7 @@ export default function BidAndProperty() {
                                                     <MDBTypography component={'div'} style={labelStyle}>Advert Type:</MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-7'>
-                                                    <MDBTypography component={'div'} ><strong>{ToCamelCase(property.advertType)} </strong></MDBTypography>
+                                                    <MDBTypography component={'div'} ><strong>{property.advertType ? ToCamelCase(property.advertType) : null} </strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                             <MDBRow >
@@ -622,7 +657,7 @@ export default function BidAndProperty() {
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-7'>
 
-                                                    <MDBTypography component={'div'} ><strong>{ToCamelCase(property.type)} </strong></MDBTypography>
+                                                    <MDBTypography component={'div'} ><strong>{property.type ? ToCamelCase(property.type) : null} </strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                             <MDBRow>
@@ -630,7 +665,7 @@ export default function BidAndProperty() {
                                                     <MDBTypography component={'div'} style={labelStyle}>Floor: </MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-7'>
-                                                    <MDBTypography component={'div'} > <strong>{property.floor}</strong></MDBTypography>
+                                                    <MDBTypography component={'div'} > <strong>{property.floor ? property.floor : null}</strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                             <MDBRow>
@@ -639,8 +674,8 @@ export default function BidAndProperty() {
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-7'>
                                                     <MDBTypography component={'div'} >
-                                                        <MDBIcon style={styleIcon} fas icon='bed' /><strong>x {property.bedRoom} and </strong><span>
-                                                            <MDBIcon style={styleIcon} fas icon='bath' /><strong>x {property.bathRoom}</strong>
+                                                        <MDBIcon style={styleIcon} fas icon='bed' /><strong>x {property.bedRoom ? property.bedRoom : null} and </strong><span>
+                                                            <MDBIcon style={styleIcon} fas icon='bath' /><strong>x {property.bathRoom ? property.bathRoom : null}</strong>
                                                         </span></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
@@ -649,7 +684,7 @@ export default function BidAndProperty() {
                                                     <MDBTypography component={'div'} style={labelStyle}>Reception:</MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-7'>
-                                                    <MDBTypography component={'div'} > <strong>{ToCamelCase(property.reception)}</strong></MDBTypography>
+                                                    <MDBTypography component={'div'} > <strong>{property.reception ? ToCamelCase(property.reception) : null}</strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                             <MDBRow>
@@ -657,7 +692,7 @@ export default function BidAndProperty() {
                                                     <MDBTypography component={'div'} style={labelStyle}>Pets:</MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-7'>
-                                                    <MDBTypography component={'div'} > <strong>{ToCamelCase(property.pets)}</strong></MDBTypography>
+                                                    <MDBTypography component={'div'} > <strong>{property.pets ? ToCamelCase(property.pets) : null}</strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                             <MDBRow>
@@ -665,7 +700,7 @@ export default function BidAndProperty() {
                                                     <MDBTypography component={'div'} style={labelStyle}>Tenancy:</MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-7'>
-                                                    <MDBTypography component={'div'} > <strong>{ToCamelCase(property.tenancyType)}</strong></MDBTypography>
+                                                    <MDBTypography component={'div'} > <strong>{property.tenancyType ? ToCamelCase(property.tenancyType) : null}</strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                             <MDBRow>
@@ -673,7 +708,7 @@ export default function BidAndProperty() {
                                                     <MDBTypography component={'div'} style={labelStyle}>Kitchen:</MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-7'>
-                                                    <MDBTypography component={'div'} > <strong>{ToCamelCase(property.kitchenFitted)}</strong></MDBTypography>
+                                                    <MDBTypography component={'div'} > <strong>{property.kitchenFitted ? ToCamelCase(property.kitchenFitted) : null}</strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                             <MDBRow>
@@ -681,7 +716,7 @@ export default function BidAndProperty() {
                                                     <MDBTypography component={'div'} style={labelStyle}>Furnished:</MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-7'>
-                                                    <MDBTypography component={'div'} > <strong>{ToCamelCase(property.furnished)}</strong></MDBTypography>
+                                                    <MDBTypography component={'div'} > <strong>{property.furnished ? ToCamelCase(property.furnished) : null}</strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                             <MDBRow>
@@ -689,7 +724,7 @@ export default function BidAndProperty() {
                                                     <MDBTypography component={'div'} style={labelStyle}>Parking:</MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-7'>
-                                                    <MDBTypography component={'div'} > <strong>{ToCamelCase(property.parking)}</strong></MDBTypography>
+                                                    <MDBTypography component={'div'} > <strong>{property.parking ? ToCamelCase(property.parking) : null}</strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                             <MDBRow>
@@ -697,7 +732,7 @@ export default function BidAndProperty() {
                                                     <MDBTypography component={'div'} style={labelStyle}>Garage:</MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-7'>
-                                                    <MDBTypography component={'div'} > <strong>{ToCamelCase(property.garage)}</strong></MDBTypography>
+                                                    <MDBTypography component={'div'} > <strong>{property.garage ? ToCamelCase(property.garage) : null}</strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                             <MDBRow>
@@ -705,7 +740,7 @@ export default function BidAndProperty() {
                                                     <MDBTypography component={'div'} style={labelStyle}>Garden / Patio:</MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol className='col-lg-7'>
-                                                    <MDBTypography component={'div'} > <strong>{ToCamelCase(property.garden)} / {ToCamelCase(property.patio)}</strong></MDBTypography>
+                                                    <MDBTypography component={'div'} > <strong>{property.garden ? ToCamelCase(property.garden) : null} / {property.patio ? ToCamelCase(property.patio) : null}</strong></MDBTypography>
                                                 </MDBCol>
                                             </MDBRow>
                                         </MDBCol>
@@ -715,7 +750,7 @@ export default function BidAndProperty() {
                                             <MDBTypography component={'div'} style={labelStyle}>Comments:</MDBTypography>
                                         </MDBCol>
                                         <MDBCol className='col-lg-10 col-md-8 col-sm-9'>
-                                            <MDBTypography component={'div'} style={{ textAlign: 'left' }}>{property.comments}</MDBTypography>
+                                            <MDBTypography component={'div'} style={{ textAlign: 'left' }}>{property.comments ? property.comments : null}</MDBTypography>
                                         </MDBCol>
                                     </MDBRow>
                                     <MDBRow>
@@ -745,19 +780,18 @@ export default function BidAndProperty() {
                                 <MDBCol className='col-lg-6 col-md-6'>
                                     <MDBRow>
                                         <MDBTypography component={'div'} className='fs-5'
-                                            style={{ fontSize: '16px', color: '#1a82db' }} ><strong>{(propertyId).toUpperCase()}</strong>
+                                            style={{ fontSize: '16px', color: '#1a82db' }} ><strong>{propertyId ? (propertyId).toUpperCase() : null}</strong>
                                         </MDBTypography>
                                     </MDBRow>
                                     <MDBRow>
-                                        <MDBCardImage src={imageUrl} position='top' alt={ToCamelCase(address)} title={ToCamelCase(address)} />
+                                        <MDBCardImage src={imageUrl} position='top' alt={address ? ToCamelCase(address) : null} title={address ? ToCamelCase(address) : null} />
                                     </MDBRow>
                                     <MDBRow>
                                         <MDBCol className='col-lg-4'>
                                             <MDBTypography component={'div'} style={labelStyle}>Address:</MDBTypography>
                                         </MDBCol>
                                         <MDBCol className='col-lg-8'>
-
-                                            <MDBTypography component={'div'} ><strong>{ToCamelCase(address)}, {ToCamelCase(town)}, {(postcode).toUpperCase()} </strong></MDBTypography>
+                                            <MDBTypography component={'div'} ><strong>{address ? ToCamelCase(address) : null}, {address ? ToCamelCase(town) : null}, {address ? (postcode).toUpperCase() : null} </strong></MDBTypography>
                                         </MDBCol>
                                     </MDBRow>
                                     <MDBRow>
@@ -765,7 +799,7 @@ export default function BidAndProperty() {
                                             <MDBTypography component={'div'} style={labelStyle}>Council Tax:</MDBTypography>
                                         </MDBCol>
                                         <MDBCol className='col-lg-8'>
-                                            <MDBTypography component={'div'} > <strong> Band {cTaxBand.toUpperCase()}</strong></MDBTypography>
+                                            <MDBTypography component={'div'} > <strong> Band {cTaxBand ? cTaxBand.toUpperCase() : null}</strong></MDBTypography>
                                         </MDBCol>
                                     </MDBRow>
 
@@ -774,7 +808,7 @@ export default function BidAndProperty() {
                                             <MDBTypography component={'div'} style={labelStyle}>Available on:</MDBTypography>
                                         </MDBCol>
                                         <MDBCol className='col-lg-8'>
-                                            <MDBTypography component={'div'} > <strong>{availableFrom}</strong></MDBTypography>
+                                            <MDBTypography component={'div'} > <strong>{availableFrom ? availableFrom : null}</strong></MDBTypography>
                                         </MDBCol>
                                     </MDBRow>
                                     <MDBRow>
@@ -811,7 +845,7 @@ export default function BidAndProperty() {
                                         </MDBCol>
                                         <MDBCol className='col-lg-7'>
 
-                                            <MDBTypography component={'div'} ><strong>{ToCamelCase(advertType)} </strong></MDBTypography>
+                                            <MDBTypography component={'div'} ><strong>{advertType ? ToCamelCase(advertType) : null} </strong></MDBTypography>
                                         </MDBCol>
                                     </MDBRow>
                                     <MDBRow >
@@ -819,7 +853,7 @@ export default function BidAndProperty() {
                                             <MDBTypography component={'div'} style={labelStyle}>Type:</MDBTypography>
                                         </MDBCol>
                                         <MDBCol className='col-lg-7'>
-                                            <MDBTypography component={'div'} ><strong>{ToCamelCase(type)} </strong></MDBTypography>
+                                            <MDBTypography component={'div'} ><strong>{type ? ToCamelCase(type) : null} </strong></MDBTypography>
                                         </MDBCol>
                                     </MDBRow>
                                     <MDBRow>
@@ -846,7 +880,7 @@ export default function BidAndProperty() {
                                             <MDBTypography component={'div'} style={labelStyle}>Reception:</MDBTypography>
                                         </MDBCol>
                                         <MDBCol className='col-lg-7'>
-                                            <MDBTypography component={'div'} > <strong>{ToCamelCase(reception)}</strong></MDBTypography>
+                                            <MDBTypography component={'div'} > <strong>{reception ? ToCamelCase(reception) : null}</strong></MDBTypography>
                                         </MDBCol>
                                     </MDBRow>
                                     <MDBRow>
@@ -854,7 +888,7 @@ export default function BidAndProperty() {
                                             <MDBTypography component={'div'} style={labelStyle}>Pets:</MDBTypography>
                                         </MDBCol>
                                         <MDBCol className='col-lg-7'>
-                                            <MDBTypography component={'div'} > <strong>{ToCamelCase(pets)}</strong></MDBTypography>
+                                            <MDBTypography component={'div'} > <strong>{pets ? ToCamelCase(pets) : null}</strong></MDBTypography>
                                         </MDBCol>
                                     </MDBRow>
                                     <MDBRow>
@@ -862,7 +896,7 @@ export default function BidAndProperty() {
                                             <MDBTypography component={'div'} style={labelStyle}>Tenancy:</MDBTypography>
                                         </MDBCol>
                                         <MDBCol className='col-lg-7'>
-                                            <MDBTypography component={'div'} > <strong>{ToCamelCase(tenancyType)}</strong></MDBTypography>
+                                            <MDBTypography component={'div'} > <strong>{tenancyType ? ToCamelCase(tenancyType) : null}</strong></MDBTypography>
                                         </MDBCol>
                                     </MDBRow>
                                     <MDBRow>
@@ -870,7 +904,7 @@ export default function BidAndProperty() {
                                             <MDBTypography component={'div'} style={labelStyle}>Kitchen:</MDBTypography>
                                         </MDBCol>
                                         <MDBCol className='col-lg-7'>
-                                            <MDBTypography component={'div'} > <strong>{ToCamelCase(kitchenFitted)}</strong></MDBTypography>
+                                            <MDBTypography component={'div'} > <strong>{kitchenFitted ? ToCamelCase(kitchenFitted) : null}</strong></MDBTypography>
                                         </MDBCol>
                                     </MDBRow>
                                     <MDBRow>
@@ -878,7 +912,7 @@ export default function BidAndProperty() {
                                             <MDBTypography component={'div'} style={labelStyle}>Furnished:</MDBTypography>
                                         </MDBCol>
                                         <MDBCol className='col-lg-7'>
-                                            <MDBTypography component={'div'} > <strong>{ToCamelCase(furnished)}</strong></MDBTypography>
+                                            <MDBTypography component={'div'} > <strong>{furnished ? ToCamelCase(furnished) : null}</strong></MDBTypography>
                                         </MDBCol>
                                     </MDBRow>
                                     <MDBRow>
@@ -886,7 +920,7 @@ export default function BidAndProperty() {
                                             <MDBTypography component={'div'} style={labelStyle}>Parking:</MDBTypography>
                                         </MDBCol>
                                         <MDBCol className='col-lg-7'>
-                                            <MDBTypography component={'div'} > <strong>{ToCamelCase(parking)}</strong></MDBTypography>
+                                            <MDBTypography component={'div'} > <strong>{parking ? ToCamelCase(parking) : null}</strong></MDBTypography>
                                         </MDBCol>
                                     </MDBRow>
                                     <MDBRow>
@@ -894,7 +928,7 @@ export default function BidAndProperty() {
                                             <MDBTypography component={'div'} style={labelStyle}>Garage:</MDBTypography>
                                         </MDBCol>
                                         <MDBCol className='col-lg-7'>
-                                            <MDBTypography component={'div'} > <strong>{ToCamelCase(garage)}</strong></MDBTypography>
+                                            <MDBTypography component={'div'} > <strong>{garage ? ToCamelCase(garage) : null}</strong></MDBTypography>
                                         </MDBCol>
                                     </MDBRow>
                                     <MDBRow>
@@ -902,7 +936,7 @@ export default function BidAndProperty() {
                                             <MDBTypography component={'div'} style={labelStyle}>Garden / Patio:</MDBTypography>
                                         </MDBCol>
                                         <MDBCol className='col-lg-7'>
-                                            <MDBTypography component={'div'} > <strong>{ToCamelCase(garden)} / {ToCamelCase(patio)}</strong></MDBTypography>
+                                            <MDBTypography component={'div'} > <strong>{garden ? ToCamelCase(garden) : null} / {patio ? ToCamelCase(patio) : null}</strong></MDBTypography>
                                         </MDBCol>
                                     </MDBRow>
                                 </MDBCol>
@@ -928,12 +962,12 @@ export default function BidAndProperty() {
                                                 onClick={(e) => { if (window.confirm('Withdraw from this bid?')) handleWithdrawBid(e) }}>Withdraw from bid
                                             </BtnAccept>
                                     } */}
-                                    {/* {
+                                    {
                                         bidOnThisProperty &&
                                         <BtnAccept
                                             onClick={(e) => { if (window.confirm('Bid on this property?')) handleBid(propertyId) }}>Bid on this property
                                         </BtnAccept>
-                                    } */}
+                                    }
                                     {
                                         selectedPropertyBidStatus &&
                                         <BtnAccept
